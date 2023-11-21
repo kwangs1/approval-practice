@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.memo">
+	<resultMap id="memoResult" type="memoVO">
+		<result property="mno" column="mno" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="name" column="name" />
+		<result property="regdate" column="regdate" />
+		<result property="upddate" column="upddate" />
+	</resultMap>
+
+<insert id="writeSelectKey">
+	<selectKey keyProperty="mno" order="BEFORE" resultType="int">
+		select mno_seq.nextval from dual
+	</selectKey>
+	insert into write
+	values(#{mno},#{title},#{content},#{name},#{regdate},#{update})
+</insert>
+
+<insert id="write">
+	insert into write
+	values(#{mno},#{title},#{content},#{name},#{regdate},#{update})
+</insert>
+</mapper>
