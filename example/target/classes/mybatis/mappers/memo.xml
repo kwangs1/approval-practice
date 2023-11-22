@@ -18,12 +18,13 @@
 	<selectKey keyProperty="mno" order="BEFORE" resultType="int">
 		select mno_seq.nextval from dual
 	</selectKey>
-	insert into write
-	values(#{mno},#{title},#{content},#{name},#{regdate},#{update})
+	insert into memo
+	values(#{mno},#{title},#{content},#{name},sysdate,#{upddate})
 </insert>
 
 <insert id="write">
-	insert into write
-	values(#{mno},#{title},#{content},#{name},#{regdate},#{update})
+	insert into memo
+	values(mno_seq.nextval,#{title},#{content},#{name},sysdate,#{upddate})
 </insert>
+
 </mapper>

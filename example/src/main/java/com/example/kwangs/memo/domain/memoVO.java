@@ -12,6 +12,7 @@ public class memoVO {
 	private String name;
 	private Date regdate;
 	private Date upddate;
+	
 	public int getMno() {
 		return mno;
 	}
@@ -47,6 +48,11 @@ public class memoVO {
 	}
 	public void setUpddate(Date upddate) {
 		this.upddate = upddate;
+	}
+	@Override
+	public String toString() {
+		return "memoVO [mno=" + mno + ", title=" + title + ", content=" + content + ", name=" + name + ", regdate="
+				+ regdate + ", upddate=" + upddate + "]";
 	}
 	
 	

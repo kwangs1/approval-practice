@@ -2,7 +2,7 @@ package com.example.kwangs.memo.mapper;
 
 import com.example.kwangs.memo.domain.memoVO;
 
-public interface MemoMapper {
+public interface memoMapper {
 	
 	public void writeSelectKey(memoVO memo);
 	
