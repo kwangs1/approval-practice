@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
+<title></title>
 <style>
 textarea{
 	width: 100%;
@@ -20,8 +21,10 @@ textarea{
 </style>
 <body>
 <form id='frm'>
+<input type='hidden' id='title' name='title' />
 	<div>
-		<button onclick='submit()'>저장</button>
+		<button class="submit">저장</button>
+		<button class="SaveAs">다른이름으로 저장</button>
 	</div>
 	<div>
 		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)"></textarea> 
@@ -41,11 +44,28 @@ function resize(obj) {
 }
 
 function submit(){
-	var frmObj = document.getElementById('frm');
-	frmObj.action = "${path}/memo/write";
-	frmObj.method = 'post';
-	
-	frmObj.submit();
+	var title = prompt("저장 할 제목을 입력해주세요.");
+	if(title !== null && title !== ''){
+		document.getElementById('title').value = title;
+		document.title = title;
+	}
+	var content = document.getElementById('content').value;
+	$.ajax({
+		type: 'post',
+		url: '${path}/memo/write',
+		contentType: 'application/json',//JSON 형식으로 전송 지정.
+		data: JSON.stringify({content: content, title: title}),//JSON.stringify를 사용하여 JSON 형식으로 변환.
+		success: function(){
+			alert("저장이 완료되었습니다.");
+			setTimeout(() =>
+				window.close(),500);
+		},
+		error: function(xhr, status, error){
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	});
 }
 
 document.addEventListener('keydown', function(event){

@@ -13,12 +13,7 @@
 </h1>
 
 <P>  The time on the server is ${serverTime}. </P>
-<a href="javascript:write()">메모 작성</a>
+<a href="${path}/memo/list">메모</a>
 
-<script>
-function write(){
-	window.open("${path}/memo/write","memo","width=1024, height=768, left=500");
-}
-</script>
 </body>
 </html>

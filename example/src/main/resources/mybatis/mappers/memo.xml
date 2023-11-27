@@ -27,4 +27,20 @@
 	values(mno_seq.nextval,#{title},#{content},#{name},sysdate,#{upddate})
 </insert>
 
+<update id="TitleUpdate">
+	update memo
+	set title = #{title}
+	where mno = #{mno}
+</update>
+
+<select id="read" parameterType="int" resultMap="memoResult">
+	select title,content
+	from memo
+	where mno = #{mno}
+</select>
+
+<select id="list" resultMap="memoResult">
+	select mno,title,regdate
+	from memo
+</select>
 </mapper>
