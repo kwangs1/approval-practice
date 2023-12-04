@@ -16,14 +16,14 @@ public class memoServiceImpl implements memoService{
 	private memoMapper mapper;
 	
 	@Override
-	public List<memoVO> read(int mno) {
+	public memoVO read(int mno) {
 		return mapper.read(mno);
 	}
-
+	
 	@Override
-	public List<memoVO>list(){
-		log.info("memo list Service success");
-		return mapper.list();
+	public List<memoVO> ajaxList(){
+		//log.info("memo list Service success");		
+		return mapper.ajaxList();
 	}
 	
 	@Override
@@ -34,5 +34,10 @@ public class memoServiceImpl implements memoService{
 	@Override
 	public void TitleUpdate(memoVO memo) {
 		mapper.TitleUpdate(memo);
+	}
+	
+	@Override
+	public void update(memoVO memo) {
+		mapper.update(memo);
 	}
 }

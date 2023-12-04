@@ -23,8 +23,7 @@ textarea{
 <form id='frm'>
 <input type='hidden' id='title' name='title' />
 	<div>
-		<button class="submit">저장</button>
-		<button class="SaveAs">다른이름으로 저장</button>
+		<button onclick='reload()'>새로 만들기</button>
 	</div>
 	<div>
 		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)"></textarea> 
@@ -33,9 +32,11 @@ textarea{
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+function reload(){
+	window.location.reload();
+}
 $(document).ready(function(){
 	document.getElementById('content').focus();
-
 });
 
 function resize(obj) {
@@ -57,8 +58,15 @@ function submit(){
 		data: JSON.stringify({content: content, title: title}),//JSON.stringify를 사용하여 JSON 형식으로 변환.
 		success: function(){
 			alert("저장이 완료되었습니다.");
-			setTimeout(() =>
-				window.close(),500);
+			
+			//부모창[list.jsp]에 작성 완료 시 ajaxList 호출.
+            if (window.opener && !window.opener.closed) {
+                window.opener.ajaxList();
+            }
+			setTimeout(() => 
+				window.close()
+			,300);
+            
 		},
 		error: function(xhr, status, error){
 			console.log(xhr);
@@ -74,6 +82,7 @@ document.addEventListener('keydown', function(event){
 		submit();
 	}
 })
+
 </script>
 </body>
 </html>

@@ -12,7 +12,9 @@ public interface memoMapper {
 
 	void TitleUpdate(memoVO memo);
 
-	List<memoVO> read(int mno);
+	memoVO read(int mno);
+	
+	List<memoVO> ajaxList();
 
-	List<memoVO> list();
+	void update(memoVO memo);
 }

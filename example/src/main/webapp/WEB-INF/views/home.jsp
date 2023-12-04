@@ -6,6 +6,8 @@
 <html>
 <head>
 	<title>Home</title>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
 <h1>
@@ -15,5 +17,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 <a href="${path}/memo/list">메모</a>
 
+<script type="text/javascript">
+</script>
 </body>
 </html>

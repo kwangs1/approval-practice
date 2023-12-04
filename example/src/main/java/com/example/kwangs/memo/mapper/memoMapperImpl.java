@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.memo.domain.memoVO;
-import com.example.kwangs.memo.service.memoServiceImpl;
 
 @Repository
 public class memoMapperImpl implements memoMapper{
@@ -18,14 +17,14 @@ public class memoMapperImpl implements memoMapper{
 	private SqlSession session;
 	
 	@Override
-	public List<memoVO> read(int mno) {
+	public memoVO read(int mno) {
 		return session.selectOne("mapper.memo.read",mno);
 	}
 	
 	@Override
-	public List<memoVO> list(){
-		log.info("memo Mapper list Success");
-		return session.selectList("mapper.memo.list");
+	public List<memoVO> ajaxList(){
+		//log.info("memo Mapper list Success");
+		return session.selectList("mapper.memo.ajaxList");
 	}
 	
 	@Override
@@ -41,5 +40,10 @@ public class memoMapperImpl implements memoMapper{
 	@Override
 	public void TitleUpdate(memoVO memo) {
 		session.update("mapper.memo.TitleUpdate",memo);
+	}
+	
+	@Override
+	public void update(memoVO memo) {
+		session.update("mapper.memo.update",memo);
 	}
 }

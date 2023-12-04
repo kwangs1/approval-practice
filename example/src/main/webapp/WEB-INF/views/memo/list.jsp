@@ -6,7 +6,11 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<style>
+.detail{
+	cursor:pointer;
+}
+</style>
 </head>
 <body>
 <a href="javascript:write()">메모 작성</a>
@@ -18,37 +22,46 @@
 			<th>날짜</th>
 		</tr>
 	</thead>
-	<tbody id="list">
+	<tbody id="ajaxList">
 	
 	</tbody>
 </table>
 
-<script>
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script type="text/javascript">
 function write() {
     window.open("${path}/memo/write", "memo", "width=1024, height=768, left=500");
 }
 
-$('document').ready(function(){
-    list();
+$(document).ready(function(){
+	ajaxList();
 });
 
-function list() {
+function ajaxList() {
     $.ajax({
         type: 'get',
-        url: '${path}/memo/list',
+        url: '${path}/memo/ajaxList',
         dataType: 'json',
-        success: function(res) {
-        	const data = res['list'];
+        success: function(data) {
+        	console.log(data);
             var htmls = "";
             
-            for (const i in data) {
-                let title = data[i].title;
-                let regdate = data[i].regdate;
-
-                htmls += "<tr><td>" + title + "</td><td>" + regdate + "</td></tr>";
+            for (var i in data) {
+            	var mno = data[i].mno;
+            	var title = data[i].title;
+            	var regdate = data[i].regdate;
+            	
+                htmls += "<tr>"
+                htmls += "<td class='detail' data-mno='"+ mno +"'>" + title + "</td>"
+                htmls += "<td>" + regdate + "</td></tr>";
             }
-            $('#list').html(htmls);
-           console.log('success');
+            $('#ajaxList').html(htmls);
+
+            $('.detail').click(function(){
+            	var mno = $(this).data('mno');
+            	window.open('${path}/memo/read?mno='+mno,'read','width=1024, height=768, left=500')
+            })
         },
         error: function(xhr, status, error) {
             console.log(xhr);

@@ -1,9 +1,7 @@
 package com.example.kwangs.memo.controller;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
-
-import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,15 +27,15 @@ public class memoController {
 	public void read(Model model,int mno) {
 		model.addAttribute("read",service.read(mno));
 	}
+	//list 화면
+	@GetMapping("/list")
+	public void list() {
+	}
+	//list ajax
 	@ResponseBody
-	@GetMapping(value="/list", produces="application/json")
-	public ResponseEntity<HashMap<String,Object>> list(HttpServletResponse response) {
-		HashMap<String,Object> result = new HashMap<>();
-		
-		result.put("list", service.list());
-
-		log.info("memo list controller success");
-		return ResponseEntity.ok(result);
+	@GetMapping("/ajaxList")
+	public List<memoVO> ajaxList(){
+		return service.ajaxList();
 	}
 	
 	@GetMapping("/write")
@@ -55,14 +53,14 @@ public class memoController {
 		return ResponseEntity.ok("Memo inserted successfully");
 	}
 	
-	@GetMapping("/TitleUpdate")
-	public void TitleUpdate() {
-		
-	}
 	@ResponseBody
 	@PostMapping("/TitleUpdate")
-	public ResponseEntity<String> TitleUpdate(memoVO memo){
+	public void TitleUpdate(@RequestBody memoVO memo){
 		service.TitleUpdate(memo);
-		return ResponseEntity.ok("Memo Title Update SuccessFully");
+	}
+	@ResponseBody
+	@PostMapping("/update")
+	public void update(@RequestBody memoVO memo) {
+		service.update(memo);
 	}
 }

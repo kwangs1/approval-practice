@@ -29,18 +29,25 @@
 
 <update id="TitleUpdate">
 	update memo
-	set title = #{title}
+	set title = #{title}, upddate = sysdate
+	where mno = #{mno}
+</update>
+
+<update id="update">
+	update memo
+	set content = #{content}, upddate = sysdate
 	where mno = #{mno}
 </update>
 
 <select id="read" parameterType="int" resultMap="memoResult">
-	select title,content
+	select mno,title,content
 	from memo
 	where mno = #{mno}
 </select>
 
-<select id="list" resultMap="memoResult">
+<select id="ajaxList" resultMap="memoResult">
 	select mno,title,regdate
 	from memo
+	order by mno desc
 </select>
 </mapper>

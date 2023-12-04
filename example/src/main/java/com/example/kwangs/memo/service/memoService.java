@@ -10,8 +10,10 @@ public interface memoService {
 
 	void TitleUpdate(memoVO memo);
 
-	List<memoVO> read(int mno);
+	memoVO read(int mno);
 
-	List<memoVO> list();
+	List<memoVO> ajaxList();
+
+	void update(memoVO memo);
 
 }
