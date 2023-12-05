@@ -24,9 +24,9 @@ textarea{
 <input type='hidden' id='mno' name='mno' value="${read.mno}"/>
 <input type='hidden' id='title' name='title' value="${read.title}"/>
 	<div>
-		<button onclick="newOpen()">새 창</button>
-		<button onclick="SaveAs()">다른이름으로 저장</button>
-		<button id='print' onclick='return printPage()'>인쇄하기</button>
+		<a href="javascript:newOpen()">새 창</a>
+		<a href="javascript:SaveAs()">다른이름으로 저장</a>
+		<a href="#" onclick="return printPage()">인쇄하기</a>
 
 	</div>
 	<div>

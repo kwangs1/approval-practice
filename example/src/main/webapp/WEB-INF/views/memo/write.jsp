@@ -23,17 +23,21 @@ textarea{
 <form id='frm'>
 <input type='hidden' id='title' name='title' />
 	<div>
-		<button onclick='reload()'>새로 만들기</button>
+		<a href="javascript:clean()">새로 만들기</a>
+		<a href="javascript:clean()">실행 취소</a>
+		<a href="javascript:copyC()">선택 복사</a>
+		<a href="javascript:TimeAndDate()">시간/날짜</a>
 	</div>
 	<div>
-		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)"></textarea> 
+		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)" oninput="resize(this)"></textarea> 
 	</div>
 </form>
 
+<script src="${path}/resources/js/command.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-function reload(){
-	window.location.reload();
+function clean(){
+	undo();
 }
 $(document).ready(function(){
 	document.getElementById('content').focus();
@@ -46,10 +50,17 @@ function resize(obj) {
 
 function submit(){
 	var title = prompt("저장 할 제목을 입력해주세요.");
-	if(title !== null && title !== ''){
+	if(title === null){
+		alert('저장이 취소되었습니다');
+		return;
+	}else if(title === ''){
+		alert('제목을 입력하세요.');
+		return;
+	}else{
 		document.getElementById('title').value = title;
 		document.title = title;
 	}
+		
 	var content = document.getElementById('content').value;
 	$.ajax({
 		type: 'post',
@@ -63,9 +74,6 @@ function submit(){
             if (window.opener && !window.opener.closed) {
                 window.opener.ajaxList();
             }
-			setTimeout(() => 
-				window.close()
-			,300);
             
 		},
 		error: function(xhr, status, error){
