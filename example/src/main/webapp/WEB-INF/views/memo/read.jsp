@@ -23,32 +23,19 @@ textarea{
 <form id='frm'>
 <input type='hidden' id='mno' name='mno' value="${read.mno}"/>
 <input type='hidden' id='title' name='title' value="${read.title}"/>
-	<div>
-		<a href="javascript:newOpen()">새 창</a>
-		<a href="javascript:SaveAs()">다른이름으로 저장</a>
-		<a href="#" onclick="return printPage()">인쇄하기</a>
-
-	</div>
+<%@include file="../memo/common.jsp"%>
+<hr>
 	<div>
 		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)">${read.content}</textarea> 
 	</div>
 </form>
 
+<script src="${path}/resources/js/command.js"></script>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-function printPage(){
-	window.print();
+function newOpen(){
+  window.open("${path}/memo/write", "memo", "width=1024, height=768, left=400");
 }
-function beforePrint(){
-	initBodyHtml = document.body.innerHTML;
-	document.body.innerHTML = document.getElementById('content').innerHTML;
-}
-function afterPrint(){
-	document.body.innerHTML = initBodyHtml;
-}
-window.onbeforeprint = beforePrint;//프린터 출력 이전 화면
-window.onafterprint = afterPrint;//프린터 출력 이후 이벤트
-
 
 $(document).ready(function(){
 	document.getElementById('content').focus();
@@ -119,10 +106,6 @@ function SaveAs(){
 			console.log(error);
 		}
 	})
-}
-
-function newOpen(){
-    window.open("${path}/memo/write", "memo", "width=1024, height=768, left=400");
 }
 </script>
 </body>

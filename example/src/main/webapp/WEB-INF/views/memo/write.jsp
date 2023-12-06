@@ -18,16 +18,18 @@ textarea{
 	border: none;
 	outline: none;
 }
+.new{
+	color: gray;
+}
+.as{
+	color: gray;
+}
 </style>
 <body>
 <form id='frm'>
 <input type='hidden' id='title' name='title' />
-	<div>
-		<a href="javascript:clean()">새로 만들기</a>
-		<a href="javascript:clean()">실행 취소</a>
-		<a href="javascript:copyC()">선택 복사</a>
-		<a href="javascript:TimeAndDate()">시간/날짜</a>
-	</div>
+<%@include file="../memo/common.jsp"%>
+<hr>
 	<div>
 		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)" oninput="resize(this)"></textarea> 
 	</div>
@@ -39,6 +41,15 @@ textarea{
 function clean(){
 	undo();
 }
+
+function newOpen(){
+ 	return;
+}
+
+function SaveAs(){
+	return;
+}
+
 $(document).ready(function(){
 	document.getElementById('content').focus();
 });
@@ -90,7 +101,6 @@ document.addEventListener('keydown', function(event){
 		submit();
 	}
 })
-
 </script>
 </body>
 </html>
