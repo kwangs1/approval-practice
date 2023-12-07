@@ -2,6 +2,7 @@ package com.example.kwangs.memo.mapper;
 
 import java.util.List;
 
+import com.example.kwangs.SearchCriteria;
 import com.example.kwangs.memo.domain.memoVO;
 
 public interface memoMapper {
@@ -14,7 +15,9 @@ public interface memoMapper {
 
 	memoVO read(int mno);
 	
-	List<memoVO> ajaxList();
+	List<memoVO> ajaxList(SearchCriteria scri);
 
 	void update(memoVO memo);
+
+	int countList();
 }

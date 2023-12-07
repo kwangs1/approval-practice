@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.kwangs.PageMaker;
+import com.example.kwangs.SearchCriteria;
 import com.example.kwangs.memo.domain.memoVO;
 import com.example.kwangs.memo.service.memoService;
 
@@ -30,12 +32,19 @@ public class memoController {
 	//list 화면
 	@GetMapping("/list")
 	public void list() {
+		
 	}
 	//list ajax
 	@ResponseBody
 	@GetMapping("/ajaxList")
-	public List<memoVO> ajaxList(){
-		return service.ajaxList();
+	public List<memoVO> ajaxList(Model model,SearchCriteria scri){
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		pageMaker.setTotalCount(service.countList());
+		
+		model.addAttribute("pageMaker",pageMaker);
+		
+		return service.ajaxList(scri);
 	}
 	
 	@GetMapping("/write")

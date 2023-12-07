@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
+
 <style>
 .detail{
 	cursor:pointer;
@@ -25,8 +26,9 @@
 	<tbody id="ajaxList">
 	
 	</tbody>
+	
 </table>
-
+<div id="pagination"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
@@ -46,17 +48,39 @@ function ajaxList() {
         success: function(data) {
         	console.log(data);
             var htmls = "";
+            var pageMaker = data.pageMaker;
+            var list = data.list;
             
-            for (var i in data) {
-            	var mno = data[i].mno;
-            	var title = data[i].title;
-            	var regdate = data[i].regdate;
+            for (var i in list) {
+            	var mno = list[i].mno;
+            	var title = list[i].title;
+            	var regdate = list[i].regdate;
             	
                 htmls += "<tr>"
                 htmls += "<td class='detail' data-mno='"+ mno +"'>" + title + "</td>"
                 htmls += "<td>" + regdate + "</td></tr>";
             }
             $('#ajaxList').html(htmls);
+            
+            var paginationHtml = "";
+                paginationHtml += "<ul class='pagination'>";
+                
+                if (pageMaker.prev) {
+                    paginationHtml += "<li><a href='#' onclick='loadPage(" + (pageMaker.startPage - 1) + ")'><i class='fa-solid fa-chevron-left'></i></a></li>";
+                }
+                
+                for (var i = pageMaker.startPage; i <= pageMaker.endPage; i++) {
+                    paginationHtml += "<li><a href='#' onclick='loadPage(" + i + ")'><i class='fa'>" + i + "</i></a></li>";
+                }
+                
+                if (pageMaker.next && data.pageMaker.endPage > 0) {
+                    paginationHtml += "<li><a href='#' onclick='loadPage(" + (pageMaker.endPage + 1) + ")'><i class='fa-solid fa-chevron-right'></i></a></li>";
+                }
+                
+                paginationHtml += "</ul>";
+            
+
+            $('#pagination').html(paginationHtml);
 
             $('.detail').click(function(){
             	var mno = $(this).data('mno');

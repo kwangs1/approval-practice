@@ -13,6 +13,13 @@
 		<result property="regdate" column="regdate" />
 		<result property="upddate" column="upddate" />
 	</resultMap>
+	
+<sql id="search">
+	<if test="searchType != null">
+		<if test="searchType == 't'.toString()">and title like '%' || #{keyword} || '%'</if>
+		<if test="searchType == 'c'.toString()">and content like '%' || #{content} || '%'</if>
+	</if>
+</sql>
 
 <insert id="writeSelectKey">
 	<selectKey keyProperty="mno" order="BEFORE" resultType="int">
@@ -46,8 +53,20 @@
 </select>
 
 <select id="ajaxList" resultMap="memoResult">
-	select mno,title,regdate
-	from memo
+	select mno,title,content,name,regdate,upddate from
+	(
+		select mno,title,content,name,regdate,upddate,
+			row_number() over(order by mno desc)as rnum
+		from memo
+		where 1=1
+		<include refid="search"></include>
+	)list
+	where rnum between #{rowStart} and #{rowEnd}
 	order by mno desc
+</select>
+
+<select id="countList" resultType="int">
+	select count(*)
+	from memo
 </select>
 </mapper>

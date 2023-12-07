@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.kwangs.SearchCriteria;
 import com.example.kwangs.memo.domain.memoVO;
 import com.example.kwangs.memo.mapper.memoMapper;
 
@@ -21,9 +22,14 @@ public class memoServiceImpl implements memoService{
 	}
 	
 	@Override
-	public List<memoVO> ajaxList(){
+	public List<memoVO> ajaxList(SearchCriteria scri){
 		//log.info("memo list Service success");		
-		return mapper.ajaxList();
+		return mapper.ajaxList(scri);
+	}
+	
+	@Override
+	public int countList() {
+		return mapper.countList();
 	}
 	
 	@Override

@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.kwangs.SearchCriteria;
 import com.example.kwangs.memo.domain.memoVO;
 
 @Repository
@@ -22,9 +23,14 @@ public class memoMapperImpl implements memoMapper{
 	}
 	
 	@Override
-	public List<memoVO> ajaxList(){
+	public List<memoVO> ajaxList(SearchCriteria scri){
 		//log.info("memo Mapper list Success");
-		return session.selectList("mapper.memo.ajaxList");
+		return session.selectList("mapper.memo.ajaxList",scri);
+	}
+	
+	@Override
+	public int countList() {
+		return session.selectOne("mapper.memo.countList");
 	}
 	
 	@Override
