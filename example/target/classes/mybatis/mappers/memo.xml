@@ -15,9 +15,9 @@
 	</resultMap>
 	
 <sql id="search">
-	<if test="searchType != null">
-		<if test="searchType == 't'.toString()">and title like '%' || #{keyword} || '%'</if>
-		<if test="searchType == 'c'.toString()">and content like '%' || #{content} || '%'</if>
+	<if test="keyword != null and keyword.trim() != ''">
+		<if test="searchType == 't'.toString()">and title like '%' ||#{keyword}||'%'</if>
+		<if test="searchType == 'c'.toString()">and content like '%' ||#{keyword}||'%'</if>
 	</if>
 </sql>
 
@@ -68,5 +68,16 @@
 <select id="countList" resultType="int">
 	select count(*)
 	from memo
+    where 1=1
+    <include refid="search"></include>
+</select>
+
+<select id="searchStr" resultMap="memoResult">
+    select title, content
+    from memo
+    where mno = #{mno}
+    <if test="keyword != null and keyword.trim() != ''">
+        and content like '%' || #{keyword} || '%'
+    </if>
 </select>
 </mapper>

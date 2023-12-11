@@ -18,6 +18,10 @@ textarea{
 	border: none;
 	outline: none;
 }
+
+.highlighted {
+    background-color: yellow;
+}
 </style>
 <body>
 <form id='frm'>
@@ -107,6 +111,21 @@ function SaveAs(){
 		}
 	})
 }
+
+function searchPop() {
+    var pop = window.open('${path}/memo/searchStrForm', 'searchPopup', 'width=400, height=90');
+}
+
+
+function displaySearchResult(result) {
+    var content = document.getElementById('content');
+    var keyword = result.keyword;
+
+    // 검색 결과에 해당하는 키워드를 드래그 처리
+    var regex = new RegExp(keyword, 'g');
+    content.innerHTML = content.value.replace(regex, '<span class="highlighted">' + keyword + '</span>');
+}
+
 </script>
 </body>
 </html>

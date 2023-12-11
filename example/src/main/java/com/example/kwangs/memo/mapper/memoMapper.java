@@ -19,5 +19,7 @@ public interface memoMapper {
 
 	void update(memoVO memo);
 
-	int countList();
+	int countList(SearchCriteria scri);
+
+	List<memoVO> searchStr(SearchCriteria scri);
 }

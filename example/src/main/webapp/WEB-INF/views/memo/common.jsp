@@ -54,6 +54,7 @@ a {
   		<a href="javascript:ctrlC()">복사</a><br>
 		<a href="javascript:ctrlA()">전체 복사</a><br>
 		<a href="javascript:del()">영역 삭제</a><br>
+		<a href="javascript:searchPop()">문자 찾기</a><br>
 		<a href="javascript:change()">문자 바꾸기</a><br>
 		<a href="javascript:TimeAndDate()">시간/날짜</a>
   </div>

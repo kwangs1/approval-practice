@@ -1,6 +1,7 @@
 package com.example.kwangs.memo.mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.ibatis.session.SqlSession;
@@ -29,8 +30,8 @@ public class memoMapperImpl implements memoMapper{
 	}
 	
 	@Override
-	public int countList() {
-		return session.selectOne("mapper.memo.countList");
+	public int countList(SearchCriteria scri) {
+		return session.selectOne("mapper.memo.countList",scri);
 	}
 	
 	@Override
@@ -51,5 +52,10 @@ public class memoMapperImpl implements memoMapper{
 	@Override
 	public void update(memoVO memo) {
 		session.update("mapper.memo.update",memo);
+	}
+	
+	@Override
+	public List<memoVO> searchStr(SearchCriteria scri) {
+		return session.selectList("mapper.memo.searchStr",scri);
 	}
 }

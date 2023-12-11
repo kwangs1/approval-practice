@@ -1,6 +1,8 @@
 package com.example.kwangs.memo.service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,8 +30,8 @@ public class memoServiceImpl implements memoService{
 	}
 	
 	@Override
-	public int countList() {
-		return mapper.countList();
+	public int countList(SearchCriteria scri) {
+		return mapper.countList(scri);
 	}
 	
 	@Override
@@ -45,5 +47,13 @@ public class memoServiceImpl implements memoService{
 	@Override
 	public void update(memoVO memo) {
 		mapper.update(memo);
+	}
+	
+	@Override
+	public Map<String, Object> searchStr(SearchCriteria scri) {
+		Map<String, Object> result = new HashMap<>();
+		List<memoVO> search = mapper.searchStr(scri);
+		result.put("searchStr", search);
+		return result;
 	}
 }

@@ -1,9 +1,11 @@
 package com.example.kwangs.memo.controller;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -36,16 +38,18 @@ public class memoController {
 	}
 	//list ajax
 	@ResponseBody
-	@GetMapping("/ajaxList")
-	public List<memoVO> ajaxList(Model model,SearchCriteria scri){
-		PageMaker pageMaker = new PageMaker();
-		pageMaker.setCri(scri);
-		pageMaker.setTotalCount(service.countList());
-		
-		model.addAttribute("pageMaker",pageMaker);
-		
-		return service.ajaxList(scri);
-	}
+	@GetMapping("ajaxList")
+	public ResponseEntity<Map<String, Object>> ajaxList(SearchCriteria scri) {
+    PageMaker pageMaker = new PageMaker();
+    pageMaker.setCri(scri);
+    pageMaker.setTotalCount(service.countList(scri));
+
+    Map<String, Object> resultMap = new HashMap<>();
+    resultMap.put("pageMaker", pageMaker);
+    resultMap.put("List", service.ajaxList(scri));
+
+    return new ResponseEntity<>(resultMap, HttpStatus.OK);
+}
 	
 	@GetMapping("/write")
 	public void write() {}
@@ -71,5 +75,21 @@ public class memoController {
 	@PostMapping("/update")
 	public void update(@RequestBody memoVO memo) {
 		service.update(memo);
+	}
+	
+	
+	@GetMapping("/searchStrForm")
+	public void searchStrGet() {
+		
+	}
+	//상세보기 문자 찾기 검색
+	@ResponseBody
+	@GetMapping("/searchStr")
+	public ResponseEntity<Map<String, Object>> searchStr(Model model, SearchCriteria scri) {
+		Map<String, Object>result = new HashMap<>();
+		result.put("search", service.searchStr(scri));
+	    result.put("keyword", scri.getKeyword()); // 검색어 추가
+		
+		return ResponseEntity.ok(result);
 	}
 }
