@@ -14,12 +14,18 @@
 		<!-- 'content'로 고정된 select -->
 		<select name="content" id="searchType">
 			<option value="content">내용</option>
-		</select> <input type="text" name="keyword" id="keyword" />
+		</select> 
+		<input type="text" name="keyword" id="keyword" />
 		<button type="button" onclick="searchStr()">검색</button>
 	</form>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+
+$(document).ready(function(){
+	document.getElementById('keyword').focus();
+});
+
 function searchStr() {
    var searchType = $('#searchType').val();
    var keyword = $('#keyword').val();
@@ -42,17 +48,14 @@ function searchStr() {
 function processSearchResult(result) {
   // JSON 데이터를 객체로 파싱
   var searchResult = result;
-
-  // 여기에서 검색 결과를 적절한 방식으로 표시하거나, 다른 동작을 수행
   console.log('Received search result:', searchResult);
-  // 예시: 검색 결과를 화면에 표시하는 함수 호출
+  // 검색 결과를 화면에 표시하는 함수 호출
   displaySearchResult(searchResult);
 }
 
 function displaySearchResult(result) {
-   // 여기에서 검색 결과를 적절한 방식으로 표시하거나, 다른 동작을 수행
    console.log('Displaying search result:', result);
-   // 예시: 검색 결과를 화면에 표시하는 함수 호출 (read.jsp에 정의된 함수를 호출)
+   // 검색 결과를 read.jsp화면에 표시하는 함수 호출 
    window.opener.displaySearchResult(result);
 }
 </script>

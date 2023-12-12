@@ -10,15 +10,15 @@
 </head>
 <title>${read.title}</title>
 <style>
-textarea{
-	width: 100%;
-	min-height: 5rem;
-	overflow-y: hidden;
+#content {
+    width: 100%;
+    height: 100%;
+    border: 1px solid #dcdcdc;
+    overflow-y: hidden;
 	resize: none;
 	border: none;
 	outline: none;
 }
-
 .highlighted {
     background-color: yellow;
 }
@@ -29,8 +29,8 @@ textarea{
 <input type='hidden' id='title' name='title' value="${read.title}"/>
 <%@include file="../memo/common.jsp"%>
 <hr>
-	<div>
-		<textarea name="content" id="content" onkeydown="resize(this)" onkeyup="resize(this)">${read.content}</textarea> 
+	<div id="content" onkeydown="resize(this)" onkeyup="resize(this)" contenteditable="true">
+		${read.content}
 	</div>
 </form>
 
@@ -51,7 +51,7 @@ function resize(obj) {
 }
 
 function submit(){
-	var content = document.getElementById('content').value;
+	var content = document.getElementById('content').innerHTML;
 	var mno = document.getElementById('mno').value;
 	
 	$.ajax({
@@ -113,17 +113,22 @@ function SaveAs(){
 }
 
 function searchPop() {
-    var pop = window.open('${path}/memo/searchStrForm', 'searchPopup', 'width=400, height=90');
+    var pop = window.open('${path}/memo/searchStrForm', 'searchPopup', 'width=400, height=90, top= -700');
 }
-
 
 function displaySearchResult(result) {
     var content = document.getElementById('content');
     var keyword = result.keyword;
 
-    // 검색 결과에 해당하는 키워드를 드래그 처리
-    var regex = new RegExp(keyword, 'g');
-    content.innerHTML = content.value.replace(regex, '<span class="highlighted">' + keyword + '</span>');
+    var regex = new RegExp('(' + keyword + ')', 'g');
+
+    // 현재 텍스트 내용을 기준으로 스타일을 적용
+    var newHTML = content.innerHTML.replace(regex, function(match) {
+        return '<span class="highlighted">' + match + '</span>';
+    });
+
+    // 생성된 HTML을 다시 HTML 요소 안에 삽입
+    content.innerHTML = newHTML;
 }
 
 </script>
