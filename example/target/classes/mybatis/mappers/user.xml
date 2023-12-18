@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.user">
+	<resultMap id="userResult" type="userVO">
+		<result property="id" column="id" />
+		<result property="pw" column="pw" />
+		<result property="name" column="name" />
+		<result property="pos" column="pos" />
+		<result property="credate" column="credate" />
+		<result property="upddate" column="upddate" />
+	</resultMap>
+	
+<insert id="write">
+insert into member
+values(#{id},#{pw},#{name},#{pos},sysdate,#{upddate})
+</insert>
+	
+<select id="idcheck" resultType="int">
+select count(*) from member where id = #{id}
+</select>
+
+<select id="login" resultType="userVO">
+select * from member where id = #{id} and pw = #{pw}
+</select>
+</mapper>

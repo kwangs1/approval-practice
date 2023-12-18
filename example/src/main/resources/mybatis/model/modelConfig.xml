@@ -7,6 +7,7 @@
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
 <typeAliases>
-		<typeAlias type="com.example.kwangs.memo.domain.memoVO" alias="memoVO" />		
+		<typeAlias type="com.example.kwangs.memo.domain.memoVO" alias="memoVO" />	
+		<typeAlias type="com.example.kwangs.user.domain.userVO" alias="userVO" />	
 </typeAliases>       
 </configuration>

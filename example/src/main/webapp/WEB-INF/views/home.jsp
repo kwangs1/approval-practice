@@ -10,12 +10,24 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </head>
 <body>
+<c:if test ="${user == null}">
 <h1>
-	Hello world!  
+	Welcome to world!
 </h1>
 
-<P>  The time on the server is ${serverTime}. </P>
 <a href="${path}/memo/list">메모</a>
+<a href="${path}/user/write">회원가입</a>
+<a href="${path}/user/login">로그인</a>
+</c:if>
+
+<c:if test ="${user != null}">
+<h1>
+	Welcome to world!  ${user.name}
+</h1>
+
+<a href="${path}/memo/list">메모</a>
+<a href="${path}/user/logout">로그아웃</a>
+</c:if>
 
 <script type="text/javascript">
 </script>
