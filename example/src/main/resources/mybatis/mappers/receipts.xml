@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.receipts">
+	<resultMap id="receiptsResult" type="receiptsVO">
+		<result property="receipts_seq" column="receipts_seq" />
+		<result property="name" column="name" />
+		<result property="id" column="id" />
+		<result property="regdate" column="regdate" />
+		<result property="productname" column="productname" />
+		<result property="fullstock" column="fullstock" />
+		<result property="stock" column="stock" />
+		<result property="stockquantity" column="stockquantity" />
+		<result property="subdivision" column="subdivision" />
+		<result property="manufacturing" column="manufacturing" />
+		<result property="currentstock" column="currentstock" />
+	</resultMap>
+	
+<insert id="write">
+insert into receipts
+values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
+	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
+</insert>
+</mapper>
