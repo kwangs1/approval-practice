@@ -4,6 +4,8 @@ import com.example.kwangs.receipts.domain.receiptsVO;
 
 public interface receiptsMapper {
 
-	void write(receiptsVO vo);
+	int write(receiptsVO vo);
+
+	String getLatestReceiptsSeq();
 
 }

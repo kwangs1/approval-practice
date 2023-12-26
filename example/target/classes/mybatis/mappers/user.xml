@@ -26,4 +26,8 @@ select count(*) from member where id = #{id}
 <select id="login" resultType="userVO">
 select * from member where id = #{id} and pw = #{pw}
 </select>
+
+<select id="list" resultType="userVO">
+select id,name,pos from member
+</select>
 </mapper>

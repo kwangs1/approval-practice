@@ -19,9 +19,15 @@
 		<result property="currentstock" column="currentstock" />
 	</resultMap>
 	
-<insert id="write">
+<insert id="write" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq">
 insert into receipts
-values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
+values(receipts_seq.nextval,#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
 	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
 </insert>
+
+<select id="getLatestReceiptsSeq" resultType="java.lang.String">
+    SELECT 'RECEIPTS' || to_char(sysdate, 'YYYYMMDD') || lpad(receipts_seq.CURRVAL, 5, '0') FROM DUAL
+</select>
+
+
 </mapper>

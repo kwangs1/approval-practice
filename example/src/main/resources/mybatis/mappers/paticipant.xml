@@ -17,4 +17,10 @@
 		<result property="upddate" column="upddate" />
 	</resultMap>
 	
+<insert id="ParticipantWrite" parameterType="paticipantVO">
+    insert into paticipant
+    values(#{paticipant_seq}, #{receipts_seq}, #{status}, #{line_seq}, #{name},
+    #{id}, #{pos}, #{regdate}, #{upddate})
+</insert>
+ 
 </mapper>

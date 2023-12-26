@@ -1,5 +1,7 @@
 package com.example.kwangs.user.mapper;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -24,5 +26,10 @@ public class userMapperImpl implements userMapper{
 	@Override
 	public userVO login(userVO user) {
 		return session.selectOne("mapper.user.login",user);
+	}
+	
+	@Override
+	public List<userVO> list(){
+		return session.selectList("mapper.user.list");
 	}
 }
