@@ -71,5 +71,4 @@ public class paticipantVO {
 		this.upddate = upddate;
 	}
 	
-	
 }

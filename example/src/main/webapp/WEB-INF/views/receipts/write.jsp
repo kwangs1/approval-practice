@@ -11,10 +11,13 @@
 
 	<button onclick="pop()">유저 목록</button>
 <form method="post" id="frmObj">
-	<input type="hidden" name="paticipantVO.receipts_seq" value="${receipts_seq}"/>
-	<input type="hidden" id="id" name="paticipantVO.id" />
-	<input type="hidden" id="pos" name="paticipantVO.pos" />
-	<input type="text" id="name" name="paticipantVO.name" />
+<!-- 
+	<input type="hidden" id="id" name="${paticipant.id}" />
+	<input type="hidden" id="pos" name="${paticipant.pos}" />
+	<input type="text" id="name" name="${paticipant.name}" />
+	-->
+	<!-- 동적으로 생성 될 input box 위치 -->
+		<div id="inputs"></div>
 	<button type="submit">상신</button>	
 </form>
 
@@ -22,14 +25,24 @@
 <script>
 window.addEventListener('message',function(e){
 	var data = e.data;
-	var id = data.id;
-	var name = data.name;
-	var pos = data.pos;
+	//var id = data.id;
+	//var name = data.name;
+	//var pos = data.pos;
+	var users  = data.users;
+	console.log(data.users);
+	<%--
+	$('#id').val(users[0].id);
+	$('#name').val(users[0].name);
+	$('#pos').val(users[0].pos);--%>
 	
-	$('#id').val(id);
-	$('#name').val(name);
-	$('#pos').val(pos);
+	 var inputs = $('#inputs');
+	 inputs.empty();
 	
+	  for (var i = 0; i < users.length; i++) {
+	      inputs.append('<input type="hidden" name="id" value="' + users[i].id + '" />');
+	      inputs.append('<input type="text" name="name" value="' + users[i].name + '" />');
+	      inputs.append('<input type="hidden" name="pos" value="' + users[i].pos + '" />');
+	  }
 });
 
 function pop(){

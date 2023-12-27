@@ -21,7 +21,7 @@
 	
 <insert id="write" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq">
 insert into receipts
-values(receipts_seq.nextval,#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
+values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
 	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
 </insert>
 
