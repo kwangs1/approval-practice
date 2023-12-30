@@ -8,45 +8,49 @@
 <meta charset="UTF-8">
 </head>
 <body>
-
 	<button onclick="pop()">유저 목록</button>
-<form method="post" id="frmObj">
-<!-- 
-	<input type="hidden" id="id" name="${paticipant.id}" />
-	<input type="hidden" id="pos" name="${paticipant.pos}" />
-	<input type="text" id="name" name="${paticipant.name}" />
-	-->
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
-	<button type="submit">상신</button>	
-</form>
+	<a href="javascript:void(0);" onclick="approval();">상신</a>	
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 window.addEventListener('message',function(e){
 	var data = e.data;
-	//var id = data.id;
-	//var name = data.name;
-	//var pos = data.pos;
 	var users  = data.users;
 	console.log(data.users);
-	<%--
-	$('#id').val(users[0].id);
-	$('#name').val(users[0].name);
-	$('#pos').val(users[0].pos);--%>
 	
 	 var inputs = $('#inputs');
 	 inputs.empty();
 	
-	  for (var i = 0; i < users.length; i++) {
-	      inputs.append('<input type="hidden" name="id" value="' + users[i].id + '" />');
-	      inputs.append('<input type="text" name="name" value="' + users[i].name + '" />');
-	      inputs.append('<input type="hidden" name="pos" value="' + users[i].pos + '" />');
-	  }
+	 for (var i = 0; i < users.length; i++) {
+	   inputs.append('<input type="hidden" id="' + users[i].id + '"   value="' + users[i].id + '" />');
+	   inputs.append('<input type="text" name="' + users[i].name + '"   value="' + users[i].name + '" />');
+	   inputs.append('<input type="hidden" pos="' + users[i].pos + '"  value="' + users[i].pos + '" />');
+	}
 });
 
 function pop(){
 	window.open("${path}/user/list","pop","width=300, height=300");
+}
+function approval(){
+
+    var formData = $('#inputs :input').serializeArray();
+    
+	$.ajax({
+	    type: 'post',
+	    url: '${path}/receipts/write',
+	    data: JSON.stringify(formData),
+	    contentType: 'application/json',
+	    success: function(response){
+	        console.log('Ajax 요청: '+response);
+	    },
+	    error: function(xhr, status, error){
+	        console.log(xhr);
+	        console.log(status);
+	        console.log(error);
+	    }
+	});
 }
 </script>
 </body>

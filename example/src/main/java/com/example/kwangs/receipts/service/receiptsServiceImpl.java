@@ -1,6 +1,6 @@
 package com.example.kwangs.receipts.service;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,20 +22,21 @@ public class receiptsServiceImpl implements receiptsService{
 	
 	@Override
 	@Transactional
-	public int write(receiptsVO rVO, paticipantVO pVO) {
-		int result = mapper.write(rVO);
+	public int write(receiptsVO receipts, List<paticipantVO> paticipant) {
+		int result = mapper.write(receipts);
 		
 		if(result == 1) {
-			String origin_seq = rVO.getReceipts_seq();
+			String origin_seq = receipts.getReceipts_seq();
 			log.info("결재 시퀀스 트리거 이전...{}"+origin_seq);
 			String new_seq = mapper.getLatestReceiptsSeq();
 			log.info("트리거 이후 결재 시퀀스..{}"+new_seq);
 			
-			
-			pVO.setReceipts_seq(new_seq);
-			log.info("결재선 결재시퀀스...{}"+pVO.getReceipts_seq());
-			//이후 isnert 된 receipts_seq 값 가져올 것.
-			paticipantMapper.ParticipantWrite(pVO);
+			for(paticipantVO pVO : paticipant) {
+				pVO.setReceipts_seq(new_seq);
+				log.info("결재선 결재시퀀스...{}"+pVO.getReceipts_seq());
+				//이후 isnert 된 receipts_seq 값 가져올 것.
+				paticipantMapper.ParticipantWrite(pVO);
+			}
 		}
 		return result;
 	}
