@@ -14,7 +14,7 @@
 </c:forEach>
 <hr>
 <div id="selectedUsers"></div>
-<button onclick="confirmSelection()">확인</button>
+<a href="javascript:void(0)" onclick="confirmSelection()">확인</a>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 var selectedUsers = [];
@@ -24,12 +24,8 @@ $('a.userLink').on('click',function(e){
 	var id = $(this).data('id');
 	var name = $(this).data('name');
 	var pos = $(this).data('pos');
-	<%--
-	window.opener.postMessage({
-		id : id, name : name, pos : pos},'*'
-	);--%>
+	
 	selectedUsers.push({ id: id, name: name, pos: pos });
-
     // 동적으로 UI 업데이트
     updateSelectedUsersUI();
 })

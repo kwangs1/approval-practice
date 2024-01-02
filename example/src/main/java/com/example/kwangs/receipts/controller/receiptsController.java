@@ -1,11 +1,10 @@
 package com.example.kwangs.receipts.controller;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,13 +28,9 @@ public class receiptsController {
 	
 	@ResponseBody
 	@PostMapping("/write")
-	public String write(receiptsVO receipts, @RequestBody List<paticipantVO> paticipant) {
-	    int result = service.write(receipts, paticipant);
-	    if(result == 1) {
-	    	log.info("값 체크: "+paticipant);
-		    return "success";
-	    }else {
-	    	return "failure";
-	    }
+	public ResponseEntity<String> write(receiptsVO receipts, @RequestBody List<paticipantVO> paticipant) {
+		log.info("Received data {} "+paticipant);
+		service.write(receipts, paticipant);
+	    return ResponseEntity.ok("Success");
 	}
 }

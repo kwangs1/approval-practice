@@ -31,16 +31,14 @@ public class receiptsServiceImpl implements receiptsService{
 			String new_seq = mapper.getLatestReceiptsSeq();
 			log.info("트리거 이후 결재 시퀀스..{}"+new_seq);
 			
-			for(paticipantVO pVO : paticipant) {
+			for(paticipantVO pVO : paticipant) {	
 				pVO.setReceipts_seq(new_seq);
 				log.info("결재선 결재시퀀스...{}"+pVO.getReceipts_seq());
-				//이후 isnert 된 receipts_seq 값 가져올 것.
+				//이후 insert 된 receipts_seq 값 가져올 것.
 				paticipantMapper.ParticipantWrite(pVO);
 			}
 		}
 		return result;
 	}
-
-
 
 }

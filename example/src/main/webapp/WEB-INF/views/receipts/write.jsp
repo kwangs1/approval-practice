@@ -15,6 +15,10 @@
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+function pop(){
+	window.open("${path}/user/list","pop","width=300, height=300");
+}
+
 window.addEventListener('message',function(e){
 	var data = e.data;
 	var users  = data.users;
@@ -23,24 +27,36 @@ window.addEventListener('message',function(e){
 	 var inputs = $('#inputs');
 	 inputs.empty();
 	
-	 for (var i = 0; i < users.length; i++) {
-	   inputs.append('<input type="hidden" id="' + users[i].id + '"   value="' + users[i].id + '" />');
-	   inputs.append('<input type="text" name="' + users[i].name + '"   value="' + users[i].name + '" />');
-	   inputs.append('<input type="hidden" pos="' + users[i].pos + '"  value="' + users[i].pos + '" />');
-	}
+		for (var i = 0; i < users.length; i++) {
+			var userContainer = $('<div class="user-container">');
+			userContainer.append('<input type="text" name="name_' + i + '" value="' + users[i].name + '" />');
+			userContainer.append('<input type="hidden" name="id_' + i + '" value="' + users[i].id + '" />');
+			userContainer.append('<input type="hidden" name="pos_' + i + '" value="' + users[i].pos + '" />');
+			inputs.append(userContainer);
+		}
 });
 
-function pop(){
-	window.open("${path}/user/list","pop","width=300, height=300");
-}
 function approval(){
+    var paticipant = [];
 
-    var formData = $('#inputs :input').serializeArray();
+    $('#inputs .user-container').each(function () {
+        var userContainer = $(this);
+        var name = userContainer.find('input[name^="name_"]').val();
+        var id = userContainer.find('input[name^="id_"]').val();
+        var pos = userContainer.find('input[name^="pos_"]').val();
+	
+        paticipant.push({
+            name: name,
+            id: id,
+            pos: pos
+        });
+    });
+    console.log('Sent data: ', JSON.stringify(paticipant));
     
 	$.ajax({
 	    type: 'post',
 	    url: '${path}/receipts/write',
-	    data: JSON.stringify(formData),
+	    data: JSON.stringify(paticipant),
 	    contentType: 'application/json',
 	    success: function(response){
 	        console.log('Ajax 요청: '+response);
