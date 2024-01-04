@@ -32,8 +32,18 @@ window.addEventListener('message',function(e){
 			userContainer.append('<input type="text" name="name_' + i + '" value="' + users[i].name + '" />');
 			userContainer.append('<input type="hidden" name="id_' + i + '" value="' + users[i].id + '" />');
 			userContainer.append('<input type="hidden" name="pos_' + i + '" value="' + users[i].pos + '" />');
+			
+			var statusDropdown = $('<select name="status_' + i + '">');
+			statusDropdown.append('<option value ="1000">기안</option>');
+			statusDropdown.append('<option value ="2000">검토</option>');
+			statusDropdown.append('<option value ="3000">협조</option>');
+			statusDropdown.append('<option value ="4000">결재</option>');
+			
+			userContainer.append(statusDropdown);
 			inputs.append(userContainer);
 		}
+		
+		
 });
 
 function approval(){
@@ -44,11 +54,13 @@ function approval(){
         var name = userContainer.find('input[name^="name_"]').val();
         var id = userContainer.find('input[name^="id_"]').val();
         var pos = userContainer.find('input[name^="pos_"]').val();
+        var status = userContainer.find('select[name^="status_"]').val();
 	
         paticipant.push({
             name: name,
             id: id,
-            pos: pos
+            pos: pos,
+            status: status
         });
     });
     console.log('Sent data: ', JSON.stringify(paticipant));

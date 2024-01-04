@@ -20,7 +20,7 @@
 <insert id="ParticipantWrite" parameterType="paticipantVO">
     insert into paticipant
     values(#{paticipant_seq}, #{receipts_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, #{regdate}, #{upddate})
+    #{id}, #{pos}, sysdate, #{upddate})
 </insert>
  
 </mapper>
