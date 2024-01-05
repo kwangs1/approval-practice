@@ -24,9 +24,9 @@ $('a.userLink').on('click',function(e){
 	var id = $(this).data('id');
 	var name = $(this).data('name');
 	var pos = $(this).data('pos');
-	
+	//배열에 담아 전송
 	selectedUsers.push({ id: id, name: name, pos: pos });
-    // 동적으로 UI 업데이트
+    // 유저 클릭시 동적으로 화면에 표시되게 하기위해 함수 호출
     updateSelectedUsersUI();
 })
 function updateSelectedUsersUI() {

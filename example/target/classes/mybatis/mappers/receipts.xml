@@ -29,5 +29,4 @@ values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock
     SELECT 'RECEIPTS' || to_char(sysdate, 'YYYYMMDD') || lpad(receipts_seq.CURRVAL, 5, '0') FROM DUAL
 </select>
 
-
 </mapper>

@@ -25,7 +25,7 @@ public class receiptsController {
 	
 	@GetMapping("/write")
 	public void write() {}
-	
+
 	@ResponseBody
 	@PostMapping("/write")
 	public ResponseEntity<String> write(receiptsVO receipts, @RequestBody List<paticipantVO> paticipant) {
@@ -33,4 +33,5 @@ public class receiptsController {
 		service.write(receipts, paticipant);
 	    return ResponseEntity.ok("Success");
 	}
+
 }
