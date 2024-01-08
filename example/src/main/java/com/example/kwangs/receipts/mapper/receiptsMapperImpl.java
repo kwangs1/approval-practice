@@ -20,4 +20,9 @@ public class receiptsMapperImpl implements receiptsMapper{
 	public String getLatestReceiptsSeq() {
 		return session.selectOne("mapper.receipts.getLatestReceiptsSeq");
 	}
+	
+	@Override
+	public int apprView(receiptsVO receipts) {
+		 return session.insert("mapper.receipts.apprView",receipts);
+	}
 }

@@ -33,5 +33,13 @@ public class receiptsController {
 		service.write(receipts, paticipant);
 	    return ResponseEntity.ok("Success");
 	}
-
+	
+	@GetMapping("/apprView")
+	public void apprView() {}
+	
+	@PostMapping("/apprView")
+	public void apprView(receiptsVO receipts) {
+		service.apprView(receipts);
+	}
+	
 }

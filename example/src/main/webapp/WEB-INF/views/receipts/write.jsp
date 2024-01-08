@@ -13,7 +13,7 @@
 		<div id="inputs"></div>
 		<input type="hidden" id="recId" name="id" value="${user.id}" />
 		<input type="hidden" id="recName" name="name" value="${user.name}" />
-	<a href="javascript:void(0);" onclick="participant();">상신</a>
+	<!-- <a href="javascript:void(0);" onclick="participant();">상신2</a> -->
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 function pop(){
@@ -44,8 +44,7 @@ window.addEventListener('message',function(e){
 			userContainer.append(statusDropdown);
 			inputs.append(userContainer);
 		}
-		
-		
+	
 });
 
 function participant() {
@@ -67,7 +66,7 @@ function participant() {
         });
     });
     
-    console.log('Send data: ', JSON.stringify(paticipant);
+    console.log('Send data: ', JSON.stringify(paticipant));
 	
     $.ajax({
         type: 'post',

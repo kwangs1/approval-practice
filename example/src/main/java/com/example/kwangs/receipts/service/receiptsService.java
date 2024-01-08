@@ -9,4 +9,6 @@ public interface receiptsService {
 
 	int write(receiptsVO receipts, List<paticipantVO> paticipant);
 
+	int apprView(receiptsVO receipts);
+
 }

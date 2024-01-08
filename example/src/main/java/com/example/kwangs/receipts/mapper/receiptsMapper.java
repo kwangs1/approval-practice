@@ -8,4 +8,6 @@ public interface receiptsMapper {
 
 	String getLatestReceiptsSeq();
 
+	int apprView(receiptsVO receipts);
+
 }
