@@ -13,7 +13,7 @@
 	<input type="hidden" name="name" value="${user.name}" />
 	<input type="hidden" name="id" value="${user.id}" />
 	품명: <input type="text" name="productname" />
-	<a href="#" onclick="btn()">상신</a>
+	<a href="javascript:void(0)" onclick="btn()">상신</a>
 </form>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>

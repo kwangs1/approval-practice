@@ -7,7 +7,7 @@ import com.example.kwangs.receipts.domain.receiptsVO;
 
 public interface receiptsService {
 
-	int write(receiptsVO receipts, List<paticipantVO> paticipant);
+	void write(List<paticipantVO> paticipant);
 
 	int apprView(receiptsVO receipts);
 
