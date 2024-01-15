@@ -1,11 +1,18 @@
 package com.example.kwangs.receipts.service;
 
+
+import java.sql.CallableStatement;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.kwangs.paticipant.domain.paticipantVO;
 import com.example.kwangs.paticipant.mapper.paticipantMapper;
@@ -39,6 +46,7 @@ public class receiptsServiceImpl implements receiptsService{
 	}
 	
     @Override
+    @Transactional
 /*    public void write(List<paticipantVO> paticipant) {
     	log.info("Before write - isViewed: " + rVO.isViewed());
         int result = apprView(rVO);
@@ -51,14 +59,14 @@ public class receiptsServiceImpl implements receiptsService{
     }*/
 
     public void write(List<paticipantVO> paticipant) {
+    	rVO.setViewed(true);
     	log.info("Before write - isViewed: " + rVO.isViewed());
         int line_seq = 1;
 
         String new_seq = mapper.getLatestReceiptsSeq();
         log.debug("trigger seqValue..{}" + new_seq);
         
-        int result = apprView(rVO);
-        if (result == 1) {
+        if (rVO.isViewed() == true) {
 	        for (paticipantVO pVO : paticipant) {
 	            pVO.setReceipts_seq(new_seq);
 	            log.debug("new_seq getSeqValue...{}" + pVO.getReceipts_seq());
@@ -68,8 +76,8 @@ public class receiptsServiceImpl implements receiptsService{
 	            paticipantMapper.ParticipantWrite(pVO);
 	            line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 	        }
-	        rVO.setViewed(true);
         }
+        rVO.setViewed(false);
         log.info("After write - isViewed: " + rVO.isViewed());
     }
 
