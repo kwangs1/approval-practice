@@ -18,25 +18,19 @@
 		<result property="manufacturing" column="manufacturing" />
 		<result property="currentstock" column="currentstock" />
 	</resultMap>
-<!-- 
-<insert id="write" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq">
-insert into receipts
-values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
-	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
-</insert> -->	
 
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
-    SELECT 'RECEIPTS' || to_char(sysdate, 'YYYYMMDD') || lpad(${receipts_seq}, 5, '0') FROM DUAL
+   SELECT 'RECEIPTS' || to_char(sysdate, 'YYYYMMDD') || lpad(receipts_seq.currval, 5, '0') FROM DUAL
 </select>
 
 
-<!--  <insert id="apprView" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq">-->
+<!-- <insert id="apprView" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq"> -->
 <insert id="apprView">
-<selectKey keyProperty="receipts_seq" resultType="java.lang.String" order="AFTER">
-	select receipts_seq.currval from dual
-</selectKey>
 insert into receipts
 values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
 	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
+<selectKey keyProperty="receipts_seq" order="AFTER" resultType="java.lang.String">
+	select max(receipts_seq) from receipts
+</selectKey>
 </insert>
 </mapper>

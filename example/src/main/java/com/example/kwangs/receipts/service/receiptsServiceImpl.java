@@ -1,11 +1,6 @@
 package com.example.kwangs.receipts.service;
 
 
-import java.sql.CallableStatement;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Types;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -36,7 +31,7 @@ public class receiptsServiceImpl implements receiptsService{
         if (!receipts.isViewed()) {
             int result = mapper.apprView(receipts);
             log.debug("apprView insert..{} " + receipts.getReceipts_seq());
-            receipts.setViewed(true);
+            receipts.setViewed(false);
             log.debug("After apprView - isViewed: " + receipts.isViewed());
             return result;
         } else {
@@ -46,27 +41,14 @@ public class receiptsServiceImpl implements receiptsService{
 	}
 	
     @Override
-    @Transactional
-/*    public void write(List<paticipantVO> paticipant) {
-    	log.info("Before write - isViewed: " + rVO.isViewed());
-        int result = apprView(rVO);
-        if (apprView(rVO) == 1) {
-        	participant(paticipant);
-        	//rVO.setViewed(false);
-        }
-       log.info("After write - isViewed: " + rVO.isViewed());
-        //return result;
-    }*/
-
     public void write(List<paticipantVO> paticipant) {
-    	rVO.setViewed(true);
+    	//rVO.setViewed(true);
     	log.info("Before write - isViewed: " + rVO.isViewed());
         int line_seq = 1;
-
-        String new_seq = mapper.getLatestReceiptsSeq();
-        log.debug("trigger seqValue..{}" + new_seq);
         
-        if (rVO.isViewed() == true) {
+        if (rVO.isViewed() == false) {
+            String new_seq = mapper.getLatestReceiptsSeq();
+            log.debug("trigger seqValue..{}" + new_seq);
 	        for (paticipantVO pVO : paticipant) {
 	            pVO.setReceipts_seq(new_seq);
 	            log.debug("new_seq getSeqValue...{}" + pVO.getReceipts_seq());
@@ -76,8 +58,8 @@ public class receiptsServiceImpl implements receiptsService{
 	            paticipantMapper.ParticipantWrite(pVO);
 	            line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 	        }
+	        rVO.setViewed(false);
         }
-        rVO.setViewed(false);
         log.info("After write - isViewed: " + rVO.isViewed());
     }
 
