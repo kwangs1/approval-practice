@@ -12,17 +12,12 @@ public class receiptsMapperImpl implements receiptsMapper{
 	private SqlSession session;
 	
 	@Override
-	public int write(receiptsVO vo) {
-		return session.insert("mapper.receipts.write",vo);
-	}
-	
-	@Override
 	public String getLatestReceiptsSeq() {
 		return session.selectOne("mapper.receipts.getLatestReceiptsSeq");
 	}
 	
 	@Override
-	public int apprView(receiptsVO receipts) {
-		 return session.insert("mapper.receipts.apprView",receipts);
+	public void apprView(receiptsVO receipts) {
+		  session.insert("mapper.receipts.apprView",receipts);
 	}
 }

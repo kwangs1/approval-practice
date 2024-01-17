@@ -11,12 +11,4 @@ import com.example.kwangs.paticipant.service.paticipantService;
 public class paticipantController {
 	@Autowired
 	private paticipantService service;
-	/*
-	@GetMapping("/write")
-	public void write() {}
-	
-	@PostMapping("/write")
-	public void write(paticipantVO vo) {
-		service.write(vo);
-	}*/
 }

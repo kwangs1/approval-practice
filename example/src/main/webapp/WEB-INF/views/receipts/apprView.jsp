@@ -13,17 +13,33 @@
 	<input type="hidden" name="name" value="${user.name}" />
 	<input type="hidden" name="id" value="${user.id}" />
 	품명: <input type="text" name="productname" />
-	<a href="javascript:void(0)" onclick="btn()">상신</a>
+	<!-- <button onClick="Appr_Btn();">상신</button> -->
+	<a href="#" onclick="Appr_Btn()">상신</a>
 </form>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-function btn(){
+function Appr_Btn(){
 	var Obj = document.getElementById("frmObj");
 	Obj.action = "${path}/receipts/apprView";
 	
-	Obj.submit();
-	participant();
+	// submit 이벤트에 대한 리스너 등록
+	Obj.addEventListener('submit', function (event) {
+	    event.preventDefault(); // 기존의 submit 동작 방지
+
+	    // 서버에 폼 데이터 전송 (submit)
+	    var xhr = new XMLHttpRequest();
+	    xhr.open('POST', Obj.action, true);
+	    xhr.onload = function () {
+	        if (xhr.status === 200) {
+	            // submit이 완료된 후 participant 함수 호출
+	            participant();
+	        }
+	    };
+	    
+	    // submit 호출
+	    xhr.send(new FormData(Obj));
+	});
 }
 </script>
 </body>

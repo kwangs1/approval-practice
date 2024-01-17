@@ -10,9 +10,4 @@ public class paticipantServiceImpl implements paticipantService{
 
 	@Autowired
 	private paticipantMapper mapper;
-	/*
-	@OverrideØß
-	public void write(paticipantVO vo) {
-		mapper.write(vo);
-	}*/
 }
