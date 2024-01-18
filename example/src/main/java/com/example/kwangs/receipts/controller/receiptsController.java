@@ -37,6 +37,7 @@ public class receiptsController {
 	@GetMapping("/apprView")
 	public void apprView() {}
 	
+	@ResponseBody
 	@PostMapping("/apprView")
 	public void apprView(receiptsVO receipts) {
 		service.apprView(receipts);

@@ -9,14 +9,15 @@
 </head>
 <body>
 <%@ include file="../receipts/write.jsp" %>
-<form method="post" id="frmObj"> 
-	<input type="hidden" name="name" value="${user.name}" />
-	<input type="hidden" name="id" value="${user.id}" />
+<!--<form method="post" id="frmObj">   -->
+	<input type="hidden" name="name" id="ApprRecId" value="${user.name}" />
+	<input type="hidden" name="id" id="ApprRecName" value="${user.id}" />
 	품명: <input type="text" name="productname" />
 	<button onClick="Appr_Btn();">상신</button>
-</form> 
+<!-- </form>  -->
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<!-- 
 <script>
 function Appr_Btn(){
 	var Obj = document.getElementById("frmObj");
@@ -38,6 +39,27 @@ function Appr_Btn(){
 	    // submit 호출
 	    xhr.send();
 	});
+}
+</script>
+ -->
+<script>
+function Appr_Btn(){
+	var recId = $('#ApprRecId').val();
+	var recName = $('#ApprRecName').val();
+	
+	$.ajax({
+		type: "post",
+		url: "${path}/receipts/apprView",
+		data: {id : recId , name : recName},
+		success: function(response){
+			participant();
+		},
+        error: function (xhr, status, error) {
+            console.log(xhr);
+            console.log(status);
+            console.log(error);
+        }
+	})
 }
 </script>
 </body>
