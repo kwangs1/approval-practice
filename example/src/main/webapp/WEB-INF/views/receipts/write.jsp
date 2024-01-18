@@ -11,9 +11,6 @@
 	<button onclick="pop()">유저 목록</button>
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
-		<input type="hidden" id="recId" name="id" value="${user.id}" />
-		<input type="hidden" id="recName" name="name" value="${user.name}" />
-	<!-- <a href="javascript:void(0);" onclick="participant();">상신2</a> -->
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 function pop(){
@@ -67,6 +64,7 @@ function participant() {
     });
     
     console.log('Send data: ', JSON.stringify(paticipant));
+    
 	
     $.ajax({
         type: 'post',
