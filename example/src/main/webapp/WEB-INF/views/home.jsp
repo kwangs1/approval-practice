@@ -31,7 +31,7 @@
 
 <script type="text/javascript">
 function receipts_pop(){
-	window.open("${path}/receipts/apprView","receipts","width=1024px, height=768");
+	window.open("${path}/approval/apprView","receipts","width=1024px, height=768");
 }
 </script>
 </body>

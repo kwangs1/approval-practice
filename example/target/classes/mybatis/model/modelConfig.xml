@@ -9,7 +9,7 @@
 <typeAliases>
 		<typeAlias type="com.example.kwangs.memo.domain.memoVO" alias="memoVO" />	
 		<typeAlias type="com.example.kwangs.user.domain.userVO" alias="userVO" />	
-		<typeAlias type="com.example.kwangs.receipts.domain.receiptsVO" alias="receiptsVO" />
-		<typeAlias type="com.example.kwangs.paticipant.domain.paticipantVO" alias="paticipantVO" />	
+		<typeAlias type="com.example.kwangs.approval.domain.approvalVO" alias="approvalVO" />
+		<typeAlias type="com.example.kwangs.participant.domain.participantVO" alias="participantVO" />	
 </typeAliases>       
 </configuration>

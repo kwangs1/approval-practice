@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.participant">
+	<resultMap id="participantResult" type="participantVO">
+		<result property="participant_seq" column="participant_seq" />
+		<result property="appr_seq" column="appr_seq" />
+		<result property="status" column="status" />
+		<result property="line_seq" column="line_seq" />
+		<result property="name" column="name" />
+		<result property="id" column="id" />
+		<result property="pos" column="pos" />
+		<result property="regdate" column="regdate" />
+		<result property="upddate" column="upddate" />
+	</resultMap>
+	
+<insert id="ParticipantWrite" parameterType="participantVO">
+    insert into participant
+    values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
+    #{id}, #{pos}, sysdate, #{upddate})
+</insert>
+ 
+</mapper>
