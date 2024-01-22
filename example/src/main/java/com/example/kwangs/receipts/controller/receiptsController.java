@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.paticipant.domain.paticipantVO;
@@ -41,6 +42,7 @@ public class receiptsController {
 	@PostMapping("/apprView")
 	public void apprView(receiptsVO receipts) {
 		service.apprView(receipts);
+		log.info("apprView Controller in");
 	}
 	
 }

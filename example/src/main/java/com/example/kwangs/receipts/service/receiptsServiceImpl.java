@@ -27,7 +27,7 @@ public class receiptsServiceImpl implements receiptsService{
 	@Override
 	public void apprView(receiptsVO receipts) {
 		mapper.apprView(receipts);
-		log.debug("apprView Insert Seq: "+receipts.getReceipts_seq());
+		log.debug(receipts.getReceipts_seq());
 	}
 	
 	@Override

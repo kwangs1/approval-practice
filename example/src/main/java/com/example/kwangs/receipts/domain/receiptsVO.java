@@ -17,7 +17,7 @@ public class receiptsVO {
 	private int subdivision;
 	private int manufacturing;
 	private int currentstock;
-	private boolean isViewed; //중복 isnert 방지 변수
+	private int line_seq;
 	
 	public String getReceipts_seq() {
 		return receipts_seq;
@@ -85,12 +85,13 @@ public class receiptsVO {
 	public void setCurrentstock(int currentstock) {
 		this.currentstock = currentstock;
 	}
-	public boolean isViewed() {
-		return isViewed;
+	public int getLine_seq() {
+		return line_seq;
 	}
-	public void setViewed(boolean isViewed) {
-		this.isViewed = isViewed;
+	public void setLine_seq(int line_seq) {
+		this.line_seq = line_seq;
 	}
+	
 	
 	
 }

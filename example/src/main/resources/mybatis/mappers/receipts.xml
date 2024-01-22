@@ -17,6 +17,7 @@
 		<result property="subdivision" column="subdivision" />
 		<result property="manufacturing" column="manufacturing" />
 		<result property="currentstock" column="currentstock" />
+		<result property="line_seq" column="line_seq" />
 	</resultMap>
 
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
@@ -27,6 +28,6 @@
 <insert id="apprView" parameterType="receiptsVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
 insert into receipts
 values(#{receipts_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
-	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
+	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock},#{line_seq})
 </insert>
 </mapper>
