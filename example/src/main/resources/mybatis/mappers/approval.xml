@@ -10,13 +10,10 @@
 		<result property="name" column="name" />
 		<result property="id" column="id" />
 		<result property="regdate" column="regdate" />
-		<result property="productname" column="productname" />
-		<result property="fullstock" column="fullstock" />
-		<result property="stock" column="stock" />
-		<result property="stockquantity" column="stockquantity" />
-		<result property="subdivision" column="subdivision" />
-		<result property="manufacturing" column="manufacturing" />
-		<result property="currentstock" column="currentstock" />
+		<result property="title" column="title" />
+		<result property="content" column="content" />
+		<result property="startdate" column="startdate" />
+		<result property="enddate" column="enddate" />
 	</resultMap>
 
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
@@ -26,7 +23,6 @@
 
 <insert id="apprView" parameterType="approvalVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
 insert into approval
-values(#{appr_seq},#{name},#{id},sysdate,#{productname},#{fullstock},#{stock},
-	#{stockquantity},#{subdivision},#{manufacturing},#{currentstock})
+values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate})
 </insert>
 </mapper>

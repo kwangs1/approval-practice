@@ -10,13 +10,10 @@ public class approvalVO {
 	private String name;
 	private String id;
 	private Date regdate;
-	private String productname;
-	private int fullstock;
-	private String stock;
-	private int stockquantity;
-	private int subdivision;
-	private int manufacturing;
-	private int currentstock;
+	private String title;
+	private String content;
+	private Date startdate;
+	private Date enddate;
 	
 
 	public String getAppr_seq() {
@@ -43,49 +40,30 @@ public class approvalVO {
 	public void setRegdate(Date regdate) {
 		this.regdate = regdate;
 	}
-	public String getProductname() {
-		return productname;
+	public String getTitle() {
+		return title;
 	}
-	public void setProductname(String productname) {
-		this.productname = productname;
+	public void setTitle(String title) {
+		this.title = title;
 	}
-	public int getFullstock() {
-		return fullstock;
+	public String getContent() {
+		return content;
 	}
-	public void setFullstock(int fullstock) {
-		this.fullstock = fullstock;
+	public void setContent(String content) {
+		this.content = content;
 	}
-	public String getStock() {
-		return stock;
+	public Date getStartdate() {
+		return startdate;
 	}
-	public void setStock(String stock) {
-		this.stock = stock;
+	public void setStartdate(Date startdate) {
+		this.startdate = startdate;
 	}
-	public int getStockquantity() {
-		return stockquantity;
+	public Date getEnddate() {
+		return enddate;
 	}
-	public void setStockquantity(int stockquantity) {
-		this.stockquantity = stockquantity;
+	public void setEnddate(Date enddate) {
+		this.enddate = enddate;
 	}
-	public int getSubdivision() {
-		return subdivision;
-	}
-	public void setSubdivision(int subdivision) {
-		this.subdivision = subdivision;
-	}
-	public int getManufacturing() {
-		return manufacturing;
-	}
-	public void setManufacturing(int manufacturing) {
-		this.manufacturing = manufacturing;
-	}
-	public int getCurrentstock() {
-		return currentstock;
-	}
-	public void setCurrentstock(int currentstock) {
-		this.currentstock = currentstock;
-	}
-	
-	
+
 	
 }

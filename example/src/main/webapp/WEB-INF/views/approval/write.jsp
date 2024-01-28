@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
-	<button onclick="pop()">유저 목록</button>
+	<button onclick="pop()">결재선 정보</button>
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -21,6 +21,7 @@ window.addEventListener('message',function(e){
 	var data = e.data;
 	var users  = data.users;
 	console.log(data.users);
+    
 	//user list에서 선택한 값을 전달 받아 동적으로 생성
 	 var inputs = $('#inputs');
 	 inputs.empty();
@@ -37,6 +38,8 @@ window.addEventListener('message',function(e){
 			statusDropdown.append('<option value ="2000">검토</option>');
 			statusDropdown.append('<option value ="3000">협조</option>');
 			statusDropdown.append('<option value ="4000">결재</option>');
+			
+			statusDropdown.val(users[i].status);
 			
 			userContainer.append(statusDropdown);
 			inputs.append(userContainer);
