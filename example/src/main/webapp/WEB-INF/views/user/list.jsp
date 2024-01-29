@@ -6,22 +6,30 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style>
+body {display: flex;}
+#userList {flex: 1; border-right: 1px solid #ccc; padding-right: 10px; margin-right: 10px;}
+#selectedUsers {flex: 1; padding-left: 10px;}
+#selectedUsers p {margin-bottom: 10px;}
+#userList a { display: block; margin-bottom: 10px;}
+#confirmButton {margin-top: auto; /* 화면 아래로 내리기 */}
+</style>
 </head>
 <body>
-<c:forEach var="user" items="${user}">
-	<a href="#" class="userLink" data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
-		${user.name} [${user.pos}]</a>
-</c:forEach>
-<hr>
+<div id="userList">
+	<c:forEach var="user" items="${user}">
+		<a href="#" class="userLink" data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
+			${user.name} [${user.pos}]</a>
+	</c:forEach>
+</div>
 <div id="selectedUsers"></div>
-<a href="javascript:void(0)" onclick="confirmSelection()">확인</a>
+<a href="javascript:void(0)" id="confirmButton" onclick="confirmSelection()">확인</a>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 var selectedUsers = [];
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
-	var container = $(this).closest('.userContainer');
 	
 	var id = $(this).data('id');
 	var name = $(this).data('name');

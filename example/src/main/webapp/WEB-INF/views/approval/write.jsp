@@ -13,8 +13,8 @@
 		<div id="inputs"></div>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
-function pop(){
-	window.open("${path}/user/list","pop","width=300, height=300");
+function pop() {
+	window.open("${path}/user/list","pop","width=768, height=400");
 }
 
 window.addEventListener('message',function(e){

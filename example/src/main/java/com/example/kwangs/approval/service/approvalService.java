@@ -12,5 +12,7 @@ public interface approvalService {
 	void write(List<participantVO> participant);
 	
 	void ApprovlTransanctional(approvalVO approval, List<participantVO> participant);
+	
+	List<approvalVO> list();
 
 }

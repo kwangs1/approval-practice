@@ -22,4 +22,9 @@ public class approvalMapperImpl implements approvalMapper{
 	public void apprView(approvalVO approval) {
 		  session.insert("mapper.approval.apprView",approval);
 	}
+	
+	@Override
+	public List<approvalVO> list() {
+		return session.selectList("mapper.approval.list");
+	}
 }

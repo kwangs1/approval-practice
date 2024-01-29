@@ -25,4 +25,11 @@
 insert into approval
 values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate})
 </insert>
+
+<select id="list" resultType="approvalVO">
+select a.title, p.name, a.regdate
+from approval a, participant p
+where a.appr_seq = p.appr_seq
+and p.id = #{id}
+</select>
 </mapper>

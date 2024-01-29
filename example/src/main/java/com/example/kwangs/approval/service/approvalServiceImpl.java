@@ -2,7 +2,6 @@ package com.example.kwangs.approval.service;
 
 import java.util.List;
 
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +32,7 @@ public class approvalServiceImpl implements approvalService{
 	public void write(List<participantVO> participant){
 		log.info("write method 진입");
 		int line_seq = 1;
+		int approvalstatus = 4097;
 		
 		String seqCurrval = mapper.getLatestReceiptsSeq();
 		log.debug("write seqValue..{}" + seqCurrval);
@@ -41,7 +41,16 @@ public class approvalServiceImpl implements approvalService{
 			pVO.setAppr_seq(seqCurrval);
 			log.debug("new_seq getSeqValue...{}" + pVO.getAppr_seq());
 			pVO.setLine_seq(line_seq);// 기본값 1
-
+			
+			
+			if(pVO.getLine_seq() == 1) {
+				pVO.setApprovalstatus(approvalstatus);
+			}else if(pVO.getLine_seq() > 1 && pVO.getStatus() == 2000 || pVO.getStatus() == 4000){
+				pVO.setApprovalstatus(4098);
+			}else if(pVO.getLine_seq() > 1 && pVO.getStatus() == 3000){
+				pVO.setApprovalstatus(4120);
+			}
+			
 			// 이후 insert 된 receipts_seq 값 가져올 것.
 			participantMapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
@@ -55,5 +64,8 @@ public class approvalServiceImpl implements approvalService{
 	    write(participant);
 	}
 
-
+	@Override
+	public List<approvalVO> list() {
+		return mapper.list();
+	}
 }

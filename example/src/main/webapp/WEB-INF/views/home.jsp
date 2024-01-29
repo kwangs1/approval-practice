@@ -25,14 +25,9 @@
 </h1>
 
 <a href="${path}/memo/list">메모</a>
-<a href="javascript:receipts_pop()">수불장 작성</a>
+<a href="${path}/approval/list">결재</a>
 <a href="${path}/user/logout">로그아웃</a>
 </c:if>
 
-<script type="text/javascript">
-function receipts_pop(){
-	window.open("${path}/approval/apprView","receipts","width=1024px, height=768");
-}
-</script>
 </body>
 </html>
