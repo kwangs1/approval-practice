@@ -10,6 +10,6 @@ public interface approvalMapper {
 	
 	String getLatestReceiptsSeq();
 
-	List<approvalVO> list();
+	List<approvalVO> apprWaitList(String id);
 
 }

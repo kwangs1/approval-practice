@@ -13,6 +13,6 @@ public interface approvalService {
 	
 	void ApprovlTransanctional(approvalVO approval, List<participantVO> participant);
 	
-	List<approvalVO> list();
+	List<approvalVO> apprWaitList(String id);
 
 }

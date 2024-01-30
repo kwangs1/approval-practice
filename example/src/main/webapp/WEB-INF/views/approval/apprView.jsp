@@ -10,8 +10,8 @@
 <body>
 <%@ include file="../approval/write.jsp" %>
 <hr>
-<input type="hidden" name="name" id="ApprRecId" value="${user.name}" />
-<input type="hidden" name="id" id="ApprRecName" value="${user.id}" />
+<input type="hidden" name="name" id="ApprRecName" value="${user.name}" />
+<input type="hidden" name="id" id="ApprRecId" value="${user.id}" />
 <body>
 
 휴가 기간: <input type="date" name="startdate" id="startdate"/> ~
@@ -44,16 +44,16 @@ window.onload = function(){
 }
 
 function Appr_Btn(){
-	var recId = $('#ApprRecId').val();
 	var recName = $('#ApprRecName').val();
+	var recId = $('#ApprRecId').val();
 	var title = $('#title').val();
 	var content = $('#content').val();
 	var startdate = $('#startdate').val();
 	var enddate = $('#enddate').val();
 	
 	var apprData = {
-		id : recId,
 		name : recName,
+		id : recId,
 		title : title,
 		content : content,
 		startdate : startdate,

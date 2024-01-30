@@ -45,9 +45,9 @@ public class approvalController {
 	}
 	
 	
-	@GetMapping("/list")
-	public void list(Model model) {
-		model.addAttribute("list",service.list());
+	@GetMapping("/apprWaitList")
+	public void apprWaitList(Model model, String id) {
+		model.addAttribute("list",service.apprWaitList(id));
 	}
 	
 }

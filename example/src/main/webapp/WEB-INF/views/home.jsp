@@ -25,7 +25,7 @@
 </h1>
 
 <a href="${path}/memo/list">메모</a>
-<a href="${path}/approval/list">결재</a>
+<a href="${path}/approval/apprWaitList?id=${user.id}">결재</a>
 <a href="${path}/user/logout">로그아웃</a>
 </c:if>
 

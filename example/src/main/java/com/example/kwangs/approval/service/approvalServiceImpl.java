@@ -65,7 +65,7 @@ public class approvalServiceImpl implements approvalService{
 	}
 
 	@Override
-	public List<approvalVO> list() {
-		return mapper.list();
+	public List<approvalVO> apprWaitList(String id) {
+		return mapper.apprWaitList(id);
 	}
 }
