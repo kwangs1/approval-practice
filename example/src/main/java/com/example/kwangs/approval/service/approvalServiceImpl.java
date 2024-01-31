@@ -1,5 +1,6 @@
 package com.example.kwangs.approval.service;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -17,11 +18,11 @@ import com.example.kwangs.participant.mapper.participantMapper;
 @Service
 public class approvalServiceImpl implements approvalService{
 	private final Logger log = LoggerFactory.getLogger(approvalServiceImpl.class);
-
 	@Autowired
 	private approvalMapper mapper;
 	@Autowired
 	private participantMapper participantMapper;
+	
 	
 	@Override
 	public void apprView(approvalVO approval) {
@@ -65,7 +66,8 @@ public class approvalServiceImpl implements approvalService{
 	}
 
 	@Override
-	public List<approvalVO> apprWaitList(String id) {
+	public List<approvalVO> apprWaitList(String id) {	
 		return mapper.apprWaitList(id);
 	}
+	
 }

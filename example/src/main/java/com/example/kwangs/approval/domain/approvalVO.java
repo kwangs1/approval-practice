@@ -4,6 +4,8 @@ import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.example.kwangs.participant.domain.participantVO;
+
 @Component
 public class approvalVO {
 	private String appr_seq;
@@ -14,7 +16,8 @@ public class approvalVO {
 	private String content;
 	private Date startdate;
 	private Date enddate;
-	
+	private int status;
+	private participantVO participant;
 
 	public String getAppr_seq() {
 		return appr_seq;
@@ -64,6 +67,18 @@ public class approvalVO {
 	public void setEnddate(Date enddate) {
 		this.enddate = enddate;
 	}
-
+	public int getStatus() {
+		return status;
+	}
+	public void setStatus(int status) {
+		this.status = status;
+	}
+	public participantVO getParticipant() {
+		return participant;
+	}
+	public void setParticipant(participantVO participant) {
+		this.participant = participant;
+	}
+	
 	
 }

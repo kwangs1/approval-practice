@@ -14,6 +14,7 @@
 		<result property="content" column="content" />
 		<result property="startdate" column="startdate" />
 		<result property="enddate" column="enddate" />
+		<result property="status" column="status" />
 	</resultMap>
 
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
@@ -23,11 +24,14 @@
 
 <insert id="apprView" parameterType="approvalVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
 insert into approval
-values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate})
+values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate},100)
 </insert>
 
 <select id="apprWaitList" resultType="approvalVO">
-select title, name, regdate from approval 
-where id = #{id}
+select a.title, a.name, a.regdate 
+	from participant p, approval a
+where p.appr_seq = a.appr_seq
+and p.approvalstatus = 4098
+and p.id = #{id}
 </select>
 </mapper>
