@@ -16,6 +16,7 @@ public class participantVO {
 	private Date regdate;
 	private Date upddate;
 	private int approvalstatus;
+	private int approvaltype;
 	
 	public String getParticipant_seq() {
 		return participant_seq;
@@ -77,6 +78,12 @@ public class participantVO {
 	}
 	public void setApprovalstatus(int approvalstatus) {
 		this.approvalstatus = approvalstatus;
+	}
+	public int getApprovaltype() {
+		return approvaltype;
+	}
+	public void setApprovaltype(int approvaltype) {
+		this.approvaltype = approvaltype;
 	}
 	
 }

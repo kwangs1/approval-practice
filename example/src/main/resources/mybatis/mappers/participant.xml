@@ -16,12 +16,13 @@
 		<result property="regdate" column="regdate" />
 		<result property="upddate" column="upddate" />
 		<result property="approvalstatus" column="approvalstatus" />
+		<result property="approvaltype" column="approvaltype" />
 	</resultMap>
 	
 <insert id="ParticipantWrite" parameterType="participantVO">
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, sysdate, #{upddate},#{approvalstatus})
+    #{id}, #{pos}, sysdate, #{upddate},#{approvalstatus},#{approvaltype})
 </insert>
  
 </mapper>

@@ -44,6 +44,8 @@ public class approvalServiceImpl implements approvalService{
 			pVO.setLine_seq(line_seq);// 기본값 1
 			
 			
+			approvalType(participant);
+			
 			if(pVO.getLine_seq() == 1) {
 				pVO.setApprovalstatus(approvalstatus);
 			}else if(pVO.getLine_seq() > 1 && pVO.getStatus() == 2000 || pVO.getStatus() == 4000){
@@ -63,6 +65,24 @@ public class approvalServiceImpl implements approvalService{
 	public void ApprovlTransanctional(approvalVO approval, List<participantVO> participant) {
 	    apprView(approval);
 	    write(participant);
+	}
+	
+	public void approvalType(List<participantVO> participant) {
+		int totalParticipant = participant.size();
+		
+		for(int i =0; i < totalParticipant; i++) {
+			participantVO pVO = participant.get(i);
+			
+			if(pVO.getLine_seq() == 1) {
+				pVO.setApprovaltype(2);
+			}else if(pVO.getLine_seq() == 2) {
+				pVO.setApprovaltype(4);
+			}else {
+				pVO.setApprovaltype(8);
+			}
+			
+		}
+	
 	}
 
 	@Override

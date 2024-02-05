@@ -13,11 +13,12 @@ body {display: flex;}
 #selectedUsers p {margin-bottom: 10px;}
 #userList a { display: block; margin-bottom: 10px;}
 #confirmButton {margin-top: auto; /* 화면 아래로 내리기 */}
+.userDiv {display: flex; align-items: center;}/* 위,아래 이동 및 삭제 버튼 */
 </style>
 </head>
 <body>
 <div id="userList">
-	<c:forEach var="user" items="${user}">
+	<c:forEach var="user" items="${user}" varStatus="loop">
 		<a href="#" class="userLink" data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
 			${user.name} [${user.pos}]</a>
 	</c:forEach>
@@ -49,19 +50,43 @@ function updateSelectedUsersUI() {
     // 배열에 있는 각 유저 정보를 순회하면서 UI에 추가
     for (var i = 0; i < selectedUsers.length; i++) {
        var user = selectedUsers[i];
-       selectedUsersDiv.append('<p>' + user.name + ' [' + user.pos + '] ' + getStatusDropdownHTML(i) + '</p>');
+       //팝업 화면에서의 결재선 상태값 설정 
+       var status = user.status || (i === selectedUsers.length - 1 ? 4000 : (i > 0 ? 2000 : 1000));
+       
+    	//오른쪽 유저화면에서의 위아래 이동버튼 및 삭제버튼
+       var userDiv = $('<div class="userDiv"></div>');
+       userDiv.append('<p>' + user.name + ' [' + user.pos + '] ' + getStatusDropdownHTML(i, status) + '</p>');
+
+       // 위로 이동 버튼 생성
+       if (i > 0) {
+           var moveUpButton = $('<button onclick="moveUserUp(' + i + ')">↑</button>');
+           userDiv.append(moveUpButton);
+       }
+
+       // 아래로 이동 버튼 생성
+       if (i < selectedUsers.length - 1) {
+           var moveDownButton = $('<button onclick="moveUserDown(' + i + ')">↓</button>');
+           userDiv.append(moveDownButton);
+       }
+
+       // 삭제 버튼 생성
+       var deleteButton = $('<button onclick="deleteUser(' + i + ')">❌</button>');
+       userDiv.append(deleteButton);
+
+   		// 전체 div를 selectedUsersDiv에 추가
+       selectedUsersDiv.append(userDiv);
       }
   }
  
-//유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
-function getStatusDropdownHTML(index) {
+// 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
+function getStatusDropdownHTML(index, defaultStatus) {
     // status 선택을 위한 dropdown의 HTML을 반환
     var dropdownHTML = '<select name="status_' + index + '">' +
-                       '<option value="1000">기안</option>' +
-                       '<option value="2000">검토</option>' +
-                       '<option value="3000">협조</option>' +
-                       '<option value="4000">결재</option>' +
-                       '</select>';
+        '<option value="1000" ' + (defaultStatus === 1000 ? 'selected' : '') + '>기안</option>' +
+        '<option value="2000" ' + (defaultStatus === 2000 ? 'selected' : '') + '>검토</option>' +
+        '<option value="3000" ' + (defaultStatus === 3000 ? 'selected' : '') + '>협조</option>' +
+        '<option value="4000" ' + (defaultStatus === 4000 ? 'selected' : '') + '>결재</option>' +
+        '</select>';
     return dropdownHTML;
 }
 
@@ -73,6 +98,32 @@ function confirmSelection(){
     }
 	window.opener.postMessage({ users: selectedUsers }, '*');
 	window.close();
+}
+
+//유저를 배열에서 삭제하는 함수
+function deleteUser(index) {
+    selectedUsers.splice(index, 1); //배열요소 하나만 삭제
+    updateSelectedUsersUI();
+}
+
+// 유저를 위로 이동하는 함수 - 스왑
+function moveUserUp(index) {
+    if (index > 0) { 
+        var temp = selectedUsers[index];
+        selectedUsers[index] = selectedUsers[index - 1];
+        selectedUsers[index - 1] = temp;
+        updateSelectedUsersUI();
+    }
+}
+
+// 유저를 아래로 이동하는 함수 - 스왑
+function moveUserDown(index) {
+    if (index < selectedUsers.length - 1) {
+        var temp = selectedUsers[index];
+        selectedUsers[index] = selectedUsers[index + 1];
+        selectedUsers[index + 1] = temp;
+        updateSelectedUsersUI();
+    }
 }
 </script>
 </body>

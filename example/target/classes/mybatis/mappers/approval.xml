@@ -33,5 +33,6 @@ select a.title, a.name, a.regdate
 where p.appr_seq = a.appr_seq
 and p.approvalstatus = 4098
 and p.id = #{id}
+and p.approvaltype = 4
 </select>
 </mapper>
