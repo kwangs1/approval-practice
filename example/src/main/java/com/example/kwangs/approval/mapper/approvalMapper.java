@@ -12,4 +12,6 @@ public interface approvalMapper {
 
 	List<approvalVO> apprWaitList(String id);
 
+	approvalVO apprInfo(String appr_seq);
+
 }

@@ -29,7 +29,7 @@
     <tbody>
     <c:forEach var="list" items="${list}">
       <tr>
-        <td>${list.title }</td>
+        <td><a href="${path}/approval/apprInfo?appr_seq=${list.appr_seq}">${list.title }</a></td>
         <td>${list.name }</td>
         <td>${list.regdate }</td>
       </tr>   

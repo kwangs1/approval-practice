@@ -27,4 +27,9 @@ public class approvalMapperImpl implements approvalMapper{
 	public List<approvalVO> apprWaitList(String id) {
 		return session.selectList("mapper.approval.apprWaitList",id);
 	}
+	
+	@Override
+	public approvalVO apprInfo(String appr_seq) {
+		return session.selectOne("mapper.approval.apprInfo",appr_seq);
+	}
 }

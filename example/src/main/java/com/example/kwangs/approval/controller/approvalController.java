@@ -14,8 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.domain.approvalVO;
+import com.example.kwangs.approval.domain.participantVO;
 import com.example.kwangs.approval.service.approvalService;
-import com.example.kwangs.participant.domain.participantVO;
+import com.example.kwangs.approval.service.participantService;
 
 @Controller
 @RequestMapping("/approval")
@@ -23,6 +24,8 @@ public class approvalController {
 	private static Logger log = Logger.getLogger(approvalController.class.getName());
 	@Autowired
 	private approvalService service;
+	@Autowired
+	private participantService pService;
 	
 	@GetMapping("/write")
 	public void write() {}
@@ -50,4 +53,17 @@ public class approvalController {
 		model.addAttribute("list",service.apprWaitList(id));
 	}
 	
+	@GetMapping("/apprInfo")
+	public approvalVO apprInfo(String appr_seq, Model model) {
+		approvalVO Info = service.apprInfo(appr_seq);
+		model.addAttribute("info",Info);
+		
+		return Info;
+	}
+	
+	@ResponseBody
+	@PostMapping("/participantCheck")
+	public void participantCheck(participantVO participant) {
+		pService.participantCheck(participant);
+	}
 }

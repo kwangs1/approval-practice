@@ -25,4 +25,10 @@
     #{id}, #{pos}, sysdate, #{upddate},#{approvalstatus},#{approvaltype})
 </insert>
  
+<update id="participantCheck">
+	update participant
+	set approvalstatus = 4097, approvaltype = 2
+	where appr_seq = #{appr_seq}
+	and participant_seq = #{participant_seq}
+</update>
 </mapper>

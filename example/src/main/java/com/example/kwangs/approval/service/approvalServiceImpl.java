@@ -1,6 +1,5 @@
 package com.example.kwangs.approval.service;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -10,9 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.kwangs.approval.domain.approvalVO;
+import com.example.kwangs.approval.domain.participantVO;
 import com.example.kwangs.approval.mapper.approvalMapper;
-import com.example.kwangs.participant.domain.participantVO;
-import com.example.kwangs.participant.mapper.participantMapper;
+import com.example.kwangs.approval.mapper.participantMapper;
 
 
 @Service
@@ -90,4 +89,10 @@ public class approvalServiceImpl implements approvalService{
 		return mapper.apprWaitList(id);
 	}
 	
+	@Override
+	public approvalVO apprInfo(String appr_seq) {
+		return mapper.apprInfo(appr_seq);
+	}
+	
+
 }

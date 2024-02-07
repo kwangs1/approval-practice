@@ -1,0 +1,48 @@
+@charset "UTF-8";
+
+/* 게시물 컨테이너 스타일 */
+.post-container {
+  width: 80%;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+/* 게시물 제목 스타일 */
+.post-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* 게시물 작성자 및 작성일 스타일 */
+.post-info {
+  font-size: 14px;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* 게시물 내용 스타일 */
+.post-content {
+  font-size: 16px;
+  line-height: 1.6;
+  background-color: #f9f9f9;
+  padding: 20px;
+  border-radius: 5px;
+}
+
+/* 버튼 스타일 */
+.button {
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+/* 버튼 호버 효과 */
+.button:hover {
+  background-color: #0056b3;
+}

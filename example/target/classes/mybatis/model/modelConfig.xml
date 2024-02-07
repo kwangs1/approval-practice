@@ -10,6 +10,6 @@
 		<typeAlias type="com.example.kwangs.memo.domain.memoVO" alias="memoVO" />	
 		<typeAlias type="com.example.kwangs.user.domain.userVO" alias="userVO" />	
 		<typeAlias type="com.example.kwangs.approval.domain.approvalVO" alias="approvalVO" />
-		<typeAlias type="com.example.kwangs.participant.domain.participantVO" alias="participantVO" />	
+		<typeAlias type="com.example.kwangs.approval.domain.participantVO" alias="participantVO" />	
 </typeAliases>       
 </configuration>

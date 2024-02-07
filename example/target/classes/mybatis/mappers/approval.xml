@@ -28,11 +28,16 @@ values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{endd
 </insert>
 
 <select id="apprWaitList" resultType="approvalVO">
-select a.title, a.name, a.regdate 
+select a.*
 	from participant p, approval a
 where p.appr_seq = a.appr_seq
 and p.approvalstatus = 4098
 and p.id = #{id}
 and p.approvaltype = 4
 </select>
+
+<select id="apprInfo" resultType="approvalVO" parameterType="String">
+select * from approval where appr_seq = #{appr_seq}
+</select>
+
 </mapper>

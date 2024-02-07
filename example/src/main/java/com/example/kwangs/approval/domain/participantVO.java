@@ -1,4 +1,4 @@
-package com.example.kwangs.participant.domain;
+package com.example.kwangs.approval.domain;
 
 import java.sql.Date;
 

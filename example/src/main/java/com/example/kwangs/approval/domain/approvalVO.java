@@ -4,8 +4,6 @@ import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
-import com.example.kwangs.participant.domain.participantVO;
-
 @Component
 public class approvalVO {
 	private String appr_seq;
