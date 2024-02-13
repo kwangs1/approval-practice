@@ -1,8 +1,9 @@
 package com.example.kwangs.approval.controller;
 
 import java.util.List;
-import java.util.logging.Logger;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -21,11 +22,9 @@ import com.example.kwangs.approval.service.participantService;
 @Controller
 @RequestMapping("/approval")
 public class approvalController {
-	private static Logger log = Logger.getLogger(approvalController.class.getName());
+	private Logger log = LoggerFactory.getLogger(approvalController.class.getName());
 	@Autowired
 	private approvalService service;
-	@Autowired
-	private participantService pService;
 	
 	@GetMapping("/write")
 	public void write() {}
@@ -49,8 +48,9 @@ public class approvalController {
 	
 	
 	@GetMapping("/apprWaitList")
-	public void apprWaitList(Model model, String id) {
+	public void apprWaitList(Model model, String id, participantVO participant) {
 		model.addAttribute("list",service.apprWaitList(id));
+		
 	}
 	
 	@GetMapping("/apprInfo")
@@ -61,9 +61,6 @@ public class approvalController {
 		return Info;
 	}
 	
-	@ResponseBody
-	@PostMapping("/participantCheck")
-	public void participantCheck(participantVO participant) {
-		pService.participantCheck(participant);
-	}
+	
+
 }

@@ -1,4 +1,4 @@
-package com.example.kwangs.approval.mapper;
+package com.example.kwangs.approval.mapper.impl;
 
 import java.util.List;
 
@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.domain.approvalVO;
+import com.example.kwangs.approval.mapper.approvalMapper;
 
 @Repository
 public class approvalMapperImpl implements approvalMapper{

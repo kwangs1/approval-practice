@@ -8,4 +8,6 @@ public interface participantMapper {
 
 	void participantCheck(participantVO participant);
 
+	participantVO getParticipantInfo(String appr_seq);
+
 }

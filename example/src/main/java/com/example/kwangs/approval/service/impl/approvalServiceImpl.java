@@ -1,4 +1,4 @@
-package com.example.kwangs.approval.service;
+package com.example.kwangs.approval.service.impl;
 
 import java.util.List;
 
@@ -12,6 +12,7 @@ import com.example.kwangs.approval.domain.approvalVO;
 import com.example.kwangs.approval.domain.participantVO;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.mapper.participantMapper;
+import com.example.kwangs.approval.service.approvalService;
 
 
 @Service
