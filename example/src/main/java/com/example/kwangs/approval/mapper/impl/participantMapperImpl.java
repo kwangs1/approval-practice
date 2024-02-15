@@ -1,5 +1,7 @@
 package com.example.kwangs.approval.mapper.impl;
 
+import java.util.List;
+
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,20 +23,13 @@ public class participantMapperImpl implements participantMapper{
 		session.insert("mapper.participant.ParticipantWrite",vo);
 	}
 	
-
 	@Override
-	public void  participantCheck(participantVO participant) {
-		log.info("participant check mapper...in");
-		log.info("apprseq{}.."+participant.getAppr_seq());
-		log.info("participantseq{}.."+participant.getParticipant_seq());
-		log.info("name{}.."+participant.getName());
-		log.info("status{}.."+participant.getApprovalstatus());
-		log.info("type{}.."+participant.getApprovaltype());
+	public void  participantCheck(List<participantVO>  participant) {
 		session.update("mapper.participant.participantCheck",participant);
 	}
 	
 	@Override
-	public participantVO getParticipantInfo(String appr_seq) {
-		return session.selectOne("mapper.participant.getParticipantInfo",appr_seq);
+	public List<participantVO> getParticipantInfo(String appr_seq) {
+		return session.selectList("mapper.participant.getParticipantInfo",appr_seq);
 	}
 }

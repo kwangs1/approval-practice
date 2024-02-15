@@ -1,5 +1,7 @@
 package com.example.kwangs.approval.service.impl;
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +19,14 @@ public class participantServiceImpl implements participantService{
 	private participantMapper mapper;
 	
 	@Override
-	public void participantCheck(participantVO participant) {
-		log.info("participantCheck service...in");
-		log.info("apprseq{}.."+participant.getAppr_seq());
-		log.info("participantseq{}.."+participant.getParticipant_seq());
-		log.info("name{}.."+participant.getName());
-		log.info("status{}.."+participant.getApprovalstatus());
-		log.info("type{}.."+participant.getApprovaltype());
+	public void participantCheck(List<participantVO> participant) {
+		log.info("participant check service...in");
 		mapper.participantCheck(participant);
 	}
 	
 	@Override
-	public participantVO getParticipantInfo(String appr_seq) {
+	public List<participantVO>  getParticipantInfo(String appr_seq) {
 		return mapper.getParticipantInfo(appr_seq);
 	}
+	
 }

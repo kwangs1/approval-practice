@@ -25,7 +25,10 @@ public class approvalController {
 	private Logger log = LoggerFactory.getLogger(approvalController.class.getName());
 	@Autowired
 	private approvalService service;
+	@Autowired
+	private participantService serviceP;
 	
+	//기안
 	@GetMapping("/write")
 	public void write() {}
 
@@ -37,6 +40,7 @@ public class approvalController {
 	    return ResponseEntity.ok("Success");
 	}
 	
+	//문서리스트
 	@GetMapping("/apprView")
 	public void apprView() {}
 	
@@ -46,13 +50,17 @@ public class approvalController {
 		service.apprView(approval);
 	}
 	
-	
+	//결재대기
 	@GetMapping("/apprWaitList")
 	public void apprWaitList(Model model, String id, participantVO participant) {
 		model.addAttribute("list",service.apprWaitList(id));
 		
+		//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
+		List<participantVO> participantInfo = serviceP.getParticipantInfo(participant.getAppr_seq());
+		model.addAttribute("participantInfo",participantInfo);
 	}
 	
+	//문서 상세보기
 	@GetMapping("/apprInfo")
 	public approvalVO apprInfo(String appr_seq, Model model) {
 		approvalVO Info = service.apprInfo(appr_seq);
@@ -60,7 +68,5 @@ public class approvalController {
 		
 		return Info;
 	}
-	
-	
 
 }

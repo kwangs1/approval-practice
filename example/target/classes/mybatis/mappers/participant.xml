@@ -26,13 +26,17 @@
 </insert>
  
 <update id="participantCheck">
-	update participant
-	set approvalstatus = 4097, approvaltype = 2 , upddate = sysdate
-	where appr_seq = #{appr_seq}
-	and participant_seq = #{participant_seq}
+	update participant p
+	set p.approvalstatus = 4097, p.approvaltype = 2 , p.upddate = sysdate
+	where p.appr_seq = (
+			select a.appr_seq from approval a where a.appr_seq = p.appr_seq)
+	and p.participant_seq = #{participant_seq}
+	and p.approvalstatus = 4098
+	and p.approvaltype = 4
+	and p.id = #{id}
 </update>
 
-<select id="getParticipantInfo" resultType="participantVO">
-	select * from participant where appr_seq = #{appr_seq}
+<select id="getParticipantInfo" resultType="participantVO" parameterType="String">
+	select * from participant
 </select>
 </mapper>

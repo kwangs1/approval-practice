@@ -67,6 +67,7 @@ public class approvalServiceImpl implements approvalService{
 	    write(participant);
 	}
 	
+	//결재 상신 시 결재선 테이블 관련 approvalType 컬럼 값 셋팅 메서드
 	public void approvalType(List<participantVO> participant) {
 		int totalParticipant = participant.size();
 		

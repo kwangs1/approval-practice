@@ -1,10 +1,12 @@
 package com.example.kwangs.approval.service;
 
+import java.util.List;
+
 import com.example.kwangs.approval.domain.participantVO;
 
 public interface participantService {
 
-	void participantCheck(participantVO participant);
+	void participantCheck(List<participantVO> participant);
 
-	participantVO getParticipantInfo(String appr_seq);
+	List<participantVO> getParticipantInfo(String appr_seq);
 }
