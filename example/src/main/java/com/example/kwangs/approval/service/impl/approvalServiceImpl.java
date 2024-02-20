@@ -29,6 +29,7 @@ public class approvalServiceImpl implements approvalService{
 		mapper.apprView(approval);
 	}
 	
+	//기안 시 결재선 관련
 	@Override
 	public void write(List<participantVO> participant){
 		log.info("write method 진입");

@@ -28,13 +28,12 @@ values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{endd
 </insert>
 
 <select id="apprWaitList" resultType="approvalVO">
-select a.*,p.*
+select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
 	from  approval a, participant p
 where p.appr_seq = a.appr_seq
-and p.participant_seq = (select p.participant_seq from participant p where p.appr_seq = a.appr_seq )
 and p.approvalstatus = 4098
-and p.id = #{id}
 and p.approvaltype = 4
+and p.id = #{id}
 </select>
 
 <select id="apprInfo" resultType="approvalVO" parameterType="String">

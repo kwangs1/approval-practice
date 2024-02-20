@@ -52,11 +52,11 @@ public class approvalController {
 	
 	//결재대기
 	@GetMapping("/apprWaitList")
-	public void apprWaitList(Model model, String id, participantVO participant) {
+	public void apprWaitList(Model model, String id, approvalVO approval) {
 		model.addAttribute("list",service.apprWaitList(id));
 		
 		//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-		List<participantVO> participantInfo = serviceP.getParticipantInfo(participant.getAppr_seq());
+		List<participantVO> participantInfo = serviceP.getParticipantInfo(approval.getAppr_seq());
 		model.addAttribute("participantInfo",participantInfo);
 	}
 	

@@ -1,6 +1,7 @@
 package com.example.kwangs.approval.mapper.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.slf4j.Logger;
@@ -24,8 +25,10 @@ public class participantMapperImpl implements participantMapper{
 	}
 	
 	@Override
-	public void  participantCheck(List<participantVO>  participant) {
-		session.update("mapper.participant.participantCheck",participant);
+	public void  participantCheck(Map<String, Object> params) {
+		log.info("participant check dao ... in");
+		log.info("dao{} :"+params);
+		session.update("mapper.participant.participantCheck",params);
 	}
 	
 	@Override

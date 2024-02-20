@@ -1,6 +1,8 @@
 package com.example.kwangs.approval.service.impl;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +23,18 @@ public class participantServiceImpl implements participantService{
 	@Override
 	public void participantCheck(List<participantVO> participant) {
 		log.info("participant check service...in");
-		mapper.participantCheck(participant);
+		for(participantVO pp : participant) {
+			//put을 통해 key,value를 받아 전달된 인자는 hashMap에 key-value 관계로 저장
+			Map<String, Object> params = new HashMap<>();
+			params.put("approvaltype", pp.getApprovaltype());
+			params.put("approvalstatus", pp.getApprovalstatus());
+			params.put("id", pp.getId());
+	        params.put("participant_seq", pp.getParticipant_seq());
+			params.put("appr_seq", pp.getAppr_seq());
+						
+			log.info("service {} :"+params);
+			mapper.participantCheck(params);
+		}
 	}
 	
 	@Override
