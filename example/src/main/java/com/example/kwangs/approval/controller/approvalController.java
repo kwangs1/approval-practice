@@ -28,26 +28,26 @@ public class approvalController {
 	@Autowired
 	private participantService serviceP;
 	
-	//문서 결재선 지정
-	@GetMapping("/write")
-	public void write() {}
+	//문서 기안 시 결재선 지정
+	@GetMapping("/ParticipantWrite")
+	public void ParticipantWrite() {}
 
 	@ResponseBody
-	@PostMapping("/write")
-	public ResponseEntity<String> write(@RequestBody List<participantVO> participant) {
+	@PostMapping("/ParticipantWrite")
+	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
 		log.info("Received data {} "+participant);
-		service.write(participant);
+		service.ParticipantWrite(participant);
 	    return ResponseEntity.ok("Success");
 	}
 	
 	//문서작성
-	@GetMapping("/apprView")
-	public void apprView() {}
+	@GetMapping("/apprWrite")
+	public void apprWrite() {}
 	
 	@ResponseBody
-	@PostMapping("/apprView")
-	public void apprView(approvalVO approval) {
-		service.apprView(approval);
+	@PostMapping("/apprWrite")
+	public void apprWrite(approvalVO approval) {
+		service.apprWrite(approval);
 	}
 	
 	//결재대기

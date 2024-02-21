@@ -23,20 +23,20 @@ public class approvalServiceImpl implements approvalService{
 	@Autowired
 	private participantMapper participantMapper;
 	
-	
+	//문서 작성
 	@Override
-	public void apprView(approvalVO approval) {
-		mapper.apprView(approval);
+	public void apprWrite(approvalVO approval) {
+		mapper.apprWrite(approval);
 	}
 	
-	//기안 시 결재선 관련
+	//문서 기안 시 결재선 지정
 	@Override
-	public void write(List<participantVO> participant){
+	public void ParticipantWrite(List<participantVO> participant){
 		log.info("write method 진입");
 		int line_seq = 1;
 		int approvalstatus = 4097;
 		
-		String seqCurrval = mapper.getLatestReceiptsSeq();
+		String seqCurrval = mapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
 		log.debug("write seqValue..{}" + seqCurrval);
 		
 		for (participantVO pVO : participant) {
@@ -64,8 +64,8 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	@Transactional
 	public void ApprovlTransanctional(approvalVO approval, List<participantVO> participant) {
-	    apprView(approval);
-	    write(participant);
+		apprWrite(approval);
+	    ParticipantWrite(participant);
 	}
 	
 	//결재 상신 시 결재선 테이블 관련 approvalType 컬럼 값 셋팅 메서드

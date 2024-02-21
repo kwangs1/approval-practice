@@ -22,7 +22,7 @@
 </select>
 
 
-<insert id="apprView" parameterType="approvalVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
+<insert id="apprWrite" parameterType="approvalVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
 insert into approval
 values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate},100)
 </insert>

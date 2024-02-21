@@ -62,14 +62,13 @@ var checkboxes = document.getElementsByName('appr_seq');
 });
 
 function approval_pop(){
-	window.open("${path}/approval/apprView","approval","width=1024px, height=768");
+	window.open("${path}/approval/apprWrite","approval","width=1024px, height=768");
 }
 
 function BundleApproval(){
 	var checkboxes = document.getElementsByName('appr_seq');
 	var ary = []; // 결재 시퀀스 배열
-	<%-- --%>
-	var participant_seq = $('#participant_seq').val();
+	<%-- 결재 대기에 걸린 결재선 정보--%>
 	var id = $('#id').val();
 	var approvalstatus = $('#approvalstatus').val();
 	var approvaltype = $('#approvaltype').val();
@@ -78,6 +77,7 @@ function BundleApproval(){
 	for(var i = 0; i < checkboxes.length; i++){
 		if(checkboxes[i].checked){
 			var appr_seq = checkboxes[i].value;
+			//결재선 시퀀스 id중복으로 인하여 값을 제대로 가져오지 못하여 _ +i 로 구분지어 가져옴
 			var participant_seq = $('#participant_seq_' + i).val();
 			console.log(participant_seq);
 			
@@ -116,7 +116,7 @@ function BundleApproval(){
 				console.log(status);
 			}
 		}); //end ajax
-}
+	}
 </script>
 </body>
 </html>

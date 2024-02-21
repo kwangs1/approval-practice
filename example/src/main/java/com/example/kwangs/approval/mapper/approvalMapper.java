@@ -6,7 +6,7 @@ import com.example.kwangs.approval.domain.approvalVO;
 
 public interface approvalMapper {
 	
-	void apprView(approvalVO approval);
+	void apprWrite(approvalVO approval);
 	
 	String getLatestReceiptsSeq();
 

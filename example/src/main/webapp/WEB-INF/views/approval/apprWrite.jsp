@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
-<%@ include file="../approval/write.jsp" %>
+<%@ include file="../approval/ParticipantWrite.jsp" %>
 <hr>
 <input type="hidden" name="name" id="ApprRecName" value="${user.name}" />
 <input type="hidden" name="id" id="ApprRecId" value="${user.id}" />
@@ -62,7 +62,7 @@ function Appr_Btn(){
 	
 	$.ajax({
 		type: "post",
-		url: "${path}/approval/apprView",
+		url: "${path}/approval/apprWrite",
 		data: apprData,
 		success: function(response){
 			participant();

@@ -71,7 +71,7 @@ function participant() {
 	
     $.ajax({
         type: 'post',
-        url: '${path}/approval/write',
+        url: '${path}/approval/ParticipantWrite',
         data: JSON.stringify(paticipant),
         contentType: 'application/json',
         success: function (response) {

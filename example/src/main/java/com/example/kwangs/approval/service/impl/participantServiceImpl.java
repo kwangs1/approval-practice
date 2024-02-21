@@ -20,6 +20,7 @@ public class participantServiceImpl implements participantService{
 	@Autowired
 	private participantMapper mapper;
 	
+	//일괄 결재 시 결재선 업데이트 
 	@Override
 	public void participantCheck(List<participantVO> participant) {
 		log.info("participant check service...in");
@@ -36,7 +37,7 @@ public class participantServiceImpl implements participantService{
 			mapper.participantCheck(params);
 		}
 	}
-	
+	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
 	public List<participantVO>  getParticipantInfo(String appr_seq) {
 		return mapper.getParticipantInfo(appr_seq);

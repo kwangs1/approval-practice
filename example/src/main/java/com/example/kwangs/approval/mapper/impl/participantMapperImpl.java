@@ -1,6 +1,5 @@
 package com.example.kwangs.approval.mapper.impl;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -20,11 +19,13 @@ public class participantMapperImpl implements participantMapper{
 	@Autowired
 	private SqlSession session;
 	
+	//결재 상신 전 결재선 지정
 	@Override
 	public void ParticipantWrite(participantVO vo) {
 		session.insert("mapper.participant.ParticipantWrite",vo);
 	}
 	
+	//일괄 결재 시 결재선 업데이트 
 	@Override
 	public void  participantCheck(Map<String, Object> params) {
 		log.info("participant check dao ... in");
@@ -32,6 +33,7 @@ public class participantMapperImpl implements participantMapper{
 		session.update("mapper.participant.participantCheck",params);
 	}
 	
+	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
 	public List<participantVO> getParticipantInfo(String appr_seq) {
 		return session.selectList("mapper.participant.getParticipantInfo",appr_seq);
