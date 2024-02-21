@@ -37,8 +37,8 @@
 
 <select id="getParticipantInfo" resultType="participantVO" parameterType="String">
 	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
-		from  approval a, participant p
-	where p.appr_seq = a.appr_seq
+		from  approval a, participant p		
+	where a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
 </select>

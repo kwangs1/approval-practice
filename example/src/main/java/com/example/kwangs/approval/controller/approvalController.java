@@ -28,7 +28,7 @@ public class approvalController {
 	@Autowired
 	private participantService serviceP;
 	
-	//기안
+	//문서 결재선 지정
 	@GetMapping("/write")
 	public void write() {}
 
@@ -40,7 +40,7 @@ public class approvalController {
 	    return ResponseEntity.ok("Success");
 	}
 	
-	//문서리스트
+	//문서작성
 	@GetMapping("/apprView")
 	public void apprView() {}
 	
