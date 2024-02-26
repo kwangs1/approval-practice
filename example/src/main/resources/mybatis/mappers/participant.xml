@@ -22,7 +22,7 @@
 <insert id="ParticipantWrite" parameterType="participantVO">
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, sysdate, #{upddate},#{approvalstatus},#{approvaltype})
+    #{id}, #{pos}, sysdate, sysdate,#{approvalstatus},#{approvaltype})
 </insert>
  
 <update id="participantCheck" parameterType="java.util.Map">
@@ -42,4 +42,12 @@
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
 </select>
+
+<update id="updateNextApprovalType">
+    update participant
+    set approvaltype = #{approvaltype}
+    where appr_seq = #{appr_seq}
+    and participant_seq = #{participant_seq}
+    and id = #{id}
+</update>
 </mapper>

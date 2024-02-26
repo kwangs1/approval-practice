@@ -38,4 +38,10 @@ public class participantMapperImpl implements participantMapper{
 	public List<participantVO> getParticipantInfo(String appr_seq) {
 		return session.selectList("mapper.participant.getParticipantInfo",appr_seq);
 	}
+	
+	@Override
+	public void updateNextApprovalType(participantVO participant) {
+		log.info("Length value..{} :" + participant);
+		session.update("mapper.participant.updateNextApprovalType",participant);
+	}
 }
