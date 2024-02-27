@@ -50,4 +50,13 @@
     and participant_seq = #{participant_seq}
     and id = #{id}
 </update>
+
+<select id="getApprovalApprseq" resultType="participantVO" parameterType="String">
+	select a.appr_seq, p.line_seq, p.approvaltype, p.participant_seq
+		from approval a
+	inner join participant p 
+		on a.appr_seq = p.appr_seq
+	where a.appr_seq = #{appr_seq}
+	order by p.line_seq
+</select>
 </mapper>

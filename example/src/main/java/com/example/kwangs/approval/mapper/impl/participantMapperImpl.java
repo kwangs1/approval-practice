@@ -1,5 +1,6 @@
 package com.example.kwangs.approval.mapper.impl;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,8 +41,17 @@ public class participantMapperImpl implements participantMapper{
 	}
 	
 	@Override
-	public void updateNextApprovalType(participantVO participant) {
-		log.info("Length value..{} :" + participant);
-		session.update("mapper.participant.updateNextApprovalType",participant);
+	public void updateNextApprovalType(String appr_seq, String participant_seq) {
+		Map<String, Object> params = new HashMap<>();
+		params.put("appr_seq", appr_seq);
+		params.put("participant_seq", participant_seq);
+		
+		log.info("Length value..{} :" + params);
+		session.update("mapper.participant.updateNextApprovalType",params);
+	}
+	
+	@Override
+	public List<participantVO>getApprovalApprseq(String appr_seq){
+		return session.selectList("mapper.participant.getApprovalApprseq",appr_seq);
 	}
 }

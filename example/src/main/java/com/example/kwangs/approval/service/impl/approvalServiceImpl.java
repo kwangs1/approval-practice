@@ -37,11 +37,11 @@ public class approvalServiceImpl implements approvalService{
 		int approvalstatus = 4097;
 		
 		String seqCurrval = mapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
-		log.debug("write seqValue..{}" + seqCurrval);
+		log.debug("Origin Seq..{}" + seqCurrval);
 		
 		for (participantVO pVO : participant) {
 			pVO.setAppr_seq(seqCurrval);
-			log.debug("new_seq getSeqValue...{}" + pVO.getAppr_seq());
+			log.debug("approval getSeq...{}" + pVO.getAppr_seq());
 			pVO.setLine_seq(line_seq);// 기본값 1
 			
 			

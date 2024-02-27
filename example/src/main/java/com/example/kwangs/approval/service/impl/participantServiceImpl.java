@@ -35,8 +35,9 @@ public class participantServiceImpl implements participantService{
 						
 			log.info("service {} :"+params);
 			mapper.participantCheck(params);
+			//결재선 차례 업데이트
+			updateNextApprovalType(pp.getAppr_seq(),pp.getParticipant_seq());
 		}
-		updateNextApprovalType(participant);
 	}
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
@@ -45,36 +46,43 @@ public class participantServiceImpl implements participantService{
 	}
 	
 	//결재 이후 결재선 순번 재지정
-	public void updateNextApprovalType(List<participantVO> participant) {
+	public void updateNextApprovalType(String appr_seq, String participant_seq) {
 	    log.info("Updating next approval type...");
-	    for (int i = 0; i < participant.size(); i++) {
+	    
+	    List<participantVO> approvalLines = mapper.getApprovalApprseq(appr_seq);
+	    for (int i = 0; i < approvalLines.size(); i++) {
 	        log.info("check point..");
-	        participantVO currentParticipant = participant.get(i);
+	        participantVO currentParticipant = approvalLines.get(i);
 	        int line_seq = currentParticipant.getLine_seq();
+	        //String participant_seq = currentParticipant.getParticipant_seq();
 	        
 	        log.info("loop.... ing..");
-	        log.info("first participant user line_seq..."+line_seq);
-	        // 첫 번째 결재자의 경우 pass
-	        /*if (line_seq == 1) {
+	        log.info("participant user line_seq: {}", line_seq);
+	        
+	        // 첫 번째 결재자는 pass
+	        if (line_seq == 1) {
 	            continue;
-	        }*/
+	        }   
+            
+            log.info("checked appr_seq.."+appr_seq);
+            log.info("checked participant_seq.."+participant_seq);
 	        
 	        // 현재 결재자의 approvaltype이 4이고 다음 결재자의 approvaltype이 8인 경우
-	        if (currentParticipant.getApprovaltype() == 4 && i + 1 < participant.size()
-	                && participant.get(i + 1).getApprovaltype() == 8) {
-	        	
-		        log.info("=======================================");
-	            participantVO nextParticipant = participant.get(i + 1);
-	            nextParticipant.setApprovaltype(4);
+	        if (currentParticipant.getApprovaltype() == 4 && i + 1 < approvalLines.size()) {
+	            participantVO nextParticipant = approvalLines.get(i + 1);
 	            
-	            log.info("Updated next approval type: {}", nextParticipant);
-	            mapper.updateNextApprovalType(nextParticipant);
-	            
-		        log.info("========================================");
+	            // 다음 결재자의 participant_seq 값도 확인하여 업데이트
+	            if (nextParticipant.getParticipant_seq() != null && nextParticipant.getParticipant_seq().equals(participant_seq)) {
+	                nextParticipant.setApprovaltype(4);
+	                
+	                log.info("Updated next approval type: {}", nextParticipant);
+	                mapper.updateNextApprovalType(nextParticipant.getAppr_seq(),nextParticipant.getParticipant_seq());
+	                
+	                log.info("=======================================");
+	            }
 	        }
 	    }
 	}//end updateNextApprovalType
-
 
 	
 }

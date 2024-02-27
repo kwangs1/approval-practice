@@ -23,21 +23,21 @@
 
 
 <insert id="apprWrite" parameterType="approvalVO" useGeneratedKeys="true" keyProperty="receipts_seq"> 
-insert into approval
-values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate},100)
+	insert into approval
+	values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate},100)
 </insert>
 
 <select id="apprWaitList" resultType="approvalVO">
-select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
-	from  approval a, participant p
-where p.appr_seq = a.appr_seq
-and p.approvalstatus = 4098
-and p.approvaltype = 4
-and p.id = #{id}
+	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
+		from  approval a, participant p
+	where p.appr_seq = a.appr_seq
+	and p.approvalstatus = 4098
+	and p.approvaltype = 4
+	and p.id = #{id}
 </select>
 
 <select id="apprInfo" resultType="approvalVO" parameterType="String">
-select * from approval where appr_seq = #{appr_seq}
+	select * from approval where appr_seq = #{appr_seq}
 </select>
 
 </mapper>
