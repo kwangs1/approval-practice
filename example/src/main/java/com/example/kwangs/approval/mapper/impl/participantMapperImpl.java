@@ -41,11 +41,7 @@ public class participantMapperImpl implements participantMapper{
 	}
 	
 	@Override
-	public void updateNextApprovalType(String appr_seq, String participant_seq) {
-		Map<String, Object> params = new HashMap<>();
-		params.put("appr_seq", appr_seq);
-		params.put("participant_seq", participant_seq);
-		
+	public void updateNextApprovalType(Map<String, Object> params) {
 		log.info("Length value..{} :" + params);
 		session.update("mapper.participant.updateNextApprovalType",params);
 	}

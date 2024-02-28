@@ -6,7 +6,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.example.kwangs.approval.domain.approvalVO;
 import com.example.kwangs.approval.domain.participantVO;
@@ -34,7 +33,6 @@ public class approvalServiceImpl implements approvalService{
 	public void ParticipantWrite(List<participantVO> participant){
 		log.info("write method 진입");
 		int line_seq = 1;
-		int approvalstatus = 4097;
 		
 		String seqCurrval = mapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
 		log.debug("Origin Seq..{}" + seqCurrval);
@@ -43,49 +41,48 @@ public class approvalServiceImpl implements approvalService{
 			pVO.setAppr_seq(seqCurrval);
 			log.debug("approval getSeq...{}" + pVO.getAppr_seq());
 			pVO.setLine_seq(line_seq);// 기본값 1
-			
-			
-			approvalType(participant);
-			
-			if(pVO.getLine_seq() == 1) {
-				pVO.setApprovalstatus(approvalstatus);
-			}else if(pVO.getLine_seq() > 1 && pVO.getStatus() == 2000 || pVO.getStatus() == 4000){
-				pVO.setApprovalstatus(4098);
-			}else if(pVO.getLine_seq() > 1 && pVO.getStatus() == 3000){
-				pVO.setApprovalstatus(4120);
-			}
-			
+
+			approvalTypeAndStatus(participant);
 			// 이후 insert 된 receipts_seq 값 가져올 것.
 			participantMapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 		}
 	}
 	
-	@Override
-	@Transactional
-	public void ApprovlTransanctional(approvalVO approval, List<participantVO> participant) {
-		apprWrite(approval);
-	    ParticipantWrite(participant);
-	}
 	
-	//결재 상신 시 결재선 테이블 관련 approvalType 컬럼 값 셋팅 메서드
-	public void approvalType(List<participantVO> participant) {
-		int totalParticipant = participant.size();
-		
-		for(int i =0; i < totalParticipant; i++) {
-			participantVO pVO = participant.get(i);
-			
-			if(pVO.getLine_seq() == 1) {
-				pVO.setApprovaltype(2);
-			}else if(pVO.getLine_seq() == 2) {
-				pVO.setApprovaltype(4);
-			}else {
-				pVO.setApprovaltype(8);
-			}
-			
-		}
-	
+	//결재 상신 시 결재선 테이블 관련 approvalType, approvalStatus 컬럼 값 셋팅 메서드
+	public void approvalTypeAndStatus(List<participantVO> participant) {
+	    int approvalstatus = 4097;
+	    boolean isFirst = true;
+	    
+	    for(int i = 0; i < participant.size(); i++) {
+	        participantVO pVO = participant.get(i);  
+	        
+	        // 기안자인 경우 2(결재완료)
+	        if(i == 0) {
+	            pVO.setApprovaltype(2);
+	            pVO.setApprovalstatus(approvalstatus);
+	        }
+	        // 중간 결재자인 경우 4(결재진행) , 4098 미결재
+	        else if(i + 1 < participant.size()) {
+	            // 가장 앞 번호의 중간 결재자는 4, 나머지는 8
+	            if(isFirst) {
+	                pVO.setApprovaltype(4);
+	                pVO.setApprovalstatus(4098);
+	                isFirst = false;
+	            } else {
+	                pVO.setApprovaltype(8);
+	                pVO.setApprovalstatus(4098);
+	            }
+	        }
+	        // 마지막 결재자인 경우 8 (결재대기) ,4098 미결재
+	        else if(i == participant.size() - 1) {
+	            pVO.setApprovaltype(8);
+	            pVO.setApprovalstatus(4098);
+	        }
+	    }
 	}
+
 
 	@Override
 	public List<approvalVO> apprWaitList(String id) {	

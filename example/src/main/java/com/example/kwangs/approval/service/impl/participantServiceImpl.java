@@ -36,7 +36,7 @@ public class participantServiceImpl implements participantService{
 			log.info("service {} :"+params);
 			mapper.participantCheck(params);
 			//결재선 차례 업데이트
-			updateNextApprovalType(pp.getAppr_seq(),pp.getParticipant_seq());
+			updateNextApprovalType(pp.getAppr_seq());
 		}
 	}
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
@@ -46,15 +46,14 @@ public class participantServiceImpl implements participantService{
 	}
 	
 	//결재 이후 결재선 순번 재지정
-	public void updateNextApprovalType(String appr_seq, String participant_seq) {
+	public void updateNextApprovalType(String appr_seq) {
 	    log.info("Updating next approval type...");
 	    
 	    List<participantVO> approvalLines = mapper.getApprovalApprseq(appr_seq);
-	    for (int i = 0; i < approvalLines.size(); i++) {
+	    for (int i = 0; i< approvalLines.size(); i++) {
 	        log.info("check point..");
 	        participantVO currentParticipant = approvalLines.get(i);
 	        int line_seq = currentParticipant.getLine_seq();
-	        //String participant_seq = currentParticipant.getParticipant_seq();
 	        
 	        log.info("loop.... ing..");
 	        log.info("participant user line_seq: {}", line_seq);
@@ -63,26 +62,40 @@ public class participantServiceImpl implements participantService{
 	        if (line_seq == 1) {
 	            continue;
 	        }   
-            
-            log.info("checked appr_seq.."+appr_seq);
-            log.info("checked participant_seq.."+participant_seq);
 	        
-	        // 현재 결재자의 approvaltype이 4이고 다음 결재자의 approvaltype이 8인 경우
-	        if (currentParticipant.getApprovaltype() == 4 && i + 1 < approvalLines.size()) {
+	        log.info("checked appr_seq.."+appr_seq);
+            log.info("checked participant_seq.."+currentParticipant.getParticipant_seq());
+	        
+	        // 현재 결재자의 approvaltype이 결재를 완료하여 2가 되고 다음 결재자(중간결재자)의 approvalType를 4로 변경
+            if (currentParticipant.getApprovaltype() == 2 && i + 1 < approvalLines.size()){
 	            participantVO nextParticipant = approvalLines.get(i + 1);
-	            
-	            // 다음 결재자의 participant_seq 값도 확인하여 업데이트
-	            if (nextParticipant.getParticipant_seq() != null && nextParticipant.getParticipant_seq().equals(participant_seq)) {
-	                nextParticipant.setApprovaltype(4);
+	             
+	            // 모든 결재자의 participant_seq 값도 확인하여 업데이트
+	            for (participantVO participant : approvalLines) {
+	            		String participant_seq = participant.getParticipant_seq();
+	            	
+	            		log.info("for loop check.."+participant_seq);
 	                
-	                log.info("Updated next approval type: {}", nextParticipant);
-	                mapper.updateNextApprovalType(nextParticipant.getAppr_seq(),nextParticipant.getParticipant_seq());
-	                
-	                log.info("=======================================");
-	            }
-	        }
-	    }
-	}//end updateNextApprovalType
-
+	                // 다음 결재자의 participant_seq 값과 현재 participant_seq 값이 일치하는 경우
+	                if (nextParticipant.getParticipant_seq() != null && nextParticipant.getParticipant_seq().equals(participant_seq)) {
+	                	nextParticipant.setApprovaltype(4);
+	                    log.info("Updated next approval type: {}", nextParticipant.getApprovaltype());
+	                    
+	                    // Map으로 매개변수 전달
+	                    Map<String, Object> params = new HashMap<>();
+	                    params.put("appr_seq", nextParticipant.getAppr_seq());
+	                    params.put("participant_seq", participant_seq);
+	                    params.put("approvaltype", nextParticipant.getApprovaltype());
+	                    
+	                    // mapper를 통해 DB 업데이트 수행
+	                    mapper.updateNextApprovalType(params);
+	                    
+	                    log.info("=======================================");
+	                    break; // 현재 결재자의 업데이트가 완료되면 루프 종료
+	                }//end if..2
+	            }//end for..2
+	        }//end if..1
+	    }//end for..1
+	}
 	
 }

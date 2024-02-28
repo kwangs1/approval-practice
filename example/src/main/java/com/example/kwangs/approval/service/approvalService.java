@@ -10,8 +10,6 @@ public interface approvalService {
 	void apprWrite(approvalVO approval);
 	//문서 기안 시 결재선 지정
 	void ParticipantWrite(List<participantVO> participant);
-	//결재 및 결재선 트랜잭션
-	void ApprovlTransanctional(approvalVO approval, List<participantVO> participant);
 	//결재대기
 	List<approvalVO> apprWaitList(String id);
 	//결재 상세보기

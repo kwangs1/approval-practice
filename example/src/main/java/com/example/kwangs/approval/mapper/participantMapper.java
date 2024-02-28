@@ -16,7 +16,7 @@ public interface participantMapper {
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	List<participantVO> getParticipantInfo(String appr_seq);
 
-	void updateNextApprovalType(String appr_seq, String participant_seq);
+	void updateNextApprovalType(Map<String, Object> params);
 
 	List<participantVO> getApprovalApprseq(String appr_seq);
 

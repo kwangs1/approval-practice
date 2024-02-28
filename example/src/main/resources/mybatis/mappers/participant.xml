@@ -20,6 +20,9 @@
 	</resultMap>
 	
 <insert id="ParticipantWrite" parameterType="participantVO">
+	<selectKey keyProperty="participant_seq" resultType="String" order="BEFORE">
+		select 'PARTICIPANT' || to_char(sysdate,'YYYYMMDD') || PARTICIPANT_SEQ.nextval from dual
+	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
     #{id}, #{pos}, sysdate, sysdate,#{approvalstatus},#{approvaltype})
@@ -43,12 +46,11 @@
 	and p.approvaltype = 4
 </select>
 
-<update id="updateNextApprovalType">
+<update id="updateNextApprovalType" parameterType="java.util.Map">
     update participant
     set approvaltype = #{approvaltype}
     where appr_seq = #{appr_seq}
     and participant_seq = #{participant_seq}
-    and id = #{id}
 </update>
 
 <select id="getApprovalApprseq" resultType="participantVO" parameterType="String">
