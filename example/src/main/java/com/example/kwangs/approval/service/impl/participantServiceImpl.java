@@ -50,7 +50,7 @@ public class participantServiceImpl implements participantService{
 	    log.info("Updating next approval type...");
 	    
 	    List<participantVO> approvalLines = mapper.getApprovalApprseq(appr_seq);
-	    for (int i = 0; i< approvalLines.size(); i++) {
+	    for (int i = 0; i < approvalLines.size(); i++) {
 	        log.info("check point..");
 	        participantVO currentParticipant = approvalLines.get(i);
 	        int line_seq = currentParticipant.getLine_seq();
@@ -64,21 +64,23 @@ public class participantServiceImpl implements participantService{
 	        }   
 	        
 	        log.info("checked appr_seq.."+appr_seq);
-            log.info("checked participant_seq.."+currentParticipant.getParticipant_seq());
+	        log.info("checked participant_seq.."+currentParticipant.getParticipant_seq());
 	        
-	        // 현재 결재자의 approvaltype이 결재를 완료하여 2가 되고 다음 결재자(중간결재자)의 approvalType를 4로 변경
-            if (currentParticipant.getApprovaltype() == 2 && i + 1 < approvalLines.size()){
-	            participantVO nextParticipant = approvalLines.get(i + 1);
-	             
+	        // 현재 결재자의 approvaltype이 결재를 완료하여 2가 되고,
+	        // 다음 결재자(중간결재자 또는 마지막 결재자)의 approvaltype이 8인 경우 approvalType를 4로 변경
+	        if (currentParticipant.getApprovaltype() == 2) {
+	            // 다음 결재자의 index
+	            int nextIndex = i + 1;
+	            
 	            // 모든 결재자의 participant_seq 값도 확인하여 업데이트
-	            for (participantVO participant : approvalLines) {
-	            		String participant_seq = participant.getParticipant_seq();
-	            	
-	            		log.info("for loop check.."+participant_seq);
+	            while (nextIndex < approvalLines.size()) {
+	                participantVO nextParticipant = approvalLines.get(nextIndex);
+	                String participant_seq = nextParticipant.getParticipant_seq();
 	                
-	                // 다음 결재자의 participant_seq 값과 현재 participant_seq 값이 일치하는 경우
-	                if (nextParticipant.getParticipant_seq() != null && nextParticipant.getParticipant_seq().equals(participant_seq)) {
-	                	nextParticipant.setApprovaltype(4);
+	                log.info("for loop check.."+participant_seq);
+	                
+	                if (nextParticipant.getApprovaltype() == 8) {
+	                    nextParticipant.setApprovaltype(4);
 	                    log.info("Updated next approval type: {}", nextParticipant.getApprovaltype());
 	                    
 	                    // Map으로 매개변수 전달
@@ -91,11 +93,14 @@ public class participantServiceImpl implements participantService{
 	                    mapper.updateNextApprovalType(params);
 	                    
 	                    log.info("=======================================");
-	                    break; // 현재 결재자의 업데이트가 완료되면 루프 종료
-	                }//end if..2
-	            }//end for..2
-	        }//end if..1
-	    }//end for..1
+	                    break; // 업데이트 후 루프 종료
+	                }
+	                
+	                nextIndex++;
+	            }
+	        }
+	    }
 	}
+
 	
 }
