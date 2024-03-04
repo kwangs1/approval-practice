@@ -34,4 +34,9 @@ public class approvalMapperImpl implements approvalMapper{
 	public approvalVO apprInfo(String appr_seq) {
 		return session.selectOne("mapper.approval.apprInfo",appr_seq);
 	}
+	//최종 결재자 결재 이후 문서 상태값 변경
+	@Override
+	public int ApprovalUpdateStatus(String appr_seq) {
+		return session.update("mapper.approval.ApprovalUpdateStatus",appr_seq);
+	}
 }

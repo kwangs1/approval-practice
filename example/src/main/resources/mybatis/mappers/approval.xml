@@ -43,4 +43,9 @@
 	select * from approval where appr_seq = #{appr_seq}
 </select>
 
+<update id="ApprovalUpdateStatus">
+	update approval
+	set status = 256
+	where appr_seq = #{appr_seq}
+</update>
 </mapper>

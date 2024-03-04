@@ -14,4 +14,6 @@ public interface approvalMapper {
 
 	approvalVO apprInfo(String appr_seq);
 
+	int ApprovalUpdateStatus(String appr_seq);
+
 }
