@@ -82,10 +82,13 @@ public class participantServiceImpl implements participantService{
 	            	//그다음 결재자의 시퀀스를 가져오기 위해 nextIndex를 가져오고 그게에 대해 시퀀스를 가져온다.
 	                participantVO nextParticipant = approvalLines.get(nextIndex);
 	                String participant_seq = nextParticipant.getParticipant_seq();
+	                int nextLine_seq = nextParticipant.getLine_seq();
 	                
+	                log.info("Next Line_seq.."+nextLine_seq);
+	                log.info("NextIndex.."+nextIndex);
 	                log.info("for loop check.."+participant_seq);
 	                //결재가 되고 가져온 그다음 결재자의 값이 8이면 4로 업데이트를 침
-	                if (nextParticipant.getApprovaltype() == 8) {
+	                if (nextParticipant.getApprovaltype() == 8 && nextLine_seq == currentParticipant.getLine_seq() +1) {
 	                    nextParticipant.setApprovaltype(4);
 	                    log.info("Updated next approval type: {}", nextParticipant.getApprovaltype());
 	                    
@@ -104,7 +107,7 @@ public class participantServiceImpl implements participantService{
 	                
 	                nextIndex++;
 	                //마지막 결재자 이며 , 마지막 결재자가 결재를 했다면 문서 상태값 완료[256] 변경 
-	                if(nextIndex == approvalLines.size() && nextParticipant.getApprovaltype() == 2) {
+	                if(nextIndex == approvalLines.size() && (nextParticipant.getApprovaltype() == 2) || (currentParticipant.getApprovaltype() == 2) ) {
 	                	approvalMapper.ApprovalUpdateStatus(appr_seq);
 	                	log.info("final participant and approval status update");
 	                }

@@ -2,6 +2,8 @@ package com.example.kwangs.approval.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,12 +54,18 @@ public class approvalController {
 	
 	//결재대기
 	@GetMapping("/apprWaitList")
-	public void apprWaitList(Model model, String id, approvalVO approval) {
+	public String apprWaitList(Model model, String id, approvalVO approval,HttpServletRequest req) {
+		
+		if(req.getSession(false).getAttribute("user") == null) {
+			return "redirect:/";
+		}
 		model.addAttribute("list",service.apprWaitList(id));
 		
 		//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 		List<participantVO> participantInfo = serviceP.getParticipantInfo(approval.getAppr_seq());
 		model.addAttribute("participantInfo",participantInfo);
+		
+		return "/approval/apprWaitList";
 	}
 	
 	//문서 상세보기

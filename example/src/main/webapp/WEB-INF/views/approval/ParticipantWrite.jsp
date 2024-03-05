@@ -17,6 +17,11 @@ function pop() {
 	window.open("${path}/user/list","pop","width=768, height=400");
 }
 
+$(document).ready(function(){
+	pop();
+});
+
+
 window.addEventListener('message',function(e){
 	var data = e.data;
 	var users  = data.users;

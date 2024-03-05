@@ -15,8 +15,30 @@ public class approvalVO {
 	private Date startdate;
 	private Date enddate;
 	private int status;
-	private participantVO participant;
+	private String docregno;
+	private String deptid;
+	private String deptname;
 
+	
+
+	public String getDocregno() {
+		return docregno;
+	}
+	public void setDocregno(String docregno) {
+		this.docregno = docregno;
+	}
+	public String getDeptid() {
+		return deptid;
+	}
+	public void setDeptid(String deptid) {
+		this.deptid = deptid;
+	}
+	public String getDeptname() {
+		return deptname;
+	}
+	public void setDeptname(String deptname) {
+		this.deptname = deptname;
+	}
 	public String getAppr_seq() {
 		return appr_seq;
 	}
@@ -70,12 +92,6 @@ public class approvalVO {
 	}
 	public void setStatus(int status) {
 		this.status = status;
-	}
-	public participantVO getParticipant() {
-		return participant;
-	}
-	public void setParticipant(participantVO participant) {
-		this.participant = participant;
 	}
 	
 	

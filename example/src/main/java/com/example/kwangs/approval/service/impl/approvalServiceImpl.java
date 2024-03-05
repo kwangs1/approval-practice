@@ -54,32 +54,47 @@ public class approvalServiceImpl implements approvalService{
 	public void approvalTypeAndStatus(List<participantVO> participant) {
 	    int approvalstatus = 4097;
 	    boolean isFirst = true;
-	    
-	    for(int i = 0; i < participant.size(); i++) {
-	        participantVO pVO = participant.get(i);  
-	        
-	        // 기안자인 경우 2(결재완료)
-	        if(i == 0) {
-	            pVO.setApprovaltype(2);
-	            pVO.setApprovalstatus(approvalstatus);
-	        }
-	        // 중간 결재자인 경우 4(결재진행) , 4098 미결재
-	        else if(i + 1 < participant.size()) {
-	            // 가장 앞 번호의 중간 결재자는 4, 나머지는 8
-	            if(isFirst) {
+
+        // 기안자와 최종 결재자가 같은 경우
+	    if(participant.size() == 1) {
+	        participantVO pVO = participant.get(0);//리스트의 첫 번쨰 요소
+	        pVO.setApprovaltype(2);
+	        pVO.setApprovalstatus(approvalstatus);
+            mapper.ApprovalUpdateStatus(pVO.getAppr_seq());
+	    }
+	    //그 외
+	    else {
+		    for(int i = 0; i < participant.size(); i++) {
+		        participantVO pVO = participant.get(i);  
+		        
+		        // 기안자인 경우 2(결재완료)
+		        if(i == 0) {
+		            pVO.setApprovaltype(2);
+		            pVO.setApprovalstatus(approvalstatus);
+		        }            
+		        // 중간 결재자이면서 마지막 결재자인 경우 4(결재진행) , 4098 미결재
+	            else if(i + 1 == participant.size() && isFirst) {
 	                pVO.setApprovaltype(4);
 	                pVO.setApprovalstatus(4098);
-	                isFirst = false;
-	            } else {
-	                pVO.setApprovaltype(8);
-	                pVO.setApprovalstatus(4098);
 	            }
-	        }
-	        // 마지막 결재자인 경우 8 (결재대기) ,4098 미결재
-	        else if(i == participant.size() - 1) {
-	            pVO.setApprovaltype(8);
-	            pVO.setApprovalstatus(4098);
-	        }
+		        // 중간 결재자인 경우 4(결재진행) , 4098 미결재
+		        else if(i + 1 < participant.size()) {
+		            // 가장 앞 번호의 중간 결재자는 4, 나머지는 8
+		            if(isFirst) {
+		                pVO.setApprovaltype(4);
+		                pVO.setApprovalstatus(4098);
+		                isFirst = false;
+		            } else {
+		                pVO.setApprovaltype(8);
+		                pVO.setApprovalstatus(4098);
+		            }
+		        }
+		        // 마지막 결재자인 경우 8 (결재대기) ,4098 미결재
+		        else if(i == participant.size() - 1) {
+			        pVO.setApprovaltype(8);
+			        pVO.setApprovalstatus(4098);	
+		        }
+		    }
 	    }
 	}
 
