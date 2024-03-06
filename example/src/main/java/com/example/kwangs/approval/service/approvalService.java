@@ -8,8 +8,6 @@ import com.example.kwangs.approval.domain.participantVO;
 public interface approvalService {
 	//결재 작성
 	void apprWrite(approvalVO approval);
-	//문서 기안 시 결재선 지정
-	void ParticipantWrite(List<participantVO> participant);
 	//결재대기
 	List<approvalVO> apprWaitList(String id);
 	//결재 상세보기

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,4 +31,17 @@ public class participantController {
 		service.participantCheck(participant);
 		return ResponseEntity.ok("participant update success");
 	}
+	
+	//문서 기안 시 결재선 지정
+	@GetMapping("/ParticipantWrite")
+	public void ParticipantWrite() {}
+
+	@ResponseBody
+	@PostMapping("/ParticipantWrite")
+	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
+		log.info("Received data {} "+participant);
+		service.ParticipantWrite(participant);
+	    return ResponseEntity.ok("Success");
+	}
+	
 }
