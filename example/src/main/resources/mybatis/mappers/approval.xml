@@ -30,7 +30,7 @@
 		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval from dual
 	</selectKey>
 	insert into approval
-	values(#{appr_seq},#{name},#{id},sysdate,#{title},#{content},#{startdate},#{enddate},1,#{docregno},#{deptid},#{deptname})
+	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},#{startdate},#{enddate},1,#{docregno},#{deptid},#{deptname})
 </insert>
 
 <select id="apprWaitList" resultType="approvalVO">

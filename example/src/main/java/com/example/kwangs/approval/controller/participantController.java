@@ -38,9 +38,9 @@ public class participantController {
 
 	@ResponseBody
 	@PostMapping("/ParticipantWrite")
-	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
+	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant,String userid) {
 		log.info("Received data {} "+participant);
-		service.ParticipantWrite(participant);
+		service.ParticipantWrite(participant,userid);
 	    return ResponseEntity.ok("Success");
 	}
 	

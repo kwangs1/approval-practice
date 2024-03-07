@@ -8,7 +8,7 @@
 <meta charset="UTF-8">
 </head>
 <body>
-<%@ include file="../approval/ParticipantWrite.jsp" %>
+<%@ include file="../participant/ParticipantWrite.jsp" %>
 <hr>
 <input type="hidden" name="name" id="ApprRecName" value="${user.name}" />
 <input type="hidden" name="id" id="ApprRecId" value="${user.id}" />

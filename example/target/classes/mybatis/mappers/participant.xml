@@ -25,12 +25,12 @@
 	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, sysdate, sysdate,#{approvalstatus},#{approvaltype})
+    #{id}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype})
 </insert>
  
 <update id="participantCheck" parameterType="java.util.Map">
 	update participant 
-		set approvalstatus = 4097, approvaltype = 2 , upddate = sysdate
+		set approvalstatus = 4097, approvaltype = 2 , upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
 	where approvaltype = #{approvaltype}
 	and approvalstatus = #{approvalstatus}
 	and id = #{id}

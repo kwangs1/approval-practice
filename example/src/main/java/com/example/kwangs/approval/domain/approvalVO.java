@@ -9,7 +9,7 @@ public class approvalVO {
 	private String appr_seq;
 	private String name;
 	private String id;
-	private Date regdate;
+	private String regdate;
 	private String title;
 	private String content;
 	private Date startdate;
@@ -57,10 +57,10 @@ public class approvalVO {
 	public void setId(String id) {
 		this.id = id;
 	}
-	public Date getRegdate() {
+	public String getRegdate() {
 		return regdate;
 	}
-	public void setRegdate(Date regdate) {
+	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
 	public String getTitle() {

@@ -1,7 +1,5 @@
 package com.example.kwangs.approval.domain;
 
-import java.sql.Date;
-
 import org.springframework.stereotype.Component;
 
 @Component
@@ -13,8 +11,8 @@ public class participantVO {
 	private String name;
 	private String id;
 	private String pos;
-	private Date regdate;
-	private Date upddate;
+	private String regdate;
+	private String upddate;
 	private int approvalstatus;
 	private int approvaltype;
 	
@@ -61,16 +59,16 @@ public class participantVO {
 	public void setPos(String pos) {
 		this.pos = pos;
 	}
-	public Date getRegdate() {
+	public String getRegdate() {
 		return regdate;
 	}
-	public void setRegdate(Date regdate) {
+	public void setRegdate(String regdate) {
 		this.regdate = regdate;
 	}
-	public Date getUpddate() {
+	public String getUpddate() {
 		return upddate;
 	}
-	public void setUpddate(Date upddate) {
+	public void setUpddate(String upddate) {
 		this.upddate = upddate;
 	}
 	public int getApprovalstatus() {
