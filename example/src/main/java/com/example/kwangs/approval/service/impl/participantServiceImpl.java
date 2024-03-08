@@ -7,7 +7,6 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 
 import com.example.kwangs.approval.domain.participantVO;
@@ -27,8 +26,7 @@ public class participantServiceImpl implements participantService{
 
 	//문서 기안 시 결재선 지정
 	@Override
-	@CachePut(value = "approvalLines" , key = "#userid")
-	public void ParticipantWrite(List<participantVO> participant,String userid){
+	public void ParticipantWrite(List<participantVO> participant){
 		log.info("write method 진입");
 		int line_seq = 1;
 		
@@ -199,6 +197,4 @@ public class participantServiceImpl implements participantService{
 	        }//end if (currentParticipant.getApprovaltype() == 2)
 	    }//end for
 	}
-
-	
 }

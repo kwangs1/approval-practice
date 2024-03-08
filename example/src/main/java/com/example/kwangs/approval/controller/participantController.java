@@ -38,10 +38,17 @@ public class participantController {
 
 	@ResponseBody
 	@PostMapping("/ParticipantWrite")
-	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant,String userid) {
+	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
 		log.info("Received data {} "+participant);
-		service.ParticipantWrite(participant,userid);
+		service.ParticipantWrite(participant);
 	    return ResponseEntity.ok("Success");
+	}
+	
+	//문서 상세보기에서의 결재
+	@ResponseBody
+	@PostMapping("/FlowAppr")
+	public participantVO FlowAppr(participantVO pvo) {
+		return service.FlowAppr(pvo);
 	}
 	
 }
