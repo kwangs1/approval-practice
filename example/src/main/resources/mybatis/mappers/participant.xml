@@ -18,7 +18,7 @@
 		<result property="approvalstatus" column="approvalstatus" />
 		<result property="approvaltype" column="approvaltype" />
 	</resultMap>
-	
+<!-- 결재선 지정 -->
 <insert id="ParticipantWrite" parameterType="participantVO">
 	<selectKey keyProperty="participant_seq" resultType="String" order="BEFORE">
 		select 'PARTICIPANT' || to_char(sysdate,'YYYYMMDD') || PARTICIPANT_SEQ.nextval from dual
@@ -28,7 +28,8 @@
     #{id}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype})
 </insert>
  
-<update id="participantCheck" parameterType="java.util.Map">
+<!-- 일괄결재 -->
+<update id="BulkAppr" parameterType="java.util.Map">
 	update participant 
 		set approvalstatus = 4097, approvaltype = 2 , upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
 	where approvaltype = #{approvaltype}
@@ -38,14 +39,17 @@
 	and appr_seq = #{appr_seq}	
 </update>
 
+<!-- 결재대기 화면에서의 결재선 정보 -->
 <select id="getParticipantInfo" resultType="participantVO" parameterType="String">
 	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
+	order by a.appr_seq desc
 </select>
 
+<!-- 일괄 결재 후 결재선 타입 변경 -->
 <update id="updateNextApprovalType" parameterType="java.util.Map">
     update participant
     set approvaltype = #{approvaltype}
@@ -53,6 +57,7 @@
     and participant_seq = #{participant_seq}
 </update>
 
+<!-- 일괄 결재 시 기준이 되는 appr_seq 조회 쿼리 -->
 <select id="getApprovalApprseq" resultType="participantVO" parameterType="String">
 	select a.appr_seq, p.line_seq, p.approvaltype, p.participant_seq
 		from approval a
@@ -60,5 +65,24 @@
 		on a.appr_seq = p.appr_seq
 	where a.appr_seq = #{appr_seq}
 	order by p.line_seq
+</select>
+
+<!-- 결재 -->
+<update id="FlowAppr" parameterType="java.util.Map">
+	update participant
+		set approvalstatus = 4097, approvaltype = 2 , upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
+	where approvaltype = #{approvaltype}
+	and approvalstatus = #{approvalstatus}
+	and id = #{id}
+	and participant_seq = #{participant_seq}
+	and appr_seq = #{appr_seq}	
+</update>
+
+<select id="pInfo" resultType="participantVO" parameterType="java.util.Map">
+	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
+		from  approval a, participant p		
+	where a.appr_seq = p.appr_seq
+	and p.approvalstatus = 4098
+	and p.approvaltype = 4
 </select>
 </mapper>

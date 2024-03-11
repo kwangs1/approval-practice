@@ -40,6 +40,7 @@
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
 	and p.id = #{id}
+	order by a.appr_seq desc
 </select>
 
 <select id="apprInfo" resultType="approvalVO" parameterType="String">

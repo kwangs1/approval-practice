@@ -18,7 +18,7 @@
 	<input type="date" name="enddate" id="enddate" />
 <br><br>
 
-<textarea name="title" id="title" rows="1" cols="50" placeholder="제목입력"></textarea>
+<textarea name="title" id="title" rows="1" cols="50" placeholder="제목입력" autofocus="autofocus"></textarea>
 <br><br>
 
 <textarea name="content" id="content" rows="10" cols="80" placeholder="내용입력"></textarea>

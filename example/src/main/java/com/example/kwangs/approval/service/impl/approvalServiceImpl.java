@@ -8,9 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.kwangs.approval.domain.approvalVO;
-import com.example.kwangs.approval.domain.participantVO;
 import com.example.kwangs.approval.mapper.approvalMapper;
-import com.example.kwangs.approval.mapper.participantMapper;
 import com.example.kwangs.approval.service.approvalService;
 
 

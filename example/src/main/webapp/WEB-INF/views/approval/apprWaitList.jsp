@@ -101,7 +101,7 @@ function BundleApproval(){
 		
 		$.ajax({
 			type: 'post',
-			url: '${path}/participant/participantCheck',
+			url: '${path}/participant/BulkAppr',
 			contentType: 'application/json',
 			data: JSON.stringify(selectParticipant),
 			success: function(response){

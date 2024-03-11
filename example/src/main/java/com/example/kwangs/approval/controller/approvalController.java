@@ -1,6 +1,8 @@
 package com.example.kwangs.approval.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -57,11 +59,23 @@ public class approvalController {
 	
 	//문서 상세보기
 	@GetMapping("/apprInfo")
-	public approvalVO apprInfo(String appr_seq, Model model) {
+	public String apprInfo(String appr_seq, Model model,participantVO pp) {		
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
+		//
+		Map<String,Object> res = new HashMap<>();
+		res.put("appr_seq", pp.getAppr_seq());
+		res.put("participant_seq", pp.getParticipant_seq());
+		res.put("approvaltype", pp.getApprovaltype());
+		res.put("approvalstatus", pp.getApprovalstatus());
+		res.put("id", pp.getId());
 		
-		return Info;
+		participantVO pInfo = serviceP.pInfo(res);
+		model.addAttribute("pInfo",pInfo);
+		log.info("pp seq {}"+pp.getAppr_seq());
+		log.info("Map value {}" + res);
+		
+		return "/approval/apprInfo";
 	}
 
 }

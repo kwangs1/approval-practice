@@ -9,6 +9,7 @@
 </head>
 <link rel="stylesheet" href="${path}/resources/info.css">
 <body>
+
 <div class="post-container">
   <h1 class="post-title">${info.title}</h1>
   <p class="post-info">기안자: ${info.name} | 작성일: ${info.regdate }</p>
@@ -16,12 +17,42 @@
   <div class="post-content">
     <p>${info.content }</p>
   </div>
-  <button onclick="apprCheck()" class="button">결재</button>
+  <button onclick="FlowAppr()" class="button">결재</button>
   <button onclick="history.back()" class="button">뒤로가기</button>
 </div>
 
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+var appr_seq = '<c:out value="${info.appr_seq}"/>';
+var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
+var approvaltype = '<c:out value="${pInfo.approvaltype}"/>';
+var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
+var id = '<c:out value="${pInfo.id}"/>';
 
+var flowAppr = [];
+flowAppr.push({
+	appr_seq : appr_seq,
+	participant_seq : participant_seq,
+	approvaltype : approvaltype,
+	approvalstatus : approvalstatus,
+	id : id
+})
+function FlowAppr(){	
+	$.ajax({
+		type: 'post',
+		url: '<c:url value="/participant/FlowAppr"/>',
+		contentType: 'application/json',
+		data: JSON.stringify(flowAppr),
+		success: function(response){
+			alert("결재 성공");
+			console.log(response);
+		},
+		error: function(xhr,status,error){
+			alert("결재 실패");
+			console.error(xhr.responseText);
+		}
+	});
+}
 </script>
 </body>
 </html>

@@ -11,12 +11,14 @@
 		<result property="name" column="name" />
 		<result property="pos" column="pos" />
 		<result property="credate" column="credate" />
-		<result property="upddate" column="upddate" />
+		<result property="upddate" column="upddate" />		
+		<result property="deptid" column="deptid" />
+		<result property="deptname" column="deptname" />
 	</resultMap>
 	
 <insert id="write">
 insert into member
-values(#{id},#{pw},#{name},#{pos},sysdate,#{upddate})
+values(#{id},#{pw},#{name},#{pos},sysdate,#{upddate},#{deptid},#{deptname})
 </insert>
 	
 <select id="idcheck" resultType="int">

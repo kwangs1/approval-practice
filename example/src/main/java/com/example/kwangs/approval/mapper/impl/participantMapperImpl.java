@@ -25,12 +25,11 @@ public class participantMapperImpl implements participantMapper{
 		session.insert("mapper.participant.ParticipantWrite",vo);
 	}
 	
-	//일괄 결재 시 결재선 업데이트 
+	//일괄 결재 
 	@Override
-	public void  participantCheck(Map<String, Object> params) {
-		log.info("participant check dao ... in");
+	public void  BulkAppr(Map<String, Object> params) {
 		log.info("dao{} :"+params);
-		session.update("mapper.participant.participantCheck",params);
+		session.update("mapper.participant.BulkAppr",params);
 	}
 	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
@@ -49,4 +48,17 @@ public class participantMapperImpl implements participantMapper{
 	public List<participantVO>getApprovalApprseq(String appr_seq){
 		return session.selectList("mapper.participant.getApprovalApprseq",appr_seq);
 	}
+	
+	//결재
+	@Override
+	public int FlowAppr(Map<String,Object> res) {
+		log.info("Mapper FlowAppr RecData {}"+res);
+		return session.update("mapper.participant.FlowAppr",res);
+	}
+	
+	@Override
+	public participantVO pInfo(Map<String,Object> res) {
+		return session.selectOne("mapper.participant.pInfo",res);
+	}
+	
 }

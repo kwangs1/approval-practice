@@ -45,10 +45,9 @@ public class participantServiceImpl implements participantService{
 		}
 	}
 	
-	//일괄 결재 시 결재선 업데이트 
+	//일괄 결재
 	@Override
-	public void participantCheck(List<participantVO> participant) {
-		log.info("participant check service...in");
+	public void BulkAppr(List<participantVO> participant) {
 		for(participantVO pp : participant) {
 			//put을 통해 key,value를 받아 전달된 인자는 hashMap에 key-value 관계로 저장
 			Map<String, Object> params = new HashMap<>();
@@ -59,7 +58,7 @@ public class participantServiceImpl implements participantService{
 			params.put("appr_seq", pp.getAppr_seq());
 						
 			log.info("service {} :"+params);
-			mapper.participantCheck(params);
+			mapper.BulkAppr(params);
 			//결재선 차례 업데이트
 			updateNextApprovalType(pp.getAppr_seq());
 		}
@@ -135,7 +134,7 @@ public class participantServiceImpl implements participantService{
 	        log.info("participant user line_seq: {}", line_seq);
 	        
 	        // 첫 번째 결재자는 pass
-	        if (line_seq == 1) {
+	        if (line_seq == approvalLines.get(0).getLine_seq()) {
 	            continue;
 	        }   
 	        
@@ -147,7 +146,7 @@ public class participantServiceImpl implements participantService{
 	        // 현재 결재자의 approvaltype이 결재를 완료하여 2가 되고,
 	        // 다음 결재자(중간결재자 또는 마지막 결재자)의 approvaltype이 8인 경우 approvalType를 4로 변경
 	        if (currentParticipant.getApprovaltype() == 2) {
-	            // 다음 결재자의 index (첫 결재자 이후 2번쨰 부터 결재를 한 후 while문이 종료되면  1씩 증가 시켜서 다음 결재자 시퀀스를 가져오기 위해
+	        	// 다음 결재자의 index (첫 결재자 이후 2번쨰 부터 결재를 한 후 while문이 종료되면  1씩 증가 시켜서 다음 결재자 시퀀스를 가져오기 위해
 	            int nextIndex = i + 1;
 	            
 	            // 모든 결재자의 participant_seq 값도 확인하여 업데이트
@@ -196,5 +195,27 @@ public class participantServiceImpl implements participantService{
 	            }
 	        }//end if (currentParticipant.getApprovaltype() == 2)
 	    }//end for
+	}
+	
+	//결재
+	@Override
+	public void FlowAppr(participantVO participant) {
+		Map<String,Object> res = new HashMap<>();
+		res.put("appr_seq", participant.getAppr_seq());
+		res.put("participant_seq", participant.getParticipant_seq());
+		res.put("approvaltype", participant.getApprovaltype());
+		res.put("approvalstatus", participant.getApprovalstatus());
+		res.put("id", participant.getId());
+		int result = mapper.FlowAppr(res);
+		
+		log.info("service FlowAppr RecData {}"+res);
+		if(result == 0) {
+			updateNextApprovalType(participant.getAppr_seq());
+		}
+	}
+	
+	@Override
+	public participantVO pInfo(Map<String,Object> res) {
+		return mapper.pInfo(res);
 	}
 }
