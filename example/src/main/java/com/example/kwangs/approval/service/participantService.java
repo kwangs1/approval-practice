@@ -18,5 +18,6 @@ public interface participantService {
 	//결재
 	void FlowAppr(participantVO participant);
 
+	//일반 결재 시 상세보기에서의 결재선 정보 
 	participantVO pInfo(Map<String, Object> res);
 }

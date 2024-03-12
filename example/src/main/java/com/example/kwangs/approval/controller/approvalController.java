@@ -59,21 +59,21 @@ public class approvalController {
 	
 	//문서 상세보기
 	@GetMapping("/apprInfo")
-	public String apprInfo(String appr_seq, Model model,participantVO pp) {		
+	public String apprInfo(String appr_seq, Model model,participantVO pp,HttpServletRequest request) {		
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
-		//
+		
+		//일반 결재 시 상세보기에서의 결재선 정보 
+		String userId = (String) request.getSession().getAttribute("userId");
 		Map<String,Object> res = new HashMap<>();
 		res.put("appr_seq", pp.getAppr_seq());
 		res.put("participant_seq", pp.getParticipant_seq());
 		res.put("approvaltype", pp.getApprovaltype());
 		res.put("approvalstatus", pp.getApprovalstatus());
-		res.put("id", pp.getId());
+		res.put("id", userId);
 		
 		participantVO pInfo = serviceP.pInfo(res);
 		model.addAttribute("pInfo",pInfo);
-		log.info("pp seq {}"+pp.getAppr_seq());
-		log.info("Map value {}" + res);
 		
 		return "/approval/apprInfo";
 	}

@@ -23,8 +23,9 @@ public interface participantMapper {
 	List<participantVO> getApprovalApprseq(String appr_seq);
 	
 	//결재
-	int FlowAppr(Map<String,Object> res);
-
+	void FlowAppr(Map<String,Object> res);
+	
+	//일반 결재 시 상세보기에서의 결재선 정보 
 	participantVO pInfo(Map<String, Object> res);
 
 }

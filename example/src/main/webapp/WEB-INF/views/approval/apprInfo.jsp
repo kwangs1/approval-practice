@@ -27,29 +27,29 @@ var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
 var approvaltype = '<c:out value="${pInfo.approvaltype}"/>';
 var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
-var id = '<c:out value="${pInfo.id}"/>';
+var id = '<c:out value="${userId}"/>';
 
-var flowAppr = [];
-flowAppr.push({
+var param = {	
 	appr_seq : appr_seq,
 	participant_seq : participant_seq,
 	approvaltype : approvaltype,
 	approvalstatus : approvalstatus,
-	id : id
-})
+	id : id}
+
 function FlowAppr(){	
 	$.ajax({
 		type: 'post',
 		url: '<c:url value="/participant/FlowAppr"/>',
-		contentType: 'application/json',
-		data: JSON.stringify(flowAppr),
+		data: param,
 		success: function(response){
 			alert("결재 성공");
 			console.log(response);
+			window.location.href= "/kwangs/approval/apprWaitList?id="+id;
 		},
 		error: function(xhr,status,error){
 			alert("결재 실패");
-			console.error(xhr.responseText);
+			console.log(xhr);
+			console.log(status);
 		}
 	});
 }

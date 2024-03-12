@@ -82,7 +82,9 @@
 	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
+	and p.appr_seq = #{appr_seq}
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
+	and p.id = #{id}
 </select>
 </mapper>

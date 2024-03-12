@@ -206,14 +206,14 @@ public class participantServiceImpl implements participantService{
 		res.put("approvaltype", participant.getApprovaltype());
 		res.put("approvalstatus", participant.getApprovalstatus());
 		res.put("id", participant.getId());
-		int result = mapper.FlowAppr(res);
+		mapper.FlowAppr(res);
 		
 		log.info("service FlowAppr RecData {}"+res);
-		if(result == 0) {
-			updateNextApprovalType(participant.getAppr_seq());
-		}
+		updateNextApprovalType(participant.getAppr_seq());
+		
 	}
-	
+
+	//일반 결재 시 상세보기에서의 결재선 정보 
 	@Override
 	public participantVO pInfo(Map<String,Object> res) {
 		return mapper.pInfo(res);

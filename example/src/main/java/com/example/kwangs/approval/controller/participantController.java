@@ -39,7 +39,6 @@ public class participantController {
 	@ResponseBody
 	@PostMapping("/ParticipantWrite")
 	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
-		//log.info("Received data {} "+participant);
 		service.ParticipantWrite(participant);
 	    return ResponseEntity.ok("Success");
 	}
@@ -47,15 +46,13 @@ public class participantController {
 	//결재
 	@ResponseBody
 	@PostMapping("/FlowAppr")
-	public ResponseEntity<String> FlowAppr(@RequestBody participantVO participant){
-		log.info("FlowAppr recDate {}"+participant);
-		
+	public ResponseEntity<String> FlowAppr(participantVO participant){	
 		try {
 			service.FlowAppr(participant);
-			return ResponseEntity.ok("FLowAppr Success");
+			return ResponseEntity.ok("결재성공");
 		}catch (Exception e) {
 			e.printStackTrace();
-			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("FlowAppr Fail..");
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결재 처리에 실패했습니다.");
 		}
 	}
 }

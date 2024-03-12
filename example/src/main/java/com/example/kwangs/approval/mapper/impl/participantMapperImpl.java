@@ -51,11 +51,12 @@ public class participantMapperImpl implements participantMapper{
 	
 	//결재
 	@Override
-	public int FlowAppr(Map<String,Object> res) {
+	public void FlowAppr(Map<String,Object> res) {
 		log.info("Mapper FlowAppr RecData {}"+res);
-		return session.update("mapper.participant.FlowAppr",res);
+		session.update("mapper.participant.FlowAppr",res);
 	}
-	
+
+	//일반 결재 시 상세보기에서의 결재선 정보 
 	@Override
 	public participantVO pInfo(Map<String,Object> res) {
 		return session.selectOne("mapper.participant.pInfo",res);
