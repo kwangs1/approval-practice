@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.approval.domain.approvalVO;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
+import com.example.kwangs.approval.service.approvalVO;
 
 
 @Service

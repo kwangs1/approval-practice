@@ -7,9 +7,10 @@
         <setting name="jdbcTypeForNull" value="NULL"/>
     </settings>
 <typeAliases>
-		<typeAlias type="com.example.kwangs.memo.domain.memoVO" alias="memoVO" />	
-		<typeAlias type="com.example.kwangs.user.domain.userVO" alias="userVO" />	
-		<typeAlias type="com.example.kwangs.approval.domain.approvalVO" alias="approvalVO" />
-		<typeAlias type="com.example.kwangs.approval.domain.participantVO" alias="participantVO" />	
+		<typeAlias type="com.example.kwangs.memo.service.memoVO" alias="memoVO" />	
+		<typeAlias type="com.example.kwangs.user.service.userVO" alias="userVO" />	
+		<typeAlias type="com.example.kwangs.approval.service.approvalVO" alias="approvalVO" />
+		<typeAlias type="com.example.kwangs.participant.service.participantVO" alias="participantVO" />	
+		<typeAlias type="com.example.kwangs.dept.service.deptVO" alias="deptVO" />	
 </typeAliases>       
 </configuration>

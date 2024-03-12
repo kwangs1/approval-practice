@@ -1,25 +1,61 @@
 package com.example.kwangs.memo.mapper;
 
 import java.util.List;
+import java.util.Map;
+import java.util.logging.Logger;
 
-import com.example.kwangs.SearchCriteria;
-import com.example.kwangs.memo.domain.memoVO;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface memoMapper {
+import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.memo.service.memoVO;
+
+@Repository
+public class memoMapper{
+	private static Logger log = Logger.getLogger(memoMapper.class.getName());
 	
-	void writeSelectKey(memoVO memo);
+
+	private SqlSession session;
 	
-	void write(memoVO memo);
 
-	void TitleUpdate(memoVO memo);
-
-	memoVO read(int mno);
+	public memoVO read(int mno) {
+		return session.selectOne("mapper.memo.read",mno);
+	}
 	
-	List<memoVO> ajaxList(SearchCriteria scri);
 
-	void update(memoVO memo);
+	public List<memoVO> ajaxList(SearchCriteria scri){
+		//log.info("memo Mapper list Success");
+		return session.selectList("mapper.memo.ajaxList",scri);
+	}
+	
 
-	int countList(SearchCriteria scri);
+	public int countList(SearchCriteria scri) {
+		return session.selectOne("mapper.memo.countList",scri);
+	}
+	
 
-	List<memoVO> searchStr(SearchCriteria scri);
+	public void write(memoVO memo) {
+		session.insert("mapper.memo.write",memo);
+	}
+	
+
+	public void writeSelectKey(memoVO memo) {
+		session.insert("mapper.memo.writeSelectKey",memo);
+	}
+	
+
+	public void TitleUpdate(memoVO memo) {
+		session.update("mapper.memo.TitleUpdate",memo);
+	}
+	
+
+	public void update(memoVO memo) {
+		session.update("mapper.memo.update",memo);
+	}
+	
+
+	public List<memoVO> searchStr(SearchCriteria scri) {
+		return session.selectList("mapper.memo.searchStr",scri);
+	}
 }

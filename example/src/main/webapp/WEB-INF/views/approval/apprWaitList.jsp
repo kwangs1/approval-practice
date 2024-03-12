@@ -15,7 +15,7 @@
 <body>
 <div class="container">
   <h2>결재</h2> 
-  <a href="javascript:history.back()">홈으로</a> | 
+  <a href="/kwangs">홈으로</a> | 
   <a href="javascript:approval_pop()">기안하기</a> | 
   <a href="javascript:BundleApproval()">일괄결재</a>  
   <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>

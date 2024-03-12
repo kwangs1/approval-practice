@@ -2,16 +2,34 @@ package com.example.kwangs.user.mapper;
 
 import java.util.List;
 
-import com.example.kwangs.user.domain.userVO;
+import org.apache.ibatis.session.SqlSession;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
-public interface userMapper {
+import com.example.kwangs.user.service.userVO;
 
-	void write(userVO user);
+@Repository
+public class userMapper{
+	@Autowired
+	private SqlSession session;
+	
 
-	int idcheck(String id);
+	public void write(userVO user) {
+		session.insert("mapper.user.write",user);
+	}
+	
 
-	userVO login(userVO user);
+	public int idcheck(String id) {
+		return session.selectOne("mapper.user.idcheck",id);
+	}
+	
 
-	List<userVO> list();
+	public userVO login(userVO user) {
+		return session.selectOne("mapper.user.login",user);
+	}
+	
 
+	public List<userVO> list(){
+		return session.selectList("mapper.user.list");
+	}
 }
