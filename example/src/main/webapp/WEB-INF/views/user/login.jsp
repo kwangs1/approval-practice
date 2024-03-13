@@ -18,6 +18,11 @@
 	
 	<button type="submit">로그인</button>
 </form>
-
+	<button onclick="join()">회원가입</button>
+<script>
+function join(){
+	location.href="${path}/user/write"
+}
+</script>
 </body>
 </html>

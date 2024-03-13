@@ -15,7 +15,22 @@ public class participantVO {
 	private String upddate;
 	private int approvalstatus;
 	private int approvaltype;
+	private String deptid;
+	private String deptname;
 	
+	
+	public String getDeptid() {
+		return deptid;
+	}
+	public void setDeptid(String deptid) {
+		this.deptid = deptid;
+	}
+	public String getDeptname() {
+		return deptname;
+	}
+	public void setDeptname(String deptname) {
+		this.deptname = deptname;
+	}
 	public String getParticipant_seq() {
 		return participant_seq;
 	}

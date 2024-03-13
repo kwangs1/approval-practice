@@ -1,8 +1,11 @@
 package com.example.kwangs.dept.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
+
+import com.example.kwangs.user.service.userVO;
 
 @Component
 public class deptVO {
@@ -13,7 +16,23 @@ public class deptVO {
 	private String abbreviation;
 	private String sendername;
 	private Date credate;
+	private String org_deptname;
+	private List<userVO> users; //부서& 유저 조직트리를 위해 userVO 추가
 	
+	
+	
+	public List<userVO> getUsers() {
+		return users;
+	}
+	public void setUsers(List<userVO> users) {
+		this.users = users;
+	}
+	public String getOrg_deptname() {
+		return org_deptname;
+	}
+	public void setOrg_deptname(String org_deptname) {
+		this.org_deptname = org_deptname;
+	}
 	public String getDeptid() {
 		return deptid;
 	}

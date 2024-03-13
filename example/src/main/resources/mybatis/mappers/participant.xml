@@ -17,6 +17,8 @@
 		<result property="upddate" column="upddate" />
 		<result property="approvalstatus" column="approvalstatus" />
 		<result property="approvaltype" column="approvaltype" />
+		<result property="deptid" column="deptid" />
+		<result property="deptname" column="deptname" />
 	</resultMap>
 <!-- 결재선 지정 -->
 <insert id="ParticipantWrite" parameterType="participantVO">
@@ -25,7 +27,7 @@
 	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype})
+    #{id}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
 </insert>
  
 <!-- 일괄결재 -->

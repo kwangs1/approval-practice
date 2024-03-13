@@ -7,12 +7,17 @@
 <meta charset="UTF-8">
 </head>
 <body>
-<form method="post" name="insertForm">
-	<input type="hidden" name="org_deptname"/>
+<form method="post" name="subDept">
+	<!-- 파라미터값에 대한 상위부서 -->
+	<input type="hidden" id="superDept" value="${info.deptname}" />
+	<input type="hidden" name="parid" value="${info.deptid}" />
 	
+	<!-- 하위부서 값 -->
+	<input type="hidden" name="org_deptname" />
+	<input type="text" value="${info.deptname}" disabled="disabled"/></br>
 	<input type="text" name="deptname" placeholder="부서명" autofocus="autofocus"/></br>
 	<input type="text" name="abbreviation" placeholder="부서약어"/></br>
-	<input type="text" name="sendername" placeholder="부서 발신명의"
+	<input type="text" name="sendername" placeholder="발신명의"
 		onkeydown="javascript: if (event.keyCode == 13){insertBtn()}"/></br>
 	
 	<button type="button" onclick="insertBtn()">생성</button>
@@ -21,13 +26,23 @@
 
 <script>
 function insertBtn(){
+	var superDept = document.getElementById('superDept').value;
 	var deptname = document.getElementsByName('deptname')[0].value;
 	
-	var org_deptname = deptname;	
+	var org_deptname = getHierarchyDeptname(superDept, deptname)
+	
 	document.getElementsByName('org_deptname')[0].value = org_deptname
 	
-	document.insertForm.action = "<c:url value= '/dept/write.do'/>";
-	document.insertForm.submit();
+	document.subDept.action = "<c:url value= '/dept/subDept'/>";
+	document.subDept.submit();
+}
+
+function getHierarchyDeptname(superDept, currentDeptname){
+	if(superDept){
+		return superDept + '/' + currentDeptname; 
+	}else{
+		return currentDeptname;
+	}
 }
 </script>
 </body>

@@ -3,16 +3,33 @@
  */
 
 var selectedUsers = [];
+//로그인한 사용자는 해당 페이지 열 때 무조건 결재선에 바로 지정되게
+$(document).ready(function(){
+	if(uId){
+		$('a.userLink[data-id="'+ uId +'"]').each(function(){
+			 var deptid = $(this).data('deptid');
+			 var deptname = $(this).data('deptname');
+			 var id = $(this).data('id');
+			 var name = $(this).data('name');
+			 var pos = $(this).data('pos');	
+
+			 selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
+			 updateSelectedUsersUI();			
+		})
+	}
+});
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
 	
+	var deptid = $(this).data('deptid');
+	var deptname = $(this).data('deptname');
 	var id = $(this).data('id');
 	var name = $(this).data('name');
 	var pos = $(this).data('pos');	
     
 	//배열에 담아 전송
-	selectedUsers.push({ id: id, name: name, pos: pos });
+	selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
     // 유저 클릭시 동적으로 화면에 표시되게 하기위해 함수 호출
     updateSelectedUsersUI();
 })

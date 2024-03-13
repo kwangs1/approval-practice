@@ -12,7 +12,42 @@
 		<result property="abbreviation" column="abbreviation" />
 		<result property="sendername" column="sendername" />
 		<result property="credate" column="credate" />		
+		<result property="org_deptname" column="org_deptname" />		
 	</resultMap>
-	
 
+<select id="list" resultType="deptVO">
+	select * from dept
+</select>
+	
+<insert id="write" parameterType="deptVO">
+	<selectKey keyProperty="deptid" resultType="String" order="BEFORE">
+		select 'D' || to_char(sysdate,'YY') || dept_seq.nextval from dual
+	</selectKey>
+	insert into dept
+	values(#{deptid},#{deptname},#{parid},#{abbreviation},#{sendername},sysdate,#{org_deptname})
+</insert>
+	
+<insert id="subDept" parameterType="deptVO">
+	<selectKey keyProperty="deptid" resultType="String" order="BEFORE">
+		select 'S' || to_char(sysdate,'YY') || dept_seq.nextval from dual
+	</selectKey>
+	insert into dept
+	values(#{deptid},#{deptname},#{parid},#{abbreviation},#{sendername},sysdate,#{org_deptname})
+</insert>
+
+<select id="info" resultType="deptVO">
+	select * from dept where deptid = #{deptid}
+</select>
+
+<select id="joinUseDept" resultType="deptVO">
+	select * from dept
+</select>
+
+<select id="flowUseInfo" resultType="deptVO">
+	select * from dept
+</select>
+	
+<select id="userList" resultType="com.example.kwangs.user.service.userVO" parameterType="String">
+	select * from member where deptid = #{deptid} order by name
+</select>
 </mapper>

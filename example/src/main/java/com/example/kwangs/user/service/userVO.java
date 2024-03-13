@@ -1,11 +1,11 @@
 package com.example.kwangs.user.service;
 
-import java.util.Date;
+import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
 @Component
-public class userVO {
+public class userVO{
 	private String id;
 	private String pw;
 	private String name;

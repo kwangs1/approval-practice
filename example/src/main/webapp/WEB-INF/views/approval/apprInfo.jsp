@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 </head>
-<link rel="stylesheet" href="${path}/resources/info.css">
+<link rel="stylesheet" href="${path}/resources/css/info.css">
 <body>
 
 <div class="post-container">

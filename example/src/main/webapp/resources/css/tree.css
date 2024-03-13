@@ -1,0 +1,23 @@
+@charset "UTF-8";
+
+
+    ul.tree {
+      list-style-type: none;
+    }
+    ul.tree ul {
+      list-style-type: none;
+    }
+    ul.tree li::before {
+      content: "▶";
+      margin-right: 5px;
+      cursor: pointer; /* 화살표를 클릭할 때 커서 모양 변경 */
+    }
+    ul.tree li.collapsed::before {
+      content: "▶"; /* 닫힌 상태 화살표 아이콘 */
+    }
+    ul.tree li.expanded::before {
+      content: "▼"; /* 열린 상태 화살표 아이콘 */
+    }
+    .btn-check {
+      margin-top: 10px;
+    }

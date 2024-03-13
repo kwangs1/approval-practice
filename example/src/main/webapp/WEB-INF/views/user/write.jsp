@@ -19,6 +19,8 @@
 </head>
 <body>
 <form method="post" action="${path}/user/write">
+	<input type="hidden" name="deptid" id="deptid"/>
+	<input type="text" name="deptname" id="deptname" placeholder="부서명" class="deptInfo"/><br>
 	id: <input type="text" name="id" id="userid" autofocus/><br>
 	<p id="checkF">존재하는 아이디 입니다.</p>
 	<p id="checkS">사용가능한 아이디 입니다.</p>
@@ -64,6 +66,19 @@ $('#userid').on('propertychange change keyup paste input',function(){
 		}
 	})
 })
+
+window.addEventListener('message', function(e){
+	var data = e.data;
+	var deptname = data.deptname;
+	var deptid = data.deptid;
+	
+	$('#deptname').val(deptname);
+	$('#deptid').val(deptid);
+});
+
+$('.deptInfo').click(function(){
+	window.open("<c:url value='/dept/joinUseDept'/>", 'deptLink','width=550, height=350');
+});
 </script>
 </body>
 </html>

@@ -18,6 +18,8 @@ window.addEventListener('message',function(e){
 	//즉 인덱스 번호라 생각하면 됨.
 		for (var i = 0; i < users.length; i++) {
 			var userContainer = $('<div class="user-container">');
+			userContainer.append('<input type="hidden" name="deptid_' + i + '" value="' + users[i].deptid + '" />');
+			userContainer.append('<input type="hidden" name="deptname_' + i + '" value="' + users[i].deptname + '" />');
 			userContainer.append('<input type="text" name="name_' + i + '" value="' + users[i].name + '" />');
 			userContainer.append('<input type="hidden" name="id_' + i + '" value="' + users[i].id + '" />');
 			userContainer.append('<input type="hidden" name="pos_' + i + '" value="' + users[i].pos + '" />');

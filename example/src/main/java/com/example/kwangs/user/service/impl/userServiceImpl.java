@@ -1,8 +1,6 @@
 package com.example.kwangs.user.service.impl;
 
 
-import java.util.List;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +32,4 @@ public class userServiceImpl implements userService{
 		return mapper.login(user);
 	}
 	
-	@Override
-	public List<userVO> list() {
-		return mapper.list();
-	}
 }

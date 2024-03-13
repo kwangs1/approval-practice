@@ -13,10 +13,10 @@
 		<div id="inputs"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="${path}/resources/js/recFlow.js"></script>
+<script src="${path}/resources/js/SendFlowInfo.js"></script>
 <script>
 function pop() {
-	window.open("${path}/user/list","pop","width=768, height=400");
+	window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");
 }
 
 function participant() {
@@ -25,12 +25,16 @@ function participant() {
 
     $('#inputs .user-container').each(function () {
         var userContainer = $(this);
+        var deptid = userContainer.find('input[name^="deptid_"]').val();
+        var deptname = userContainer.find('input[name^="deptname_"]').val();
         var name = userContainer.find('input[name^="name_"]').val();
         var id = userContainer.find('input[name^="id_"]').val();
         var pos = userContainer.find('input[name^="pos_"]').val();
         var status = userContainer.find('select[name^="status_"]').val();
 
         paticipant.push({
+        	deptid: deptid,
+        	deptname: deptname,
             name: name,
             id: id,
             pos: pos,

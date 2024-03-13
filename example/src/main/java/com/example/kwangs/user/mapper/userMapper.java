@@ -28,8 +28,4 @@ public class userMapper{
 		return session.selectOne("mapper.user.login",user);
 	}
 	
-
-	public List<userVO> list(){
-		return session.selectList("mapper.user.list");
-	}
 }
