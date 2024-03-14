@@ -93,7 +93,7 @@
 <div id="selectedUsers"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/RecvFlowInfo.js'/>"></script>
+<script src="<c:url value='/resources/js/SendFlowInfo.js'/>"></script>
 <script>
 var uId = '<c:out value="${user}"/>';
 <%-- 조직트리 --%>

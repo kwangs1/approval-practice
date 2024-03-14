@@ -16,23 +16,26 @@
 		<result property="enddate" column="enddate" />
 		<result property="status" column="status" />
 		<result property="docregno" column="docregno" />
-		<result property="deptid" column="deptid" />
-		<result property="deptname" column="deptname" />
+		<result property="drafterdeptid" column="drafterdeptid" />
+		<result property="drafterdeptname" column="drafterdeptname" />
+		<result property="regno" column="regno" />
 	</resultMap>
-
+<!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
    SELECT 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || appr_seq.currval FROM DUAL
 </select>
 
-
+<!-- 기안 -->
 <insert id="apprWrite" parameterType="approvalVO"> 
 	<selectKey keyProperty="appr_seq" resultType="String" order="BEFORE">
 		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval from dual
 	</selectKey>
 	insert into approval
-	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},#{startdate},#{enddate},1,#{docregno},#{deptid},#{deptname})
+	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno})
 </insert>
 
+<!-- 결재대기 -->
 <select id="apprWaitList" resultType="approvalVO">
 	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
 		from  approval a, participant p
@@ -43,13 +46,56 @@
 	order by a.appr_seq desc
 </select>
 
+<!-- 결재 상세보기 -->
 <select id="apprInfo" resultType="approvalVO" parameterType="String">
 	select * from approval where appr_seq = #{appr_seq}
 </select>
 
+<!-- 최종 결재자 결재 이후 문서 상태값 변경 -->
 <update id="ApprovalUpdateStatus">
 	update approval
 	set status = 256
 	where appr_seq = #{appr_seq}
+</update>
+
+<!-- 유저에 대한 부서 약어 -->
+<select id="getUserDeptInfo" resultType="com.example.kwangs.user.service.userVO">
+	select
+		u.id, u.deptid, d.abbreviation
+	from member u , dept d
+	where u.deptid = d.deptid
+	and u.id = #{id}
+</select>
+
+<!-- 결재 완료 문서 찾기 -->
+<select id="getApprStatus" resultType="approvalVO" parameterType="String">
+	select * from approval where appr_seq = #{appr_seq} and status = 256
+</select>
+
+<!-- 기안자 부서 가져오기 -->
+<select id="getDocDept" resultType="com.example.kwangs.user.service.userVO" parameterType="String">
+	select u.id, d.deptid, d.abbreviation
+		from member u, dept d
+	where u.deptid = d.deptid
+	and u.id = #{id}
+</select>
+
+<!-- 문서번호 업데이트 -->
+<update id="ConCludeDocRegNo">
+	update approval
+		set docregno = #{docregno}
+	where appr_seq = #{appr_seq}
+</update>
+
+<!-- 현재 문서번호 체결될 번호 가져오기  -->
+<select id="getCurrSeq" resultType="int" parameterType="String">
+	select regno from approval where drafterdeptid = #{drafterdeptid}
+</select>
+
+<!-- 그다음 문서번호 가져오기 -->
+<update id="getNextSeq">
+	update approval
+		set regno = regno +1
+	where drafterdeptid = #{drafterdeptid}
 </update>
 </mapper>

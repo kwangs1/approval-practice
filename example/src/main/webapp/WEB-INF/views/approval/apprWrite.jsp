@@ -28,6 +28,10 @@
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
+var drafterdeptid = '<c:out value="${user.deptid}"/>';
+var drafterdeptname = '<c:out value="${user.deptname}"/>';
+var docregno = '<c:out value="${uInfo.abbreviation}"/>';
+
 window.onload = function(){
 	var startDay = new Date();
 	var endDay = new Date(startDay);
@@ -58,6 +62,9 @@ function Appr_Btn(){
 		content : content,
 		startdate : startdate,
 		enddate : enddate,
+		drafterdeptid: drafterdeptid,
+		drafterdeptname : drafterdeptname,
+		docregno :docregno
 	}
 	
 	$.ajax({

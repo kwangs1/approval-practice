@@ -1,6 +1,7 @@
 package com.example.kwangs.approval.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.user.service.userVO;
 
 
 @Service
@@ -21,17 +23,25 @@ public class approvalServiceImpl implements approvalService{
 	//문서 작성
 	@Override
 	public void apprWrite(approvalVO approval) {
+		String abbr = approval.getDocregno();
+		approval.setDocregno(abbr+"-@N");
 		mapper.apprWrite(approval);
 	}
-
+	//결재대기
 	@Override
 	public List<approvalVO> apprWaitList(String id) {	
 		return mapper.apprWaitList(id);
 	}
-	
+	//상세보기
 	@Override
 	public approvalVO apprInfo(String appr_seq) {
 		return mapper.apprInfo(appr_seq);
+	}
+	
+	//유저에 대한 부서 약어
+	@Override
+	public userVO getUserDeptInfo(Map<String,Object>res) {
+		return mapper.getUserDeptInfo(res);
 	}
 	
 

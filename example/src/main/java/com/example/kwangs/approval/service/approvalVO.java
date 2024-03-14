@@ -16,28 +16,37 @@ public class approvalVO {
 	private Date enddate;
 	private int status;
 	private String docregno;
-	private String deptid;
-	private String deptname;
+	private String drafterdeptid;
+	private String drafterdeptname;
+	private int regno;
 
 	
 
+	public int getRegno() {
+		return regno;
+	}
+	public void setRegno(int regno) {
+		this.regno = regno;
+	}
 	public String getDocregno() {
 		return docregno;
 	}
 	public void setDocregno(String docregno) {
 		this.docregno = docregno;
 	}
-	public String getDeptid() {
-		return deptid;
+
+	public String getDrafterdeptid() {
+		return drafterdeptid;
 	}
-	public void setDeptid(String deptid) {
-		this.deptid = deptid;
+	public void setDrafterdeptid(String drafterdeptid) {
+		this.drafterdeptid = drafterdeptid;
 	}
-	public String getDeptname() {
-		return deptname;
+
+	public String getDrafterdeptname() {
+		return drafterdeptname;
 	}
-	public void setDeptname(String deptname) {
-		this.deptname = deptname;
+	public void setDrafterdeptname(String drafterdeptname) {
+		this.drafterdeptname = drafterdeptname;
 	}
 	public String getAppr_seq() {
 		return appr_seq;

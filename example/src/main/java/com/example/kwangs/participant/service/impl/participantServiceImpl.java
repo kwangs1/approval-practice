@@ -1,8 +1,11 @@
 package com.example.kwangs.participant.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,9 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.kwangs.approval.mapper.approvalMapper;
+import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
+import com.example.kwangs.user.service.userVO;
 
 @Service
 public class participantServiceImpl implements participantService{
@@ -22,6 +27,8 @@ public class participantServiceImpl implements participantService{
 	private participantMapper mapper;
 	@Autowired
 	private approvalMapper approvalMapper;
+	@Autowired
+	private HttpServletRequest request;
 	
 
 	//문서 기안 시 결재선 지정
@@ -82,6 +89,7 @@ public class participantServiceImpl implements participantService{
 	        pVO.setApprovalstatus(approvalstatus);
 	        //결재문서 상태값 변경
 	        approvalMapper.ApprovalUpdateStatus(pVO.getAppr_seq());
+	        ConCludeDocRegNo(pVO.getAppr_seq());
 	    }
 	    //그 외
 	    else {
@@ -183,6 +191,7 @@ public class participantServiceImpl implements participantService{
 	                if(nextIndex == approvalLines.size() && nextParticipant.getApprovaltype() == 2 ) {
 	                	approvalMapper.ApprovalUpdateStatus(appr_seq);
 	                	log.info("final participant and approval status update");
+	                	ConCludeDocRegNo(appr_seq);
 	                }
 	            }//end while
 	            /*
@@ -191,7 +200,8 @@ public class participantServiceImpl implements participantService{
 	            */
 	            if(currentParticipant.getApprovaltype() == 2 && nextIndex == approvalLines.size()) {
                 	approvalMapper.ApprovalUpdateStatus(appr_seq);
-                	log.info("final participant and approval status update");	
+                	log.info("final participant and approval status update");
+                	ConCludeDocRegNo(appr_seq);
 	            }
 	        }//end if (currentParticipant.getApprovaltype() == 2)
 	    }//end for
@@ -217,5 +227,47 @@ public class participantServiceImpl implements participantService{
 	@Override
 	public participantVO pInfo(Map<String,Object> res) {
 		return mapper.pInfo(res);
+	}
+	
+	//문서번호 체번
+	public void ConCludeDocRegNo(String appr_seq) {
+		log.info("=================== DOCNO UPDATE LINE ===================");
+		//결재가 완료된 문서찾기
+		List<approvalVO> approval = approvalMapper.getApprStatus(appr_seq);
+		
+		//기안자의 부서 가져오기
+		String id = (String)request.getSession().getAttribute("userId");
+		userVO checkDocDept = approvalMapper.getDocDept(id);
+		
+		String deptid = checkDocDept.getDeptid();
+		String abbreviation = checkDocDept.getAbbreviation();
+		log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation);
+
+		for(approvalVO ap : approval) {
+			if(ap.getStatus() == 256 && id.equals(ap.getId()) && deptid.equals(ap.getDrafterdeptid())) {
+				
+				log.info("regno value{}"+ap.getRegno());
+				//현재의 번호를 가져오며 , 만약 값이 없다면 1부터 , 있다면 제일 큰수 +1
+				List<Integer> currSeq = approvalMapper.getCurrSeq(ap.getDrafterdeptid());
+				int seq;
+				
+				if(currSeq.isEmpty()) {
+					seq = 1;
+				}else {
+					seq = currSeq.get(0)+1;
+				}
+				log.info(ap.getAppr_seq()+" -> CurrSeq value{} "+seq);	
+				
+				ap.setDocregno(abbreviation+"-"+seq);
+
+				//문서번호 업데이트
+				approvalMapper.ConCludeDocRegNo(ap);
+
+				//다음 문서번호 가져올 번호 업데이트
+				approvalMapper.getNextSeq(ap.getDrafterdeptid());
+				log.info("NextSeq value{}"+seq);
+			}
+		}
+		log.info("=================== DOCNO UPDATE LINE ===================");
 	}
 }

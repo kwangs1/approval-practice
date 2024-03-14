@@ -13,7 +13,7 @@
 		<div id="inputs"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="${path}/resources/js/SendFlowInfo.js"></script>
+<script src="${path}/resources/js/RecFlowInfo.js"></script>
 <script>
 function pop() {
 	window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");

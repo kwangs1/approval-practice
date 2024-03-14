@@ -4,8 +4,10 @@ import java.sql.Date;
 
 import org.springframework.stereotype.Component;
 
+import com.example.kwangs.dept.service.deptVO;
+
 @Component
-public class userVO{
+public class userVO extends deptVO{
 	private String id;
 	private String pw;
 	private String name;

@@ -20,6 +20,7 @@ import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
+import com.example.kwangs.user.service.userVO;
 
 @Controller
 @RequestMapping("/approval")
@@ -33,7 +34,18 @@ public class approvalController {
 	
 	//문서작성
 	@GetMapping("/apprWrite")
-	public void apprWrite() {}
+	public void apprWrite(userVO userVO,HttpServletRequest req, Model model) {
+		//부서 약어에 대한 값 가져오기 위함
+		String userId = (String) req.getSession().getAttribute("userId");
+		String abbreviation = userVO.getAbbreviation();
+		
+		Map<String,Object> res = new HashMap<>();
+		res.put("id", userId);
+		res.put("abbreviation", abbreviation);
+		
+		userVO uInfo = service.getUserDeptInfo(res);
+		model.addAttribute("uInfo",uInfo);
+	}
 	
 	@ResponseBody
 	@PostMapping("/apprWrite")
@@ -46,7 +58,7 @@ public class approvalController {
 	public String apprWaitList(Model model, String id, approvalVO approval,HttpServletRequest req) {
 		
 		if(req.getSession(false).getAttribute("user") == null) {
-			return "redirect:/";
+			return "redirect:/user/login";
 		}
 		model.addAttribute("list",service.apprWaitList(id));
 		
