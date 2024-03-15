@@ -80,6 +80,7 @@
 	and appr_seq = #{appr_seq}	
 </update>
 
+<!-- 일반 결재 시 상세보기에서의 결재선 정보  -->
 <select id="pInfo" resultType="participantVO" parameterType="java.util.Map">
 	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
 		from  approval a, participant p		
@@ -89,4 +90,12 @@
 	and p.approvaltype = 4
 	and p.id = #{id}
 </select>
+
+<!-- 기안자가 최종결재자인 경우 결재선상태 및 결재문서 상태 업데이트 -->
+<update id="updateFLowType" parameterType="java.util.Map">
+	update participant
+		set approvaltype = 2,upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), approvalstatus = 4097
+	where appr_seq = #{appr_seq}
+	and participant_seq = #{participant_seq}
+</update>
 </mapper>

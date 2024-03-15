@@ -1,6 +1,6 @@
 package com.example.kwangs.participant.service.impl;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -34,21 +34,18 @@ public class participantServiceImpl implements participantService{
 	//문서 기안 시 결재선 지정
 	@Override
 	public void ParticipantWrite(List<participantVO> participant){
-		log.info("write method 진입");
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
-		log.debug("Origin Seq..{}" + seqCurrval);
 		
 		for (participantVO pVO : participant) {
 			pVO.setAppr_seq(seqCurrval);
-			log.debug("approval getSeq...{}" + pVO.getAppr_seq());
 			pVO.setLine_seq(line_seq);// 기본값 1
 
-			approvalTypeAndStatus(participant);
 			// 이후 insert 된 receipts_seq 값 가져올 것.
 			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
+			approvalTypeAndStatus(participant);
 		}
 	}
 	
@@ -79,14 +76,18 @@ public class participantServiceImpl implements participantService{
 	
 	//결재 상신 시 결재선 테이블 관련 approvalType, approvalStatus 컬럼 값 셋팅 메서드
 	public void approvalTypeAndStatus(List<participantVO> participant) {
-	    int approvalstatus = 4097;
 	    boolean isFirst = true;
 
         // 기안자와 최종 결재자가 같은 경우
 	    if(participant.size() == 1) {
-	        participantVO pVO = participant.get(0);//리스트의 첫 번쨰 요소
-	        pVO.setApprovaltype(2);
-	        pVO.setApprovalstatus(approvalstatus);
+	    	//리스트의 첫 번쨰 요소   
+	        participantVO pVO = participant.get(0);     
+	        //기안자가 최종결재자인 경우 결재선상태 및 결재문서 상태 업데이트
+	        Map<String,Object> res = new HashMap<>();
+	        res.put("appr_seq", pVO.getAppr_seq());
+	        res.put("participant_seq", pVO.getParticipant_seq());
+	        
+	        mapper.updateFLowType(res);
 	        //결재문서 상태값 변경
 	        approvalMapper.ApprovalUpdateStatus(pVO.getAppr_seq());
 	        ConCludeDocRegNo(pVO.getAppr_seq());
@@ -97,9 +98,12 @@ public class participantServiceImpl implements participantService{
 		        participantVO pVO = participant.get(i);  
 		        
 		        // 기안자인 경우 2(결재완료)
-		        if(i == 0) {
-		            pVO.setApprovaltype(2);
-		            pVO.setApprovalstatus(approvalstatus);
+		        if(i == 0) {       
+			        Map<String,Object> res = new HashMap<>();
+			        res.put("appr_seq", pVO.getAppr_seq());
+			        res.put("participant_seq", pVO.getParticipant_seq());
+			        
+			        mapper.updateFLowType(res);
 		        }            
 		        // 중간 결재자이면서 마지막 결재자인 경우 4(결재진행) , 4098 미결재
 	            else if(i + 1 == participant.size() && isFirst) {
@@ -133,7 +137,7 @@ public class participantServiceImpl implements participantService{
 	    //appr_seq를 통해 participantVO의 정보를 반복문을 통해 가져옴
 	    List<participantVO> approvalLines = mapper.getApprovalApprseq(appr_seq);
 	    for (int i = 0; i < approvalLines.size(); i++) {
-	        log.info("check point..");
+	        log.info("=======================================");
 	        //0~ 마지막 까지 
 	        participantVO currentParticipant = approvalLines.get(i);
 	        int line_seq = currentParticipant.getLine_seq();
@@ -235,18 +239,17 @@ public class participantServiceImpl implements participantService{
 		//결재가 완료된 문서찾기
 		List<approvalVO> approval = approvalMapper.getApprStatus(appr_seq);
 		
-		//기안자의 부서 가져오기
+		//기안자의 부서 정보가져오기
 		String id = (String)request.getSession().getAttribute("userId");
 		userVO checkDocDept = approvalMapper.getDocDept(id);
 		
 		String deptid = checkDocDept.getDeptid();
 		String abbreviation = checkDocDept.getAbbreviation();
-		log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation);
+		String deptcode = checkDocDept.getDeptcode();
 
 		for(approvalVO ap : approval) {
-			if(ap.getStatus() == 256 && id.equals(ap.getId()) && deptid.equals(ap.getDrafterdeptid())) {
+			if(ap.getStatus() == 256 && deptid.equals(ap.getDrafterdeptid())) {
 				
-				log.info("regno value{}"+ap.getRegno());
 				//현재의 번호를 가져오며 , 만약 값이 없다면 1부터 , 있다면 제일 큰수 +1
 				List<Integer> currSeq = approvalMapper.getCurrSeq(ap.getDrafterdeptid());
 				int seq;
@@ -254,18 +257,22 @@ public class participantServiceImpl implements participantService{
 				if(currSeq.isEmpty()) {
 					seq = 1;
 				}else {
-					seq = currSeq.get(0)+1;
+					 // 컬렉션 최대값을 구함
+					int maxCurrSeq = Collections.max(currSeq); 
+		            seq = maxCurrSeq + 1;
 				}
-				log.info(ap.getAppr_seq()+" -> CurrSeq value{} "+seq);	
+				log.info(ap.getAppr_seq()+" -> maxCurrSeq value{} "+seq);	
+				log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation+"/"+seq);
 				
 				ap.setDocregno(abbreviation+"-"+seq);
+				ap.setRegno(deptcode +seq);
 
 				//문서번호 업데이트
 				approvalMapper.ConCludeDocRegNo(ap);
 
 				//다음 문서번호 가져올 번호 업데이트
-				approvalMapper.getNextSeq(ap.getDrafterdeptid());
-				log.info("NextSeq value{}"+seq);
+				int NextSeq = approvalMapper.getNextSeq(ap.getDrafterdeptid());
+				log.info("update NextSeq value{}"+NextSeq);
 			}
 		}
 		log.info("=================== DOCNO UPDATE LINE ===================");

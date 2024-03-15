@@ -63,8 +63,8 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.getCurrSeq",drafterdeptid);
 	}
 	//그다음 문서번호 가져오기
-	public void getNextSeq(String drafterdeptid) {
-		session.update("mapper.approval.getNextSeq",drafterdeptid);
+	public int getNextSeq(String drafterdeptid) {
+		return session.update("mapper.approval.getNextSeq",drafterdeptid);
 	}
 	//end
 	

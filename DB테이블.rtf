@@ -15,7 +15,8 @@ parid varchar2(20),\
 abbreviation varchar2(20),\
 sendername varchar2(30),\
 credate date,\
-org_deptname varchar2(100));\
+org_deptname varchar2(100),\
+Deptcode varchar2(30) );\
 \
 --
 \f1 \'c1\'f7\'b1\'de
@@ -52,7 +53,11 @@ STATUS	NUMBER,\
 DOCREGNO	 VARCHAR2(100 BYTE),\
 drafterDEPTID	VARCHAR2(20 BYTE),\
 drafterDEPTNAME	 VARCHAR2(30 BYTE),\
-Regno number \
+Regno varchar2(100),\
+Numattr number,\
+finalapprover varchar2(20),\
+Approvaldate varchar2(30),\
+Finalapprover varchar2(20)\
 );\
 \
 --

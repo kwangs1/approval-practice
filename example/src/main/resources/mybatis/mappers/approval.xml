@@ -19,6 +19,9 @@
 		<result property="drafterdeptid" column="drafterdeptid" />
 		<result property="drafterdeptname" column="drafterdeptname" />
 		<result property="regno" column="regno" />
+		<result property="numattr" column="numattr" />
+		<result property="finalapprover" column="finalapprover" />
+		<result property="approvaldate" column="approvaldate" />
 	</resultMap>
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
@@ -32,7 +35,7 @@
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
-		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno})
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{numattr},#{finalapprover},#{approvaldate})
 </insert>
 
 <!-- 결재대기 -->
@@ -54,7 +57,15 @@
 <!-- 최종 결재자 결재 이후 문서 상태값 변경 -->
 <update id="ApprovalUpdateStatus">
 	update approval
-	set status = 256
+	set status = 256, approvaldate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
+	finalapprover =(select
+                f.id
+                from (
+                  select
+                     row_number() over ( partition by t.appr_seq ORDER BY participant_seq desc) rindex, t.*
+                     from participant t
+                     where t.appr_seq = #{appr_seq}) f
+                where f.rindex = 1)  
 	where appr_seq = #{appr_seq}
 </update>
 
@@ -74,7 +85,7 @@
 
 <!-- 기안자 부서 가져오기 -->
 <select id="getDocDept" resultType="com.example.kwangs.user.service.userVO" parameterType="String">
-	select u.id, d.deptid, d.abbreviation
+	select u.id, d.deptid, d.abbreviation, d.deptcode
 		from member u, dept d
 	where u.deptid = d.deptid
 	and u.id = #{id}
@@ -83,19 +94,19 @@
 <!-- 문서번호 업데이트 -->
 <update id="ConCludeDocRegNo">
 	update approval
-		set docregno = #{docregno}
+		set docregno = #{docregno}, regno = #{regno}
 	where appr_seq = #{appr_seq}
 </update>
 
 <!-- 현재 문서번호 체결될 번호 가져오기  -->
 <select id="getCurrSeq" resultType="int" parameterType="String">
-	select regno from approval where drafterdeptid = #{drafterdeptid}
+	select numattr from approval where drafterdeptid = #{drafterdeptid}
 </select>
 
 <!-- 그다음 문서번호 가져오기 -->
 <update id="getNextSeq">
 	update approval
-		set regno = regno +1
+		set numattr = numattr +1
 	where drafterdeptid = #{drafterdeptid}
 </update>
 </mapper>

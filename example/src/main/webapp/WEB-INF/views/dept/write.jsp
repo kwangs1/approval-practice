@@ -11,6 +11,7 @@
 	<input type="hidden" name="org_deptname"/>
 	
 	<input type="text" name="deptname" placeholder="부서명" autofocus="autofocus"/></br>
+	<input type="text" name="deptcode" placeholder="부서코드"/></br>
 	<input type="text" name="abbreviation" placeholder="부서약어"/></br>
 	<input type="text" name="sendername" placeholder="부서 발신명의"
 		onkeydown="javascript: if (event.keyCode == 13){insertBtn()}"/></br>

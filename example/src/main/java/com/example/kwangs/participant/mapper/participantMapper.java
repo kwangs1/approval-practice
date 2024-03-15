@@ -56,4 +56,9 @@ public class participantMapper{
 		return session.selectOne("mapper.participant.pInfo",res);
 	}
 	
+	//기안자가 최종결재자인 경우 결재선상태 및 결재문서 상태 업데이트
+	public void updateFLowType(Map<String,Object>res) {
+		session.update("mapper.participant.updateFLowType",res);
+	}
+	
 }

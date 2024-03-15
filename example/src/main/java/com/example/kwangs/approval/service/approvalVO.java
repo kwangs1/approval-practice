@@ -18,15 +18,36 @@ public class approvalVO {
 	private String docregno;
 	private String drafterdeptid;
 	private String drafterdeptname;
-	private int regno;
+	private String regno;
+	private int numattr;
+	private String finalapprover;
+	private String approvaldate;
 
 	
 
-	public int getRegno() {
+	public String getApprovaldate() {
+		return approvaldate;
+	}
+	public void setApprovaldate(String approvaldate) {
+		this.approvaldate = approvaldate;
+	}
+	public String getFinalapprover() {
+		return finalapprover;
+	}
+	public void setFinalapprover(String finalapprover) {
+		this.finalapprover = finalapprover;
+	}
+	public String getRegno() {
 		return regno;
 	}
-	public void setRegno(int regno) {
+	public void setRegno(String regno) {
 		this.regno = regno;
+	}
+	public int getNumattr() {
+		return numattr;
+	}
+	public void setNumattr(int numattr) {
+		this.numattr = numattr;
 	}
 	public String getDocregno() {
 		return docregno;
