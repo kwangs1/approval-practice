@@ -19,7 +19,6 @@ public class approvalVO {
 	private String drafterdeptid;
 	private String drafterdeptname;
 	private String regno;
-	private int numattr;
 	private String finalapprover;
 	private String approvaldate;
 
@@ -42,12 +41,6 @@ public class approvalVO {
 	}
 	public void setRegno(String regno) {
 		this.regno = regno;
-	}
-	public int getNumattr() {
-		return numattr;
-	}
-	public void setNumattr(int numattr) {
-		this.numattr = numattr;
 	}
 	public String getDocregno() {
 		return docregno;

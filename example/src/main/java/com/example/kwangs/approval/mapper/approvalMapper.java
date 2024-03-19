@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.user.service.userVO;
 
@@ -58,14 +59,13 @@ public class approvalMapper{
 	public void ConCludeDocRegNo(approvalVO ap) {
 		session.update("mapper.approval.ConCludeDocRegNo",ap);
 	}
-	//현재 문서번호 체결될 번호 가져오기
-	public List<Integer> getCurrSeq(String drafterdeptid){
-		return session.selectList("mapper.approval.getCurrSeq",drafterdeptid);
+	//문서번호 가져오기
+	public Document findByDeptDocNo(String deptid) {
+		return session.selectOne("mapper.approval.findByDeptDocNo",deptid);
 	}
-	//그다음 문서번호 가져오기
-	public int getNextSeq(String drafterdeptid) {
-		return session.update("mapper.approval.getNextSeq",drafterdeptid);
+	//문서번호 저장
+	public int save(Document document) {
+		return session.insert("mapper.approval.save",document);
 	}
 	//end
-	
 }

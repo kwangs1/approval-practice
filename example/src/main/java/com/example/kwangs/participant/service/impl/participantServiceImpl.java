@@ -1,6 +1,5 @@
 package com.example.kwangs.participant.service.impl;
 
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.kwangs.approval.mapper.approvalMapper;
+import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
@@ -29,6 +29,8 @@ public class participantServiceImpl implements participantService{
 	private approvalMapper approvalMapper;
 	@Autowired
 	private HttpServletRequest request;
+	@Autowired
+	private DocumentNumberGenerator DocumentNumberGenerator;
 	
 
 	//문서 기안 시 결재선 지정
@@ -249,30 +251,17 @@ public class participantServiceImpl implements participantService{
 
 		for(approvalVO ap : approval) {
 			if(ap.getStatus() == 256 && deptid.equals(ap.getDrafterdeptid())) {
+				//년도 및 부서별 문서번호 셋팅 메서드 호출
+				String docno = DocumentNumberGenerator.genearteDocumentNumber(deptid);
+
+				log.info(ap.getAppr_seq()+" -> maxCurrSeq value{} "+docno);	
+				log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation+"/"+docno);
 				
-				//현재의 번호를 가져오며 , 만약 값이 없다면 1부터 , 있다면 제일 큰수 +1
-				List<Integer> currSeq = approvalMapper.getCurrSeq(ap.getDrafterdeptid());
-				int seq;
-				
-				if(currSeq.isEmpty()) {
-					seq = 1;
-				}else {
-					 // 컬렉션 최대값을 구함
-					int maxCurrSeq = Collections.max(currSeq); 
-		            seq = maxCurrSeq + 1;
-				}
-				log.info(ap.getAppr_seq()+" -> maxCurrSeq value{} "+seq);	
-				log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation+"/"+seq);
-				
-				ap.setDocregno(abbreviation+"-"+seq);
-				ap.setRegno(deptcode +seq);
+				ap.setDocregno(abbreviation +docno);
+				ap.setRegno(deptcode +docno);
 
 				//문서번호 업데이트
 				approvalMapper.ConCludeDocRegNo(ap);
-
-				//다음 문서번호 가져올 번호 업데이트
-				int NextSeq = approvalMapper.getNextSeq(ap.getDrafterdeptid());
-				log.info("update NextSeq value{}"+NextSeq);
 			}
 		}
 		log.info("=================== DOCNO UPDATE LINE ===================");

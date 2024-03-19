@@ -19,7 +19,6 @@
 		<result property="drafterdeptid" column="drafterdeptid" />
 		<result property="drafterdeptname" column="drafterdeptname" />
 		<result property="regno" column="regno" />
-		<result property="numattr" column="numattr" />
 		<result property="finalapprover" column="finalapprover" />
 		<result property="approvaldate" column="approvaldate" />
 	</resultMap>
@@ -35,7 +34,7 @@
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
-		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{numattr},#{finalapprover},#{approvaldate})
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate})
 </insert>
 
 <!-- 결재대기 -->
@@ -98,15 +97,21 @@
 	where appr_seq = #{appr_seq}
 </update>
 
-<!-- 현재 문서번호 체결될 번호 가져오기  -->
-<select id="getCurrSeq" resultType="int" parameterType="String">
-	select numattr from approval where drafterdeptid = #{drafterdeptid}
-</select>
+<!-- 문서번호 저장 -->
+<insert id="save" parameterType="com.example.kwangs.approval.service.Document">
+	insert into document
+	values(#{deptid},#{deptdocno},#{year})
+</insert>
 
-<!-- 그다음 문서번호 가져오기 -->
-<update id="getNextSeq">
-	update approval
-		set numattr = numattr +1
-	where drafterdeptid = #{drafterdeptid}
-</update>
+<!-- 마지막 문서번호 가져오기 -->
+<select id="findByDeptDocNo" parameterType="String" resultType="com.example.kwangs.approval.service.Document">
+(select
+     f.*
+       from (
+              select
+                 row_number() over ( partition by t.deptid ORDER BY deptdocno desc) rindex, t.*
+                  from document t
+                 where t.deptid = #{deptid}) f
+       where f.rindex = 1) 
+</select>
 </mapper>
