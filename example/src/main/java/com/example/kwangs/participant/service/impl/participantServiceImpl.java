@@ -17,6 +17,7 @@ import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
+import com.example.kwangs.user.mapper.userMapper;
 import com.example.kwangs.user.service.userVO;
 
 @Service
@@ -27,6 +28,8 @@ public class participantServiceImpl implements participantService{
 	private participantMapper mapper;
 	@Autowired
 	private approvalMapper approvalMapper;
+	@Autowired
+	private userMapper userMapper;
 	@Autowired
 	private HttpServletRequest request;
 	@Autowired
@@ -59,7 +62,7 @@ public class participantServiceImpl implements participantService{
 			Map<String, Object> params = new HashMap<>();
 			params.put("approvaltype", pp.getApprovaltype());
 			params.put("approvalstatus", pp.getApprovalstatus());
-			params.put("id", pp.getId());
+			params.put("signerid", pp.getSignerid());
 	        params.put("participant_seq", pp.getParticipant_seq());
 			params.put("appr_seq", pp.getAppr_seq());
 						
@@ -221,7 +224,7 @@ public class participantServiceImpl implements participantService{
 		res.put("participant_seq", participant.getParticipant_seq());
 		res.put("approvaltype", participant.getApprovaltype());
 		res.put("approvalstatus", participant.getApprovalstatus());
-		res.put("id", participant.getId());
+		res.put("signerid", participant.getSignerid());
 		mapper.FlowAppr(res);
 		
 		log.info("service FlowAppr RecData {}"+res);
@@ -243,8 +246,9 @@ public class participantServiceImpl implements participantService{
 		
 		//기안자의 부서 정보가져오기
 		String id = (String)request.getSession().getAttribute("userId");
-		userVO checkDocDept = approvalMapper.getDocDept(id);
-		
+		userVO checkDocDept = userMapper.getDocDept(id);
+
+		//String id = checkDocDept.getDrafterid();
 		String deptid = checkDocDept.getDeptid();
 		String abbreviation = checkDocDept.getAbbreviation();
 		String deptcode = checkDocDept.getDeptcode();
@@ -255,7 +259,7 @@ public class participantServiceImpl implements participantService{
 				String docno = DocumentNumberGenerator.genearteDocumentNumber(deptid);
 
 				log.info(ap.getAppr_seq()+" -> maxCurrSeq value{} "+docno);	
-				log.info("Use Info"+ id +"/"+ deptid +"/"+ abbreviation+"/"+docno);
+				log.info("Use Info" + id +"/"+ deptid +"/"+ abbreviation+"/"+docno);
 				
 				ap.setDocregno(abbreviation +docno);
 				ap.setRegno(deptcode +docno);

@@ -7,8 +7,8 @@
 <mapper namespace="mapper.approval">
 	<resultMap id="approvalResult" type="approvalVO">
 		<result property="appr_seq" column="appr_seq" />
-		<result property="name" column="name" />
-		<result property="id" column="id" />
+		<result property="draftername" column="draftername" />
+		<result property="drafterid" column="drafterid" />
 		<result property="regdate" column="regdate" />
 		<result property="title" column="title" />
 		<result property="content" column="content" />
@@ -33,18 +33,18 @@
 		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval from dual
 	</selectKey>
 	insert into approval
-	values(#{appr_seq},#{name},#{id},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
+	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate})
 </insert>
 
 <!-- 결재대기 -->
 <select id="apprWaitList" resultType="approvalVO">
-	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
+	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
 		from  approval a, participant p
 	where p.appr_seq = a.appr_seq
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
-	and p.id = #{id}
+	and p.signerid = #{signerid}
 	order by a.appr_seq desc
 </select>
 
@@ -58,7 +58,7 @@
 	update approval
 	set status = 256, approvaldate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
 	finalapprover =(select
-                f.id
+                f.signerid
                 from (
                   select
                      row_number() over ( partition by t.appr_seq ORDER BY participant_seq desc) rindex, t.*
@@ -83,11 +83,12 @@
 </select>
 
 <!-- 기안자 부서 가져오기 -->
-<select id="getDocDept" resultType="com.example.kwangs.user.service.userVO" parameterType="String">
-	select u.id, d.deptid, d.abbreviation, d.deptcode
-		from member u, dept d
-	where u.deptid = d.deptid
-	and u.id = #{id}
+<select id="getDocDept" resultType="approvalVO" parameterType="String">
+        select * from approval a, dept d
+        where a.drafterdeptid = d.deptid
+        and a.drafterdeptname = #{drafterdeptname}
+        and a.drafterid = #{drafterid}
+        and appr_seq = #{appr_seq}
 </select>
 
 <!-- 문서번호 업데이트 -->

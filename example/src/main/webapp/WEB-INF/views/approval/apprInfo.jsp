@@ -12,7 +12,7 @@
 
 <div class="post-container">
   <h1 class="post-title">${info.title}</h1>
-  <p class="post-info">기안자: ${info.name} | 작성일: ${info.regdate }</p>
+  <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
   <p class="post-info">신청날짜: ${info.startdate} ~ ${info.enddate}</p>
   <div class="post-content">
     <p>${info.content }</p>
@@ -27,14 +27,14 @@ var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
 var approvaltype = '<c:out value="${pInfo.approvaltype}"/>';
 var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
-var id = '<c:out value="${userId}"/>';
+var signerid = '<c:out value="${userId}"/>';
 
 var param = {	
 	appr_seq : appr_seq,
 	participant_seq : participant_seq,
 	approvaltype : approvaltype,
 	approvalstatus : approvalstatus,
-	id : id}
+	signerid : signerid}
 
 function FlowAppr(){	
 	$.ajax({
@@ -44,7 +44,7 @@ function FlowAppr(){
 		success: function(response){
 			alert("결재 성공");
 			console.log(response);
-			window.location.href= "/kwangs/approval/apprWaitList?id="+id;
+			window.location.href= "/kwangs/approval/apprWaitList?id="+signerid;
 		},
 		error: function(xhr,status,error){
 			alert("결재 실패");

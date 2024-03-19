@@ -1,7 +1,5 @@
 package com.example.kwangs.user.mapper;
 
-import java.util.List;
-
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -26,6 +24,11 @@ public class userMapper{
 
 	public userVO login(userVO user) {
 		return session.selectOne("mapper.user.login",user);
+	}
+	
+	//기안자 부서 가져오기
+	public userVO getDocDept(String id) {
+		return session.selectOne("mapper.user.getDocDept",id);
 	}
 	
 }

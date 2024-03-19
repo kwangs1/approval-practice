@@ -52,8 +52,8 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.getApprStatus",appr_seq);
 	}
 	//기안자 부서 가져오기
-	public userVO getDocDept(String id) {
-		return session.selectOne("mapper.approval.getDocDept",id);
+	public approvalVO getDocDept(String appr_seq) {
+		return session.selectOne("mapper.approval.getDocDept",appr_seq);
 	}
 	//문서번호 업데이트
 	public void ConCludeDocRegNo(approvalVO ap) {

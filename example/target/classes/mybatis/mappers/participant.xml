@@ -10,8 +10,8 @@
 		<result property="appr_seq" column="appr_seq" />
 		<result property="status" column="status" />
 		<result property="line_seq" column="line_seq" />
-		<result property="name" column="name" />
-		<result property="id" column="id" />
+		<result property="signername" column="signername" />
+		<result property="signerid" column="signerid" />
 		<result property="pos" column="pos" />
 		<result property="regdate" column="regdate" />
 		<result property="upddate" column="upddate" />
@@ -26,8 +26,8 @@
 		select 'PARTICIPANT' || to_char(sysdate,'YYYYMMDD') || PARTICIPANT_SEQ.nextval from dual
 	</selectKey>
     insert into participant
-    values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{name},
-    #{id}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
+    values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
+    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
 </insert>
  
 <!-- 일괄결재 -->
@@ -36,14 +36,14 @@
 		set approvalstatus = 4097, approvaltype = 2 , upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
 	where approvaltype = #{approvaltype}
 	and approvalstatus = #{approvalstatus}
-	and id = #{id}
+	and signerid = #{signerid}
 	and participant_seq = #{participant_seq}
 	and appr_seq = #{appr_seq}	
 </update>
 
 <!-- 결재대기 화면에서의 결재선 정보 -->
 <select id="getParticipantInfo" resultType="participantVO" parameterType="String">
-	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
+	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
@@ -75,20 +75,20 @@
 		set approvalstatus = 4097, approvaltype = 2 , upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
 	where approvaltype = #{approvaltype}
 	and approvalstatus = #{approvalstatus}
-	and id = #{id}
+	and signerid = #{signerid}
 	and participant_seq = #{participant_seq}
 	and appr_seq = #{appr_seq}	
 </update>
 
 <!-- 일반 결재 시 상세보기에서의 결재선 정보  -->
 <select id="pInfo" resultType="participantVO" parameterType="java.util.Map">
-	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.id
+	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
 	and p.appr_seq = #{appr_seq}
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
-	and p.id = #{id}
+	and p.signerid = #{signerid}
 </select>
 
 <!-- 기안자가 최종결재자인 경우 결재선상태 및 결재문서 상태 업데이트 -->

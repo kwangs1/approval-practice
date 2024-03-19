@@ -5,10 +5,10 @@ import java.sql.Date;
 import org.springframework.stereotype.Component;
 
 @Component
-public class approvalVO {
+public class approvalVO{
 	private String appr_seq;
-	private String name;
-	private String id;
+	private String draftername;
+	private String drafterid;
 	private String regdate;
 	private String title;
 	private String content;
@@ -22,7 +22,6 @@ public class approvalVO {
 	private String finalapprover;
 	private String approvaldate;
 
-	
 
 	public String getApprovaldate() {
 		return approvaldate;
@@ -68,17 +67,17 @@ public class approvalVO {
 	public void setAppr_seq(String appr_seq) {
 		this.appr_seq = appr_seq;
 	}
-	public String getName() {
-		return name;
+	public String getDraftername() {
+		return draftername;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setDraftername(String draftername) {
+		this.draftername = draftername;
 	}
-	public String getId() {
-		return id;
+	public String getDrafterid() {
+		return drafterid;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setDrafterid(String drafterid) {
+		this.drafterid = drafterid;
 	}
 	public String getRegdate() {
 		return regdate;

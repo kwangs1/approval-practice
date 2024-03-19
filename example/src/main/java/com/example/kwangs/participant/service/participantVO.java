@@ -8,8 +8,8 @@ public class participantVO {
 	private String appr_seq;
 	private int status;
 	private int line_seq;
-	private String name;
-	private String id;
+	private String signername;
+	private String signerid;
 	private String pos;
 	private String regdate;
 	private String upddate;
@@ -56,17 +56,17 @@ public class participantVO {
 	public void setLine_seq(int line_seq) {
 		this.line_seq = line_seq;
 	}
-	public String getName() {
-		return name;
+	public String getSignername() {
+		return signername;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setSignername(String signername) {
+		this.signername = signername;
 	}
-	public String getId() {
-		return id;
+	public String getSignerid() {
+		return signerid;
 	}
-	public void setId(String id) {
-		this.id = id;
+	public void setSignerid(String signerid) {
+		this.signerid = signerid;
 	}
 	public String getPos() {
 		return pos;

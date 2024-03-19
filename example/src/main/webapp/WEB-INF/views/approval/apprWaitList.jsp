@@ -23,7 +23,7 @@
 	<c:if test="${participant.approvaltype == 4 && participant.approvalstatus == 4098}">
 		<input type="hidden" id="appr_seq" value="${participant.appr_seq}" />
 		<input type="hidden" id="participant_seq_${loop.index }" value="${participant.participant_seq}"/>
-		<input type="hidden" id="id" value="${participant.id}"/>
+		<input type="hidden" id="signerid" value="${participant.signerid}"/>
 		<input type="hidden" id="approvalstatus" value="${participant.approvalstatus}"/>
 		<input type="hidden" id="approvaltype" value="${participant.approvaltype}"/>
 	</c:if>
@@ -43,7 +43,7 @@
       <tr>
       	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }" /></td>
         <td><a href="${path}/approval/apprInfo?appr_seq=${list.appr_seq}">${list.title }</a></td>
-        <td>${list.name }</td>
+        <td>${list.draftername }</td>
         <td>${list.regdate }</td>
       </tr>   
     </c:forEach>
@@ -69,7 +69,7 @@ function BundleApproval(){
 	var checkboxes = document.getElementsByName('appr_seq');
 	var ary = []; // 결재 시퀀스 배열
 	<%-- 결재 대기에 걸린 결재선 정보--%>
-	var id = $('#id').val();
+	var signerid = $('#signerid').val();
 	var approvalstatus = $('#approvalstatus').val();
 	var approvaltype = $('#approvaltype').val();
 	var selectParticipant = []; //전제 값 배열
@@ -85,7 +85,7 @@ function BundleApproval(){
 			selectParticipant.push({
 				appr_seq: appr_seq,
 				participant_seq: participant_seq,
-				id: id,
+				signerid: signerid,
 				approvalstatus: approvalstatus,
 				approvaltype: approvaltype
 			});

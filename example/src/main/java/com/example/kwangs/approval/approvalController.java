@@ -82,7 +82,7 @@ public class approvalController {
 		res.put("participant_seq", pp.getParticipant_seq());
 		res.put("approvaltype", pp.getApprovaltype());
 		res.put("approvalstatus", pp.getApprovalstatus());
-		res.put("id", userId);
+		res.put("signerid", userId);
 		
 		participantVO pInfo = serviceP.pInfo(res);
 		model.addAttribute("pInfo",pInfo);
