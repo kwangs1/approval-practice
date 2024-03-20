@@ -20,7 +20,6 @@ public class deptVO {
 	private List<userVO> users; //부서& 유저 조직트리를 위해 userVO 추가
 	private String deptcode;
 	
-
 	public String getDeptcode() {
 		return deptcode;
 	}

@@ -7,7 +7,7 @@
 <head>
 <meta charset="UTF-8">
 </head>
-<link rel="stylesheet" href="<c:url value='/resources/css/tree.css'/>"/>
+<link rel="stylesheet" href="<c:url value='/resources/css/u_tree.css'/>"/>
 <body>
 <button onclick="javascript:window.close();">닫기</button></br>
   <ul class="tree">
@@ -50,14 +50,20 @@
 <script>
 <%-- tree start --%>  
 $(document).ready(function() {
-  // 처음에 모든 자식 요소를 감춥니다.
-    $('ul.tree ul').hide();
+  // 처음에 모든 자식 요소를 펼치기
+    $('ul.tree ul').show();
 
   // 루트 요소와 자식 요소에 클릭 이벤트를 추가합니다.
     $('ul.tree li').click(function(e) {
      if (e.target.tagName !== 'INPUT') {
           e.stopPropagation();
          	$(this).children('ul').toggle();
+         	
+         	if($(this).hasClass('expanded')){
+         		$(this).removeClass('expanded').addClass('collapsed');
+         	}else{
+         		$(this).removeClass('collapsed').addClass('expanded');
+         	}
         }
      });
 });

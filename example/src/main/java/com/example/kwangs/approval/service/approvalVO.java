@@ -22,7 +22,6 @@ public class approvalVO{
 	private String finalapprover;
 	private String approvaldate;
 
-
 	public String getApprovaldate() {
 		return approvaldate;
 	}

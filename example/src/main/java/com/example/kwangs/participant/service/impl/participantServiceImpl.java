@@ -14,11 +14,11 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 import com.example.kwangs.user.mapper.userMapper;
-import com.example.kwangs.user.service.userVO;
 
 @Service
 public class participantServiceImpl implements participantService{
@@ -28,10 +28,6 @@ public class participantServiceImpl implements participantService{
 	private participantMapper mapper;
 	@Autowired
 	private approvalMapper approvalMapper;
-	@Autowired
-	private userMapper userMapper;
-	@Autowired
-	private HttpServletRequest request;
 	@Autowired
 	private DocumentNumberGenerator DocumentNumberGenerator;
 	
@@ -243,23 +239,22 @@ public class participantServiceImpl implements participantService{
 		log.info("=================== DOCNO UPDATE LINE ===================");
 		//결재가 완료된 문서찾기
 		List<approvalVO> approval = approvalMapper.getApprStatus(appr_seq);
+
 		
-		//기안자의 부서 정보가져오기
-		String id = (String)request.getSession().getAttribute("userId");
-		userVO checkDocDept = userMapper.getDocDept(id);
-
-		//String id = checkDocDept.getDrafterid();
-		String deptid = checkDocDept.getDeptid();
-		String abbreviation = checkDocDept.getAbbreviation();
-		String deptcode = checkDocDept.getDeptcode();
-
+		approvalVO ApprDocDeptInfo = approvalMapper.ApprDocDeptInfo(appr_seq);
+		String deptid = ApprDocDeptInfo.getDrafterdeptid();
+		
+		deptVO DocDeptInfo = approvalMapper.DocDeptInfo(deptid);
+		String abbreviation = DocDeptInfo.getAbbreviation();
+		String deptcode = DocDeptInfo.getDeptcode();
+		
 		for(approvalVO ap : approval) {
-			if(ap.getStatus() == 256 && deptid.equals(ap.getDrafterdeptid())) {
+			if(ap.getStatus() == 256 && deptid.equals(DocDeptInfo.getDeptid())) {
 				//년도 및 부서별 문서번호 셋팅 메서드 호출
 				String docno = DocumentNumberGenerator.genearteDocumentNumber(deptid);
 
 				log.info(ap.getAppr_seq()+" -> maxCurrSeq value{} "+docno);	
-				log.info("Use Info" + id +"/"+ deptid +"/"+ abbreviation+"/"+docno);
+				log.info("Use Info" +"/"+ deptid +"/"+ abbreviation+"/"+docno);
 				
 				ap.setDocregno(abbreviation +docno);
 				ap.setRegno(deptcode +docno);

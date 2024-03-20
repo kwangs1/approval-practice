@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.user.service.userVO;
 
 @Repository
@@ -52,8 +53,11 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.getApprStatus",appr_seq);
 	}
 	//기안자 부서 가져오기
-	public approvalVO getDocDept(String appr_seq) {
-		return session.selectOne("mapper.approval.getDocDept",appr_seq);
+	public approvalVO ApprDocDeptInfo(String appr_seq) {
+		return session.selectOne("mapper.approval.ApprDocDeptInfo",appr_seq);
+	}
+	public deptVO DocDeptInfo(String deptid) {
+		return session.selectOne("mapper.approval.DocDeptInfo",deptid);
 	}
 	//문서번호 업데이트
 	public void ConCludeDocRegNo(approvalVO ap) {

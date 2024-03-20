@@ -29,11 +29,4 @@ select count(*) from member where id = #{id}
 select * from member where id = #{id} and pw = #{pw}
 </select>
 
-<!-- 기안자 부서 가져오기 -->
-<select id="getDocDept" resultType="userVO" parameterType="String">
-	select u.id, d.deptid, d.abbreviation, d.deptcode
-		from member u, dept d
-	where u.deptid = d.deptid
-	and u.id = #{id}
-</select>
 </mapper>

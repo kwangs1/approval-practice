@@ -82,13 +82,26 @@
 	select * from approval where appr_seq = #{appr_seq} and status = 256
 </select>
 
-<!-- 기안자 부서 가져오기 -->
-<select id="getDocDept" resultType="approvalVO" parameterType="String">
-        select * from approval a, dept d
-        where a.drafterdeptid = d.deptid
-        and a.drafterdeptname = #{drafterdeptname}
-        and a.drafterid = #{drafterid}
-        and appr_seq = #{appr_seq}
+<!-- 문서에 대한 기안자 정보 가져오기 -->
+<select id="ApprDocDeptInfo" resultType="approvalVO" parameterType="String">
+	select a.appr_seq, a.drafterdeptid, a.drafterid, d.abbreviation, d.deptcode
+		from approval a
+	inner join dept d
+		on a.drafterdeptid = d.deptid
+	where a.status = 256
+	and a.appr_seq = #{appr_seq}
+</select>
+
+<select id="DocDeptInfo" resultType="com.example.kwangs.dept.service.deptVO" parameterType="String">
+	(select
+		f.*
+		from(
+			select
+				row_number() over(partition by t.deptid order by a.appr_seq desc)rindex, t.*
+				from dept t, approval a
+				where t.deptid = a.drafterdeptid
+				and t.deptid = #{deptid})f
+			where f.rindex = 1)	
 </select>
 
 <!-- 문서번호 업데이트 -->

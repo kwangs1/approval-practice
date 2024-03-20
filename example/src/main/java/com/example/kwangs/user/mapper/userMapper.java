@@ -26,9 +26,4 @@ public class userMapper{
 		return session.selectOne("mapper.user.login",user);
 	}
 	
-	//기안자 부서 가져오기
-	public userVO getDocDept(String id) {
-		return session.selectOne("mapper.user.getDocDept",id);
-	}
-	
 }

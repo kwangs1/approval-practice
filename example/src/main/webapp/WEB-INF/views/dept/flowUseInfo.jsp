@@ -6,7 +6,7 @@
 <head>
 <meta charset="UTF-8">
 </head>
-<link rel="stylesheet" href="<c:url value='/resources/css/flowtree.css'/>"/>
+<link rel="stylesheet" href="<c:url value='/resources/css/f_tree.css'/>"/>
 <body>
 <input type="hidden" id="uId" value="${userid}"/>
 <div id="btn">
@@ -24,12 +24,10 @@
 			<c:forEach var="user" items="${dept.users}">
 			         <c:if test="${not empty user.name}">
 			      		<ul class="user-list"> 
-			            	<li class="user">
-			            		<a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
+			            		😑 <a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
 			             			data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
 			             	<c:out value="${user.name}" escapeXml="false" />
 			             		</a>
-			            	</li>
 			      		</ul>
 			        </c:if>
 			 </c:forEach>
@@ -44,12 +42,10 @@
 					<c:forEach var="user" items="${subDept.users}">
 					         <c:if test="${not empty user.name}">
 					      		<ul class="user-list"> 
-					            	<li class="user">
-					            		<a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
+					            		😑<a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
 					             			data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
 					             	<c:out value="${user.name}" escapeXml="false" />
 					             		</a>
-					            	</li>
 					      		</ul>
 					        </c:if>
 					 </c:forEach>
@@ -64,12 +60,10 @@
 							<c:forEach var="user" items="${grandDept.users}">
 							         <c:if test="${not empty user.name}">
 							      		<ul class="user-list"> 
-							            	<li class="user">
-							            		<a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
+							            	😑<a href="#" class="userLink" data-deptid="${user.deptid}" data-deptname="${user.deptname}"
 							             			data-id="${user.id}" data-name="${user.name}" data-pos="${user.pos}">
 							             	<c:out value="${user.name}" escapeXml="false" />
 							             		</a>
-							            	</li>
 							      		</ul>
 							        </c:if>
 							 </c:forEach>
@@ -103,6 +97,7 @@ $(document).ready(function() {
 	if(uId){
 		//사용자가 속한 부서의 li엘리먼트를 찾아 해당 li와 그 부모들의 ul를 모두 보여줌
 		$('ul.tree li').has('a[data-id="${user}"]').children('ul').show();
+		$('a[data-id="${user}"]').closest('ul.tree li').addClass('expanded');
 	}
 	
   // 루트 요소와 자식 요소에 클릭 이벤트를 추가합니다.
@@ -110,6 +105,12 @@ $(document).ready(function() {
      if (e.target.tagName !== 'INPUT') {
           e.stopPropagation();
          	$(this).children('ul').toggle();
+         	
+         	if($(this).hasClass('expanded')){
+         		$(this).removeClass('expanded').addClass('collapsed');
+         	}else{
+         		$(this).removeClass('collapsed').addClass('expanded');
+         	}
         }
      });
   
