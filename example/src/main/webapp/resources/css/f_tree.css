@@ -11,6 +11,7 @@ ul.tree ul {list-style-type: none;}
 ul.tree li::before {content: "+"; margin-right: 5px; cursor: pointer; /* 화살표를 클릭할 때 커서 모양 변경 */}  
 ul.tree li.expanded::before { content: "-"; }
 ul.tree li.collapsed::before { content: "+"; }
+ul.tree li.lastValue::before { content: ""; }
 
 a{text-decoration:none; color:black;}
 a:hover{text-decoration:block; color:green;}

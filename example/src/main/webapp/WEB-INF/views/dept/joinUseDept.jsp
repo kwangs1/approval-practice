@@ -27,7 +27,7 @@
                   <c:forEach var="grandDept" items="${joinUseDept}">
                     <c:if test="${grandDept.parid eq subDept.deptid}">
                       <ul>
-                        <li id="grandDept${grandDept.deptid}">
+                        <li id="grandDept${grandDept.deptid}" class="lastValue">
                         <a href="#" class="deptLink" data-deptname="${grandDept.deptname}" data-deptid="${grandDept.deptid}">${grandDept.deptname}</a>
                         </li>
                       </ul>

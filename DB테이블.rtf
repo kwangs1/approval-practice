@@ -31,11 +31,20 @@ credate date);\
 \f1 \'c6\'fa\'b4\'f5
 \f0 \
 create table folder(\
-fldrid number PRIMARY key,\
+fldrid varchar2(20) PRIMARY key,\
 fldrname varchar2(30),\
-applid number,\
+parfldrid varchar2(20),\
+parfldrname varchar2(30),\
+fldrdepth number,\
+ownertype varchar2(2),\
 ownerid varchar2(20),\
-indexdate date);\
+appltype varchar2(2),\
+applid number,\
+regdate varchar2(30),\
+updatedate varchar2(30),\
+updaterid varchar2(20),\
+year varchar2(5),\
+endyear varchar2(5));\
 \
 --
 \f1 \'b0\'e1\'c0\'e7

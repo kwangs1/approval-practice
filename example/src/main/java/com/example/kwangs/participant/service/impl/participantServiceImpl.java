@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +16,7 @@ import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
-import com.example.kwangs.user.mapper.userMapper;
+import com.example.kwangs.xmlTemp.saveXml;
 
 @Service
 public class participantServiceImpl implements participantService{
@@ -30,6 +28,8 @@ public class participantServiceImpl implements participantService{
 	private approvalMapper approvalMapper;
 	@Autowired
 	private DocumentNumberGenerator DocumentNumberGenerator;
+	@Autowired
+	private saveXml saveXml;
 	
 
 	//문서 기안 시 결재선 지정
@@ -38,6 +38,12 @@ public class participantServiceImpl implements participantService{
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
+
+		String drafterid = approvalMapper.getDrafterId(participant.get(0).getAppr_seq()); // 기안자(A)의 아이디 조회
+		log.info("기안자는 누군가요?? "+drafterid);
+		
+	    StringBuilder xmlBuilder = new StringBuilder();
+	    xmlBuilder.append("<participants>");
 		
 		for (participantVO pVO : participant) {
 			pVO.setAppr_seq(seqCurrval);
@@ -47,7 +53,20 @@ public class participantServiceImpl implements participantService{
 			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
+			
+	        // participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
+	        xmlBuilder.append("<participant>");
+	        xmlBuilder.append("<signerId>").append(pVO.getSignerid()).append("</signerId>");
+	        // 다른 필드들도 필요한 경우 추가 가능
+	        xmlBuilder.append("</participant>");
+			
 		}
+		xmlBuilder.append("</participants>");
+
+	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
+	    String xmlData = xmlBuilder.toString();
+	    //saveXml.saveXml(drafterid, xmlData);
+	    saveXml.saveXml(xmlData);
 	}
 	
 	//일괄 결재

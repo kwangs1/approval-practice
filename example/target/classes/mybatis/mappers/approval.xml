@@ -128,4 +128,12 @@
                  where t.deptid = #{deptid}) f
        where f.rindex = 1) 
 </select>
+
+<select id="getDrafterId" parameterType="String" resultType="approvalVO">
+	select a.drafterid
+	from approval a, participant p
+	where a.appr_seq = p.appr_seq
+	and a.appr_seq = #{apprid}
+</select>
+
 </mapper>

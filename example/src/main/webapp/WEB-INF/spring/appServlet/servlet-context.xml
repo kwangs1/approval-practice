@@ -7,6 +7,14 @@
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
 
+
+    <!-- 프로퍼티 파일 로드 -->
+    <context:property-placeholder location="classpath:application.properties" />
+
+    <!-- basePath 빈 설정 -->
+    <beans:bean id="basePath" class="java.lang.String">
+        <beans:constructor-arg value="${data.xml.basepath}" />
+    </beans:bean>
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->

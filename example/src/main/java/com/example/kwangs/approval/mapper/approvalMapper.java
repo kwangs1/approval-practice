@@ -72,4 +72,7 @@ public class approvalMapper{
 		return session.insert("mapper.approval.save",document);
 	}
 	//end
+	public String getDrafterId(String appr_seq) {
+		return session.selectOne("mapper.approval.getDrafterId",appr_seq);
+	}
 }
