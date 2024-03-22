@@ -2,10 +2,6 @@
  * 결재선 지정 유저 받아오기
  */
 
-$(document).ready(function(){
-	pop();
-});
-
 window.addEventListener('message',function(e){
 	var data = e.data;
 	var users  = data.users;
@@ -20,8 +16,8 @@ window.addEventListener('message',function(e){
 			var userContainer = $('<div class="user-container">');
 			userContainer.append('<input type="hidden" name="deptid_' + i + '" value="' + users[i].deptid + '" />');
 			userContainer.append('<input type="hidden" name="deptname_' + i + '" value="' + users[i].deptname + '" />');
-			userContainer.append('<input type="text" name="signername_' + i + '" value="' + users[i].name + '" />');
 			userContainer.append('<input type="hidden" name="signerid_' + i + '" value="' + users[i].id + '" />');
+			userContainer.append('<input type="text" name="signername_' + i + '" value="' + users[i].name + '" />');
 			userContainer.append('<input type="hidden" name="pos_' + i + '" value="' + users[i].pos + '" />');
 			
 			var statusDropdown = $('<select name="status_' + i + '">');

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 public class participantVO {
 	private String participant_seq;
 	private String appr_seq;
-	private int status;
+	private String status;
 	private int line_seq;
 	private String signername;
 	private String signerid;
@@ -44,10 +44,10 @@ public class participantVO {
 	public void setAppr_seq(String appr_seq) {
 		this.appr_seq = appr_seq;
 	}
-	public int getStatus() {
+	public String getStatus() {
 		return status;
 	}
-	public void setStatus(int status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 	public int getLine_seq() {

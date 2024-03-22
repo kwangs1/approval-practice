@@ -2,6 +2,8 @@ package com.example.kwangs.participant;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,8 +40,9 @@ public class participantController {
 
 	@ResponseBody
 	@PostMapping("/ParticipantWrite")
-	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant) {
-		service.ParticipantWrite(participant);
+	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant, HttpServletRequest request) {
+		String id = (String) request.getSession().getAttribute("userId");
+		service.ParticipantWrite(participant,id);
 	    return ResponseEntity.ok("Success");
 	}
 	

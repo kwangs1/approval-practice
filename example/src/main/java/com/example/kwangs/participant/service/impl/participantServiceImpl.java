@@ -34,13 +34,11 @@ public class participantServiceImpl implements participantService{
 
 	//문서 기안 시 결재선 지정
 	@Override
-	public void ParticipantWrite(List<participantVO> participant){
+	public void ParticipantWrite(List<participantVO> participant,String id){
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
-
-		String drafterid = approvalMapper.getDrafterId(participant.get(0).getAppr_seq()); // 기안자(A)의 아이디 조회
-		log.info("기안자는 누군가요?? "+drafterid);
+		log.info("가져오는 시퀀스 값 잘 가지고 오나? "+seqCurrval);
 		
 	    StringBuilder xmlBuilder = new StringBuilder();
 	    xmlBuilder.append("<participants>");
@@ -54,9 +52,14 @@ public class participantServiceImpl implements participantService{
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
 			
-	        // participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
+	        //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
 	        xmlBuilder.append("<participant>");
-	        xmlBuilder.append("<signerId>").append(pVO.getSignerid()).append("</signerId>");
+	        xmlBuilder.append("<deptid>").append(pVO.getDeptid()).append("</deptid>");
+	        xmlBuilder.append("<deptname>").append(pVO.getDeptname()).append("</deptname>");
+	        xmlBuilder.append("<signerid>").append(pVO.getSignerid()).append("</signerid>");
+	        xmlBuilder.append("<signername>").append(pVO.getSignername()).append("</signername>");
+	        xmlBuilder.append("<pos>").append(pVO.getPos()).append("</pos>");
+	        xmlBuilder.append("<status>").append(pVO.getStatus()).append("</status>");
 	        // 다른 필드들도 필요한 경우 추가 가능
 	        xmlBuilder.append("</participant>");
 			
@@ -65,8 +68,7 @@ public class participantServiceImpl implements participantService{
 
 	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
 	    String xmlData = xmlBuilder.toString();
-	    //saveXml.saveXml(drafterid, xmlData);
-	    saveXml.saveXml(xmlData);
+	    saveXml.saveXml(id,xmlData);
 	}
 	
 	//일괄 결재

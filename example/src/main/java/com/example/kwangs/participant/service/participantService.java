@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface participantService {
 	//문서 기안 시 결재선 지정
-	void ParticipantWrite(List<participantVO> participant);
+	void ParticipantWrite(List<participantVO> participant,String id);
 
 	//일괄 결재
 	void BulkAppr(List<participantVO> participant);

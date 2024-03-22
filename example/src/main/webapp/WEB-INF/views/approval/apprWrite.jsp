@@ -10,6 +10,10 @@
 <body>
 <%@ include file="../participant/ParticipantWrite.jsp" %>
 <hr>
+
+	<button onClick="Appr_Btn();">상신</button>
+	<button onClick="window.close()">닫기</button>
+<hr>
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
 <body>
@@ -23,8 +27,6 @@
 
 <textarea name="content" id="content" rows="10" cols="80" placeholder="내용입력"></textarea>
 <br><br>
-
-<button onClick="Appr_Btn();">상신</button>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
