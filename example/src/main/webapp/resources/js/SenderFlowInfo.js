@@ -3,21 +3,6 @@
  */
 
 var selectedUsers = [];
-//로그인한 사용자는 해당 페이지 열 때 무조건 결재선에 바로 지정되게
-$(document).ready(function(){
-	if(uId){
-		$('a.userLink[data-id="'+ uId +'"]').each(function(){
-			 var deptid = $(this).data('deptid');
-			 var deptname = $(this).data('deptname');
-			 var id = $(this).data('id');
-			 var name = $(this).data('name');
-			 var pos = $(this).data('pos');	
-
-			 selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
-			 updateSelectedUsersUI();			
-		})
-	}
-});
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
@@ -89,6 +74,19 @@ function confirmSelection(){
         selectedUsers[i].status = status;
     }
 	window.opener.postMessage({ users: selectedUsers }, '*');
+	
+	$.ajax({
+		type: 'post',
+		url: '/kwangs/SaveFlowUseInfoTemp',
+		contentType: 'application/json',
+		data: JSON.stringify(selectedUsers),
+		success: function(){
+			console.log("success");
+		},
+		error : function(error){
+			console.error("Error seding clicked users to server:",error);
+		}
+	});
 	window.close();
 }
 

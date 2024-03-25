@@ -68,11 +68,11 @@ public class deptController {
 	//결재선 정보 가져올 부서 및 유저목록
 	@GetMapping("/flowUseInfo")
 	public String flowUseInfo(Model model, HttpServletRequest request) {
+		String id = (String) request.getSession().getAttribute("userId");
+		model.addAttribute("user",id);
+		
 		List<deptVO>flowUseInfo = service.flowUseInfo();
 		model.addAttribute("flowUseInfo",flowUseInfo);
-		
-		String userid = (String) request.getSession().getAttribute("userId");
-		model.addAttribute("user",userid);
 		
 		return "dept/flowUseInfo";
 	}

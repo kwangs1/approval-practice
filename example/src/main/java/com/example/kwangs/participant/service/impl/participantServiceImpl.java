@@ -16,7 +16,7 @@ import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
-import com.example.kwangs.xmlTemp.saveXml;
+import com.example.kwangs.xmlTemp.saveXmlTemp;
 
 @Service
 public class participantServiceImpl implements participantService{
@@ -29,7 +29,7 @@ public class participantServiceImpl implements participantService{
 	@Autowired
 	private DocumentNumberGenerator DocumentNumberGenerator;
 	@Autowired
-	private saveXml saveXml;
+	private saveXmlTemp saveXmlTemp;
 	
 
 	//문서 기안 시 결재선 지정
@@ -38,7 +38,6 @@ public class participantServiceImpl implements participantService{
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
-		log.info("가져오는 시퀀스 값 잘 가지고 오나? "+seqCurrval);
 		
 	    StringBuilder xmlBuilder = new StringBuilder();
 	    xmlBuilder.append("<participants>");
@@ -68,7 +67,7 @@ public class participantServiceImpl implements participantService{
 
 	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
 	    String xmlData = xmlBuilder.toString();
-	    saveXml.saveXml(id,xmlData);
+	    saveXmlTemp.SaveParticipantTemp(id,xmlData);
 	}
 	
 	//일괄 결재

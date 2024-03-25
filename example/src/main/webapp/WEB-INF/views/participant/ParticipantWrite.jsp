@@ -24,7 +24,7 @@ $(document).ready(function(){
 	
 	var id = '<c:out value="${user.id}"/>';
 	$.ajax({
-		url: "<c:url value='/getXmlData.do'/>",
+		url: "<c:url value='/getXmlData'/>",
 		type: "get",
 		data: {id : id},
 		dataType: 'json',

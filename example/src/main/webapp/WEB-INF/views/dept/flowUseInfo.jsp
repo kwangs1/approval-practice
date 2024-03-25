@@ -87,7 +87,7 @@
 <div id="selectedUsers"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/SendFlowInfo.js'/>"></script>
+<script src="<c:url value='/resources/js/SenderFlowInfo.js'/>"></script>
 <script>
 var uId = '<c:out value="${user}"/>';
 <%-- 조직트리 --%>
@@ -117,6 +117,51 @@ $(document).ready(function() {
   $('.user-list').click(function(e){
 	  e.stopPropagation();
   });  
+	
+$.ajax({
+	type: 'get',
+	url: '<c:url value="/getSaveFlowUseInfoTemp"/>',
+	data: {id : uId},
+	dataType: 'json',
+	success: function(data){
+		if(data.length === 0){
+			if(uId){
+				$('a.userLink[data-id="'+ uId +'"]').each(function(){
+					 var deptid = $(this).data('deptid');
+					 var deptname = $(this).data('deptname');
+					 var id = $(this).data('id');
+					 var name = $(this).data('name');
+					 var pos = $(this).data('pos');	
+
+					 selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
+					 updateSelectedUsersUI();			
+				})
+			}
+		}else{
+			for(var i =0; i<data.length; i++){
+				var user = data[i];
+				drawParticipant(user);
+				console.log("success call infoTemp");
+				console.log(user);
+			}
+		}
+	},
+	error: function(error){
+		console.error("Error seding clicked users to server:",error);
+	}
+});//end ajax	
+
+function drawParticipant(user){
+	  var deptid = user.deptid;
+	  var deptname = user.deptname;
+	  var id = user.id;
+	  var name = user.name;
+	  var pos = user.pos;
+
+	  selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
+	  updateSelectedUsersUI();	
+}
+
 }); 
 </script>
 </body>
