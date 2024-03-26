@@ -42,12 +42,22 @@
 </update>
 
 <!-- 결재대기 화면에서의 결재선 정보 -->
-<select id="getParticipantInfo" resultType="participantVO" parameterType="String">
-	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
+<select id="ApprWaitFLowInfo" resultType="participantVO" parameterType="String">
+	select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
+	order by a.appr_seq desc
+</select>
+
+<!-- 결재진행 화면에서의 결재선 정보 -->
+<select id="ApprProgrsFLowInfo" resultType="participantVO" parameterType="String">
+	select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.status, p.deptid
+		from  approval a, participant p		
+	where a.appr_seq = p.appr_seq
+	and p.status = 1000
+	and a.status != 256
 	order by a.appr_seq desc
 </select>
 
@@ -97,5 +107,16 @@
 		set approvaltype = 2,upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), approvalstatus = 4097
 	where appr_seq = #{appr_seq}
 	and participant_seq = #{participant_seq}
+</update>
+
+<!-- 회수 -->
+<update id="RetireAppr" parameterType="java.util.Map">
+	update participant
+		set approvalstatus = 1024
+	where participant_seq = #{participant_seq}
+	and appr_seq = #{appr_seq}
+	and signerid = #{signerid}
+	and deptid = #{deptid}
+	and status = '1000'
 </update>
 </mapper>

@@ -91,8 +91,13 @@ public class participantServiceImpl implements participantService{
 	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
-	public List<participantVO>  getParticipantInfo(String appr_seq) {
-		return mapper.getParticipantInfo(appr_seq);
+	public List<participantVO>  ApprWaitFLowInfo(String appr_seq) {
+		return mapper.ApprWaitFLowInfo(appr_seq);
+	}
+	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
+	@Override
+	public List<participantVO>  ApprProgrsFLowInfo(String appr_seq) {
+		return mapper.ApprProgrsFLowInfo(appr_seq);
 	}
 	
 	//결재 상신 시 결재선 테이블 관련 approvalType, approvalStatus 컬럼 값 셋팅 메서드
@@ -212,18 +217,12 @@ public class participantServiceImpl implements participantService{
 	                }
 	                
 	                nextIndex++;
-	                //마지막 결재자 이며 , 마지막 결재자가 결재를 했다면 문서 상태값 완료[256] 변경 
-	                if(nextIndex == approvalLines.size() && nextParticipant.getApprovaltype() == 2 ) {
-	                	approvalMapper.ApprovalUpdateStatus(appr_seq);
-	                	log.info("final participant and approval status update");
-	                	ConCludeDocRegNo(appr_seq);
-	                }
 	            }//end while
 	            /*
 	             * 기안자,최종결재자 둘만 있을 시 while문을 타지 않기에 while문 밖에서 기안자,최종결재자만 있는 결재문서일 경우
 	             * 문서 상태값 완료로 변경            	
 	            */
-	            if(currentParticipant.getApprovaltype() == 2 && nextIndex == approvalLines.size()) {
+	            if(currentParticipant.getApprovaltype() == 2 && i == approvalLines.size() -1) {
                 	approvalMapper.ApprovalUpdateStatus(appr_seq);
                 	log.info("final participant and approval status update");
                 	ConCludeDocRegNo(appr_seq);
@@ -284,5 +283,11 @@ public class participantServiceImpl implements participantService{
 			}
 		}
 		log.info("=================== DOCNO UPDATE LINE ===================");
+	}
+	
+	//회수
+	@Override
+	public void RetireAppr(Map<String,Object> res) {
+		mapper.RetireAppr(res);
 	}
 }

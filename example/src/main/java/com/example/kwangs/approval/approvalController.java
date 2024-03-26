@@ -55,18 +55,40 @@ public class approvalController {
 	
 	//결재대기
 	@GetMapping("/apprWaitList")
-	public String apprWaitList(Model model, String id, approvalVO approval,HttpServletRequest req) {
+	public String apprWaitList(Model model,HttpServletRequest req) {
 		
 		if(req.getSession(false).getAttribute("user") == null) {
 			return "redirect:/user/login";
 		}
-		model.addAttribute("list",service.apprWaitList(id));
+		String id =(String)req.getSession().getAttribute("userId");
+		List<approvalVO> wait = service.apprWaitList(id);
+		model.addAttribute("list",wait);
 		
-		//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-		List<participantVO> participantInfo = serviceP.getParticipantInfo(approval.getAppr_seq());
-		model.addAttribute("participantInfo",participantInfo);
+		for(approvalVO ap : wait) {	
+			List<participantVO> participantInfo = serviceP.ApprWaitFLowInfo(ap.getAppr_seq());
+			model.addAttribute("participantInfo",participantInfo);	
+		}
 		
 		return "/approval/apprWaitList";
+	}
+	
+	//결재진행
+	@GetMapping("/SanctnProgrsList")
+	public String SanctnProgrsList(Model model,HttpServletRequest req) {
+		
+		if(req.getSession(false).getAttribute("user") == null) {
+			return "redirect:/user/login";
+		}
+		String id =(String)req.getSession().getAttribute("userId");
+		List<approvalVO> progrs = service.SanctnProgrsList(id);
+		model.addAttribute("list",progrs);
+		
+		for(approvalVO ap : progrs) {	
+			List<participantVO> participantInfo = serviceP.ApprProgrsFLowInfo(ap.getAppr_seq());
+			model.addAttribute("participantInfo",participantInfo);	
+		}
+		
+		return "/approval/SanctnProgrsList";		
 	}
 	
 	//문서 상세보기

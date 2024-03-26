@@ -32,6 +32,13 @@ public class approvalServiceImpl implements approvalService{
 	public List<approvalVO> apprWaitList(String id) {	
 		return mapper.apprWaitList(id);
 	}
+	
+	//결재진행
+	@Override
+	public List<approvalVO> SanctnProgrsList(String id) {	
+		return mapper.SanctnProgrsList(id);
+	}
+	
 	//상세보기
 	@Override
 	public approvalVO apprInfo(String appr_seq) {
@@ -44,5 +51,10 @@ public class approvalServiceImpl implements approvalService{
 		return mapper.getUserDeptInfo(res);
 	}
 	
+	//회수 시 문서 상태값 변경
+	@Override
+	public void RetireApprStatus(String appr_seq) {
+		mapper.RetireApprStatus(appr_seq);
+	}
 
 }

@@ -39,12 +39,27 @@
 
 <!-- 결재대기 -->
 <select id="apprWaitList" resultType="approvalVO">
-	select a.*,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
-		from  approval a, participant p
-	where p.appr_seq = a.appr_seq
+	select a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate ,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
+		from  approval a
+		inner join participant p
+	on a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
+	and  a.status not in(4096,256)
 	and p.approvaltype = 4
 	and p.signerid = #{signerid}
+	order by a.appr_seq desc
+</select>
+
+<!-- 결재진행 -->
+<select id="SanctnProgrsList" resultType="approvalVO" parameterType="String">
+	select a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate, p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
+		from  approval a
+		inner join participant p
+	on a.appr_seq = p.appr_seq
+	and p.signerid = #{signerid}
+	and a.status != 256
+	and (p.approvalstatus =1024 and a.status =4096 or(p.approvalstatus !=1024 and a.status != 4096))
+	group by a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate, p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
 	order by a.appr_seq desc
 </select>
 
@@ -129,11 +144,10 @@
        where f.rindex = 1) 
 </select>
 
-<select id="getDrafterId" parameterType="String" resultType="approvalVO">
-	select a.drafterid
-	from approval a, participant p
-	where a.appr_seq = p.appr_seq
-	and a.appr_seq = #{apprid}
-</select>
-
+<!-- 회수 시 문서 상태값 변경 -->
+<update id="RetireApprStatus">
+	update approval
+		set status = 4096
+	where appr_seq = #{appr_seq}
+</update>
 </mapper>

@@ -30,8 +30,13 @@ public class participantMapper{
 	}
 	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-	public List<participantVO> getParticipantInfo(String appr_seq) {
-		return session.selectList("mapper.participant.getParticipantInfo",appr_seq);
+	public List<participantVO> ApprWaitFLowInfo(String appr_seq) {
+		return session.selectList("mapper.participant.ApprWaitFLowInfo",appr_seq);
+	}
+	
+	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
+	public List<participantVO> ApprProgrsFLowInfo(String appr_seq) {
+		return session.selectList("mapper.participant.ApprProgrsFLowInfo",appr_seq);
 	}
 	
 	//결재 시 결재자들의 타입 값 변경
@@ -61,4 +66,8 @@ public class participantMapper{
 		session.update("mapper.participant.updateFLowType",res);
 	}
 	
+	//회수
+	public void RetireAppr(Map<String,Object> res) {
+		session.update("mapper.participant.RetireAppr",res);
+	}
 }

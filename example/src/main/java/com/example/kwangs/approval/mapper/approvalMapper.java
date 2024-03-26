@@ -32,6 +32,11 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.apprWaitList",id);
 	}
 	
+	//결재 진행
+	public List<approvalVO> SanctnProgrsList(String id) {
+		return session.selectList("mapper.approval.SanctnProgrsList",id);
+	}
+	
 	//결재 상세보기
 	public approvalVO apprInfo(String appr_seq) {
 		return session.selectOne("mapper.approval.apprInfo",appr_seq);
@@ -72,7 +77,9 @@ public class approvalMapper{
 		return session.insert("mapper.approval.save",document);
 	}
 	//end
-	public String getDrafterId(String appr_seq) {
-		return session.selectOne("mapper.approval.getDrafterId",appr_seq);
+	
+	public void RetireApprStatus(String appr_seq) {
+		session.update("mapper.approval.RetireApprStatus",appr_seq);
 	}
+	
 }

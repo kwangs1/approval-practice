@@ -1,6 +1,8 @@
 package com.example.kwangs.participant;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 
@@ -25,6 +28,8 @@ public class participantController {
 	private Logger log = LoggerFactory.getLogger(participantController.class.getName());
 	@Autowired
 	private participantService service;
+	@Autowired
+	private approvalService approvalService;
 	
 	//일괄 결재
 	@ResponseBody
@@ -57,5 +62,24 @@ public class participantController {
 			e.printStackTrace();
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("결재 처리에 실패했습니다.");
 		}
+	}
+	
+	//회수 [리스트]
+	@ResponseBody
+	@PostMapping("/RetireAppr")
+	public ResponseEntity<String> RetireAppr(@RequestBody List<participantVO> participant){
+		for(participantVO pp : participant) {
+			Map<String,Object> res = new HashMap<>();
+			res.put("participant_seq", pp.getParticipant_seq());
+			res.put("appr_seq", pp.getAppr_seq());
+			res.put("signerid", pp.getSignerid());
+			res.put("deptid", pp.getDeptid());
+			res.put("status", pp.getStatus());
+			
+			service.RetireAppr(res);
+			approvalService.RetireApprStatus(pp.getAppr_seq());
+		}
+		
+		return ResponseEntity.ok("RetireAppr Update Success");
 	}
 }
