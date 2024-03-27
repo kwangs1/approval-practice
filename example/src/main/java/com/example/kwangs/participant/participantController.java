@@ -78,6 +78,7 @@ public class participantController {
 			
 			service.RetireAppr(res);
 			approvalService.RetireApprStatus(pp.getAppr_seq());
+			log.info("RetireAppr SendData {}" +res);
 		}
 		
 		return ResponseEntity.ok("RetireAppr Update Success");

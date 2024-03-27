@@ -111,5 +111,14 @@ public class approvalController {
 		
 		return "/approval/apprInfo";
 	}
+	
+	//재기안
+	@GetMapping("/Resubmission")
+	public String Resubmission(String appr_seq, Model model) {
+		approvalVO Info = service.apprInfo(appr_seq);
+		model.addAttribute("info",Info);
+		
+		return "/approval/Resubmission";
+	}
 
 }

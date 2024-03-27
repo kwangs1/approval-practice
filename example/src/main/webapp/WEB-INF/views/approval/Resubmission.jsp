@@ -17,10 +17,7 @@
   <div class="post-content">
     <p>${info.content }</p>
   </div>
-  
-  <c:if test="${info.drafterid == user.id && info.status == 1}">
-  	<button onclick="FlowAppr()" class="button" id="btn">결재</button>  
-  </c:if>
+  <button onclick="FlowAppr()" class="button">재기안</button>
   <button onclick="window.close()" class="button">닫기</button>
 </div>
 
@@ -39,23 +36,7 @@ var param = {
 	approvalstatus : approvalstatus,
 	signerid : signerid}
 
-function FlowAppr(){	
-	$.ajax({
-		type: 'post',
-		url: '<c:url value="/participant/FlowAppr"/>',
-		data: param,
-		success: function(response){
-			alert("결재 성공");
-			console.log(response);
-			window.location.href= "/kwangs/approval/apprWaitList?id="+signerid;
-		},
-		error: function(xhr,status,error){
-			alert("결재 실패");
-			console.log(xhr);
-			console.log(status);
-		}
-	});
-}
+
 </script>
 </body>
 </html>

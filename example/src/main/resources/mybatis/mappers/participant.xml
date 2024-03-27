@@ -56,7 +56,7 @@
 	select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.status, p.deptid
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
-	and p.status = 1000
+	and p.status = '1000'
 	and a.status != 256
 	order by a.appr_seq desc
 </select>
@@ -112,7 +112,7 @@
 <!-- 회수 -->
 <update id="RetireAppr" parameterType="java.util.Map">
 	update participant
-		set approvalstatus = 1024
+		set approvaltype = 1024
 	where participant_seq = #{participant_seq}
 	and appr_seq = #{appr_seq}
 	and signerid = #{signerid}

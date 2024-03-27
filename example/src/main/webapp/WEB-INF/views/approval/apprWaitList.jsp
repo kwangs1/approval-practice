@@ -31,8 +31,8 @@
     <tbody>
     <c:forEach var="list" items="${list}"> <%-- 결재 테이블 데이터 --%>
       <tr>
-      	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }" /></td>
-        <td><a href="${path}/approval/apprInfo?appr_seq=${list.appr_seq}">${list.title }</a></td>
+      	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }"/></td>
+        <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
         <td>${list.draftername }</td>
         <td>${list.regdate }</td>
       </tr>   
@@ -53,6 +53,14 @@
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+$('a.apprInfo').on('click', function(event) {
+    event.preventDefault();
+    
+    var appr_seq = $(this).attr("data-apprseq"); 
+    var url = "<c:url value='/approval/apprInfo'/>" + "?appr_seq=" + appr_seq;
+    window.open(url, "Info", "width=1024px, height=768px");
+});
+
 var checkboxes = document.getElementsByName('appr_seq');
 //"전체 선택" 체크박스를 클릭했을 때 모든 체크박스를 선택 또는 해제하는 함수
 $('#selectAll').change(function(){
