@@ -114,11 +114,20 @@ public class approvalController {
 	
 	//재기안
 	@GetMapping("/Resubmission")
-	public String Resubmission(String appr_seq, Model model) {
+	public String Resubmission(String appr_seq, Model model, HttpServletRequest request) {
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
 		
+		//결재선 정보 	
+		List<participantVO> pInfo = serviceP.getRe_pInfo(appr_seq);
+		model.addAttribute("pInfo",pInfo);
 		return "/approval/Resubmission";
+	}
+	
+	@ResponseBody
+	@PostMapping("/Resubmission")
+	public void Resubmission(approvalVO approval) {
+		service.Resubmission(approval);
 	}
 
 }

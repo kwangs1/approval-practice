@@ -83,4 +83,34 @@ public class participantController {
 		
 		return ResponseEntity.ok("RetireAppr Update Success");
 	}
+	
+	//재기안 시 결재자 상태값 업데이트
+	@ResponseBody
+	@PostMapping("/ResubmissionFlowStatusUpd")
+	public ResponseEntity<String> ResubmissionFlowStatusUpd(@RequestBody List<participantVO> participant){
+		service.ResubmissionFlowStatusUpd(participant);
+		return ResponseEntity.ok("ResubmissionFlowStatusUpd Success Update");
+	}
+	
+	//재기안 시 결재선 새로 추가
+	@ResponseBody
+	@PostMapping("/ResubmissionParticipantWrite")
+	public ResponseEntity<String> ResubmissionParticipantWrite(@RequestBody List<participantVO> participant){
+		for(participantVO pp : participant) {
+			log.info("new flow appr_seq _"+pp.getAppr_seq());
+			log.info("new flow signerid _"+pp.getSignerid());
+			log.info("new flow signername _"+pp.getSignername());
+			log.info("new flow status _"+pp.getStatus());
+			log.info("new flow pos _"+pp.getPos());
+			log.info("new flow deptid _"+pp.getDeptid());
+			log.info("new flow deptname _"+pp.getDeptname());
+			log.info("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
+		}
+		try {
+			service.ResubmissionParticipantWrite(participant);
+			return ResponseEntity.ok("success");
+		}catch(Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");
+		}
+	}
 }

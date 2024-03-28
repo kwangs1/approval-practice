@@ -18,4 +18,6 @@ public interface approvalService {
 	userVO getUserDeptInfo(Map<String, Object> res);
 	//회수 시 문서 상태값 변경
 	void RetireApprStatus(String appr_seq);
+	//재기안 시 문서 상태값 변경
+	void Resubmission(approvalVO approval);
 }

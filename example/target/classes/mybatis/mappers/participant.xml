@@ -119,4 +119,37 @@
 	and deptid = #{deptid}
 	and status = '1000'
 </update>
+
+<!-- 재기안 시 해당 문서에 대한 결재자 정보 가져오기 -->
+<select id="getRe_pInfo" parameterType="String" resultType="participantVO">
+	select a.appr_seq, p.participant_seq, p.signerid, p.approvaltype
+		from approval a
+	inner join participant p
+	on a.appr_seq = p.appr_seq
+	where p.appr_seq = #{appr_seq}
+	order by p.participant_seq
+</select>
+
+<!-- 재기안 시 결재자 상태값 변경 -->
+<update id="ResubmissionFlowStatusUpd">
+	update participant
+		set approvaltype = #{approvaltype},upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
+	where appr_seq = #{appr_seq}
+	and participant_seq = #{participant_seq}
+</update>
+
+<!-- 재기안 시 새로운 결재선에 대한 line_seq 마지막 값 가져오기 -->
+<select id="getLastSeq" resultType="participantVO" parameterType="String">
+	 select max(line_seq) from participant where appr_seq = #{appr_seq}
+</select>
+
+<!-- 재기안 시 새로운 결재선 추가 -->
+<insert id="ResubmissionParticipantWrite" parameterType="participantVO">
+	<selectKey keyProperty="participant_seq" resultType="String" order="BEFORE">
+		select 'PARTICIPANT' || to_char(sysdate,'YYYYMMDD') || PARTICIPANT_SEQ.nextval from dual
+	</selectKey>
+    insert into participant
+    values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
+    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
+</insert>
 </mapper>

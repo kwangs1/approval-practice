@@ -78,8 +78,12 @@ public class approvalMapper{
 	}
 	//end
 	
+	//문서 회수 시 문서 상태값 변경
 	public void RetireApprStatus(String appr_seq) {
 		session.update("mapper.approval.RetireApprStatus",appr_seq);
 	}
-	
+	//재기안 시 문서 상태값 변경
+	public void Resubmission(approvalVO approval) {
+		session.update("mapper.approval.Resubmission",approval);
+	}
 }

@@ -290,4 +290,44 @@ public class participantServiceImpl implements participantService{
 	public void RetireAppr(Map<String,Object> res) {
 		mapper.RetireAppr(res);
 	}
+	
+	//재기안 시 해당 문서에 대한 결재자 정보 가져오기
+	@Override
+	public List<participantVO> getRe_pInfo(String appr_seq){
+		return mapper.getRe_pInfo(appr_seq);
+	}
+	
+	//재기안 시 결재자 상태값 업데이트
+	@Override
+	public void ResubmissionFlowStatusUpd(List<participantVO> participant) {
+		for(participantVO pp : participant) {
+			if(pp.getApprovaltype() == 1024) {
+				pp.setApprovaltype(2);
+			}else if(pp.getApprovaltype() != 1024){
+				pp.setApprovaltype(8);
+			}
+			mapper.ResubmissionFlowStatusUpd(pp);
+		}
+	}
+	
+	//재기안 시 결재선 새로 추가
+	@Override
+	public void ResubmissionParticipantWrite(List<participantVO> participant) {
+		log.info("--"+participant.get(0).getAppr_seq());
+		for(participantVO pvo : participant) {
+			String appr_seq = pvo.getAppr_seq();
+			log.info("Resubmission appr_seq "+appr_seq);
+			pvo.setAppr_seq(appr_seq);
+			/*
+			int lastSeq = mapper.getLastSeq(appr_seq);
+			log.info("Resubmission lastseq "+lastSeq);
+			pvo.setLine_seq(lastSeq +1);
+			*/
+			log.info("new flow signer" + pvo.getSignerid());
+			mapper.ResubmissionParticipantWrite(pvo);
+			//lastSeq++;
+			approvalTypeAndStatus(participant);
+			log.info("end service ..");
+		}
+	}
 }

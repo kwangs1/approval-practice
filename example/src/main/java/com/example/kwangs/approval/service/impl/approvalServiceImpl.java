@@ -56,5 +56,11 @@ public class approvalServiceImpl implements approvalService{
 	public void RetireApprStatus(String appr_seq) {
 		mapper.RetireApprStatus(appr_seq);
 	}
+	
+	//재기안 시 문서 상태값 변경
+	@Override
+	public void Resubmission(approvalVO approval) {
+		mapper.Resubmission(approval);
+	}
 
 }

@@ -70,4 +70,24 @@ public class participantMapper{
 	public void RetireAppr(Map<String,Object> res) {
 		session.update("mapper.participant.RetireAppr",res);
 	}
+	
+	//재기안 시 해당 문서에 대한 결재자 정보 가져오기
+	public List<participantVO> getRe_pInfo(String appr_seq){
+		return session.selectList("mapper.participant.getRe_pInfo",appr_seq);
+	}
+	
+	//재기안 시 결재자 상태값 업데이트
+	public int ResubmissionFlowStatusUpd(participantVO pp){
+		return session.update("mapper.participant.ResubmissionFlowStatusUpd",pp);
+	}
+	
+	//재기안 시 새로운 결재선 추가에 대한 line_seq 마지막 값 가져오기
+	public int getLastSeq(String appr_seq) {
+		return session.selectOne("mapper.participant.getLastSeq",appr_seq);
+	}
+	
+	//재기안 시 새로운 결재선 추가
+	public void ResubmissionParticipantWrite(participantVO participant) {
+		session.insert("mapper.participant.ResubmissionParticipantWrite",participant);
+	}
 }
