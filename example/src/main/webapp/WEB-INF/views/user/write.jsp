@@ -21,17 +21,17 @@
 <form method="post" action="${path}/user/write">
 	<input type="hidden" name="deptid" id="deptid"/>
 	<input type="text" name="deptname" id="deptname" placeholder="부서명" class="deptInfo"/><br>
-	id: <input type="text" name="id" id="userid" autofocus/><br>
+	<input type="text" name="id" id="userid" placeholder="아이디를 입력하세요." autofocus/><br>
 	<p id="checkF">존재하는 아이디 입니다.</p>
 	<p id="checkS">사용가능한 아이디 입니다.</p>
-	pw: <input type="password" name="pw" id="userpw"/><br>
-	name: <input type="text" name="name" id="username" /><br>
-	pos: <select name="pos">
-			<option value="없음">없음</option>
-			<option value="주임">주임</option>
-			<option value="대리">대리</option>
-			<option value="과장">과장</option>
-		 </select>
+	<input type="password" name="pw" id="userpw" placeholder="비밀번호를 입력하세요."/><br>
+	<input type="text" name="name" id="username" placeholder="이름을 입력하세요."/><br>
+	<select name="pos">
+	    <option value="">직위를 선택하세요.</option>
+	    <c:forEach var="posItem" items="${pos}">
+	        <option value="${posItem.posname}">${posItem.posname}</option>
+	    </c:forEach>
+	</select>
 	
 	<button type="submit">가입</button>
 </form>

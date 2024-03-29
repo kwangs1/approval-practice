@@ -17,8 +17,23 @@ public class participantVO {
 	private int approvaltype;
 	private String deptid;
 	private String deptname;
+	private String flag;
+	private String statusname;
 	
 	
+	
+	public String getStatusname() {
+		return statusname;
+	}
+	public void setStatusname(String statusname) {
+		this.statusname = statusname;
+	}
+	public String getFlag() {
+		return flag;
+	}
+	public void setFlag(String flag) {
+		this.flag = flag;
+	}
 	public String getDeptid() {
 		return deptid;
 	}

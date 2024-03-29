@@ -41,5 +41,5 @@ public interface participantService {
 	void ResubmissionFlowStatusUpd(List<participantVO> participant);
 	
 	//재기안 시 결재선 새로 추가
-	 void ResubmissionParticipantWrite(List<participantVO> participant);
+	 void ResubmissionParticipantWrite(List<participantVO> participant,String id);
 }

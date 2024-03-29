@@ -95,19 +95,10 @@ public class participantController {
 	//재기안 시 결재선 새로 추가
 	@ResponseBody
 	@PostMapping("/ResubmissionParticipantWrite")
-	public ResponseEntity<String> ResubmissionParticipantWrite(@RequestBody List<participantVO> participant){
-		for(participantVO pp : participant) {
-			log.info("new flow appr_seq _"+pp.getAppr_seq());
-			log.info("new flow signerid _"+pp.getSignerid());
-			log.info("new flow signername _"+pp.getSignername());
-			log.info("new flow status _"+pp.getStatus());
-			log.info("new flow pos _"+pp.getPos());
-			log.info("new flow deptid _"+pp.getDeptid());
-			log.info("new flow deptname _"+pp.getDeptname());
-			log.info("ㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡㅡ");
-		}
+	public ResponseEntity<String> ResubmissionParticipantWrite(@RequestBody List<participantVO> participant, HttpServletRequest request){
+		String id = (String)request.getSession().getAttribute("userId");
 		try {
-			service.ResubmissionParticipantWrite(participant);
+			service.ResubmissionParticipantWrite(participant,id);
 			return ResponseEntity.ok("success");
 		}catch(Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("fail");

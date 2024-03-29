@@ -26,16 +26,17 @@
         <th>제목</th>
         <th>기안자</th>
         <th>기안날짜</th>
+        <th>처리구분</th>
       </tr>
     </thead>
     <tbody>
-    <c:forEach var="list" items="${list}"> <%-- 결재 테이블 데이터 --%>
+    <c:forEach var="list" items="${list}">
       <tr>
       	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }"/></td>
         <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
         <td>${list.draftername }</td>
         <td>${list.regdate }</td>
-      </tr>   
+		<td>  
 	        <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 	  <c:forEach var="participant" items="${participantInfo}" varStatus="loop">
 		<c:if test="${participant.approvaltype == 4 && participant.approvalstatus == 4098}">
@@ -45,7 +46,12 @@
 			<input type="hidden" id="approvalstatus" value="${participant.approvalstatus}"/>
 			<input type="hidden" id="approvaltype" value="${participant.approvaltype}"/>
 		</c:if> 
+		<c:if test="${participant.approvaltype == 4 && list.appr_seq eq participant.appr_seq}">
+			${participant.statusname}
+		</c:if>	
 	  </c:forEach>
+	   </td>
+	  </tr>
     </c:forEach>
     </tbody>
   </table>

@@ -33,6 +33,7 @@
     <tbody>
     <c:forEach var="list" items="${list}">
     <input type="hidden" name="drafterid" id="drafterid" value="${list.drafterid}" />
+    <input type="hidden" id="a_status" value="${list.status}" />
 	        <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 	  <c:forEach var="participant" items="${participantInfo}" varStatus="loop">
 		<c:if test="${participant.status == '1000' && participant.signerid == user.id}">
@@ -66,6 +67,7 @@
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+var a_status = $('#a_status').val();
 var checkboxes = document.getElementsByName('appr_seq');
 
 <%-- 결재 진행에 걸린 결재선 정보--%>
@@ -142,6 +144,9 @@ function Resubmission_Pop(){
 		return
 	}else if(Resubmission_Ary.length > 1){
 		alert("하나의 문서만 선택해주세요.");
+		return;
+	}else if(a_status != 4096){
+		alert("회수한 문서만 재기안이 가능합니다.");
 		return;
 	}
 	url = '<c:url value="/approval/Resubmission"/>';

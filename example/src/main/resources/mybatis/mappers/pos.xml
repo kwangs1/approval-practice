@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.pos">
+	<resultMap id="posResult" type="posVO">
+		<result property="posid" column="posid" />
+		<result property="posname" column="posname" />
+		<result property="seq" column="seq" />
+		<result property="credate" column="credate" />
+	</resultMap>
+	
+<insert id="write" parameterType="posVO">
+<selectKey keyProperty="posid" resultType="int" order="BEFORE">
+	select pos_seq.nextval from dual
+</selectKey>
+insert into pos
+values(#{posid},#{posname},#{seq},sysdate)
+</insert>
+
+<select id="JoinposList" resultType="posVO">
+	select * from pos order by seq
+</select>
+
+<select id="list" resultType="posVO">
+	select * from pos order by seq
+</select>
+</mapper>

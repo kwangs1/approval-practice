@@ -18,7 +18,7 @@
     <p>${info.content }</p>
   </div>
   
-  <c:if test="${info.drafterid == user.id && info.status == 1}">
+  <c:if test="${info.status == 1 && pInfo.approvaltype == 4}">
   	<button onclick="FlowAppr()" class="button" id="btn">결재</button>  
   </c:if>
   <button onclick="window.close()" class="button">닫기</button>
@@ -46,8 +46,8 @@ function FlowAppr(){
 		data: param,
 		success: function(response){
 			alert("결재 성공");
-			console.log(response);
-			window.location.href= "/kwangs/approval/apprWaitList?id="+signerid;
+			window.close();
+			opener.location.reload();
 		},
 		error: function(xhr,status,error){
 			alert("결재 실패");

@@ -39,7 +39,7 @@
 
 <!-- 결재대기 -->
 <select id="apprWaitList" resultType="approvalVO" parameterType="String">
-	select a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate ,p.approvalstatus, p.approvaltype, p.signerid
+	select a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate ,p.approvalstatus, p.approvaltype, p.signerid, p.statusname
 		from  approval a
 		inner join participant p
 	on a.appr_seq = p.appr_seq
@@ -47,6 +47,7 @@
 	and a.status not in(4096,256)
 	and p.approvaltype = 4
 	and p.signerid = #{signerid}
+	and p.flag = '0'
 	order by a.appr_seq desc
 </select>
 
@@ -57,6 +58,7 @@
 		inner join participant p
 	on a.appr_seq = p.appr_seq
 	where p.signerid = #{signerid}
+	and p.flag = '0'
 	and a.status != 256
 	and (p.approvaltype =1024 and a.status =4096 or(p.approvaltype !=1024 and a.status != 4096))
 	group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status

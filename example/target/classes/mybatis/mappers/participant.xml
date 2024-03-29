@@ -19,6 +19,8 @@
 		<result property="approvaltype" column="approvaltype" />
 		<result property="deptid" column="deptid" />
 		<result property="deptname" column="deptname" />
+		<result property="flag" column="flag" />
+		<result property="statusname" column="statusname" />
 	</resultMap>
 <!-- 결재선 지정 -->
 <insert id="ParticipantWrite" parameterType="participantVO">
@@ -27,7 +29,7 @@
 	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
-    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
+    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname},0,#{statusname})
 </insert>
  
 <!-- 일괄결재 -->
@@ -43,11 +45,12 @@
 
 <!-- 결재대기 화면에서의 결재선 정보 -->
 <select id="ApprWaitFLowInfo" resultType="participantVO" parameterType="String">
-	select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid
+	select a.appr_seq, p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.statusname
 		from  approval a, participant p		
 	where a.appr_seq = p.appr_seq
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
+	and p.flag = '0'
 	order by a.appr_seq desc
 </select>
 
@@ -58,6 +61,7 @@
 	where a.appr_seq = p.appr_seq
 	and p.status = '1000'
 	and a.status != 256
+	and p.flag ='0'
 	order by a.appr_seq desc
 </select>
 
@@ -98,6 +102,7 @@
 	and p.appr_seq = #{appr_seq}
 	and p.approvalstatus = 4098
 	and p.approvaltype = 4
+	and p.flag = '0'
 	and p.signerid = #{signerid}
 </select>
 
@@ -133,7 +138,7 @@
 <!-- 재기안 시 결재자 상태값 변경 -->
 <update id="ResubmissionFlowStatusUpd">
 	update participant
-		set approvaltype = #{approvaltype},upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS')
+		set approvaltype = #{approvaltype},upddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), flag = '1', line_seq = 0
 	where appr_seq = #{appr_seq}
 	and participant_seq = #{participant_seq}
 </update>
@@ -150,6 +155,6 @@
 	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
-    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname})
+    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname},0,#{statusname})
 </insert>
 </mapper>

@@ -1,5 +1,7 @@
 package com.example.kwangs.user;
 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -12,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.example.kwangs.pos.service.posService;
+import com.example.kwangs.pos.service.posVO;
 import com.example.kwangs.user.service.userService;
 import com.example.kwangs.user.service.userVO;
 
@@ -21,17 +25,20 @@ public class userController {
 	
 	@Autowired
 	private userService service;
+	@Autowired
+	private posService posService;
 	
 	@GetMapping("/write")
-	public void write() {
-		
+	public void write(Model model) {	
+		List<posVO> posList = posService.JoinposList();
+		model.addAttribute("pos", posList);		
 	}
 	
 	@PostMapping("/write")
 	public String write(userVO user) {
 		service.write(user);
 		
-		return "redirect:/";
+		return "redirect:/user/login";
 	}
 	
 	@ResponseBody

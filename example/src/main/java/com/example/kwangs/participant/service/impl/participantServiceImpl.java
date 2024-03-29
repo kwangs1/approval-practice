@@ -46,6 +46,15 @@ public class participantServiceImpl implements participantService{
 			pVO.setAppr_seq(seqCurrval);
 			pVO.setLine_seq(line_seq);// 기본값 1
 
+			if(pVO.getStatus().equals("1000")) {
+				pVO.setStatusname("기안");
+			}else if(pVO.getStatus().equals("2000")){
+				pVO.setStatusname("검토");
+			}else if(pVO.getStatus().equals("3000")) {
+				pVO.setStatusname("협조");
+			}else {
+				pVO.setStatusname("결재");
+			}
 			// 이후 insert 된 receipts_seq 값 가져올 것.
 			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
@@ -312,22 +321,46 @@ public class participantServiceImpl implements participantService{
 	
 	//재기안 시 결재선 새로 추가
 	@Override
-	public void ResubmissionParticipantWrite(List<participantVO> participant) {
-		log.info("--"+participant.get(0).getAppr_seq());
+	public void ResubmissionParticipantWrite(List<participantVO> participant,String id) {
+		int seq = 1;
+		
+		 StringBuilder xmlBuilder = new StringBuilder();
+		 xmlBuilder.append("<participants>");
 		for(participantVO pvo : participant) {
 			String appr_seq = pvo.getAppr_seq();
-			log.info("Resubmission appr_seq "+appr_seq);
 			pvo.setAppr_seq(appr_seq);
-			/*
-			int lastSeq = mapper.getLastSeq(appr_seq);
-			log.info("Resubmission lastseq "+lastSeq);
-			pvo.setLine_seq(lastSeq +1);
-			*/
-			log.info("new flow signer" + pvo.getSignerid());
+			pvo.setLine_seq(seq);
+			
+			if(pvo.getStatus().equals("1000")) {
+				pvo.setStatusname("기안");
+			}else if(pvo.getStatus().equals("2000")){
+				pvo.setStatusname("검토");
+			}else if(pvo.getStatus().equals("3000")) {
+				pvo.setStatusname("협조");
+			}else {
+				pvo.setStatusname("결재");
+			}
+			
 			mapper.ResubmissionParticipantWrite(pvo);
-			//lastSeq++;
+			seq++;
 			approvalTypeAndStatus(participant);
 			log.info("end service ..");
+			 //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
+	        xmlBuilder.append("<participant>");
+	        xmlBuilder.append("<deptid>").append(pvo.getDeptid()).append("</deptid>");
+	        xmlBuilder.append("<deptname>").append(pvo.getDeptname()).append("</deptname>");
+	        xmlBuilder.append("<signerid>").append(pvo.getSignerid()).append("</signerid>");
+	        xmlBuilder.append("<signername>").append(pvo.getSignername()).append("</signername>");
+	        xmlBuilder.append("<pos>").append(pvo.getPos()).append("</pos>");
+	        xmlBuilder.append("<status>").append(pvo.getStatus()).append("</status>");
+	        // 다른 필드들도 필요한 경우 추가 가능
+	        xmlBuilder.append("</participant>");
+			
 		}
+		xmlBuilder.append("</participants>");
+
+	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
+	    String xmlData = xmlBuilder.toString();
+	    saveXmlTemp.SaveParticipantTemp(id,xmlData);
 	}
 }
