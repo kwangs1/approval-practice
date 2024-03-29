@@ -34,7 +34,11 @@ td { border: 1px solid #000; }
 <script>
 function posWrite(){
 	url = '<c:url value="/pos/write"/>';
-	window.open('<c:url value="/pos/write"/>','pos','width=220px, height=135px');
+	// 사용자 인터랙션을 통해 팝업 열기
+	var posWindow = window.open(url, 'posWindow', 'width=220px, height=135px');
+	if (posWindow) {
+		posWindow.focus(); // 팝업을 활성화 상태로
+	}
 }
 </script>
 </body>
