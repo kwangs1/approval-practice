@@ -17,12 +17,18 @@
 <a href="${path}/approval/apprWaitList?id=${user.id}">결재</a>
 <a href="${path}/dept/list">부서</a>
 <a href="javascript:pos()">직위</a>
+<a href="javascript:bizunit()">단위과제</a>
 <a href="${path}/user/logout">로그아웃</a>
 
 <script>
 function pos(){
 	url = '<c:url value="/pos/list"/>';
 	window.open(url,'pos','width=400px, height=350px');
+}
+
+function bizunit(){
+	url = '<c:url value="/bizunit/list"/>';
+	window.open(url,'pos','width=1024px, height=768px');
 }
 </script>
 </body>

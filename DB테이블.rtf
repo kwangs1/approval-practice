@@ -101,4 +101,16 @@ POS	VARCHAR2(15 BYTE),\
 CREDATE	DATE,\
 UPDDATE	DATE,\
 DEPTID	VARCHAR2(20 BYTE),\
-DEPTNAME	VARCHAR2(30 BYTE) );}
+DEPTNAME	VARCHAR2(30 BYTE) );\
+\
+\'97\uc0\u45800 \u50948 \u44284 \u51228 \
+create table bizunit(\
+bizunitcd varchar2(10),\
+procdeptid varchar2(20),\
+procdeptname varchar2(30),\
+bizopendate date,\
+bizunitname varchar2(20),\
+bizunitdesc varchar2(300),\
+bizunitchargeid varchar2(20),\
+keepperiod varchar2(1),\
+ablitionflag varchar2(1));}

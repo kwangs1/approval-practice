@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="mapper.bizunit">
+	<resultMap id="bizunit" type="bizunitVO">
+		<result property="bizunitcd" column="bizunitcd" />
+		<result property="procdeptid" column="procdeptid" />
+		<result property="procdeptname" column="procdeptname" />
+		<result property="bizopendate" column="bizopendate" />
+		<result property="bizunitname" column="bizunitname" />
+		<result property="bizunitdesc" column="bizunitdesc" />
+		<result property="bizunitchargeid" column="bizunitchargeid" />
+		<result property="keepperiod" column="keepperiod" />
+		<result property="ablitionflag" column="ablitionflag" />
+	</resultMap>
+
+<insert id="uploadCSV" parameterType="bizunitVO">
+	insert into bizunit
+	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},'0',#{ablitionflag})
+</insert>
+
+<select id="getbizList" resultMap="bizunit">
+	select * from bizunit
+</select>
+
+<select id="list" resultMap="bizunit">
+	select * from bizunit
+</select>
+
+<insert id="write" parameterType="bizunitVO">
+	insert into bizunit
+	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},'0',#{ablitionflag})
+</insert>
+</mapper>
