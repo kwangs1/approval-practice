@@ -16,13 +16,13 @@
 	</div>
 	<p>파일을 업로드 중입니다..</p>
 </div>
-<form name="uploadCSV" method="post" enctype="multipart/form-data">
 	<input type="file" name="file" id="file"/>
 	<br><br>
-	<button type="button" onclick="upload()" id="uploadButton">등록</button>
+	<button type="button" onclick="upload()">등록</button>
 	<button type="button" onclick="window.close()">닫기</button>
-</form>
 
+
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 function upload(){
 	var fileInput = document.getElementById('file');
@@ -39,21 +39,33 @@ function upload(){
 		alert("CSV 파일을 선택해주세요.");
 		return false;
 	}
-		var loading = document.getElementById('loading');
-		loading.style.display = 'flex';
 	
-		document.uploadCSV.action ='<c:url value="/bizunit/uploadCSV"/>';
-		document.uploadCSV.submit();
+	var formData = new FormData();
+	formData.append('file',file);
+	$.ajax({
+		type:"post",
+		url:'<c:url value="/bizunit/uploadCSV"/>',
+		data: formData,
+		processData: false, //jquery가 데이터를 문자열로 변환하지 않도록
+		contentType: false, //jquery가 올바른 multipart/form-data 헤더를 설정
+		success:function(){
+			var loading = document.getElementById('loading');
+			loading.style.display = 'flex';
+			
+			setTimeout(function() {
+				alert("파일이 업로드 되었습니다.");
+				window.close();
+				opener.location.reload();
+			}, 3000);
+		},
+		error : function(xhr,status,error){
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
 		
-		setTimeout(function() {
-			window.close();
-			opener.location.reload();
-		}, 5000);
 }
-
-document.getElementById('uploadButton').addEventListener('click', function() {
-	  upload();
-});
 </script>
 </body>
 </html>

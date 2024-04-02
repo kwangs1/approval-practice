@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.kwangs.bizunit.service.bizunitService;
@@ -30,6 +31,7 @@ public class bizunitController {
 	@GetMapping("/uploadCSV")
 	public void upload() {}
 	
+	@ResponseBody
 	@PostMapping("/uploadCSV")
 	public String uploadCSV(MultipartFile file) {
 		if(file.isEmpty()) {
@@ -89,6 +91,7 @@ public class bizunitController {
 	@GetMapping("write")
 	public void write() {}
 	
+	@ResponseBody
 	@PostMapping("write")
 	public void write(bizunitVO biz) {
 		service.write(biz);
