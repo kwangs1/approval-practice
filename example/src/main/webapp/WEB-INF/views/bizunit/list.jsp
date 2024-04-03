@@ -18,10 +18,10 @@
   }
 </style>
 <body>
-<button onclick="window.close()">닫기</button>
-<button onclick="write()">등록</button>
-<button onclick="exportCSV()">파일 내보내기</button>
-<button onclick="uploadCSV()">파일 업로드</button>
+<a href="window.close()">닫기</a>
+<a href="javascript:write()">등록</a>
+<a href="javascript:exportCSV()">파일 내보내기</a>
+<a href="javascript:uploadCSV()">파일 업로드</a>
 <table>
 	<thead>
 		<tr>
@@ -57,10 +57,7 @@ function exportCSV(){
 
 function write(){
 	url = '<c:url value="/bizunit/write"/>';
-	var bizwindow = window.open(url,'upload','width=600px, height=600px');	
-	if (bizwindow) {
-		bizwindow.focus(); 
-	}
+	window.open(url,'upload','width=600px, height=600px');	
 }
 </script>
 </body>

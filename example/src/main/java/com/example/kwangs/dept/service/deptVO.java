@@ -17,8 +17,8 @@ public class deptVO {
 	private String sendername;
 	private Date credate;
 	private String org_deptname;
-	private List<userVO> users; //부서& 유저 조직트리를 위해 userVO 추가
 	private String deptcode;
+	private List<userVO> users; //부서& 유저 조직트리를 위해 userVO 추가
 	
 	public String getDeptcode() {
 		return deptcode;

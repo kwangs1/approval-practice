@@ -18,6 +18,7 @@
 <a href="${path}/dept/list">부서</a>
 <a href="javascript:pos()">직위</a>
 <a href="javascript:bizunit()">단위과제</a>
+<a href="javascript:folder()">폴더</a>
 <a href="${path}/user/logout">로그아웃</a>
 
 <script>
@@ -29,6 +30,11 @@ function pos(){
 function bizunit(){
 	url = '<c:url value="/bizunit/list"/>';
 	window.open(url,'pos','width=1024px, height=768px');
+}
+
+function folder(){
+	url = '<c:url value="/folder/deptAllFolderAdd"/>';
+	window.open(url,'folder','width=500px, height=500px');
 }
 </script>
 </body>

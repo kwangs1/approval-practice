@@ -88,11 +88,11 @@ public class bizunitController {
 	}
 	
 	//insert
-	@GetMapping("write")
+	@GetMapping("/write")
 	public void write() {}
 	
 	@ResponseBody
-	@PostMapping("write")
+	@PostMapping("/write")
 	public void write(bizunitVO biz) {
 		service.write(biz);
 	}

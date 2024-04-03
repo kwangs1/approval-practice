@@ -15,5 +15,6 @@
 		<typeAlias type="com.example.kwangs.dept.service.deptVO" alias="deptVO" />	
 		<typeAlias type="com.example.kwangs.pos.service.posVO" alias="posVO" />	
 		<typeAlias type="com.example.kwangs.bizunit.service.bizunitVO" alias="bizunitVO" />	
+		<typeAlias type="com.example.kwangs.folder.service.folderVO" alias="folderVO" />	
 </typeAliases>       
 </configuration>

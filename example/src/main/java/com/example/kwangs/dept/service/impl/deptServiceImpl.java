@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.dept.mapper.deptMapper;
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
+import com.example.kwangs.folder.mapper.folderD;
+import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.service.userVO;
 
 @Service
@@ -15,6 +17,8 @@ public class deptServiceImpl implements deptService{
 
 	@Autowired
 	private deptMapper mapper;
+	@Autowired
+	private folderD fdMapper;
 	
 	//목록
 	@Override
@@ -25,11 +29,34 @@ public class deptServiceImpl implements deptService{
 	@Override
 	public void write(deptVO dept) {
 		mapper.write(dept);
+		CreateDeptCommonFolder(dept);
 	}
 	//하위부서 생성
 	@Override
 	public void subDept(deptVO dept) {
 		mapper.subDept(dept);
+		CreateDeptCommonFolder(dept);
+	}
+	public void CreateDeptCommonFolder(deptVO dept) {
+		folderVO fd_8010 = new folderVO();
+		fd_8010.setFldrname("기록물 등록대장");
+		fd_8010.setOwnertype("1");
+		fd_8010.setAppltype("1");
+		fd_8010.setOwnerid(dept.getDeptid());
+		fd_8010.setApplid(8010);
+		fd_8010.setYear("0000");
+		fd_8010.setEndyear("9999");
+		fdMapper.CreateDeptCommonFolder(fd_8010);
+		
+		folderVO fd_7000 = new folderVO();
+		fd_7000.setFldrname("단위과제");
+		fd_7000.setOwnertype("1");
+		fd_7000.setAppltype("3");
+		fd_7000.setOwnerid(dept.getDeptid());
+		fd_7000.setApplid(7000);
+		fd_7000.setYear("0000");
+		fd_7000.setEndyear("9999");
+		fdMapper.CreateDeptCommonFolder(fd_7000);
 	}
 	//상세보기
 	@Override

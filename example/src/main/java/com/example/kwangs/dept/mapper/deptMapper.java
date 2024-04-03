@@ -42,4 +42,8 @@ public class deptMapper {
 	public List<userVO> userList(String deptid){
 		return session.selectList("mapper.dept.userList",deptid);
 	}
+	//부서 기준 문서함 폴더 생성 시 공통된 폴더 부서 전체 삽입하기 위해 가져오는 부분
+	public List<deptVO> findAll(){
+		return session.selectList("mapper.dept.findAll");
+	}
 }
