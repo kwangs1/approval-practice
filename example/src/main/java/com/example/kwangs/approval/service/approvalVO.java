@@ -21,7 +21,22 @@ public class approvalVO{
 	private String regno;
 	private String finalapprover;
 	private String approvaldate;
+	private String folderid;
+	private String bizunitcd;
 
+	
+	public String getFolderid() {
+		return folderid;
+	}
+	public void setFolderid(String folderid) {
+		this.folderid = folderid;
+	}
+	public String getBizunitcd() {
+		return bizunitcd;
+	}
+	public void setBizunitcd(String bizunitcd) {
+		this.bizunitcd = bizunitcd;
+	}
 	public String getApprovaldate() {
 		return approvaldate;
 	}

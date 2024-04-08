@@ -7,9 +7,10 @@
 <meta charset="UTF-8">
 </head>
 <body>
-  <a href="javascript:approval_pop()">기안하기</a> | 
-<a href="apprWaitList.do?id=${user.id}">결재대기</a> |
-<a href="SanctnProgrsList.do?id=${user.id}">결재진행</a>
+<a href="javascript:approval_pop()">기안하기</a> | 
+<a href="apprWaitList?id=${user.id}">결재대기</a> |
+<a href="SanctnProgrsList?id=${user.id}">결재진행</a>|
+<a href="docFrame?drafterdeptid=${user.deptid}">문서함</a>
 
 
 <script>

@@ -6,8 +6,17 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
 </head>
 <body>
+<div class="loading" id="loading"style="display:none">
+	<div class="spinner">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<p>등록 중..</p>
+</div>
 <%@ include file="../participant/ParticipantWrite.jsp" %>
 <hr>
 
@@ -16,6 +25,9 @@
 <hr>
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
+
+<input type="hidden" name="folderid" id="folderid"/>
+<input type="hidden" name="bizunitcd" id="bizunitcd"/>
 <body>
 
 휴가 기간: <input type="date" name="startdate" id="startdate"/> ~
@@ -56,6 +68,8 @@ function Appr_Btn(){
 	var content = $('#content').val();
 	var startdate = $('#startdate').val();
 	var enddate = $('#enddate').val();
+	var folderid = $('#folderid').val();
+	var bizunitcd = $('#bizunitcd').val();
 	
 	var apprData = {
 		draftername : draftername,
@@ -66,7 +80,9 @@ function Appr_Btn(){
 		enddate : enddate,
 		drafterdeptid: drafterdeptid,
 		drafterdeptname : drafterdeptname,
-		docregno :docregno
+		docregno :docregno,
+		folderid :folderid,
+		bizunitcd :bizunitcd
 	}
 	
 	$.ajax({
@@ -83,6 +99,16 @@ function Appr_Btn(){
         }
 	})
 }
+
+window.addEventListener('message', function(e){
+	var data = e.data;
+	var folderid = data.fldrid;
+	var bizunitcd = data.bizunitcd;
+	
+	$('#folderid').val(folderid);
+	$('#bizunitcd').val(bizunitcd);
+});
+
 </script>
 </body>
 </html>

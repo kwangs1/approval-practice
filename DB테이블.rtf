@@ -67,7 +67,9 @@ drafterDEPTNAME	 VARCHAR2(30 BYTE),\
 Regno varchar2(100),\
 finalapprover varchar2(20),\
 Approvaldate varchar2(30),\
-Finalapprover varchar2(20)\
+Finalapprover varchar2(20),\
+Folded varchar2(20),\
+Bizunitcd varchar2(10)\
 );\
 \
 --
@@ -103,7 +105,9 @@ UPDDATE	DATE,\
 DEPTID	VARCHAR2(20 BYTE),\
 DEPTNAME	VARCHAR2(30 BYTE) );\
 \
-\'97\uc0\u45800 \u50948 \u44284 \u51228 \
+\'97
+\f1 \'b4\'dc\'c0\'a7\'b0\'fa\'c1\'a6
+\f0 \
 create table bizunit(\
 bizunitcd varchar2(10),\
 procdeptid varchar2(20),\
@@ -113,4 +117,23 @@ bizunitname varchar2(20),\
 bizunitdesc varchar2(300),\
 bizunitchargeid varchar2(20),\
 keepperiod varchar2(1),\
-ablitionflag varchar2(1));}
+ablitionflag varchar2(1));\
+\
+\'97\uc0\u44592 \u47197 \u47932 \u52384 \
+    create table apprfolder(\
+    fldrid varchar2(20),\
+    fldrinfoyear varchar2(4),\
+    bizunitcd varchar2(10),\
+    procdeptid varchar2(20),\
+    filingflag varchar2(1),\
+    biztranstype varchar2(1),\
+    keepingperiod varchar2(3),\
+    transferyaer varchar2(4),\
+    procstatus varchar2(4),\
+    fldrmanagerid varchar2(20),\
+    fldrmanagername varchar2(20),\
+    fromdeptid varchar2(4),\
+    todeptid varchar2(4),\
+    prodyear varchar2(4),\
+    endyear varchar2(4),\
+    bizunityearseq varchar2(20));}

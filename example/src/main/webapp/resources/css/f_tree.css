@@ -1,16 +1,85 @@
 @charset "UTF-8";
 
-body{display:flex; justify-content: space-between; align-items: flex-start;}
-#selectedUsers{flex: 1; padding-left: 10px;}
-#selectedUsers p {margin-bottom: 10px;}
-.userDiv{display:flex; align-items: center; margin-left: auto;}
-#btn{margin-top: 0;}
+/* 탭 메뉴 스타일 */
+.tab_menu {
+  display: flex;
+  align-items: center;
+}
 
-ul.tree {list-style-type: none;}
-ul.tree ul {list-style-type: none;}
-ul.tree li::before {content: "+"; margin-right: 5px; cursor: pointer; /* 화살표를 클릭할 때 커서 모양 변경 */}  
-ul.tree li.expanded::before { content: "-"; }
-ul.tree li.collapsed::before { content: "+"; }
+.tab_menu button {
+  margin-right: 10px;
+}
 
-a{text-decoration:none; color:black;}
-a:hover{text-decoration:block; color:green;}
+.tab_menu .list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+}
+
+.tab_menu .list li {
+  margin-right: 10px;
+}
+
+.tab_menu .list li a {
+  text-decoration: none;
+  color: black;
+}
+
+.tab_menu .list li.is_on a {
+  font-weight: bold;
+}
+
+/* 탭 컨텐츠 스타일 */
+.tab_content {
+  padding: 20px;
+}
+
+.content.show {
+  display: block;
+}
+
+/* 트리 스타일 */
+ul.tree {
+  list-style-type: none;
+  padding: 0;
+}
+
+ul.tree .dept-name {
+  font-weight: bold;
+}
+
+ul.tree ul {
+  padding-left: 20px;
+}
+
+ul.tree .user-list {
+  margin-top: 5px;
+}
+
+ul.tree .user-list a {
+  text-decoration: none;
+  color: blue;
+}
+
+ul.tree .folder-name {
+  font-weight: bold;
+}
+
+ul.tree .af-list {
+  margin-left: 20px;
+}
+
+ul.tree .af-list a {
+  text-decoration: none;
+  color: green;
+}
+.tab1_content #selectedUsers{
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+.tab1_content #selectedUsers .userDiv{
+	flex: 1;
+	padding-left: 10px;
+}

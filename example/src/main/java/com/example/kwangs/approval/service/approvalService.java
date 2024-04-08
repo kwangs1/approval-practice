@@ -12,6 +12,8 @@ public interface approvalService {
 	List<approvalVO> apprWaitList(String id);
 	//결재진행
 	List<approvalVO> SanctnProgrsList(String id);
+	//문서함
+	List<approvalVO>docFrame(String drafterdeptid);
 	//결재 상세보기
 	approvalVO apprInfo(String appr_seq);
 	//유저에 대한 부서 약어

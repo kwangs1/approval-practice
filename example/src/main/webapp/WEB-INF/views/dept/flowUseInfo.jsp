@@ -9,11 +9,18 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/f_tree.css'/>"/>
 <body>
 <input type="hidden" id="uId" value="${userid}"/>
-<div id="btn">
+<div class="tab_menu">
 	<button onclick="javascript:window.close();">닫기</button> 
 	<button onclick="confirmSelection()">확인</button></br></br>
+	<hr><br>
+	<ul class="list">
+		<li class="tab1 is_on"><a href="#" class="btn">결재선</a></li>
+		<li class="tab2"><a href="#" class="btn">편철</a></li>
+	</ul>
 </div>
 <%-- --%>
+<div class="tab_content">
+<div class="content tab1_content">
   <ul class="tree">
   <%-- 최상위 부서 start --%>
     <c:forEach var="dept" items="${flowUseInfo}">
@@ -71,20 +78,39 @@
                       </ul>
                     </c:if>
                   </c:forEach>
-                  <%-- 최상위 하위 - 하위 부서 end --%>
-                  
+                  <%-- 최상위 하위 - 하위 부서 end --%>            
                 </li>
               </ul>
             </c:if>
           </c:forEach>
-          <%-- 최상위 하위 부서 end --%>
-          
+          <%-- 최상위 하위 부서 end --%>    
         </li>
       </c:if>
     </c:forEach>
     <%-- 최상위 부서 end --%>
   </ul>
 <div id="selectedUsers"></div>
+</div>
+
+  <div class="content tab2_content" style="display:none;">
+	<ul class="tree">
+		<c:forEach var="folder" items="${list}">
+			<ul class="folder">
+				<li id="folder${folder.fldrid}">
+				<span class="folder-name">${folder.fldrname}</span>
+				<c:forEach var="apprfolder" items="${folder.apprfolders}">
+					<ul class="af-list"> 				
+						<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" 
+						data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}">${apprfolder.fldrname}</a>			
+					</ul>
+				</c:forEach>
+				</li>
+			</ul>
+		</c:forEach>
+	</ul>
+  </div>
+  <div id="selectedApFolder"></div>
+</div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/SenderFlowInfo.js'/>"></script>
@@ -94,6 +120,7 @@ var uId = '<c:out value="${user}"/>';
 $(document).ready(function() {
 	// 처음에 모든 자식 요소를 감춥니다.
     $('ul.tree ul').hide();
+    $('ul.tree ul.folder').show();
 	if(uId){
 		//사용자가 속한 부서의 li엘리먼트를 찾아 해당 li와 그 부모들의 ul를 모두 보여줌
 		$('ul.tree li').has('a[data-id="${user}"]').children('ul').show();
@@ -117,7 +144,9 @@ $(document).ready(function() {
   $('.user-list').click(function(e){
 	  e.stopPropagation();
   });  
-	
+  $('.af-list').click(function(e){
+	  e.stopPropagation();
+  });  
 $.ajax({
 	type: 'get',
 	url: '<c:url value="/getSaveFlowUseInfoTemp"/>',
@@ -141,8 +170,6 @@ $.ajax({
 			for(var i =0; i<data.length; i++){
 				var user = data[i];
 				drawParticipant(user);
-				console.log("success call infoTemp");
-				console.log(user);
 			}
 		}
 	},
@@ -151,18 +178,44 @@ $.ajax({
 	}
 });//end ajax	
 
-function drawParticipant(user){
-	  var deptid = user.deptid;
-	  var deptname = user.deptname;
-	  var id = user.id;
-	  var name = user.name;
-	  var pos = user.pos;
-
-	  selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
-	  updateSelectedUsersUI();	
-}
-
+	function drawParticipant(user){
+		  var deptid = user.deptid;
+		  var deptname = user.deptname;
+		  var id = user.id;
+		  var name = user.name;
+		  var pos = user.pos;
+	
+		  selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
+		  updateSelectedUsersUI();	
+	}
 }); 
+//tab
+var tabList = document.querySelectorAll('.tab_menu .list li');
+var tabContent = document.querySelectorAll('.tab_content .content');
+
+for(var index=0; index < tabList.length; index++){
+	var tab = tabList[index];
+	
+	(function(tab, index){
+		tab.querySelector('.btn').addEventListener('click',function(e){
+			e.preventDefault();
+			
+			for(var i=0; i < tabList.length; i++){
+				tabList[i].classList.remove('is_on');
+			}
+			tab.classList.add('is_on');
+			
+			for(var i=0; i < tabContent.length; i++){
+				tabContent[i].style.display = 'none';
+			}
+			tabContent[index].style.display = 'block';
+			
+			var tabId = tab.classList.contains('tab1') ? 'tab1_content' : 'tab2_content';
+			document.querySelector('.'+tabId).style.display='block';
+		});
+	})(tab,index);
+	
+}
 </script>
 </body>
 </html>

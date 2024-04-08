@@ -95,9 +95,15 @@ function participant() {
         contentType: 'application/json',
         success: function (response) {
             console.log('Ajax 요청: ' + response);
-            alert('상신이 완료되었습니다.');
-            window.close();
-            window.opener.location.reload();
+
+			var loading = document.getElementById('loading')
+			loading.style.display = 'flex';
+			
+			setTimeout(function(){
+	            alert('상신이 완료되었습니다.');
+	            window.close();
+	            window.opener.location.reload();
+			},3000)
         },
         error: function (xhr, status, error) {
             console.log(xhr);

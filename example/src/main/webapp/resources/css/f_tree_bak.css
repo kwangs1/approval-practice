@@ -1,0 +1,16 @@
+@charset "UTF-8";
+
+body{display:flex; justify-content: space-between; align-items: flex-start;}
+#selectedUsers{flex: 1; padding-left: 10px;}
+#selectedUsers p {margin-bottom: 10px;}
+.userDiv{display:flex; align-items: center; margin-left: auto;}
+#btn{margin-top: 0;}
+
+ul.tree {list-style-type: none;}
+ul.tree ul {list-style-type: none;}
+ul.tree li::before {content: "+"; margin-right: 5px; cursor: pointer; /* 화살표를 클릭할 때 커서 모양 변경 */}  
+ul.tree li.expanded::before { content: "-"; }
+ul.tree li.collapsed::before { content: "+"; }
+
+a{text-decoration:none; color:black;}
+a:hover{text-decoration:block; color:green;}

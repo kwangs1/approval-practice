@@ -65,6 +65,7 @@ public class userController {
 		if(currUser != null) {
 			session.setAttribute("user", currUser);
 			session.setAttribute("userId", currUser.getId());
+			session.setAttribute("deptId", currUser.getDeptid());
 			return "redirect:/";
 		}else {
 			rttr.addFlashAttribute("result",0);

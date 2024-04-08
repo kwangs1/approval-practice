@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.folder.service.folderS;
+import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 import com.example.kwangs.user.service.userVO;
@@ -30,6 +32,8 @@ public class approvalController {
 	private approvalService service;
 	@Autowired
 	private participantService serviceP;
+	@Autowired
+	private folderS folderService;
 	
 	
 	//문서작성
@@ -89,6 +93,17 @@ public class approvalController {
 		}
 		
 		return "/approval/SanctnProgrsList";		
+	}
+	
+	//문서함
+	@GetMapping("/docFrame")
+	public void docFrame(Model model, HttpServletRequest request) {
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		List<approvalVO> docframe = service.docFrame(drafterdeptid);
+		model.addAttribute("docframe",docframe);
+		
+		List<folderVO> docfldrSidebar = folderService.docfldrSidebar(drafterdeptid);
+		model.addAttribute("docfldrSidebar",docfldrSidebar);
 	}
 	
 	//문서 상세보기

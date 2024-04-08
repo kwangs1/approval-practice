@@ -1,6 +1,10 @@
 package com.example.kwangs.folder.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.example.kwangs.apprfolder.service.apprfolderVO;
 
 @Component
 public class folderVO {
@@ -19,7 +23,16 @@ public class folderVO {
 	private String updaterid;
 	private String year;
 	private String endyear;
+	//기안 시 편철 정보부를 떄 폴더이름 가져오기위해서..
+	private List<apprfolderVO> apprfolders;
 	
+	
+	public List<apprfolderVO> getApprfolders() {
+		return apprfolders;
+	}
+	public void setApprfolders(List<apprfolderVO> apprfolders) {
+		this.apprfolders = apprfolders;
+	}
 	public String getFldrid() {
 		return fldrid;
 	}

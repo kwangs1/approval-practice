@@ -21,7 +21,7 @@
 		<result property="year" column="year" />
 		<result property="endyear" column="endyear" />
 	</resultMap>
-	
+<!-- 부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]-->
 <insert id="deptAllFolderAdd" parameterType="folderVO">
 	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
 		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
@@ -30,7 +30,7 @@
 	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
 	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
 </insert>
-
+<!-- 부서 생성 시 공통폴더 자동생성 -->
 <insert id="CreateDeptCommonFolder" parameterType="folderVO">
 	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
 		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
@@ -39,5 +39,39 @@
 	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
 	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
 </insert>
-
+<!-- 단위과제 작성 시 폴더 정보 가져올거 -->
+<select id="b_fdInfo" resultType="folderVO">
+	select fldrid, fldrname, fldrdepth from folder where applid = 7000
+</select>
+<!-- 문서함 사이드 메뉴 부서 폴더 가져올 거 -->
+<select id="docfldrSidebar" resultType="folderVO" parameterType="String">
+	select fldrid, lpad(' ', 3*LEVEL-1)||fldrname as fldrname, parfldrid,parfldrname, fldrdepth,
+	    ownertype, ownerid, appltype, applid, regdate, updatedate, updaterid, year,endyear
+    from folder
+    where ownerid = #{ownerid}
+    start with parfldrid is null
+    connect by prior fldrid = parfldrid
+    order by fldrid, fldrdepth
+</select>
+<!-- 기안 시 단위과제 보여주기 -->
+<select id="DeptFolderList" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 7010
+</select>
+<!-- 문서목록 -->
+<select id="list" resultMap="folder">
+	select * from folder
+</select>
+<!-- 문서 상세보기 -->
+<select id="info" resultMap="folder" parameterType="String">
+	select * from folder where fldrid = #{fldrid}
+</select>
+<!-- 기록물철 작성 시 문서 인서트 -->
+<insert id="apprfolderAdd"  parameterType="folderVO">
+	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
+		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
+	</selectKey>
+	insert into folder
+	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
+	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
+</insert>
 </mapper>

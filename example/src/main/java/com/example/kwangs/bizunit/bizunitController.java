@@ -27,7 +27,7 @@ public class bizunitController {
 	@Autowired
 	private bizunitService service;
 	
-	//CSV 업로드
+	//단위과제 CSV파일 업로드[insert]
 	@GetMapping("/uploadCSV")
 	public void upload() {}
 	
@@ -48,7 +48,7 @@ public class bizunitController {
 		return "/bizunit/uploadCSV";
 	}
 	
-	//CSV 익스포트
+	//단위과제 CSV 익스포트
 	@GetMapping("exportCSV")
 	public void exportCSV(HttpServletResponse response) {
 		List<bizunitVO> bizList = service.getbizList();
@@ -80,14 +80,14 @@ public class bizunitController {
 	
 	}
 	
-	//list
+	//단위과제 목록
 	@GetMapping("/list")
 	public void list(Model model) {
 		List<bizunitVO> list = service.list();
 		model.addAttribute("list",list);
 	}
 	
-	//insert
+	//작성
 	@GetMapping("/write")
 	public void write() {}
 	

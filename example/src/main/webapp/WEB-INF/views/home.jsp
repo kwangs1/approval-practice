@@ -33,7 +33,7 @@ function bizunit(){
 }
 
 function folder(){
-	url = '<c:url value="/folder/deptAllFolderAdd"/>';
+	url = '<c:url value="/folder/list"/>';
 	window.open(url,'folder','width=500px, height=500px');
 }
 </script>

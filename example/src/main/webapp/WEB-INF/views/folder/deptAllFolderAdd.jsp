@@ -18,8 +18,9 @@
 </div>
 	<select id="deptApplid" onchange="setApplidValue(this)">
 		<option value="" selected="selected">생성할 폴더를 선택 하십시오.</option>
-		<option value="8010">기록물 등록대장</option>
 		<option value="7000">단위과제</option>
+		<option value="8000">대장</option>
+		<option value="8010">기록물 등록대장</option>
 	</select>
 	<input type="hidden" name="applid" id="applid" value=""/><br><br>
 	
@@ -53,7 +54,7 @@ function setApplidValue(selectElement){
 
 function setApplType(applid){
 	var appltype = $('#appltype');
-	if(applid === '8010'){
+	if(applid === '8000' && applid === '8010'){
 		appltype.val('1');
 	}else{
 		appltype.val('3');

@@ -18,7 +18,7 @@
   }
 </style>
 <body>
-<a href="window.close()">닫기</a>
+<a href="javascript:window.close()">닫기</a>
 <a href="javascript:write()">등록</a>
 <a href="javascript:exportCSV()">파일 내보내기</a>
 <a href="javascript:uploadCSV()">파일 업로드</a>

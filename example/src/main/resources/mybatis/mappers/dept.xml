@@ -52,4 +52,7 @@
 	select * from member where deptid = #{deptid} order by name
 </select>
 
+<select id="findAll" resultType="deptVO">
+	select deptid from dept
+</select>
 </mapper>

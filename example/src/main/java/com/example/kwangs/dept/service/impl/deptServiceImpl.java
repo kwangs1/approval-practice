@@ -38,15 +38,15 @@ public class deptServiceImpl implements deptService{
 		CreateDeptCommonFolder(dept);
 	}
 	public void CreateDeptCommonFolder(deptVO dept) {
-		folderVO fd_8010 = new folderVO();
-		fd_8010.setFldrname("기록물 등록대장");
-		fd_8010.setOwnertype("1");
-		fd_8010.setAppltype("1");
-		fd_8010.setOwnerid(dept.getDeptid());
-		fd_8010.setApplid(8010);
-		fd_8010.setYear("0000");
-		fd_8010.setEndyear("9999");
-		fdMapper.CreateDeptCommonFolder(fd_8010);
+		folderVO fd_8000 = new folderVO();
+		fd_8000.setFldrname("대장");
+		fd_8000.setOwnertype("1");
+		fd_8000.setAppltype("1");
+		fd_8000.setOwnerid(dept.getDeptid());
+		fd_8000.setApplid(8000);
+		fd_8000.setYear("0000");
+		fd_8000.setEndyear("9999");
+		fdMapper.CreateDeptCommonFolder(fd_8000);
 		
 		folderVO fd_7000 = new folderVO();
 		fd_7000.setFldrname("단위과제");

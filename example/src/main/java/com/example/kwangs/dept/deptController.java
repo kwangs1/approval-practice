@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
+import com.example.kwangs.folder.service.folderS;
+import com.example.kwangs.folder.service.folderVO;
 
 @Controller
 @RequestMapping("/dept")
@@ -20,6 +22,8 @@ public class deptController {
 
 	@Autowired
 	private deptService service;
+	@Autowired
+	private folderS folderService;
 	
 	//목록
 	@GetMapping("/list")
@@ -65,7 +69,7 @@ public class deptController {
 		return "dept/joinUseDept";
 	}
 	
-	//결재선 정보 가져올 부서 및 유저목록
+	//결재선 정보 가져올 부서 및 유저목록 & 기록물철 정보
 	@GetMapping("/flowUseInfo")
 	public String flowUseInfo(Model model, HttpServletRequest request) {
 		String id = (String) request.getSession().getAttribute("userId");
@@ -73,6 +77,10 @@ public class deptController {
 		
 		List<deptVO>flowUseInfo = service.flowUseInfo();
 		model.addAttribute("flowUseInfo",flowUseInfo);
+		
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		List<folderVO> DeptFolderList = folderService.DeptFolderList(deptid);
+		model.addAttribute("list",DeptFolderList);
 		
 		return "dept/flowUseInfo";
 	}

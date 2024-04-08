@@ -38,6 +38,11 @@ public class approvalServiceImpl implements approvalService{
 	public List<approvalVO> SanctnProgrsList(String id) {	
 		return mapper.SanctnProgrsList(id);
 	}
+	//문서함
+	@Override
+	public List<approvalVO> docFrame(String drafterdeptid){
+		return mapper.docFrame(drafterdeptid);
+	}
 	
 	//상세보기
 	@Override

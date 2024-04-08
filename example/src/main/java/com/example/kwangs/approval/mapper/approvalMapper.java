@@ -37,6 +37,11 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.SanctnProgrsList",id);
 	}
 	
+	//문서함
+	public List<approvalVO> docFrame(String drafterdeptid){
+		return session.selectList("mapper.approval.docFrame",drafterdeptid);
+	}
+	
 	//결재 상세보기
 	public approvalVO apprInfo(String appr_seq) {
 		return session.selectOne("mapper.approval.apprInfo",appr_seq);

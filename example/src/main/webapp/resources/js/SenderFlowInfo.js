@@ -18,6 +18,21 @@ $('a.userLink').on('click',function(e){
     // 유저 클릭시 동적으로 화면에 표시되게 하기위해 함수 호출
     updateSelectedUsersUI();
 })
+
+//편철 데이터 전송
+var selectedFldrid = null;
+var selectedFldrname = null;
+var selectedBizunitcd = null;
+$('a.afLink').on('click',function(e){
+e.preventDefault();
+	
+selectedFldrid = $(this).data('fldrid');
+selectedBizunitcd = $(this).data('bizunitcd');
+selectedFldrname = $(this).data('fldrname');
+
+updateSelectedApFolder();
+});
+
 function updateSelectedUsersUI() {
     // 선택된 유저 정보를 기반으로 UI 업데이트
     var selectedUsersDiv = $('#selectedUsers');
@@ -54,7 +69,16 @@ function updateSelectedUsersUI() {
        selectedUsersDiv.append(userDiv);
       }
   }
- 
+function updateSelectedApFolder(){
+	var selDiv = $('#selectedApFolder');
+	selDiv.empty(); //기존 내용 제거
+
+	var userDiv = $('<div class="userDiv"></div>');
+	userDiv.append('<p>'+ selectedFldrname + '</p>');
+			
+	selDiv.append(userDiv);
+
+}
 // 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
 function getStatusDropdownHTML(index, defaultStatus) {
     // status 선택을 위한 dropdown의 HTML을 반환
@@ -73,7 +97,12 @@ function confirmSelection(){
         var status = $('[name="status_' + i + '"]').val();
         selectedUsers[i].status = status;
     }
-	window.opener.postMessage({ users: selectedUsers }, '*');
+	var data = {
+			users: selectedUsers,
+			fldrid: selectedFldrid,
+			bizunitcd: selectedBizunitcd
+		}
+		window.opener.postMessage(data,"*");
 	
 	$.ajax({
 		type: 'post',

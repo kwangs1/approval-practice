@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="apprfolder">
+	<resultMap id="apprfolder" type="apprfolderVO">
+		<result property="fldrid" column="fldrid"/>
+		<result property="fldrinfoyear" column="fldrinfoyear"/>
+		<result property="bizunitcd" column="bizunitcd"/>
+		<result property="procdeptid" column="procdeptid"/>
+		<result property="filingflag" column="filingflag"/>
+		<result property="biztranstype" column="biztranstype"/>
+		<result property="keepingperiod" column="keepingperiod"/>
+		<result property="transferyaer" column="transferyaer"/>
+		<result property="procstatus" column="procstatus"/>
+		<result property="fldrmanagerid" column="fldrmanagerid"/>
+		<result property="fldrmanagername" column="fldrmanagername"/>
+		<result property="fromdeptid" column="fromdeptid"/>
+		<result property="todeptid" column="todeptid"/>
+		<result property="prodyear" column="prodyear"/>
+		<result property="endyear" column="endyear"/>
+		<result property="bizunityearseq" column="bizunityearseq"/>
+	</resultMap>
+
+<!-- 기안 시 기록물철 가져와서 집어넣기 -->
+<select id="DeptApprFolderList" resultType="apprfolderVO" parameterType="String">
+	select af.*, f.fldrname
+	from apprfolder af
+	inner join folder f
+	on af.fldrid = f.fldrid
+	where af.procdeptid = #{procdeptid}
+</select>
+
+<!-- 기록물철 작성 -->
+<insert id="write" parameterType="apprfolderVO">
+	insert into apprfolder
+	values(#{fldrid},#{fldrinfoyear},#{bizunitcd},#{procdeptid},0,0,
+	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},#{prodyear},#{endyear},#{bizunityearseq})
+</insert>
+</mapper>

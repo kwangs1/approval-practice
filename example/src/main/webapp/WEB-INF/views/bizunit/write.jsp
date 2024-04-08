@@ -36,7 +36,7 @@
 <textarea rows="5" cols="70" name="bizunitdesc" placeholder="단위과제에 대한 설명" id="bizunitdesc"></textarea>
 <br><br>
 <button type="button" onclick="add()">등록</button>
-<button type="button" onclick="window.close()">닫기</button>
+<button  type="button" onClick="window.close()">닫기</button>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>

@@ -26,4 +26,7 @@ public class userMapper{
 		return session.selectOne("mapper.user.login",user);
 	}
 	
+	public userVO folderUseInfo(String id) {
+		return session.selectOne("mapper.user.folderUseInfo",id);
+	}
 }
