@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.dept.mapper.deptMapper;
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
-import com.example.kwangs.folder.mapper.folderD;
+import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.service.userVO;
 
@@ -18,7 +18,7 @@ public class deptServiceImpl implements deptService{
 	@Autowired
 	private deptMapper mapper;
 	@Autowired
-	private folderD fdMapper;
+	private folderMapper fdMapper;
 	
 	//목록
 	@Override

@@ -18,8 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
-import com.example.kwangs.folder.service.folderS;
 import com.example.kwangs.folder.service.folderVO;
+import com.example.kwangs.folder.service.impl.folderServiceimpl;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 import com.example.kwangs.user.service.userVO;
@@ -33,7 +33,7 @@ public class approvalController {
 	@Autowired
 	private participantService serviceP;
 	@Autowired
-	private folderS folderService;
+	private folderServiceimpl folderService;
 	
 	
 	//문서작성

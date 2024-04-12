@@ -1,4 +1,4 @@
-package com.example.kwangs.folder.service;
+package com.example.kwangs.folder.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -6,25 +6,27 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.apprfolder.mapper.apprfolderD;
+import com.example.kwangs.apprfolder.mapper.apprfolderMapper;
 import com.example.kwangs.apprfolder.service.apprfolderVO;
 import com.example.kwangs.bizunit.mapper.bizunitMapper;
 import com.example.kwangs.bizunit.service.bizunitVO;
 import com.example.kwangs.dept.mapper.deptMapper;
 import com.example.kwangs.dept.service.deptVO;
-import com.example.kwangs.folder.mapper.folderD;
+import com.example.kwangs.folder.mapper.folderMapper;
+import com.example.kwangs.folder.service.folderService;
+import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.mapper.userMapper;
 import com.example.kwangs.user.service.userVO;
 
 @Service
-public class folderS implements IfolderS{
+public class folderServiceimpl implements folderService{
 
 	@Autowired
-	private folderD mapper;
+	private folderMapper mapper;
 	@Autowired
 	private deptMapper deptMapper;
 	@Autowired
-	private apprfolderD apprfolderMapper;
+	private apprfolderMapper apprfolderMapper;
 	@Autowired
 	private userMapper userMapper;
 	@Autowired

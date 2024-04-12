@@ -17,7 +17,7 @@ import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.bizunit.mapper.bizunitMapper;
 import com.example.kwangs.bizunit.service.bizunitService;
 import com.example.kwangs.bizunit.service.bizunitVO;
-import com.example.kwangs.folder.mapper.folderD;
+import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.folderVO;
 
 @Service
@@ -27,7 +27,7 @@ public class bizunitServiceimpl implements bizunitService{
 	@Autowired
 	private bizunitMapper mapper;
 	@Autowired
-	private folderD folderMapper;
+	private folderMapper folderMapper;
 	
 	//csv upload
 	@Override

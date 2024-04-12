@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.example.kwangs.apprfolder.service.apprfolderVO;
 
 @Repository
-public class apprfolderD {
+public class apprfolderMapper {
 
 	@Autowired
 	private SqlSession session;

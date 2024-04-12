@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.bizunit.service.bizunitService;
 import com.example.kwangs.bizunit.service.bizunitVO;
-import com.example.kwangs.folder.service.IfolderS;
+import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
 
 @Controller
@@ -22,7 +22,7 @@ import com.example.kwangs.folder.service.folderVO;
 public class folderC {
 
 	@Autowired
-	private IfolderS service;
+	private folderService service;
 	@Autowired
 	private bizunitService bizService;
 	

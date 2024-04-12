@@ -13,8 +13,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
-import com.example.kwangs.folder.service.folderS;
 import com.example.kwangs.folder.service.folderVO;
+import com.example.kwangs.folder.service.impl.folderServiceimpl;
 
 @Controller
 @RequestMapping("/dept")
@@ -23,7 +23,7 @@ public class deptController {
 	@Autowired
 	private deptService service;
 	@Autowired
-	private folderS folderService;
+	private folderServiceimpl folderService;
 	
 	//목록
 	@GetMapping("/list")

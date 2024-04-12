@@ -119,7 +119,9 @@ bizunitchargeid varchar2(20),\
 keepperiod varchar2(1),\
 ablitionflag varchar2(1));\
 \
-\'97\uc0\u44592 \u47197 \u47932 \u52384 \
+\'97
+\f1 \'b1\'e2\'b7\'cf\'b9\'b0\'c3\'b6
+\f0 \
     create table apprfolder(\
     fldrid varchar2(20),\
     fldrinfoyear varchar2(4),\
@@ -132,8 +134,28 @@ ablitionflag varchar2(1));\
     procstatus varchar2(4),\
     fldrmanagerid varchar2(20),\
     fldrmanagername varchar2(20),\
-    fromdeptid varchar2(4),\
-    todeptid varchar2(4),\
+    fromdeptid varchar2(20),\
+    todeptid varchar2(20),\
     prodyear varchar2(4),\
     endyear varchar2(4),\
-    bizunityearseq varchar2(20));}
+    bizunityearseq varchar2(20));\
+\
+\'97\uc0\u44208 \u51116 \u54260 \u45908 \u47716 \u48260 \
+    create table fldrmbr(\
+    fldrid varchar2(20),\
+    fldrmbrid varchar2(100),\
+    indexdate date,\
+    registdate date,\
+    registerid varchar2(20),\
+    updatedate date,\
+    updaterid varchar2(20));\
+\
+\'97\uc0\u47928 \u49436 \u54260 \u45908 \u47716 \u48260 \
+    create table fldrmbr2(\
+    fldrid varchar2(20),\
+    fldrmbrid varchar2(100),\
+    indexdate date,\
+    registdate date,\
+    registerid varchar2(20),\
+    updatedate date,\
+    updaterid varchar2(20));}
