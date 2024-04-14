@@ -30,6 +30,15 @@
 	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
 	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
 </insert>
+<!-- 하위폴더 생성-->
+<insert id="subFolderAdd" parameterType="folderVO">
+	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
+		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
+	</selectKey>
+	insert into folder
+	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},#{fldrdepth},#{ownertype},#{ownerid},#{appltype},
+	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
+</insert>
 <!-- 부서 생성 시 공통폴더 자동생성 -->
 <insert id="CreateDeptCommonFolder" parameterType="folderVO">
 	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">

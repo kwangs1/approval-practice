@@ -45,6 +45,13 @@ public class folderServiceimpl implements folderService{
 		}
 		mapper.deptAllFolderAdd(fd);
 	}
+	
+	//하위 폴더 생성
+	@Override
+	public void subFolderAdd(folderVO fd) {
+		mapper.subFolderAdd(fd);
+	}
+	
 	//문서함 사이드 메뉴 부서 폴더 가져올 거 
 	@Override
 	public List<folderVO>docfldrSidebar(String ownerid){

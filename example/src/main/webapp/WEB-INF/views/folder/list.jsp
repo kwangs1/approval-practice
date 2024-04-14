@@ -44,7 +44,7 @@
     </c:forEach>
     <%-- 최상위 부서 end --%>
   </ul>
-<script src="<c:url value='/js/jquery.js'/>"></script>
+<script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 <%-- tree start --%>  
 $(document).ready(function() {

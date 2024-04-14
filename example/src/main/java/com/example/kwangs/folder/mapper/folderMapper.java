@@ -18,7 +18,10 @@ public class folderMapper {
 	public void deptAllFolderAdd(folderVO fd) {
 		session.insert("folder.deptAllFolderAdd",fd);
 	}
-	
+	//하위 폴더 생성
+	public void subFolderAdd(folderVO fd) {
+		session.insert("folder.subFolderAdd",fd);
+	}
 	//부서 생성 시 공통 폴더 자동 생성
 	public void CreateDeptCommonFolder(folderVO fd) {
 		session.insert("folder.CreateDeptCommonFolder",fd);

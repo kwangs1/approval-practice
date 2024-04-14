@@ -36,6 +36,22 @@ public class folderC {
 		service.deptAllFolderAdd(fd);
 	}
 	
+	//하위 폴더 생성
+	@GetMapping("/subFolderAdd")
+	public void subFloderAdd(Model model, folderVO fd) {
+		folderVO info = service.info(fd.getFldrid());
+		model.addAttribute("info",info);
+		
+		int subDepth = info.getFldrdepth()+1;
+		model.addAttribute("subDepth",subDepth);
+	}
+	
+	@PostMapping("/subFolderAdd")
+	public String subFolderAdd(folderVO fd) {
+		service.subFolderAdd(fd);
+		return "redirect:/folder/list";
+	}
+	
 	//문서목록
 	@GetMapping("list")
 	public void list(Model model,HttpServletRequest request) {

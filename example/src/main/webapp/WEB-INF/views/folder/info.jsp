@@ -12,7 +12,7 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 <body>
 
 <c:if test="${info.applid != 7010}">
-<a href="subfolderIn.do?fldrid=${info.fldrid}">폴더 추가</a> | 
+<a href="subFolderAdd?fldrid=${info.fldrid}">폴더 추가</a> | 
 </c:if>
 <c:if test="${info.applid == 7010}">
 	<a href="javascript:apprfolderIn_pop()">기록물철 추가</a> |
