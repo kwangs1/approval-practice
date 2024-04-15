@@ -1,10 +1,22 @@
 package com.example.kwangs.common;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+
 public class Criteria {
 	private int page;
 	private int perPageNum;
 	private int rowStart;
 	private int rowEnd;
+	private String drafterdeptid;
+	private String fldrid;
+	private String fldrname;
+	private String ownerid;
+	private int applid;
+	private String bizunitcd;
+	private String id;
+	private String signerid;
+	
 	
 	//기본값으로 한 페이지당 보이는 게시물 개수 10개
 	//이후 사용자가 원하는 게시물 개수 선택하여 리스트에 보이게 하기 위해 calculateRowStartAndEnd()함수 만듬.
@@ -50,5 +62,83 @@ public class Criteria {
         this.rowStart = ((page - 1) * perPageNum) + 1;
         this.rowEnd = rowStart + perPageNum - 1;
     }
+
+	public String getDrafterdeptid() {
+		return drafterdeptid;
+	}
+
+	public void setDrafterdeptid(String drafterdeptid) {
+		this.drafterdeptid = drafterdeptid;
+	}
+
+	public String getFldrid() {
+		return fldrid;
+	}
+
+	public void setFldrid(String fldrid) {
+		this.fldrid = fldrid;
+	}
+
+	public String getFldrname() {
+		return fldrname;
+	}
+
+	public void setFldrname(String fldrname) {
+		this.fldrname = fldrname;
+	}
+
+	public String getOwnerid() {
+		return ownerid;
+	}
+
+	public void setOwnerid(String ownerid) {
+		this.ownerid = ownerid;
+	}
+
+	public int getApplid() {
+		return applid;
+	}
+
+	public void setApplid(int applid) {
+		this.applid = applid;
+	}
+
+	public String getBizunitcd() {
+		return bizunitcd;
+	}
+
+	public void setBizunitcd(String bizunitcd) {
+		this.bizunitcd = bizunitcd;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getSignerid() {
+		return signerid;
+	}
+
+	public void setSignerid(String signerid) {
+		this.signerid = signerid;
+	}
+	
+	public void cookieVal(HttpServletRequest request) {
+		Cookie[] cookies = request.getCookies();
+		if(cookies != null) {
+			for(Cookie cookie : cookies) {
+				if(cookie.getName().equals("perPageNum")) {
+					int perPageNum = Integer.parseInt(cookie.getValue());
+					this.perPageNum = perPageNum;
+					calculateRowStartAndEnd();
+					break;
+				}
+			}
+		}
+	}
 	
 }

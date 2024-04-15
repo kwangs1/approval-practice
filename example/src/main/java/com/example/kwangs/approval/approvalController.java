@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.common.PageMaker;
+import com.example.kwangs.common.SearchCriteria;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.folder.service.impl.folderServiceimpl;
 import com.example.kwangs.participant.service.participantService;
@@ -55,6 +57,18 @@ public class approvalController {
 	@PostMapping("/apprWrite")
 	public void apprWrite(approvalVO approval) {
 		service.apprWrite(approval);
+	}
+
+	//결재함
+	@GetMapping("/ApprFrame")
+	public String apprFrame(Model model, HttpServletRequest request) {
+		String ownerid = (String) request.getSession().getAttribute("userId");
+		
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(ownerid);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);
+		
+		return "/approval/ApprFrame";		
 	}
 	
 	//결재대기
@@ -97,13 +111,28 @@ public class approvalController {
 	
 	//문서함
 	@GetMapping("/docFrame")
-	public void docFrame(Model model, HttpServletRequest request) {
+	public void docFrame(Model model, HttpServletRequest request, SearchCriteria scri, folderVO fd, approvalVO ap) {
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
 		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
-		List<approvalVO> docframe = service.docFrame(drafterdeptid);
+		scri.setDrafterdeptid(drafterdeptid);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		
+		List<approvalVO> docframe = service.docFrame(scri);
 		model.addAttribute("docframe",docframe);
+		
+		pageMaker.setTotalCount(service.totalDocCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
 		
 		List<folderVO> docfldrSidebar = folderService.docfldrSidebar(drafterdeptid);
 		model.addAttribute("docfldrSidebar",docfldrSidebar);
+		model.addAttribute("fldrname",fd.getFldrname());
 	}
 	
 	//문서 상세보기

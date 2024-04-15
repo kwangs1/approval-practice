@@ -16,20 +16,30 @@
 	</div>
 	<p>등록 중..</p>
 </div>
-	<select id="deptApplid" onchange="setApplidValue(this)">
+
+	<select id="deptApplid" onchange="setApplidValue(this)"  style="display:none">
 		<option value="" selected="selected">생성할 폴더를 선택 하십시오.</option>
 		<option value="7000">단위과제</option>
 		<option value="8000">대장</option>
-		<option value="8010">기록물 등록대장</option>
+	</select>	
+	<select id="userApplid" onchange="setApplidValue(this)" style="display:none">
+		<option value="" selected="selected">선택 하십시오.</option>
+		<option value="1000">결재</option>
 	</select>
 	<input type="hidden" name="applid" id="applid" value=""/><br><br>
 	
-	<input type="hidden" name="fldrname" id="fldrname"/>
-	소유자 유형: <input type="hidden" name="ownertype" id="ownertype" value="1" />부서<br><br>
-	폴더 유형: <input type="hidden" name="appltype" id="appltype"/>문서함(부서)<br><br>
-	
-	생산년도: <input type="text" name="year" id="year" readonly="readonly" style="border:none;"/><br><br>
-	종료년도: <input type="text" name="endyear" id="endyear"/><br><br>
+	<input type="hidden" name="fldrname" id="fldrname"/>	
+	<input type="hidden" name="ownerid" id="ownerid" />
+	<input type="hidden" name="year" id="year" value="0000"/>
+	<input type="hidden" name="endyear" id="endyear" value="9999"/>
+
+소유자 유형:
+	<input type="radio" name="ownertype"  id="ownertype_1"  value="1" onclick="showId()" checked="checked"/>문서함
+	<input type="radio" name="ownertype"  id="ownertype_2"  value="2" onclick="showId()"/>결재함<br><br>
+
+폴더 유형: 
+	<input type="radio" name="appltype" id="appltype_1"  value="1"/>문서함
+	<input type="radio" name="appltype" id="appltype_2"  value="2"/>결재함<br><br>
 	
 	<button type="button" onclick="insertBtn()">생성</button>
 	<button type="button" onclick="javascript:window.close()">닫기</button>
@@ -37,14 +47,17 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 $(document).ready(function(){
-	setYear();
+	showId();
 	
 	$('#deptApplid').change(function(){
 		var SelectText = $(this).find("option:selected").text();
 		
 		$('#fldrname').val(SelectText);
-		var applid = $(this).val();
-		setApplType(applid);
+	})
+	$('#userApplid').change(function(){
+		var SelectText = $(this).find("option:selected").text();
+		
+		$('#fldrname').val(SelectText);
 	})
 })
 
@@ -52,35 +65,39 @@ function setApplidValue(selectElement){
 	document.getElementById('applid').value = selectElement.value;	
 }
 
-function setApplType(applid){
-	var appltype = $('#appltype');
-	if(applid === '8000' && applid === '8010'){
-		appltype.val('1');
+function showId(){
+	var OptionValue = document.querySelector('input[name="ownertype"]:checked').value;
+	var ownerid = document.getElementById('ownerid')
+	
+	if(OptionValue == '1'){
+		ownerid.value ='<c:out value="${user.deptid}"/>';
+		document.getElementById('appltype_1').checked = true;
+		$('#deptApplid').css('display','block');
+		$('#userApplid').css('display','none');
 	}else{
-		appltype.val('3');
+		ownerid.value ='<c:out value="${user.id}"/>';
+		document.getElementById('appltype_2').checked = true;
+		$('#deptApplid').css('display','none');
+		$('#userApplid').css('display','block');
 	}
 }
 
-function setYear(){
-	var today = new Date();
-	var CurrYear = today.getFullYear();
-	document.getElementById('year').value = CurrYear;
-	document.getElementById('endyear').value = CurrYear;
-}
 
 function insertBtn(){
 	var applid = $('#applid').val(); 
 	var fldrname = $('#fldrname').val(); 
-	var ownertype = $('#ownertype').val(); 
-	var appltype = $('#appltype').val();
-	var year = $('#year').val(); 
-	var endyear = $('#endyear').val();
-	
+    var ownertype = $('input[name="ownertype"]:checked').val(); 
+    var appltype = $('input[name="appltype"]:checked').val();
+    var year = $('#year').val();
+    var endyear = $('#endyear').val();
+    var ownerid = $('#ownerid').val();
+    
 	var paramData = {
 			applid :applid,
 			fldrname :fldrname,
 			ownertype :ownertype,
 			appltype :appltype,
+			ownerid :ownerid,
 			year :year,
 			endyear :endyear
 	}
@@ -97,7 +114,7 @@ function insertBtn(){
 				alert('등록되었습니다.');
 				window.close();
 				opener.location.reload();
-			},5000)
+			},2000)
 		},
 		error: function(xhr,error,status){
 			console.log(xhr);

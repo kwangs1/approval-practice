@@ -16,5 +16,7 @@ public interface folderService {
 	//문서 상세보기
 	folderVO info(String fldrid);
 	//기록물철 작성
-	void apprfolderAdd(folderVO fd, String userid) throws Exception;
+	void folderAddAndApprF(folderVO fd, String userid) throws Exception;
+	//결재함 사이드메뉴
+	List<folderVO>ApprfldrSidebar(String ownerid);
 }

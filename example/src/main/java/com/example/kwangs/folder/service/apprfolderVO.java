@@ -1,8 +1,6 @@
-package com.example.kwangs.apprfolder.service;
+package com.example.kwangs.folder.service;
 
 import org.springframework.stereotype.Component;
-
-import com.example.kwangs.folder.service.folderVO;
 
 @Component
 public class apprfolderVO extends folderVO{

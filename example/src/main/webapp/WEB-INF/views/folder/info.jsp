@@ -15,7 +15,7 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 <a href="subFolderAdd?fldrid=${info.fldrid}">폴더 추가</a> | 
 </c:if>
 <c:if test="${info.applid == 7010}">
-	<a href="javascript:apprfolderIn_pop()">기록물철 추가</a> |
+	<a href="javascript:folderAddAndApprF()">기록물철 추가</a> |
 </c:if>
 <a href="edit.do?fldrid=${info.fldrid}">수정</a> |
 <a href="javascript:window.close()">닫기</a>
@@ -40,8 +40,8 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 var buCode = '${bInfo.bizunitcd}';
 var deptid = '${bInfo.procdeptid}';
 var usu = '<c:out value="${currUser.userid}"/>';
-function apprfolderIn_pop(){
-	url = '<c:url value="/folder/apprfolderAdd"/>';
+function folderAddAndApprF(){
+	url = '<c:url value="/folder/folderAddAndApprF"/>';
 	url += '?fldrid='+ '${info.fldrid}' + '&buCode=' + buCode + '&deptid=' + deptid + '&userid=' + usu;
 	
 	window.open(url, 'apprfolderIn', 'width=500px, height=500px');

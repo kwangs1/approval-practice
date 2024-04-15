@@ -3,6 +3,7 @@ package com.example.kwangs.approval.service;
 import java.util.List;
 import java.util.Map;
 
+import com.example.kwangs.common.SearchCriteria;
 import com.example.kwangs.user.service.userVO;
 
 public interface approvalService {
@@ -13,7 +14,7 @@ public interface approvalService {
 	//결재진행
 	List<approvalVO> SanctnProgrsList(String id);
 	//문서함
-	List<approvalVO>docFrame(String drafterdeptid);
+	List<approvalVO>docFrame(SearchCriteria scri);
 	//결재 상세보기
 	approvalVO apprInfo(String appr_seq);
 	//유저에 대한 부서 약어
@@ -22,4 +23,6 @@ public interface approvalService {
 	void RetireApprStatus(String appr_seq);
 	//재기안 시 문서 상태값 변경
 	void Resubmission(approvalVO approval);
+	//문서함 문서 총갯수
+	int totalDocCnt(SearchCriteria scri);
 }

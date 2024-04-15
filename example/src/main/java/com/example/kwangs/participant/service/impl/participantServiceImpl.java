@@ -13,6 +13,9 @@ import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.dept.service.deptVO;
+import com.example.kwangs.folder.mapper.folderMapper;
+import com.example.kwangs.folder.service.fldrmbr2VO;
+import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
@@ -30,6 +33,8 @@ public class participantServiceImpl implements participantService{
 	private DocumentNumberGenerator DocumentNumberGenerator;
 	@Autowired
 	private saveXmlTemp saveXmlTemp;
+	@Autowired
+	private folderMapper folderMapper;
 	
 
 	//문서 기안 시 결재선 지정
@@ -139,6 +144,7 @@ public class participantServiceImpl implements participantService{
 			        res.put("participant_seq", pVO.getParticipant_seq());
 			        
 			        mapper.updateFLowType(res);
+                	DocFldrmbr2Add(pVO.getAppr_seq());
 		        }            
 		        // 중간 결재자이면서 마지막 결재자인 경우 4(결재진행) , 4098 미결재
 	            else if(i + 1 == participant.size() && isFirst) {
@@ -172,7 +178,6 @@ public class participantServiceImpl implements participantService{
 	    //appr_seq를 통해 participantVO의 정보를 반복문을 통해 가져옴
 	    List<participantVO> approvalLines = mapper.getApprovalApprseq(appr_seq);
 	    for (int i = 0; i < approvalLines.size(); i++) {
-	        log.info("=======================================");
 	        //0~ 마지막 까지 
 	        participantVO currentParticipant = approvalLines.get(i);
 	        int line_seq = currentParticipant.getLine_seq();
@@ -221,7 +226,6 @@ public class participantServiceImpl implements participantService{
 	                    // mapper를 통해 DB 업데이트 수행
 	                    mapper.updateNextApprovalType(params);
 	                    
-	                    log.info("=======================================");
 	                    break; // 업데이트 후 루프 종료
 	                }
 	                
@@ -235,6 +239,7 @@ public class participantServiceImpl implements participantService{
                 	approvalMapper.ApprovalUpdateStatus(appr_seq);
                 	log.info("final participant and approval status update");
                 	ConCludeDocRegNo(appr_seq);
+                	DocFldrmbr2Add(appr_seq);
 	            }
 	        }//end if (currentParticipant.getApprovaltype() == 2)
 	    }//end for
@@ -264,7 +269,6 @@ public class participantServiceImpl implements participantService{
 	
 	//문서번호 체번
 	public void ConCludeDocRegNo(String appr_seq) {
-		log.info("=================== DOCNO UPDATE LINE ===================");
 		//결재가 완료된 문서찾기
 		List<approvalVO> approval = approvalMapper.getApprStatus(appr_seq);
 
@@ -291,7 +295,6 @@ public class participantServiceImpl implements participantService{
 				approvalMapper.ConCludeDocRegNo(ap);
 			}
 		}
-		log.info("=================== DOCNO UPDATE LINE ===================");
 	}
 	
 	//회수
@@ -363,4 +366,32 @@ public class participantServiceImpl implements participantService{
 	    String xmlData = xmlBuilder.toString();
 	    saveXmlTemp.SaveParticipantTemp(id,xmlData);
 	}
+	
+//최종 결재 이후 문서폴더멤버 테이블 같이 insert
+public void DocFldrmbr2Add(String appr_seq) {
+	List<approvalVO> approval = approvalMapper.getApprStatus(appr_seq);		
+				
+	for(approvalVO ap : approval) {
+		if(ap.getStatus() == 256) {
+			//해당 기안기 편철에 insert
+			fldrmbr2VO fm2 = new fldrmbr2VO();
+			fm2.setFldrid(ap.getFolderid());
+			fm2.setFldrmbrid(appr_seq);
+			fm2.setIndexdate(ap.getApprovaldate());
+			fm2.setRegistdate(ap.getApprovaldate());
+			fm2.setRegisterid(ap.getDrafterid());
+			folderMapper.DocFldrmbr2Add(fm2);
+			//기록물 등록대장에 같이 들어가기
+			fldrmbr2VO fm2_r = new fldrmbr2VO();
+			folderVO fdDoc = folderMapper.DocFloder(ap.getDrafterdeptid());
+			fm2_r.setFldrid(fdDoc.getFldrid());
+			fm2_r.setFldrmbrid(appr_seq);
+			fm2_r.setIndexdate(ap.getApprovaldate());
+			fm2_r.setRegistdate(ap.getApprovaldate());
+			fm2_r.setRegisterid(ap.getDrafterid());
+			folderMapper.DocFldrmbr2Add(fm2_r);
+		}
+	}
+}
+
 }

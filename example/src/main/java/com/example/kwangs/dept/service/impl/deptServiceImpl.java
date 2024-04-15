@@ -47,7 +47,7 @@ public class deptServiceImpl implements deptService{
 		fd_8000.setYear("0000");
 		fd_8000.setEndyear("9999");
 		fdMapper.CreateDeptCommonFolder(fd_8000);
-		
+	
 		folderVO fd_7000 = new folderVO();
 		fd_7000.setFldrname("단위과제");
 		fd_7000.setOwnertype("1");

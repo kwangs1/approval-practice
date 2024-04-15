@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.common.SearchCriteria;
 import com.example.kwangs.user.service.userVO;
 
 
@@ -40,8 +41,8 @@ public class approvalServiceImpl implements approvalService{
 	}
 	//문서함
 	@Override
-	public List<approvalVO> docFrame(String drafterdeptid){
-		return mapper.docFrame(drafterdeptid);
+	public List<approvalVO> docFrame(SearchCriteria scri){
+		return mapper.docFrame(scri);
 	}
 	
 	//상세보기
@@ -66,6 +67,11 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	public void Resubmission(approvalVO approval) {
 		mapper.Resubmission(approval);
+	}
+	//문서함 총 갯수
+	@Override
+	public int totalDocCnt(SearchCriteria scri) {
+		return mapper.totalDocCnt(scri);
 	}
 
 }

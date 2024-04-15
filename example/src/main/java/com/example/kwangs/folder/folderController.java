@@ -19,7 +19,7 @@ import com.example.kwangs.folder.service.folderVO;
 
 @Controller
 @RequestMapping("/folder")
-public class folderC {
+public class folderController {
 
 	@Autowired
 	private folderService service;
@@ -67,8 +67,8 @@ public class folderC {
 	}
 	
 	//기록물철 추가
-	@GetMapping("/apprfolderAdd")
-	public void apprfolderInfo(Model model,String fldrid) {
+	@GetMapping("/folderAddAndApprF")
+	public void folderAddAndApprF(Model model,String fldrid) {
 		folderVO info =  service.info(fldrid);
 		model.addAttribute("info",info);
 		
@@ -82,9 +82,9 @@ public class folderC {
 	}
 	
 	@ResponseBody
-	@PostMapping("/apprfolderAdd")
-	public void apprfolderIn(folderVO fl, HttpServletRequest request)throws Exception {
+	@PostMapping("/folderAddAndApprF")
+	public void folderAddAndApprF(folderVO fl, HttpServletRequest request)throws Exception {
 		String userid = (String)request.getSession().getAttribute("userId");
-		service.apprfolderAdd(fl,userid);
+		service.folderAddAndApprF(fl,userid);
 	}
 }

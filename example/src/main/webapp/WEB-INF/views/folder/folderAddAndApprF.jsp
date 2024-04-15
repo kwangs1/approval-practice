@@ -86,7 +86,7 @@ function addApprFolder(){
 	
 	$.ajax({
 		type: 'post',
-		url: '<c:url value="/folder/apprfolderAdd"/>',
+		url: '<c:url value="/folder/folderAddAndApprF"/>',
 		data: paramData,
 		success: function(){
 			var loading = document.getElementById('loading')

@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.kwangs.apprfolder.service.apprfolderVO;
-
 @Component
 public class folderVO {
 

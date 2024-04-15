@@ -6,13 +6,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.apprfolder.mapper.apprfolderMapper;
-import com.example.kwangs.apprfolder.service.apprfolderVO;
 import com.example.kwangs.bizunit.mapper.bizunitMapper;
 import com.example.kwangs.bizunit.service.bizunitVO;
 import com.example.kwangs.dept.mapper.deptMapper;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.mapper.folderMapper;
+import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.mapper.userMapper;
@@ -26,8 +25,6 @@ public class folderServiceimpl implements folderService{
 	@Autowired
 	private deptMapper deptMapper;
 	@Autowired
-	private apprfolderMapper apprfolderMapper;
-	@Autowired
 	private userMapper userMapper;
 	@Autowired
 	private bizunitMapper bizMapper;
@@ -35,14 +32,12 @@ public class folderServiceimpl implements folderService{
 	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
 	@Override
 	public void deptAllFolderAdd(folderVO fd) {
+		/*
 		List<deptVO> departments = deptMapper.findAll();
 		for(deptVO dept : departments) {
-			String ownerid = dept.getDeptid();
-			
+			String ownerid = dept.getDeptid();		
 			fd.setOwnerid(ownerid);
-			
-			
-		}
+		}*/
 		mapper.deptAllFolderAdd(fd);
 	}
 	
@@ -63,7 +58,7 @@ public class folderServiceimpl implements folderService{
 		List<folderVO> DeptApprFolderList = mapper.DeptFolderList(ownerid);
 		for(folderVO fd : DeptApprFolderList) {
 			
-			List<apprfolderVO> fds = apprfolderMapper.DeptApprFolderList(ownerid);
+			List<apprfolderVO> fds = mapper.DeptApprFolderList(ownerid);
 			fd.setApprfolders(fds);
 		}
 		return DeptApprFolderList;
@@ -78,11 +73,11 @@ public class folderServiceimpl implements folderService{
 	public folderVO info(String fldrid) {
 		return mapper.info(fldrid);
 	}
-	//기록물철 작성
+	//기록물철 등록
 	@Override
-	public void apprfolderAdd(folderVO fd,String userid) throws Exception {
+	public void folderAddAndApprF(folderVO fd,String userid) throws Exception {
 		fd.setApplid(7020);
-		mapper.apprfolderAdd(fd);
+		mapper.folderAddAndApprF(fd);
 		
 		userVO folderUseInfo = userMapper.folderUseInfo(userid);
 		bizunitVO biz = bizMapper.bInfo(fd.getFldrname());
@@ -90,6 +85,7 @@ public class folderServiceimpl implements folderService{
 		int year = now.getYear();
 		String strYear = Integer.toString(year);
 		
+		//단위과제 하위 폴더 등록 시 기록물철에 같이 insert
 		apprfolderVO af = new apprfolderVO();
 		af.setFldrid(fd.getFldrid());
 		af.setFldrinfoyear(strYear);
@@ -101,6 +97,12 @@ public class folderServiceimpl implements folderService{
 		af.setFldrmanagerid(folderUseInfo.getId());
 		af.setFldrmanagername(folderUseInfo.getName());
 		
-		apprfolderMapper.write(af);
+		mapper.apprFolderAdd(af);
+	}
+	
+	//결재함 사이드메뉴
+	@Override
+	public List<folderVO>ApprfldrSidebar(String ownerid){
+		return mapper.ApprfldrSidebar(ownerid);
 	}
 }

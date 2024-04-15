@@ -24,6 +24,16 @@
 		<result property="folderid" column="folderid" />
 		<result property="bizunitcd" column="bizunitcd" />
 	</resultMap>
+	
+	<!-- 검색 동적 쿼리 -->
+	<sql id="search">
+		<if test="searchType != null">
+			<if test="searchType == 't'.toString()">and title like '%' || #{keyword} || '%' </if>
+			<if test="searchType == 'd'.toString()">and docregno like '%' || #{keyword} || '%' </if>
+			<if test="searchType == 'u'.toString()">and draftername like '%' || #{keyword} || '%' </if>
+		</if>
+	</sql>
+	
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
    SELECT 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || appr_seq.currval FROM DUAL
@@ -68,10 +78,19 @@
 </select>
 
 <!-- 문서함 -->
-<select id="docFrame" resultType="approvalVO" parameterType="String">
-	select * from approval
-	where drafterdeptid = #{drafterdeptid}
-	and status = 256
+<select id="docFrame" resultType="approvalVO">
+		select d.*
+		from(
+			select a.*, row_number() over(order by docregno desc)as rnum
+			from approval a, fldrmbr2 fm2
+			where 1=1
+			and a.drafterdeptid = #{drafterdeptid} 
+			and a.status = 256
+			and a.appr_seq = fm2.fldrmbrid
+			and fm2.fldrid = #{fldrid}
+			<include refid="search"></include>
+		)d
+		where rnum between #{rowStart} and #{rowEnd}
 </select>
 
 <!-- 결재 상세보기 -->
@@ -169,4 +188,16 @@
 	where appr_seq = #{appr_seq}
 	and drafterid = #{drafterid}
 </update>
+
+<!-- 문서함 총 갯수 -->
+<select id="totalDocCnt" resultType="int">
+		select count(*) 
+			from approval a
+		inner join fldrmbr2 fm2
+			on a.appr_seq = fm2.fldrmbrid
+		where a.drafterdeptid = #{drafterdeptid}
+		and a.status = 256
+		and fm2.fldrid = #{fldrid}
+		<include refid="search"></include>
+</select>
 </mapper>

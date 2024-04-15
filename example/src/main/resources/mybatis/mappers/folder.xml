@@ -54,12 +54,8 @@
 </select>
 <!-- 문서함 사이드 메뉴 부서 폴더 가져올 거 -->
 <select id="docfldrSidebar" resultType="folderVO" parameterType="String">
-	select fldrid, lpad(' ', 3*LEVEL-1)||fldrname as fldrname, parfldrid,parfldrname, fldrdepth,
-	    ownertype, ownerid, appltype, applid, regdate, updatedate, updaterid, year,endyear
-    from folder
-    where ownerid = #{ownerid}
-    start with parfldrid is null
-    connect by prior fldrid = parfldrid
+	select * from folder
+	where ownerid = #{ownerid}
     order by fldrid, fldrdepth
 </select>
 <!-- 기안 시 단위과제 보여주기 -->
@@ -75,7 +71,7 @@
 	select * from folder where fldrid = #{fldrid}
 </select>
 <!-- 기록물철 작성 시 문서 인서트 -->
-<insert id="apprfolderAdd"  parameterType="folderVO">
+<insert id="folderAddAndApprF"  parameterType="folderVO">
 	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
 		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
 	</selectKey>
@@ -83,4 +79,33 @@
 	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
 	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
 </insert>
+<!-- 기록물철 등록 -->
+<insert id="apprFolderAdd" parameterType="com.example.kwangs.folder.service.apprfolderVO">
+	insert into apprfolder
+	values(#{fldrid},#{fldrinfoyear},#{bizunitcd},#{procdeptid},0,0,
+	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},#{prodyear},#{endyear},#{bizunityearseq})
+</insert>
+<!-- 기안 시 기록물철 가져와서 집어넣기 -->
+<select id="DeptApprFolderList" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="String">
+	select af.*, f.fldrname
+	from apprfolder af
+	inner join folder f
+	on af.fldrid = f.fldrid
+	where af.procdeptid = #{procdeptid}
+</select>
+<!-- 기록물 등록대장 fldrid 가져오기 -->
+<select id="DocFloder" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 8010
+</select>
+<!-- 결재 완료 시 문서맴버 테이블 등록 -->
+<insert id="DocFldrmbr2Add" parameterType="com.example.kwangs.folder.service.fldrmbr2VO">
+	insert into fldrmbr2
+	values(#{fldrid},#{fldrmbrid},#{indexdate},#{registdate},#{registerid},#{updatedate},#{updaterid})
+</insert>
+<!-- 결재함 사이드메뉴 -->
+<select id="ApprfldrSidebar" resultType="folderVO" parameterType="String">
+	select * from folder 
+	where ownerid = #{ownerid} 
+	order by fldrid, fldrdepth
+</select>
 </mapper>

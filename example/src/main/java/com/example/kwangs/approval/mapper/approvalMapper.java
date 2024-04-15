@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.common.SearchCriteria;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.user.service.userVO;
 
@@ -38,8 +39,8 @@ public class approvalMapper{
 	}
 	
 	//문서함
-	public List<approvalVO> docFrame(String drafterdeptid){
-		return session.selectList("mapper.approval.docFrame",drafterdeptid);
+	public List<approvalVO> docFrame(SearchCriteria scri){
+		return session.selectList("mapper.approval.docFrame",scri);
 	}
 	
 	//결재 상세보기
@@ -90,5 +91,9 @@ public class approvalMapper{
 	//재기안 시 문서 상태값 변경
 	public void Resubmission(approvalVO approval) {
 		session.update("mapper.approval.Resubmission",approval);
+	}
+	//문서함 총 갯수
+	public int totalDocCnt(SearchCriteria scri) {
+		return session.selectOne("mapper.approval.totalDocCnt",scri);
 	}
 }

@@ -8,14 +8,35 @@
 </head>
 <body>
 <a href="javascript:approval_pop()">기안하기</a> | 
-<a href="apprWaitList?id=${user.id}">결재대기</a> |
-<a href="SanctnProgrsList?id=${user.id}">결재진행</a>|
-<a href="docFrame?drafterdeptid=${user.deptid}">문서함</a>
+<a href="javascript:loadApprFrameList()">결재함</a> |
+<a href="javascript:loadDocFrameList()">문서함</a>
 
 
+<script src="<c:url value='/resources/js/pagingCookie.js'/>"></script>
 <script>
 function approval_pop(){
-	window.open("${path}/approval/apprWrite","approval","width=1024px, height=768");
+	window.open("<c:url value='/approval/apprWrite'/>","approval","width=1024px, height=768");
+}
+
+function loadDocFrameList(){
+	var getLastDocUrl = getCookie("lastDocUrl");
+	if(getLastDocUrl !== null){
+		var docUrl = decodeURIComponent(getLastDocUrl);
+		window.location.href = docUrl;
+	}else{
+		url = '<c:url value="docFrame?drafterdeptid=${user.deptid}"/>';
+		window.location.href = url;
+	}
+}
+function loadApprFrameList(){
+	var g_lastApprUrl = getCookie("lastApprUrl");
+	if(g_lastApprUrl !== null){
+		var apprUrl = decodeURIComponent(g_lastApprUrl);
+		window.location.href = apprUrl
+	}else{
+		url = '<c:url value="ApprFrame"/>';
+		window.location.href = url;
+	}
 }
 </script>
 </body>

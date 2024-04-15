@@ -80,22 +80,48 @@ public class PageMaker {
 	public String makeQuery(int page) {
 		UriComponents uriComponents = 
 				UriComponentsBuilder.newInstance()
+				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("ownerid", cri.getOwnerid())
+				.queryParam("fldrid", cri.getFldrid())
+				.queryParam("fldrname", cri.getFldrname())
+				.queryParam("applid", cri.getApplid())
 				.queryParam("page", page)
 				.queryParam("perPageNum", cri.getPerPageNum())
 				.build();
+		
 		return uriComponents.toUriString();
 	}
 	
-	public String makerSearch(int page) {
+	public String makeSearch(int page) {
 		UriComponents uriComponents = 
 				UriComponentsBuilder.newInstance()
+				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("ownerid", cri.getOwnerid())
+				.queryParam("fldrid", cri.getFldrid())
+				.queryParam("fldrname", cri.getFldrname())
+				.queryParam("applid", cri.getApplid())
 				.queryParam("page", page)
 				.queryParam("perPageNum", cri.getPerPageNum())
 				.queryParam("searchType", ((SearchCriteria)cri).getSearchType())
 				.queryParam("keyword", ((SearchCriteria)cri).getKeyword())
 				.build();
-		return uriComponents.toUriString();
+		
+		return uriComponents.toUriString();				
 	}
+	
+	public String makeLoadPage(int page) {
+		UriComponents uriComponents = 
+				UriComponentsBuilder.newInstance()
+				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("ownerid", cri.getOwnerid())
+				.queryParam("fldrid", cri.getFldrid())
+				.queryParam("fldrname", cri.getFldrname())
+				.queryParam("applid", cri.getApplid())
+				.build();
+		
+		return uriComponents.toUriString();
+    }
+	
 	
 	@SuppressWarnings("unused")
 	private String encoding(String keyword) {

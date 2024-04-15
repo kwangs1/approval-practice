@@ -6,6 +6,8 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.kwangs.folder.service.apprfolderVO;
+import com.example.kwangs.folder.service.fldrmbr2VO;
 import com.example.kwangs.folder.service.folderVO;
 
 @Repository
@@ -47,7 +49,27 @@ public class folderMapper {
 		return session.selectOne("folder.info",fldrid);
 	}
 	//기록물철 작성 시 폴더테이블 인서트
-	public void apprfolderAdd(folderVO fd) {
-		session.insert("folder.apprfolderAdd",fd);
+	public void folderAddAndApprF(folderVO fd) {
+		session.insert("folder.folderAddAndApprF",fd);
+	}
+	//기록물철 작성
+	public void apprFolderAdd(apprfolderVO af) {
+		session.insert("folder.apprFolderAdd",af);
+	}
+	//기안 시 기록물철 가져와서 집어넣기
+	public List<apprfolderVO> DeptApprFolderList(String procdeptid){
+		return session.selectList("folder.DeptApprFolderList",procdeptid);
+	}
+	//최종 결재 이후 문서폴더 멤버 테이블 insert
+	public void DocFldrmbr2Add(fldrmbr2VO fm2) {
+		session.insert("folder.DocFldrmbr2Add",fm2);
+	}
+	//문서함 기록물 등록대장 fldrid 가져오기
+	public folderVO DocFloder(String ownerid) {
+		return session.selectOne("folder.DocFloder",ownerid);
+	}
+	//결재함 사이드메뉴
+	public List<folderVO>ApprfldrSidebar(String ownerid){
+		return session.selectList("folder.ApprfldrSidebar",ownerid);
 	}
 }
