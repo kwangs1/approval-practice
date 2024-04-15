@@ -60,15 +60,13 @@ public class approvalController {
 	}
 
 	//결재함
-	@GetMapping("/ApprFrame")
-	public String apprFrame(Model model, HttpServletRequest request) {
-		String ownerid = (String) request.getSession().getAttribute("userId");
-		
+	@GetMapping("/apprFrame")
+	public void apprFrame(Model model, HttpServletRequest request) {
+		String id = (String) request.getSession().getAttribute("userId");
+		request.getParameter(id);
 		//결재함 사이드 메뉴
-		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(ownerid);
-		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);
-		
-		return "/approval/ApprFrame";		
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
 	}
 	
 	//결재대기
@@ -81,6 +79,10 @@ public class approvalController {
 		String id =(String)req.getSession().getAttribute("userId");
 		List<approvalVO> wait = service.apprWaitList(id);
 		model.addAttribute("list",wait);
+		
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
 		
 		for(approvalVO ap : wait) {	
 			List<participantVO> participantInfo = serviceP.ApprWaitFLowInfo(ap.getAppr_seq());
@@ -100,6 +102,10 @@ public class approvalController {
 		String id =(String)req.getSession().getAttribute("userId");
 		List<approvalVO> progrs = service.SanctnProgrsList(id);
 		model.addAttribute("list",progrs);
+		
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
 		
 		for(approvalVO ap : progrs) {	
 			List<participantVO> participantInfo = serviceP.ApprProgrsFLowInfo(ap.getAppr_seq());

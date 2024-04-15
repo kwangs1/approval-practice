@@ -34,7 +34,7 @@ function loadApprFrameList(){
 		var apprUrl = decodeURIComponent(g_lastApprUrl);
 		window.location.href = apprUrl
 	}else{
-		url = '<c:url value="ApprFrame"/>';
+		url = '<c:url value="/approval/apprFrame?id=${userId}"/>';
 		window.location.href = url;
 	}
 }

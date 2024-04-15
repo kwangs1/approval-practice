@@ -12,7 +12,7 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
-<%@ include file="../approval/ApprFrame.jsp" %>
+<%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
 <div class="cd1">
   <h2>결재대기</h2> 
