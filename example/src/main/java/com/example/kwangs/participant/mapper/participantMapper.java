@@ -90,4 +90,9 @@ public class participantMapper{
 	public void ResubmissionParticipantWrite(participantVO participant) {
 		session.insert("mapper.participant.ResubmissionParticipantWrite",participant);
 	}
+	
+	//중간 결재자 결재 차례 시 중간결재자에 대한 결재대기 & 결재진행 
+	public List<participantVO> ApprFlowLines(String signerid){
+		return session.selectList("mapper.participant.ApprFlowLines",signerid);
+	}
 }

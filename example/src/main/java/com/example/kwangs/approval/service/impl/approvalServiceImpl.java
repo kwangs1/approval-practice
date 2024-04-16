@@ -12,6 +12,9 @@ import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.folder.mapper.folderMapper;
+import com.example.kwangs.folder.service.fldrmbrVO;
+import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.service.userVO;
 
 
@@ -20,6 +23,8 @@ public class approvalServiceImpl implements approvalService{
 	private final Logger log = LoggerFactory.getLogger(approvalServiceImpl.class);
 	@Autowired
 	private approvalMapper mapper;
+	@Autowired
+	private folderMapper fMapper;
 	
 	//문서 작성
 	@Override
@@ -27,6 +32,23 @@ public class approvalServiceImpl implements approvalService{
 		String abbr = approval.getDocregno();
 		approval.setDocregno(abbr+"-@N");
 		mapper.apprWrite(approval);
+		
+		//기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기
+		folderVO ApprFldrmbr_2020_D = fMapper.ApprFldrmbr_2020(approval.getDrafterid());
+		folderVO ApprFldrmbr_6021_D = fMapper.ApprFldrmbr_6021(approval.getDrafterid());
+		
+		fldrmbrVO fm_2020_D = new fldrmbrVO();
+		fm_2020_D.setFldrid(ApprFldrmbr_2020_D.getFldrid());
+		fm_2020_D.setFldrmbrid(approval.getAppr_seq());
+		fm_2020_D.setRegisterid(approval.getDrafterid());
+		fMapper.ApprFldrmbrInsert(fm_2020_D);
+		
+		fldrmbrVO fm_6021_D = new fldrmbrVO();
+		fm_6021_D.setFldrid(ApprFldrmbr_6021_D.getFldrid());
+		fm_6021_D.setFldrmbrid(approval.getAppr_seq());
+		fm_6021_D.setRegisterid(approval.getDrafterid());
+		fMapper.ApprFldrmbrInsert(fm_6021_D);
+
 	}
 	//결재대기
 	@Override

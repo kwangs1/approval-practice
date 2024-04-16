@@ -157,4 +157,13 @@
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
     #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname},0,#{statusname})
 </insert>
+
+<!-- 중간 결재자 결재 차례 시 중간결재자에 대한 결재대기 & 결재진행  -->
+<select id="ApprFlowLines" resultType="participantVO" parameterType="String">
+	select * 
+		from participant p
+	inner join approval a
+	on p.appr_seq = a.appr_seq
+	where p.signerid = #{signerid}
+</select>
 </mapper>

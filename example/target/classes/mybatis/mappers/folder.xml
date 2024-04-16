@@ -108,4 +108,16 @@
 	where ownerid = #{ownerid} 
 	order by fldrid, fldrdepth
 </select>
+<!-- 기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기-->
+<select id="ApprFldrmbr_2020" resultType="folderVO" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 2020
+</select>
+<select id="ApprFldrmbr_6021" resultType="folderVO" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 6021
+</select>
+<!-- 기안 시 기안자의 결재진행&기안한 문서 결재멤버 폴더테이블 등록 -->
+<insert id="ApprFldrmbrInsert" parameterType="com.example.kwangs.folder.service.fldrmbrVO">
+	insert into fldrmbr
+	values(#{fldrid},#{fldrmbrid},sysdate,sysdate,#{registerid},#{updatedate},#{updaterid})
+</insert>
 </mapper>

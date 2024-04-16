@@ -15,6 +15,7 @@ import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.fldrmbr2VO;
+import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
@@ -158,6 +159,26 @@ public class participantServiceImpl implements participantService{
 		                pVO.setApprovaltype(4);
 		                pVO.setApprovalstatus(4098);
 		                isFirst = false;
+		        		
+		        		/*중간 결재자 결재 차례 시 중간결재자에 대한 결재대기 & 결재진행 
+		        		log.info("현재 결재멤버 폴더 를 만들 결재자 "+pVO.getSignerid());
+
+		        		folderVO ApprFldrmbr_2020_M = folderMapper.ApprFldrmbr_2020(pVO.getSignerid());
+		        		folderVO ApprFldrmbr_2021_M = folderMapper.ApprFldrmbr_6021(pVO.getSignerid());
+		        				
+		        		fldrmbrVO fm_2010_M = new fldrmbrVO();
+		        		fm_2010_M.setFldrid(ApprFldrmbr_2020_M.getFldrid());
+		        		fm_2010_M.setFldrmbrid(pVO.getAppr_seq());
+		        		fm_2010_M.setRegisterid(pVO.getSignerid());
+		        		folderMapper.ApprFldrmbrInsert(fm_2010_M);
+		        					
+		        		fldrmbrVO fm_2020_M = new fldrmbrVO();
+		        		fm_2020_M.setFldrid(ApprFldrmbr_2021_M.getFldrid());
+		        		fm_2020_M.setFldrmbrid(pVO.getAppr_seq());
+		        		fm_2020_M.setRegisterid(pVO.getSignerid());
+		        		folderMapper.ApprFldrmbrInsert(fm_2020_M);
+		        					
+		        		log.info("폴더 생성 완료한 결재자 " + pVO.getSignerid());*/
 		            } else {
 		                pVO.setApprovaltype(8);
 		                pVO.setApprovalstatus(4098);

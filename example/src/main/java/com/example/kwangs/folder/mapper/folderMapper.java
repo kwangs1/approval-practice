@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.fldrmbr2VO;
+import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderVO;
 
 @Repository
@@ -71,5 +72,16 @@ public class folderMapper {
 	//결재함 사이드메뉴
 	public List<folderVO>ApprfldrSidebar(String ownerid){
 		return session.selectList("folder.ApprfldrSidebar",ownerid);
+	}
+	//기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기
+	public folderVO ApprFldrmbr_2020(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_2020",ownerid);
+	}
+	public folderVO ApprFldrmbr_6021(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_6021",ownerid);
+	}
+	//기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록
+	public void ApprFldrmbrInsert(fldrmbrVO fm) {
+		session.insert("folder.ApprFldrmbrInsert",fm);
 	}
 }
