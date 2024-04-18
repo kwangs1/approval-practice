@@ -75,7 +75,7 @@
 
 <!-- 일괄 결재 시 기준이 되는 appr_seq 조회 쿼리 -->
 <select id="getApprovalApprseq" resultType="participantVO" parameterType="String">
-	select a.appr_seq, p.line_seq, p.approvaltype, p.participant_seq
+	select a.appr_seq, p.line_seq, p.approvaltype, p.participant_seq, p.signerid, p.status, p.approvalstatus
 		from approval a
 	inner join participant p 
 		on a.appr_seq = p.appr_seq

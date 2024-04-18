@@ -34,20 +34,20 @@ public class approvalServiceImpl implements approvalService{
 		mapper.apprWrite(approval);
 		
 		//기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기
-		folderVO ApprFldrmbr_2020_D = fMapper.ApprFldrmbr_2020(approval.getDrafterid());
-		folderVO ApprFldrmbr_6021_D = fMapper.ApprFldrmbr_6021(approval.getDrafterid());
+		folderVO ApprFldrmbr_2020 = fMapper.ApprFldrmbr_2020(approval.getDrafterid());
+		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());
 		
-		fldrmbrVO fm_2020_D = new fldrmbrVO();
-		fm_2020_D.setFldrid(ApprFldrmbr_2020_D.getFldrid());
-		fm_2020_D.setFldrmbrid(approval.getAppr_seq());
-		fm_2020_D.setRegisterid(approval.getDrafterid());
-		fMapper.ApprFldrmbrInsert(fm_2020_D);
+		fldrmbrVO fm_2020 = new fldrmbrVO();
+		fm_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
+		fm_2020.setFldrmbrid(approval.getAppr_seq());
+		fm_2020.setRegisterid(approval.getDrafterid());
+		fMapper.ApprFldrmbrInsert(fm_2020);
 		
-		fldrmbrVO fm_6021_D = new fldrmbrVO();
-		fm_6021_D.setFldrid(ApprFldrmbr_6021_D.getFldrid());
-		fm_6021_D.setFldrmbrid(approval.getAppr_seq());
-		fm_6021_D.setRegisterid(approval.getDrafterid());
-		fMapper.ApprFldrmbrInsert(fm_6021_D);
+		fldrmbrVO fm_6021 = new fldrmbrVO();
+		fm_6021.setFldrid(ApprFldrmbr_6021.getFldrid());
+		fm_6021.setFldrmbrid(approval.getAppr_seq());
+		fm_6021.setRegisterid(approval.getDrafterid());
+		fMapper.ApprFldrmbrInsert(fm_6021);
 
 	}
 	//결재대기

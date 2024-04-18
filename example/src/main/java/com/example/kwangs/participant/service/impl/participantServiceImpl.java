@@ -37,7 +37,36 @@ public class participantServiceImpl implements participantService{
 	@Autowired
 	private folderMapper folderMapper;
 	
+	
+	public void IntermediateApprFldrmbr(String appr_seq) {
+		//기안자 다음 결재자 결재대기,결재진행 폴더 생성
+		List<participantVO> SignerInfo = mapper.getApprovalApprseq(appr_seq);
+		for(int i=0; i < SignerInfo.size(); i++) {
+			participantVO IntermediateApprFldrmbr  = SignerInfo.get(i);
+			
+			if(IntermediateApprFldrmbr.getApprovaltype() == 4 && i+1 == SignerInfo.size()) {
+				log.info("ID: "+IntermediateApprFldrmbr.getSignerid());
+				log.info("STATUS: "+IntermediateApprFldrmbr.getApprovalstatus());
+				log.info("TYPE: "+IntermediateApprFldrmbr.getApprovaltype());
+				folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(IntermediateApprFldrmbr.getSignerid());
+				folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(IntermediateApprFldrmbr.getSignerid());
+				
+				fldrmbrVO fm_2010 = new fldrmbrVO();
+				fm_2010.setFldrid(ApprFldrmbr_2010.getFldrid());
+				fm_2010.setFldrmbrid(IntermediateApprFldrmbr.getAppr_seq());
+				fm_2010.setRegisterid(IntermediateApprFldrmbr.getSignerid());
+				folderMapper.ApprFldrmbrInsert(fm_2010);
+				
+				fldrmbrVO fm_2020 = new fldrmbrVO();
+				fm_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
+				fm_2020.setFldrmbrid(IntermediateApprFldrmbr.getAppr_seq());
+				fm_2020.setRegisterid(IntermediateApprFldrmbr.getSignerid());
+				folderMapper.ApprFldrmbrInsert(fm_2020);			
 
+			}
+		}
+		
+	}
 	//문서 기안 시 결재선 지정
 	@Override
 	public void ParticipantWrite(List<participantVO> participant,String id){
@@ -61,11 +90,11 @@ public class participantServiceImpl implements participantService{
 			}else {
 				pVO.setStatusname("결재");
 			}
-			// 이후 insert 된 receipts_seq 값 가져올 것.
 			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
 			
+			IntermediateApprFldrmbr(pVO.getAppr_seq());
 	        //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
 	        xmlBuilder.append("<participant>");
 	        xmlBuilder.append("<deptid>").append(pVO.getDeptid()).append("</deptid>");
@@ -164,7 +193,7 @@ public class participantServiceImpl implements participantService{
 		        		log.info("현재 결재멤버 폴더 를 만들 결재자 "+pVO.getSignerid());
 
 		        		folderVO ApprFldrmbr_2020_M = folderMapper.ApprFldrmbr_2020(pVO.getSignerid());
-		        		folderVO ApprFldrmbr_2021_M = folderMapper.ApprFldrmbr_6021(pVO.getSignerid());
+		        		folderVO ApprFldrmbr_2021_M = folderMapper.ApprFldrmbr_2010(pVO.getSignerid());
 		        				
 		        		fldrmbrVO fm_2010_M = new fldrmbrVO();
 		        		fm_2010_M.setFldrid(ApprFldrmbr_2020_M.getFldrid());
@@ -415,4 +444,5 @@ public void DocFldrmbr2Add(String appr_seq) {
 	}
 }
 
+//
 }

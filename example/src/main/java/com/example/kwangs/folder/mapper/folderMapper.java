@@ -80,6 +80,10 @@ public class folderMapper {
 	public folderVO ApprFldrmbr_6021(String ownerid) {
 		return session.selectOne("folder.ApprFldrmbr_6021",ownerid);
 	}
+	//중간 결재자 및 최종결재자의 결재 차례시 결재대기 폴더 정보 가져오기
+	public folderVO ApprFldrmbr_2010(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_2010",ownerid);
+	}	
 	//기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록
 	public void ApprFldrmbrInsert(fldrmbrVO fm) {
 		session.insert("folder.ApprFldrmbrInsert",fm);
