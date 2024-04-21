@@ -25,7 +25,6 @@ public class participantMapper{
 	
 	//일괄 결재 
 	public void  BulkAppr(Map<String, Object> params) {
-		log.info("dao{} :"+params);
 		session.update("mapper.participant.BulkAppr",params);
 	}
 	
@@ -41,7 +40,6 @@ public class participantMapper{
 	
 	//결재 시 결재자들의 타입 값 변경
 	public void updateNextApprovalType(Map<String, Object> params) {
-		log.info("Length value..{} :" + params);
 		session.update("mapper.participant.updateNextApprovalType",params);
 	}
 	
@@ -52,7 +50,6 @@ public class participantMapper{
 	
 	//결재
 	public void FlowAppr(Map<String,Object> res) {
-		log.info("Mapper FlowAppr RecData {}"+res);
 		session.update("mapper.participant.FlowAppr",res);
 	}
 

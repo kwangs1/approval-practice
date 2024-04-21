@@ -1,6 +1,7 @@
 package com.example.kwangs.folder.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,9 +84,27 @@ public class folderMapper {
 	//중간 결재자 및 최종결재자의 결재 차례시 결재대기 폴더 정보 가져오기
 	public folderVO ApprFldrmbr_2010(String ownerid) {
 		return session.selectOne("folder.ApprFldrmbr_2010",ownerid);
-	}	
+	}
+	//중간 결재자 및 최종결재자의 결재 차례시 결재한 문서 폴더 정보 가져오기
+	public folderVO ApprFldrmbr_6022(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_6022",ownerid);
+	}
 	//기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록
 	public void ApprFldrmbrInsert(fldrmbrVO fm) {
 		session.insert("folder.ApprFldrmbrInsert",fm);
+	}
+	//결재멤버폴더 테이블에서의 해당 문서 결재대기&결재진행 삭제
+	public void deleteApprFldrmbr_2010(Map<String,Object> sendData_2010) {
+		session.delete("folder.deleteApprFldrmbr_2010",sendData_2010);
+	}
+	public void deleteApprFldrmbr_2020(Map<String,Object> sendData_2020) {
+		session.delete("folder.deleteApprFldrmbr_2020",sendData_2020);
+	}
+	//해당 문서의 결재자들에 대한 결재대기,결재진행 폴더 중복 체크
+	public int checkFldrmbr_2010(Map<String,Object> check2010) {
+		return session.selectOne("folder.checkFldrmbr_2010",check2010);
+	}
+	public int checkFldrmbr_2020(Map<String,Object> check2020) {
+		return session.selectOne("folder.checkFldrmbr_2020",check2020);
 	}
 }
