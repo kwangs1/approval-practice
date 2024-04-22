@@ -35,7 +35,7 @@
   	<c:otherwise>
   	 <li>
        <a href="#" data-fldrid = "${item.fldrid}"
-      	onClick ="loadDocFrame('${user.deptid}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">
+      	onClick ="loadDocFrame('${user.deptid}','${user.id}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">
       ${item.fldrname}</a>
     </li>	
   	</c:otherwise>
@@ -181,9 +181,9 @@ $('#selectAll').change(function(){
 		checkboxes[i].checked = this.checked;
 	}
 })
-function loadDocFrame(drafterdeptid,ownerid,fldrid,fldrname,applid){
+function loadDocFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 	var url = '<c:url value="docFrame"/>'
-	url += '?drafterdeptid='+drafterdeptid+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
+	url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
 			
 	window.location.href = url;
 	setCookie_f(url);

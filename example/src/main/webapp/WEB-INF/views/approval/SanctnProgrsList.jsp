@@ -10,6 +10,12 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+ <style>
+.disable{color:gray;}
+.pagination {list-style: none; display: flex;}
+.pagination li {margin: 0 5px;}
+.pagination a {text-decoration: none; color: #333; padding: 5px 10px; border: 1px solid #ccc; border-radius: 3px;}
+</style>
 </head>
 <body>
   <%@ include file="../approval/apprFrame.jsp" %>
@@ -18,6 +24,26 @@
   <h2>결재진행</h2>
   <a href="javascript:RetireAppr()">회수</a> |
   <a href="javascript:Resubmission_Pop()">재기안</a>
+ <%-- 검색 --%>
+<div class="search" align="center">
+    <select id="searchType" name="searchType">
+		<option value="t"<c:out value="${scri.searchType eq 't' ? 'selected' : ''}"/>>제목</option>
+		<option value="d"<c:out value="${scri.searchType eq 'd' ? 'selected' : ''}"/>>문서번호</option>
+		<option value="u"<c:out value="${scri.searchType eq 'u' ? 'selected' : ''}"/>>기안자</option>
+    </select>
+	<input type="text" name="keyword" id="keywordInput" value="${scri.keyword}" 
+		onkeydown="javascript:if (event.keyCode == 13) {fncSearch();}"/>
+	<button onclick="fncSearch()" type="button">검색</button>
+   
+	<select name="perPageNum" id="perPageNum" onchange="loadPage(1)">
+	 <option value="10"
+	 <c:if test="${scri.getPerPageNum() == 10 }">selected="selected"</c:if>>10개</option>
+	 <option value="15"
+	 <c:if test="${scri.getPerPageNum() == 15 }">selected="selected"</c:if>>15개</option>
+	 <option value="20"
+	 <c:if test="${scri.getPerPageNum() == 20 }">selected="selected"</c:if>>20개</option>
+	</select>
+</div>
  <table class="table table-bordered">
     <thead>
       <tr>
@@ -61,10 +87,74 @@
     </c:forEach>
     </tbody>
   </table>
+ <ul class="pagination">
+		<c:if test="${pageMaker.prev}">
+			<li>
+				<a href='<c:url value="SanctnProgrsList?page=${pageMaker.startPage-1}"/>'>◀</a>
+			</li>
+		</c:if>
+		<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="pageNum">
+			<li>
+				<a href='<c:url value="SanctnProgrsList${pageMaker.makeSearch(pageNum)}"/>'>&nbsp;&nbsp;${pageNum}&nbsp;&nbsp;</a>
+			</li>
+		</c:forEach>
+		<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
+			<li>
+				<a href='<c:url value="SanctnProgrsList${pageMaker.makeSearch(pageMaker.endPage+1)}"/>'>▶</a>
+			</li>
+		</c:if>
+	</ul>
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script type="text/javascript">
+$(document).ready(function(){
+	//쿠키 값 가져오기..
+	var getPerPageNum = getCookie("perPageNum");
+	if(getPerPageNum !== null){
+		$('#perPageNum').val(getPerPageNum);
+	}
+	
+	//검색어 및 타입 값 검색 시 초기화 안되도록... 
+	var urlParams = new URLSearchParams(window.location.search);
+	var searchType = urlParams.get('searchType');
+	var keyword = urlParams.get('keyword');
+	
+	if(searchType == null && keyword == null){
+		$('#keywordInput').val('');
+		$('#searchType').val("t");
+	}else{
+		$('#keywordInput').val(decodeURIComponent(keyword));
+		$('#searchType').val(searchType);		
+	}
+});
+function fncSearch(){
+	self.location = "SanctnProgrsList" + "${pageMaker.makeQuery(1)}" + "&searchType=" + $("select option:selected").val() 
+	+ "&keyword=" + encodeURIComponent($('#keywordInput').val());
+}
+
+$('#perPageNum').change(function(){
+	var selectedVal = $(this).val();
+	saveCookie(selectedVal);
+})
+function loadPage(pageNum){
+	var searchType = $('#searchType').val();
+	var keyword = $('#keywordInput').val();
+	var perPageNum = $('#perPageNum').val();
+
+	var url = '<c:url value="SanctnProgrsList"/>'+ "${pageMaker.makeLoadPage(1)}";
+	
+	if(searchType !== ''){
+		url += '&searchType=' + searchType;
+	}
+	if(keyword !== ''){
+		url += '&keyword=' +keyword;
+	}
+	url += '&perPageNum=' + perPageNum;
+	
+	window.location.href = url;
+}
+
 var a_status = $('#a_status').val();
 var checkboxes = document.getElementsByName('appr_seq');
 

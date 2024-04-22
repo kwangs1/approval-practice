@@ -25,7 +25,9 @@
   	</c:when>
   	<c:otherwise>
   	 <li>     
-      <a href="#" data-applid ="${item.applid}"  class="ApprFrame">${item.fldrname}</a>
+      <a href="#" data-applid ="${item.applid}"  
+      onClick ="loadApprFrame('${user.deptid}','${user.id}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">
+      ${item.fldrname}</a>
     </li>	
   	</c:otherwise>
   </c:choose>
@@ -47,22 +49,21 @@ $(document).ready(function(){
 	
 })
 
-
-$('a.ApprFrame').on('click',function(){
-	var applid = $(this).attr('data-applid');
-	
+function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 	if(applid === '2010'){
-		url = "<c:url value='/approval/apprWaitList'/>";
+		var url = '<c:url value="/approval/apprWaitList"/>'
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
 		window.location.href = url;
 		setCookie_f2(url);
 	}
 	else if(applid === '2020'){
-		url = "<c:url value='/approval/SanctnProgrsList'/>";
+		var url = "<c:url value='/approval/SanctnProgrsList'/>";
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
 		window.location.href = url;
 		setCookie_f2(url);
 	}
 	setCookie_a(applid);
-})
+}
 </script>
 </body>
 </html>

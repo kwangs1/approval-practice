@@ -40,7 +40,7 @@ public class participantServiceImpl implements participantService{
 	/*
 	 * participant 내 기능 메서드
 	 */
-	//기안 시 기안자 다음 결재자의 결재대기,결재진행 폴더 생성
+	//기안 시 기안자 다음 결재자의 결재대기 및 전 결재자에 대해 결재진행 폴더 생성
 	public void IntermediateApprFldrmbr(String appr_seq) {
 		//기안자 다음 결재자 결재대기,결재진행 폴더 생성
 		List<participantVO> SignerInfo = mapper.getApprovalApprseq(appr_seq);
@@ -49,21 +49,33 @@ public class participantServiceImpl implements participantService{
 			
 			if(IntermediateApprFldrmbr.getApprovaltype() == 4 && i+1 == SignerInfo.size()) {
 				folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(IntermediateApprFldrmbr.getSignerid());
-				folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(IntermediateApprFldrmbr.getSignerid());
 				
 				fldrmbrVO fm_2010 = new fldrmbrVO();
 				fm_2010.setFldrid(ApprFldrmbr_2010.getFldrid());
 				fm_2010.setFldrmbrid(IntermediateApprFldrmbr.getAppr_seq());
 				fm_2010.setRegisterid(IntermediateApprFldrmbr.getSignerid());
 				folderMapper.ApprFldrmbrInsert(fm_2010);
-				
+	
+			}
+		}
+		for(participantVO pps :SignerInfo) {				
+			folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(pps.getSignerid());
+			
+			Map<String,Object> check2020 = new HashMap<>();
+			check2020.put("fldrmbrid", pps.getAppr_seq());
+			check2020.put("registerid", pps.getSignerid());
+			check2020.put("fldrid", ApprFldrmbr_2020.getFldrid());
+			
+			int checkFldrmbr_2020 = folderMapper.checkFldrmbr_2020(check2020);	
+			
+			if(checkFldrmbr_2020 == 0) {
 				fldrmbrVO fm_2020 = new fldrmbrVO();
 				fm_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
-				fm_2020.setFldrmbrid(IntermediateApprFldrmbr.getAppr_seq());
-				fm_2020.setRegisterid(IntermediateApprFldrmbr.getSignerid());
+				fm_2020.setFldrmbrid(pps.getAppr_seq());
+				fm_2020.setRegisterid(pps.getSignerid());
 				folderMapper.ApprFldrmbrInsert(fm_2020);			
-			}
-		}		
+			}			
+		}
 	}
 	//결재 상신 시 결재선 테이블 관련 approvalType, approvalStatus 컬럼 값 셋팅 메서드
 	public void approvalTypeAndStatus(List<participantVO> participant) {
@@ -170,17 +182,35 @@ public class participantServiceImpl implements participantService{
 	    				folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(nextParticipant.getSignerid());
 	    				folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(nextParticipant.getSignerid());
 	    				
-	    				fldrmbrVO Fldrmbr_2010 = new fldrmbrVO();
-	    				Fldrmbr_2010.setFldrid(ApprFldrmbr_2010.getFldrid());
-	    				Fldrmbr_2010.setFldrmbrid(nextParticipant.getAppr_seq());
-	    				Fldrmbr_2010.setRegisterid(nextParticipant.getSignerid());
-						folderMapper.ApprFldrmbrInsert(Fldrmbr_2010);			
+	    				//해당 결재자 해당 문서에 폴더값 있나 없나 중복체크
+	    				Map<String,Object> check2010 = new HashMap<>();
+	    				check2010.put("fldrmbrid", nextParticipant.getAppr_seq());
+	    				check2010.put("registerid", nextParticipant.getSignerid());
+	    				check2010.put("fldrid", ApprFldrmbr_2010.getFldrid());
+	    				
+	    				Map<String,Object> check2020 = new HashMap<>();
+	    				check2020.put("fldrmbrid", nextParticipant.getAppr_seq());
+	    				check2020.put("registerid", nextParticipant.getSignerid());
+	    				check2020.put("fldrid", ApprFldrmbr_2020.getFldrid());
+	    				
+	    				int checkFldrmbr_2010 = folderMapper.checkFldrmbr_2010(check2010);
+	    				int checkFldrmbr_2020 = folderMapper.checkFldrmbr_2020(check2020);		
+	    				
+	    				if(checkFldrmbr_2010 == 0) {
+		    				fldrmbrVO Fldrmbr_2010 = new fldrmbrVO();
+		    				Fldrmbr_2010.setFldrid(ApprFldrmbr_2010.getFldrid());
+		    				Fldrmbr_2010.setFldrmbrid(nextParticipant.getAppr_seq());
+		    				Fldrmbr_2010.setRegisterid(nextParticipant.getSignerid());
+							folderMapper.ApprFldrmbrInsert(Fldrmbr_2010);			
+	    				}			
 						
-	    				fldrmbrVO Fldrmbr_2020 = new fldrmbrVO();
-	    				Fldrmbr_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
-	    				Fldrmbr_2020.setFldrmbrid(nextParticipant.getAppr_seq());
-	    				Fldrmbr_2020.setRegisterid(nextParticipant.getSignerid());
-						folderMapper.ApprFldrmbrInsert(Fldrmbr_2020);	
+	    				if(checkFldrmbr_2020 == 0) {
+		    				fldrmbrVO Fldrmbr_2020 = new fldrmbrVO();
+		    				Fldrmbr_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
+		    				Fldrmbr_2020.setFldrmbrid(nextParticipant.getAppr_seq());
+		    				Fldrmbr_2020.setRegisterid(nextParticipant.getSignerid());
+							folderMapper.ApprFldrmbrInsert(Fldrmbr_2020);			
+	    				}
 	                    break; // 업데이트 후 루프 종료
 	                }             
 	                nextIndex++;
@@ -289,54 +319,6 @@ public class participantServiceImpl implements participantService{
 			}
 		}
 	}
-	//결재 시의 결재멤버 폴더 테이블에 해당문서의 결재자 중 결재진행 및 결재대기 중복 체크
-	public void DuplicationCheck(String appr_seq) {
-		log.info("체크로직 검사...");
-		List<participantVO> Lines = mapper.getApprovalApprseq(appr_seq);
-		for(int i=0; i< Lines.size(); i++) {
-			participantVO pp = Lines.get(i);
-			folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(pp.getSignerid());
-			folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(pp.getSignerid());
-			Map<String,Object> check2010 = new HashMap<>();
-			check2010.put("fldrmbrid", pp.getAppr_seq());
-			check2010.put("registerid", pp.getSignerid());
-			check2010.put("fldrid", ApprFldrmbr_2010.getFldrid());
-			
-			Map<String,Object> check2020 = new HashMap<>();
-			check2020.put("fldrmbrid", pp.getAppr_seq());
-			check2020.put("registerid", pp.getSignerid());
-			check2020.put("fldrid", ApprFldrmbr_2020.getFldrid());
-			
-			int checkFldrmbr_2010 = folderMapper.checkFldrmbr_2010(check2010);
-			int checkFldrmbr_2020 = folderMapper.checkFldrmbr_2020(check2020);			
-			
-			if(pp.getApprovaltype() == 4 && i +1< Lines.size()) {
-				log.info("체크 Appr_Seq "+pp.getAppr_seq());
-				log.info("체크 Signerid "+pp.getSignerid());
-				log.info("체크 fldriid_2020 "+ApprFldrmbr_2020.getFldrid());
-				log.info("체크 fldriid_2010 "+ApprFldrmbr_2010.getFldrid());
-				log.info("현재 해당 문서에 대한 결재자의 결재대기폴더 갯수.. "+checkFldrmbr_2010);
-				log.info("현재 해당 문서에 대한 결재자의 결재진행폴더 갯수.. "+checkFldrmbr_2020);
-				if(checkFldrmbr_2010 == 0) {
-					fldrmbrVO Fldrmbr_2010 = new fldrmbrVO();
-					Fldrmbr_2010.setFldrid(ApprFldrmbr_2010.getFldrid());
-					Fldrmbr_2010.setFldrmbrid(pp.getAppr_seq());
-					Fldrmbr_2010.setRegisterid(pp.getSignerid());
-					folderMapper.ApprFldrmbrInsert(Fldrmbr_2010);			
-				}else {
-					log.info("해당 사용자는 결재대기 폴더가 이미 존재합니다");}
-				if(checkFldrmbr_2020 == 0) {
-					fldrmbrVO Fldrmbr_2020 = new fldrmbrVO();
-					Fldrmbr_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
-					Fldrmbr_2020.setFldrmbrid(pp.getAppr_seq());
-					Fldrmbr_2020.setRegisterid(pp.getSignerid());
-					folderMapper.ApprFldrmbrInsert(Fldrmbr_2020);	
-				}else {
-					log.info("해당 사용자는 결재진행 폴더가 이미 존재합니다");}					
-		
-				}				
-			}
-	}
 //participant 내 기능 메서드 끝
 
 	//문서 기안 시 결재선 등록
@@ -422,14 +404,32 @@ public class participantServiceImpl implements participantService{
 		mapper.FlowAppr(res);
 		
 		updateNextApprovalType(participant.getAppr_seq());		
-		//결재한 문서 생성 && 해당 문서 결재자 리스트 불러오기
-		folderVO fldrmbr_6022 = folderMapper.ApprFldrmbr_6022(participant.getSignerid()); //결재한문서
-		//결지시 결재한문서 폴더 등록
-		fldrmbrVO fm_6022 = new fldrmbrVO();
-		fm_6022.setFldrid(fldrmbr_6022.getFldrid());
-		fm_6022.setFldrmbrid(participant.getAppr_seq());
-		fm_6022.setRegisterid(participant.getSignerid());
-		folderMapper.ApprFldrmbrInsert(fm_6022);
+		//결재한 문서 & 기안한 문서 폴더 값 가져오기
+		folderVO ApprFldrmbr_6021 = folderMapper.ApprFldrmbr_6021(participant.getSignerid()); //기안한 문서
+		folderVO ApprFldrmbr_6022 = folderMapper.ApprFldrmbr_6022(participant.getSignerid()); //결재한문서
+		//기안한문서
+		Map<String,Object> check6021 = new HashMap<>();
+		check6021.put("fldrid", ApprFldrmbr_6021.getFldrid());
+		check6021.put("fldrmbrid", participant.getAppr_seq());
+		check6021.put("registerid", participant.getSignerid());
+		//결재한문서
+		Map<String,Object> check6022 = new HashMap<>();
+		check6022.put("fldrid", ApprFldrmbr_6022.getFldrid());
+		check6022.put("fldrmbrid", participant.getAppr_seq());
+		check6022.put("registerid", participant.getSignerid());
+		//체크
+		int checkAppr_6021 = folderMapper.checkFldrmbr_6021(check6021);
+		int checkAppr_6022 = folderMapper.checkFldrmbr_6022(check6022);
+		if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
+			//결재시 결재한문서 폴더 등록
+			fldrmbrVO fm_6022 = new fldrmbrVO();
+			fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
+			fm_6022.setFldrmbrid(participant.getAppr_seq());
+			fm_6022.setRegisterid(participant.getSignerid());
+			folderMapper.ApprFldrmbrInsert(fm_6022);
+		}else if(checkAppr_6022 > 0) {
+			log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+		}
 		//최종 결재자 결재 시 해당 문서에 대한 결재멤버 테이블에서의 모든 결재자 결재진행,결재대기 삭제
 		DeleteSignerApprFldrmbr(participant);	
 	}

@@ -71,14 +71,30 @@ public class approvalController {
 	
 	//결재대기
 	@GetMapping("/apprWaitList")
-	public String apprWaitList(Model model,HttpServletRequest req) {
-		
-		if(req.getSession(false).getAttribute("user") == null) {
+	public String apprWaitList(Model model,HttpServletRequest request, SearchCriteria scri, folderVO fd) {	
+		if(request.getSession(false).getAttribute("user") == null) {
 			return "redirect:/user/login";
 		}
-		String id =(String)req.getSession().getAttribute("userId");
-		List<approvalVO> wait = service.apprWaitList(id);
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setDrafterdeptid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		
+		List<approvalVO> wait = service.apprWaitList(scri);
 		model.addAttribute("list",wait);
+		
+		pageMaker.setTotalCount(service.totalApprCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
 		
 		//결재함 사이드 메뉴
 		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
@@ -94,18 +110,34 @@ public class approvalController {
 	
 	//결재진행
 	@GetMapping("/SanctnProgrsList")
-	public String SanctnProgrsList(Model model,HttpServletRequest req) {
+	public String SanctnProgrsList(Model model,HttpServletRequest request, SearchCriteria scri, folderVO fd) {
 		
-		if(req.getSession(false).getAttribute("user") == null) {
+		if(request.getSession(false).getAttribute("user") == null) {
 			return "redirect:/user/login";
 		}
-		String id =(String)req.getSession().getAttribute("userId");
-		List<approvalVO> progrs = service.SanctnProgrsList(id);
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setDrafterdeptid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		List<approvalVO> progrs = service.SanctnProgrsList(scri);
 		model.addAttribute("list",progrs);
 		
 		//결재함 사이드 메뉴
 		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
 		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
+
+		pageMaker.setTotalCount(service.totalApprCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
 		
 		for(approvalVO ap : progrs) {	
 			List<participantVO> participantInfo = serviceP.ApprProgrsFLowInfo(ap.getAppr_seq());
@@ -120,9 +152,11 @@ public class approvalController {
 	public void docFrame(Model model, HttpServletRequest request, SearchCriteria scri, folderVO fd, approvalVO ap) {
 		PageMaker pageMaker = new PageMaker();
 		pageMaker.setCri(scri);
-		
+
+		String id =(String)request.getSession().getAttribute("userId");
 		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
 		scri.setDrafterdeptid(drafterdeptid);
+		scri.setId(id);
 		scri.setOwnerid(fd.getOwnerid());
 		scri.setFldrid(fd.getFldrid());
 		scri.setFldrname(fd.getFldrname());

@@ -10,9 +10,9 @@ public interface approvalService {
 	//결재 작성
 	void apprWrite(approvalVO approval);
 	//결재대기
-	List<approvalVO> apprWaitList(String id);
+	List<approvalVO> apprWaitList(SearchCriteria scri);
 	//결재진행
-	List<approvalVO> SanctnProgrsList(String id);
+	List<approvalVO> SanctnProgrsList(SearchCriteria scri);
 	//문서함
 	List<approvalVO>docFrame(SearchCriteria scri);
 	//결재 상세보기
@@ -25,4 +25,6 @@ public interface approvalService {
 	void Resubmission(approvalVO approval);
 	//문서함 문서 총갯수
 	int totalDocCnt(SearchCriteria scri);
+	//결재대기 문서 총 갯수
+	int totalApprCnt(SearchCriteria scri);
 }

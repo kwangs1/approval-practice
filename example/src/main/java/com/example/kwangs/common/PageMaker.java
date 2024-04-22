@@ -81,6 +81,7 @@ public class PageMaker {
 		UriComponents uriComponents = 
 				UriComponentsBuilder.newInstance()
 				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("id", cri.getId())
 				.queryParam("ownerid", cri.getOwnerid())
 				.queryParam("fldrid", cri.getFldrid())
 				.queryParam("fldrname", cri.getFldrname())
@@ -96,6 +97,7 @@ public class PageMaker {
 		UriComponents uriComponents = 
 				UriComponentsBuilder.newInstance()
 				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("id", cri.getId())
 				.queryParam("ownerid", cri.getOwnerid())
 				.queryParam("fldrid", cri.getFldrid())
 				.queryParam("fldrname", cri.getFldrname())
@@ -113,6 +115,7 @@ public class PageMaker {
 		UriComponents uriComponents = 
 				UriComponentsBuilder.newInstance()
 				.queryParam("drafterdeptid", cri.getDrafterdeptid())
+				.queryParam("id", cri.getId())
 				.queryParam("ownerid", cri.getOwnerid())
 				.queryParam("fldrid", cri.getFldrid())
 				.queryParam("fldrname", cri.getFldrname())

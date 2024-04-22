@@ -33,16 +33,8 @@ public class approvalServiceImpl implements approvalService{
 		approval.setDocregno(abbr+"-@N");
 		mapper.apprWrite(approval);
 		
-		//기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기
-		folderVO ApprFldrmbr_2020 = fMapper.ApprFldrmbr_2020(approval.getDrafterid());
-		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());
-		
-		fldrmbrVO fm_2020 = new fldrmbrVO();
-		fm_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
-		fm_2020.setFldrmbrid(approval.getAppr_seq());
-		fm_2020.setRegisterid(approval.getDrafterid());
-		fMapper.ApprFldrmbrInsert(fm_2020);
-		
+		//기안자의 기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기 & 등록
+		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());	
 		fldrmbrVO fm_6021 = new fldrmbrVO();
 		fm_6021.setFldrid(ApprFldrmbr_6021.getFldrid());
 		fm_6021.setFldrmbrid(approval.getAppr_seq());
@@ -52,14 +44,14 @@ public class approvalServiceImpl implements approvalService{
 	}
 	//결재대기
 	@Override
-	public List<approvalVO> apprWaitList(String id) {	
-		return mapper.apprWaitList(id);
+	public List<approvalVO> apprWaitList(SearchCriteria scri) {	
+		return mapper.apprWaitList(scri);
 	}
 	
 	//결재진행
 	@Override
-	public List<approvalVO> SanctnProgrsList(String id) {	
-		return mapper.SanctnProgrsList(id);
+	public List<approvalVO> SanctnProgrsList(SearchCriteria scri) {	
+		return mapper.SanctnProgrsList(scri);
 	}
 	//문서함
 	@Override
@@ -94,6 +86,11 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	public int totalDocCnt(SearchCriteria scri) {
 		return mapper.totalDocCnt(scri);
+	}
+	//결재대기 문서 총 갯수
+	@Override
+	public int totalApprCnt(SearchCriteria scri) {
+		return mapper.totalApprCnt(scri);
 	}
 
 }

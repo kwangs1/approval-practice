@@ -29,13 +29,13 @@ public class approvalMapper{
 	}
 	
 	//결재 대기
-	public List<approvalVO> apprWaitList(String id) {
-		return session.selectList("mapper.approval.apprWaitList",id);
+	public List<approvalVO> apprWaitList(SearchCriteria scri) {
+		return session.selectList("mapper.approval.apprWaitList",scri);
 	}
 	
 	//결재 진행
-	public List<approvalVO> SanctnProgrsList(String id) {
-		return session.selectList("mapper.approval.SanctnProgrsList",id);
+	public List<approvalVO> SanctnProgrsList(SearchCriteria scri) {
+		return session.selectList("mapper.approval.SanctnProgrsList",scri);
 	}
 	
 	//문서함
@@ -95,5 +95,9 @@ public class approvalMapper{
 	//문서함 총 갯수
 	public int totalDocCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.totalDocCnt",scri);
+	}
+	//결재대기 문서 총갯수
+	public int totalApprCnt(SearchCriteria scri) {
+		return session.selectOne("mapper.approval.totalApprCnt",scri);
 	}
 }

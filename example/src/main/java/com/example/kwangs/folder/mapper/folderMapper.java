@@ -106,5 +106,12 @@ public class folderMapper {
 	}
 	public int checkFldrmbr_2020(Map<String,Object> check2020) {
 		return session.selectOne("folder.checkFldrmbr_2020",check2020);
+	}	
+	//기안한 문서 && 결재한 문서 폴더 중복 체크
+	public int checkFldrmbr_6021(Map<String,Object>check6021) {
+		return session.selectOne("folder.checkFldrmbr_6021",check6021);
+	}
+	public int checkFldrmbr_6022(Map<String,Object>check6022) {
+		return session.selectOne("folder.checkFldrmbr_6022",check6022);
 	}
 }

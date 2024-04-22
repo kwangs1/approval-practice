@@ -126,7 +126,7 @@
 <!-- 기안 시 기안자의 결재진행&기안한 문서 결재멤버 폴더테이블 등록 -->
 <insert id="ApprFldrmbrInsert" parameterType="com.example.kwangs.folder.service.fldrmbrVO">
 	insert into fldrmbr
-	values(#{fldrid},#{fldrmbrid},sysdate,sysdate,#{registerid},#{updatedate},#{updaterid})
+	values(#{fldrid},#{fldrmbrid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{registerid},#{updatedate},#{updaterid})
 </insert>
 
 <!-- 최종결재 완료 시 해당 문서 결재자들에 대한 결재진행 및 결재대기 삭제 -->
@@ -154,5 +154,18 @@
 	where fldrmbrid = #{fldrmbrid}
 	and registerid = #{registerid}
 	and fldrid = #{fldrid}
+</select>
+<!-- 해당 문서의 결재자들에 대한 기안한 문서,결재한 문서 폴더 중복 체크 -->
+<select id="checkFldrmbr_6021" resultType="int" parameterType="java.util.Map">
+	select count(*) from fldrmbr
+	where fldrid = #{fldrid}
+	and fldrmbrid = #{fldrmbrid}
+	and registerid = #{registerid}
+</select>
+<select id="checkFldrmbr_6022" resultType="int" parameterType="java.util.Map">
+	select count(*) from fldrmbr
+	where fldrid = #{fldrid}
+	and fldrmbrid = #{fldrmbrid}
+	and registerid = #{registerid}
 </select>
 </mapper>
