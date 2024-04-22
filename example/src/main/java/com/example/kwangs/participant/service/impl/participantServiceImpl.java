@@ -179,22 +179,14 @@ public class participantServiceImpl implements participantService{
 	                    params.put("approvaltype", nextParticipant.getApprovaltype());   
 	                    mapper.updateNextApprovalType(params);    
 	                    //중간 결재자 결재 이후 그다음 결재자에 대한 결재멤버 폴더 등록
-	    				folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(nextParticipant.getSignerid());
-	    				folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(nextParticipant.getSignerid());
-	    				
+	    				folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(nextParticipant.getSignerid());		
 	    				//해당 결재자 해당 문서에 폴더값 있나 없나 중복체크
 	    				Map<String,Object> check2010 = new HashMap<>();
 	    				check2010.put("fldrmbrid", nextParticipant.getAppr_seq());
 	    				check2010.put("registerid", nextParticipant.getSignerid());
 	    				check2010.put("fldrid", ApprFldrmbr_2010.getFldrid());
 	    				
-	    				Map<String,Object> check2020 = new HashMap<>();
-	    				check2020.put("fldrmbrid", nextParticipant.getAppr_seq());
-	    				check2020.put("registerid", nextParticipant.getSignerid());
-	    				check2020.put("fldrid", ApprFldrmbr_2020.getFldrid());
-	    				
 	    				int checkFldrmbr_2010 = folderMapper.checkFldrmbr_2010(check2010);
-	    				int checkFldrmbr_2020 = folderMapper.checkFldrmbr_2020(check2020);		
 	    				
 	    				if(checkFldrmbr_2010 == 0) {
 		    				fldrmbrVO Fldrmbr_2010 = new fldrmbrVO();
@@ -202,15 +194,7 @@ public class participantServiceImpl implements participantService{
 		    				Fldrmbr_2010.setFldrmbrid(nextParticipant.getAppr_seq());
 		    				Fldrmbr_2010.setRegisterid(nextParticipant.getSignerid());
 							folderMapper.ApprFldrmbrInsert(Fldrmbr_2010);			
-	    				}			
-						
-	    				if(checkFldrmbr_2020 == 0) {
-		    				fldrmbrVO Fldrmbr_2020 = new fldrmbrVO();
-		    				Fldrmbr_2020.setFldrid(ApprFldrmbr_2020.getFldrid());
-		    				Fldrmbr_2020.setFldrmbrid(nextParticipant.getAppr_seq());
-		    				Fldrmbr_2020.setRegisterid(nextParticipant.getSignerid());
-							folderMapper.ApprFldrmbrInsert(Fldrmbr_2020);			
-	    				}
+	    				}		
 	                    break; // 업데이트 후 루프 종료
 	                }             
 	                nextIndex++;
@@ -274,7 +258,7 @@ public class participantServiceImpl implements participantService{
 			}
 		}
 	}	
-	//최종 결재 완료 시 해당 문서에 대한 결재자들의 결재멤버 테이블에서의 결재진행,결재대기 값 삭제
+	//중간결재자들 결재 완료 및 최종 결재 완료 시 해당 문서에 대한 결재자들의 결재멤버 테이블에서의 결재진행,결재대기 값 삭제
 	public void DeleteSignerApprFldrmbr(participantVO pp) {
 		folderVO ApprFldrmbr_2010 = folderMapper.ApprFldrmbr_2010(pp.getSignerid());
 		folderVO ApprFldrmbr_2020 = folderMapper.ApprFldrmbr_2020(pp.getSignerid());

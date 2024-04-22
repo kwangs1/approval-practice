@@ -153,17 +153,7 @@ function loadPage(pageNum){
 	var searchType = $('#searchType').val();
 	var keyword = $('#keywordInput').val();
 	var perPageNum = $('#perPageNum').val();
-
-	var url = '<c:url value="docFrame"/>'+ "${pageMaker.makeLoadPage(1)}";
-	
-	if(searchType !== ''){
-		url += '&searchType=' + searchType;
-	}
-	if(keyword !== ''){
-		url += '&keyword=' +keyword;
-	}
-	url += '&perPageNum=' + perPageNum;
-	
+	var url = '<c:url value="docFrame"/>'+ "${pageMaker.makeSearch(1)}";
 	window.location.href = url;
 }
 
@@ -182,8 +172,9 @@ $('#selectAll').change(function(){
 	}
 })
 function loadDocFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
+	var searchType = $('#searchType').val();
 	var url = '<c:url value="docFrame"/>'
-	url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
+	url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType='+searchType
 			
 	window.location.href = url;
 	setCookie_f(url);

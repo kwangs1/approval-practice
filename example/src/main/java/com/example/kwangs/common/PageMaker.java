@@ -111,21 +111,6 @@ public class PageMaker {
 		return uriComponents.toUriString();				
 	}
 	
-	public String makeLoadPage(int page) {
-		UriComponents uriComponents = 
-				UriComponentsBuilder.newInstance()
-				.queryParam("drafterdeptid", cri.getDrafterdeptid())
-				.queryParam("id", cri.getId())
-				.queryParam("ownerid", cri.getOwnerid())
-				.queryParam("fldrid", cri.getFldrid())
-				.queryParam("fldrname", cri.getFldrname())
-				.queryParam("applid", cri.getApplid())
-				.build();
-		
-		return uriComponents.toUriString();
-    }
-	
-	
 	@SuppressWarnings("unused")
 	private String encoding(String keyword) {
 		if(keyword == null || keyword.trim().length() == 0) {

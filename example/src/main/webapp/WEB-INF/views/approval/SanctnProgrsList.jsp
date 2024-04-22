@@ -141,17 +141,7 @@ function loadPage(pageNum){
 	var searchType = $('#searchType').val();
 	var keyword = $('#keywordInput').val();
 	var perPageNum = $('#perPageNum').val();
-
-	var url = '<c:url value="SanctnProgrsList"/>'+ "${pageMaker.makeLoadPage(1)}";
-	
-	if(searchType !== ''){
-		url += '&searchType=' + searchType;
-	}
-	if(keyword !== ''){
-		url += '&keyword=' +keyword;
-	}
-	url += '&perPageNum=' + perPageNum;
-	
+	var url = '<c:url value="SanctnProgrsList"/>'+ "${pageMaker.makeSearch(1)}";
 	window.location.href = url;
 }
 

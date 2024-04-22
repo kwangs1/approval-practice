@@ -89,8 +89,8 @@
 			and a.drafterdeptid = #{drafterdeptid}
 			and fm.fldrid = #{fldrid}
 	        and f.applid = 2020
-			group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status
-			<include refid="search"></include>
+	        <include refid="search"></include>
+			<!-- group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status -->
 		)t
 		where rnum between #{rowStart} and #{rowEnd}
 </select>

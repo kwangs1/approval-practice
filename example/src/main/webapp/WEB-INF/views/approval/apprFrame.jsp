@@ -23,13 +23,13 @@
     	<p class="disable">${item.fldrname}</p>
     </li>  		
   	</c:when>
-  	<c:otherwise>
+  	<c:when test="${item.applid != 6022 && item.applid != 6021 }">
   	 <li>     
       <a href="#" data-applid ="${item.applid}"  
       onClick ="loadApprFrame('${user.deptid}','${user.id}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">
       ${item.fldrname}</a>
     </li>	
-  	</c:otherwise>
+  	</c:when>
   </c:choose>
   </c:forEach>
 </ul>
@@ -52,13 +52,13 @@ $(document).ready(function(){
 function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 	if(applid === '2010'){
 		var url = '<c:url value="/approval/apprWaitList"/>'
-		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
 		window.location.href = url;
 		setCookie_f2(url);
 	}
 	else if(applid === '2020'){
 		var url = "<c:url value='/approval/SanctnProgrsList'/>";
-		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
 		window.location.href = url;
 		setCookie_f2(url);
 	}
