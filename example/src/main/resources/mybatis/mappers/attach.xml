@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="Attach">
+	<resultMap id="AttachResult" type="AttachVO">
+		<result property="uuid" column="uuid" />
+		<result property="uploadpath" column="uploadpath" />
+		<result property="uploadpath" column="uploadpath" />
+		<result property="filetype" column="filetype" />
+		<result property="appr_seq" column="appr_seq" />
+	</resultMap>
+	
+<insert id="DocFileIn" parameterType="AttachVO">
+	insert into attach
+	values(#{uuid},#{uploadpath},#{uploadpath},#{filetype},#{appr_seq})
+</insert>
+</mapper>

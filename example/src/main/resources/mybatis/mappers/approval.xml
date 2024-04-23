@@ -81,16 +81,15 @@
 			where a.appr_seq = p.appr_seq
 			and a.appr_seq = fm.fldrmbrid
 	        and f.fldrid = fm.fldrid		
-			and p.approvalstatus = 4098	
 			and p.flag = '0'
 			and a.status != 256
-			and p.approvaltype = 8
+			and p.signerid = #{signerid}
 			and (p.approvaltype =1024 and a.status =4096 or(p.approvaltype !=1024 and a.status != 4096))
 			and a.drafterdeptid = #{drafterdeptid}
 			and fm.fldrid = #{fldrid}
 	        and f.applid = 2020
 	        <include refid="search"></include>
-			<!-- group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status -->
+			group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status
 		)t
 		where rnum between #{rowStart} and #{rowEnd}
 </select>

@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.example.kwangs.common.PageMaker;
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.PageMaker;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.memo.service.memoService;
 import com.example.kwangs.memo.service.memoVO;
 

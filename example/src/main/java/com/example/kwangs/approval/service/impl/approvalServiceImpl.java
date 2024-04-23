@@ -11,7 +11,9 @@ import org.springframework.stereotype.Service;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.file.AttachVO;
+import com.example.kwangs.common.file.fileMapper;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderVO;
@@ -25,6 +27,8 @@ public class approvalServiceImpl implements approvalService{
 	private approvalMapper mapper;
 	@Autowired
 	private folderMapper fMapper;
+	@Autowired
+	private fileMapper fileMapper;
 	
 	//문서 작성
 	@Override
@@ -40,6 +44,17 @@ public class approvalServiceImpl implements approvalService{
 		fm_6021.setFldrmbrid(approval.getAppr_seq());
 		fm_6021.setRegisterid(approval.getDrafterid());
 		fMapper.ApprFldrmbrInsert(fm_6021);
+		
+		if(approval.getAttach() == null || approval.getAttach().size() <= 0) {
+			log.info("file List: "+approval.getAttach());
+			return;
+		}
+		List<AttachVO> attach = approval.getAttach();
+		for(int i=0; i < attach.size(); i++) {
+			AttachVO attachVO = attach.get(i);
+			attachVO.setAppr_seq(approval.getAppr_seq());
+			fileMapper.DocFileIn(attachVO);
+		}
 
 	}
 	//결재대기

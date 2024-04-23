@@ -1,4 +1,4 @@
-package com.example.kwangs.common;
+package com.example.kwangs.common.paging;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;

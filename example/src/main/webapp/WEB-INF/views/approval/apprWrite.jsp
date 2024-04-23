@@ -40,6 +40,18 @@
 <textarea name="content" id="content" rows="10" cols="80" placeholder="내용입력"></textarea>
 <br><br>
 
+	<div>
+		<div class="panel-heading">File Attach
+			<input type="file" name="uploadFile" class="uploadFile" multiple />
+		</div>
+		
+		<div class="uploadResult">
+			<ul>
+			
+			</ul>
+		</div>
+	</div>
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
@@ -60,6 +72,15 @@ window.onload = function(){
 	start.value = startDay;
 	end.value = endDay;
 }
+
+window.addEventListener('message', function(e){
+	var data = e.data;
+	var folderid = data.fldrid;
+	var bizunitcd = data.bizunitcd;
+	
+	$('#folderid').val(folderid);
+	$('#bizunitcd').val(bizunitcd);
+});
 
 function Appr_Btn(){
 	var draftername = $('#draftername').val();
@@ -91,6 +112,7 @@ function Appr_Btn(){
 		data: apprData,
 		success: function(response){
 			participant();
+			docFileIn();
 		},
         error: function (xhr, status, error) {
             console.log(xhr);
@@ -100,14 +122,24 @@ function Appr_Btn(){
 	})
 }
 
-window.addEventListener('message', function(e){
-	var data = e.data;
-	var folderid = data.fldrid;
-	var bizunitcd = data.bizunitcd;
+function docFileIn(){
+	$(".uploadResult ul li").each(function(i, obj){
+    
+    var jobj = $(obj);
+    
+    console.dir(jobj);
+    console.log("-------------------------");
+    console.log(jobj.data("filename"));
+    
+    
+    str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
+    str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
+    str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
+    str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+ jobj.data("type")+"'>";
+    
+  });
 	
-	$('#folderid').val(folderid);
-	$('#bizunitcd').val(bizunitcd);
-});
+}
 
 </script>
 </body>

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.approval.service.approvalVO;
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.user.service.userVO;
 

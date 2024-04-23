@@ -3,7 +3,7 @@ package com.example.kwangs.approval.service;
 import java.util.List;
 import java.util.Map;
 
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.user.service.userVO;
 
 public interface approvalService {

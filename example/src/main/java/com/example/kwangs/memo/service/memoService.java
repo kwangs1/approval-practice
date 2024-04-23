@@ -3,7 +3,7 @@ package com.example.kwangs.memo.service;
 import java.util.List;
 import java.util.Map;
 
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.SearchCriteria;
 
 public interface memoService {
 

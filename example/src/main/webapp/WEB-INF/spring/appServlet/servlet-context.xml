@@ -34,6 +34,4 @@
 	
 	<context:component-scan base-package="com.example.kwangs" />
 	
-	
-	
 </beans:beans>

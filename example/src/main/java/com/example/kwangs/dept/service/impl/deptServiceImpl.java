@@ -57,6 +57,19 @@ public class deptServiceImpl implements deptService{
 		fd_7000.setYear("0000");
 		fd_7000.setEndyear("9999");
 		fdMapper.CreateDeptCommonFolder(fd_7000);
+		
+		folderVO fd_8010 = new folderVO();
+		fd_8010.setFldrname("기록물 등록대장");
+		fd_8010.setParfldrid(fd_8000.getFldrid());
+		fd_8010.setParfldrname(fd_8000.getFldrname());
+		fd_8010.setFldrdepth(fd_8000.getFldrdepth()+1);
+		fd_8010.setOwnertype("1");
+		fd_8010.setAppltype("3");
+		fd_8010.setOwnerid(dept.getDeptid());
+		fd_8010.setApplid(8010);
+		fd_8010.setYear("0000");
+		fd_8010.setEndyear("9999");
+		fdMapper.CreateDeptCommonFolder(fd_8010);
 	}
 	//상세보기
 	@Override

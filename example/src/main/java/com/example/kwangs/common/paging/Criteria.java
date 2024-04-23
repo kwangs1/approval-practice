@@ -1,4 +1,4 @@
-package com.example.kwangs.common;
+package com.example.kwangs.common.paging;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

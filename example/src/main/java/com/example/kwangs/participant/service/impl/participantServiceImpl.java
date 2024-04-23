@@ -364,6 +364,35 @@ public class participantServiceImpl implements participantService{
 			mapper.BulkAppr(params);
 			//결재선 차례 업데이트
 			updateNextApprovalType(pp.getAppr_seq());
+			
+			//결재한 문서 & 기안한 문서 폴더 값 가져오기
+			folderVO ApprFldrmbr_6021 = folderMapper.ApprFldrmbr_6021(pp.getSignerid()); //기안한 문서
+			folderVO ApprFldrmbr_6022 = folderMapper.ApprFldrmbr_6022(pp.getSignerid()); //결재한문서
+			//기안한문서
+			Map<String,Object> check6021 = new HashMap<>();
+			check6021.put("fldrid", ApprFldrmbr_6021.getFldrid());
+			check6021.put("fldrmbrid", pp.getAppr_seq());
+			check6021.put("registerid", pp.getSignerid());
+			//결재한문서
+			Map<String,Object> check6022 = new HashMap<>();
+			check6022.put("fldrid", ApprFldrmbr_6022.getFldrid());
+			check6022.put("fldrmbrid", pp.getAppr_seq());
+			check6022.put("registerid", pp.getSignerid());
+			//체크
+			int checkAppr_6021 = folderMapper.checkFldrmbr_6021(check6021);
+			int checkAppr_6022 = folderMapper.checkFldrmbr_6022(check6022);
+			if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
+				//결재시 결재한문서 폴더 등록
+				fldrmbrVO fm_6022 = new fldrmbrVO();
+				fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
+				fm_6022.setFldrmbrid(pp.getAppr_seq());
+				fm_6022.setRegisterid(pp.getSignerid());
+				folderMapper.ApprFldrmbrInsert(fm_6022);
+			}else if(checkAppr_6022 > 0) {
+				log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+			}
+			//최종 결재자 결재 시 해당 문서에 대한 결재멤버 테이블에서의 모든 결재자 결재진행,결재대기 삭제
+			DeleteSignerApprFldrmbr(pp);	
 		}
 	}	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분

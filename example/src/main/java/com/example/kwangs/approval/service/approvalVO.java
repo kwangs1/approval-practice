@@ -1,8 +1,11 @@
 package com.example.kwangs.approval.service;
 
 import java.sql.Date;
+import java.util.List;
 
 import org.springframework.stereotype.Component;
+
+import com.example.kwangs.common.file.AttachVO;
 
 @Component
 public class approvalVO{
@@ -23,8 +26,16 @@ public class approvalVO{
 	private String approvaldate;
 	private String folderid;
 	private String bizunitcd;
+	private List<AttachVO> attach;
 
 	
+	
+	public List<AttachVO> getAttach() {
+		return attach;
+	}
+	public void setAttach(List<AttachVO> attach) {
+		this.attach = attach;
+	}
 	public String getFolderid() {
 		return folderid;
 	}

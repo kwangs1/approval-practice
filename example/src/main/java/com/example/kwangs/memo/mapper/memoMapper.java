@@ -8,7 +8,7 @@ import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.memo.service.memoVO;
 
 @Repository

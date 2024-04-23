@@ -1,4 +1,4 @@
-package com.example.kwangs.common;
+package com.example.kwangs.common.paging;
 
 public class SearchCriteria extends Criteria{
 	private String searchType = "";

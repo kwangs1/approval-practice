@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
-import com.example.kwangs.common.PageMaker;
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.file.AttachVO;
+import com.example.kwangs.common.paging.PageMaker;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.folder.service.impl.folderServiceimpl;
 import com.example.kwangs.participant.service.participantService;
@@ -55,8 +57,16 @@ public class approvalController {
 	
 	@ResponseBody
 	@PostMapping("/apprWrite")
-	public void apprWrite(approvalVO approval) {
+	public void apprWrite(approvalVO approval,RedirectAttributes rttr) {
+		if(approval.getAttach() != null) {
+			List<AttachVO> attach = approval.getAttach();
+			for(int i=0; i < attach.size(); i++) {
+				AttachVO attachVO = attach.get(i);
+				log.info("getAttachValue: "+attachVO);
+			}
+		}
 		service.apprWrite(approval);
+		rttr.addFlashAttribute("result",approval.getAppr_seq());
 	}
 
 	//결재함
@@ -127,6 +137,7 @@ public class approvalController {
 		scri.setFldrid(fd.getFldrid());
 		scri.setFldrname(fd.getFldrname());
 		scri.setApplid(fd.getApplid());
+		scri.setSignerid(id);
 		
 		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
 		List<approvalVO> progrs = service.SanctnProgrsList(scri);

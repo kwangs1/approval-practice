@@ -8,7 +8,7 @@ import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.common.SearchCriteria;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.memo.mapper.memoMapper;
 import com.example.kwangs.memo.service.memoService;
 import com.example.kwangs.memo.service.memoVO;
