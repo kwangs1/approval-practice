@@ -41,8 +41,8 @@
 <br><br>
 
 	<div>
-		<div class="panel-heading">File Attach
-			<input type="file" name="uploadFile" class="uploadFile" multiple />
+		<div class="panel-heading">
+			<input type="file" name="uploadFile" class="uploadFile" multiple/>
 		</div>
 		
 		<div class="uploadResult">
@@ -71,76 +71,138 @@ window.onload = function(){
 	
 	start.value = startDay;
 	end.value = endDay;
-}
-
-window.addEventListener('message', function(e){
-	var data = e.data;
-	var folderid = data.fldrid;
-	var bizunitcd = data.bizunitcd;
-	
-	$('#folderid').val(folderid);
-	$('#bizunitcd').val(bizunitcd);
-});
-
-function Appr_Btn(){
-	var draftername = $('#draftername').val();
-	var drafterid = $('#drafterid').val();
-	var title = $('#title').val();
-	var content = $('#content').val();
-	var startdate = $('#startdate').val();
-	var enddate = $('#enddate').val();
-	var folderid = $('#folderid').val();
-	var bizunitcd = $('#bizunitcd').val();
-	
-	var apprData = {
-		draftername : draftername,
-		drafterid : drafterid,
-		title : title,
-		content : content,
-		startdate : startdate,
-		enddate : enddate,
-		drafterdeptid: drafterdeptid,
-		drafterdeptname : drafterdeptname,
-		docregno :docregno,
-		folderid :folderid,
-		bizunitcd :bizunitcd
 	}
-	
-	$.ajax({
-		type: "post",
-		url: "${path}/approval/apprWrite",
-		data: apprData,
-		success: function(response){
-			participant();
-			docFileIn();
-		},
-        error: function (xhr, status, error) {
-            console.log(xhr);
-            console.log(status);
-            console.log(error);
-        }
-	})
-}
 
-function docFileIn(){
-	$(".uploadResult ul li").each(function(i, obj){
-    
-    var jobj = $(obj);
-    
-    console.dir(jobj);
-    console.log("-------------------------");
-    console.log(jobj.data("filename"));
-    
-    
-    str += "<input type='hidden' name='attachList["+i+"].fileName' value='"+jobj.data("filename")+"'>";
-    str += "<input type='hidden' name='attachList["+i+"].uuid' value='"+jobj.data("uuid")+"'>";
-    str += "<input type='hidden' name='attachList["+i+"].uploadPath' value='"+jobj.data("path")+"'>";
-    str += "<input type='hidden' name='attachList["+i+"].fileType' value='"+ jobj.data("type")+"'>";
-    
-  });
-	
-}
+	window.addEventListener('message', function(e) {
+		var data = e.data;
+		var folderid = data.fldrid;
+		var bizunitcd = data.bizunitcd;
 
+		$('#folderid').val(folderid);
+		$('#bizunitcd').val(bizunitcd);
+	});
+
+	function Appr_Btn() {
+		// FormData 객체 생성 
+		//[첨부파일 데이터와 묶어서 서버로 보내기 위해서 결재 데이터도 같이 FormData에 넣어줌.]
+		var formData = new FormData(); 
+
+	    // 기안 시 등록하는 필드 정보 추가
+	    formData.append('draftername', $('#draftername').val());
+	    formData.append('drafterid', $('#drafterid').val());
+	    formData.append('title', $('#title').val());
+	    formData.append('content', $('#content').val());
+	    formData.append('startdate', $('#startdate').val());
+	    formData.append('enddate', $('#enddate').val());
+	    formData.append('drafterdeptid', drafterdeptid);
+	    formData.append('drafterdeptname', drafterdeptname);
+	    formData.append('docregno', docregno);
+	    formData.append('folderid', $('#folderid').val());
+	    formData.append('bizunitcd', $('#bizunitcd').val());
+
+	    // 파일 정보 추가
+	    UploadFileAppend(formData);
+	  	/*
+	  	 * 파일 등록 시 ajax에서는 일반적인 body에서의 form태그 안 enctype="multipart/form-data" 의 값을 설정하기위해 
+	  	 * processData, contentType 값을 flase로 설정
+	  	*/
+		$.ajax({
+			type : "post",
+			url : "${path}/approval/apprWrite",
+			data : formData,        
+	        processData: false,
+	        contentType: false,
+			success : function(response) {
+				participant();
+			},
+			error : function(xhr, status, error) {
+				console.log(xhr);
+				console.log(status);
+				console.log(error);
+			}
+		})
+	}
+//업로드 파일 관련 JS
+	var uploadUL = $(".uploadResult ul");
+	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
+	var maxSize = 5242880; //5MB
+
+	function checkExtension(fileName, fileSize) {
+
+		if (fileSize >= maxSize) {
+			alert("파일 사이즈 초과");
+			$('.uploadFile').val('');
+			return false;
+		}
+
+		if (regex.test(fileName)) {
+			alert("해당 종류의 파일은 업로드할 수 없습니다.");
+			$('.uploadFile').val('');
+			return false;
+		}
+		return true;
+	}
+	//작성뷰에서 파일 업로드 시 PC에 저장시키기 위한 JS
+	$("input[type='file']").change(function(e){
+		var formData = new FormData();
+		var inputFile = $("input[name='uploadFile']");
+		var files = inputFile[0].files;
+		for (var i = 0; i < files.length; i++) {
+			if (!checkExtension(files[i].name, files[i].size)) {
+					return false;
+				}
+			formData.append("uploadFile", files[i]);
+		}
+		$.ajax({
+			url : '<c:url value="/uploadFile"/>',
+			processData : false,
+			contentType : false,
+			data : formData,
+			type : 'POST',
+			dataType : 'json',
+			success : function(result) {
+				console.log(result);
+				showUploadResult(result); //업로드 결과 처리 함수 
+				}
+			}); //$.ajax	  
+		});	
+	//업로드 된 부분을 화면단에서 보여지게 하기 위한JS
+	 function showUploadResult(uploadResultArr) {
+
+		if (!uploadResultArr || uploadResultArr.length == 0) {
+			return;
+		}
+		var str = "";
+		$(uploadResultArr).each(function(i, obj) {
+			str += "<li style='list-style: none;'"
+			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
+			str += "<span> " + obj.fileName + "</span>";
+			str += "</div>";
+			str + "</li>";
+			
+		});
+		uploadUL.append(str);
+	}
+	//업로드된 파일의 데이터를 담을 JS
+	function UploadFileAppend(formData){
+		$(".uploadResult ul li").each(function(i, obj) {
+			var str = "";
+			 var jobj = $(obj);
+
+		        var uuid = jobj.data("uuid");
+		        var uploadPath = jobj.data("path");
+		        var fileName = jobj.data("filename");
+		        var fileType = jobj.data("type");
+
+		        // 파일 정보를 FormData에 추가
+		        formData.append("attach[" + i + "].uuid", uuid);
+		        formData.append("attach[" + i + "].uploadPath", uploadPath);
+		        formData.append("attach[" + i + "].fileName", fileName);
+		        formData.append("attach[" + i + "].fileType", fileType);
+			uploadUL.append(str);
+			console.log(str);
+		});
+	}
 </script>
 </body>
 </html>

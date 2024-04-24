@@ -7,14 +7,14 @@
 <mapper namespace="Attach">
 	<resultMap id="AttachResult" type="AttachVO">
 		<result property="uuid" column="uuid" />
-		<result property="uploadpath" column="uploadpath" />
-		<result property="uploadpath" column="uploadpath" />
-		<result property="filetype" column="filetype" />
+		<result property="uploadPath" column="uploadPath" />
+		<result property="fileName" column="fileName" />
+		<result property="fileType" column="fileType" />
 		<result property="appr_seq" column="appr_seq" />
 	</resultMap>
 	
 <insert id="DocFileIn" parameterType="AttachVO">
 	insert into attach
-	values(#{uuid},#{uploadpath},#{uploadpath},#{filetype},#{appr_seq})
+	values(#{uuid},#{uploadPath},#{fileName},#{fileType},#{appr_seq})
 </insert>
 </mapper>

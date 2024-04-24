@@ -10,6 +10,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
  <style>
 .disable{color:gray;}
 .pagination {list-style: none; display: flex;}
@@ -18,6 +19,14 @@
 </style>
 </head>
 <body>
+<div class="loading" id="loading"style="display:none">
+	<div class="spinner">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<p>등록 중..</p>
+</div>
 <%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
 <div class="cd1">
@@ -193,8 +202,13 @@ function BundleApproval(){
 			data: JSON.stringify(selectParticipant),
 			success: function(response){
 				console.log("일괄 결재 ajax 요청 데이터 ",response);
-				alert("결재가 완료되었습니다.");
-				window.location.reload();
+				var loading = document.getElementById('loading')
+				loading.style.display = 'flex';
+				
+				setTimeout(function(){
+					alert("결재가 완료되었습니다.");
+					window.location.reload();
+				},3000)
 			},
 			error : function(xhr,error,status){
 				alert("결재에 실패하였습니다.");

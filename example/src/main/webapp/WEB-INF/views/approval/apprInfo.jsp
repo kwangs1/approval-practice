@@ -6,10 +6,18 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
 </head>
 <link rel="stylesheet" href="${path}/resources/css/info.css">
 <body>
-
+<div class="loading" id="loading"style="display:none">
+	<div class="spinner">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<p>등록 중..</p>
+</div>
 <div class="post-container">
   <h1 class="post-title">${info.title}</h1>
   <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
@@ -44,10 +52,15 @@ function FlowAppr(){
 		type: 'post',
 		url: '<c:url value="/participant/FlowAppr"/>',
 		data: param,
-		success: function(response){
-			alert("결재 성공");
-			window.close();
-			opener.location.reload();
+		success: function(response){		
+			var loading = document.getElementById('loading')
+			loading.style.display = 'flex';
+			
+			setTimeout(function(){
+				alert("결재가 완료되었습니다.");
+				window.close();
+				opener.location.reload();	
+			},3000)
 		},
 		error: function(xhr,status,error){
 			alert("결재 실패");
