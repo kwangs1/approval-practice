@@ -9,6 +9,14 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
 </head>
 <link rel="stylesheet" href="${path}/resources/css/info.css">
+<style>
+.btn-upload {
+width: 150px; height: 30px; background: #fff; border: 1px solid rgb(77,77,77); border-radius: 10px;
+font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center;
+&:hover {background: rgb(77,77,77); color: #fff; }
+}
+li{list-style:none; padding-left:0px;}
+</style>
 <body>
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
@@ -26,6 +34,20 @@
     <p>${info.content }</p>
   </div>
   
+  	<div>
+		<div>
+			<label for="file" class="btn-upload">파일 업로드</label>
+			
+			<input type="file" id="file" name="uploadFile" class="uploadFile" 
+			multiple="multiple" style="display:none;"/>
+		</div>
+		
+		<div class="uploadResult">
+			<ul>
+			</ul>
+		</div>
+	</div>
+	<br>
   <c:if test="${info.status == 1 && pInfo.approvaltype == 4}">
   	<button onclick="FlowAppr()" class="button" id="btn">결재</button>  
   </c:if>
@@ -39,6 +61,7 @@ var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
 var approvaltype = '<c:out value="${pInfo.approvaltype}"/>';
 var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
 var signerid = '<c:out value="${userId}"/>';
+var drafterid = '<c:out value="${info.drafterid}"/>';
 
 var param = {	
 	appr_seq : appr_seq,
@@ -69,6 +92,23 @@ function FlowAppr(){
 		}
 	});
 }
+
+$.getJSON('<c:url value="/getAttachList"/>',{appr_seq: appr_seq}, function(arr){
+	var str = "";
+	
+	$(arr).each(function(i,attach){
+		str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
+		str += "<div><span style='cursor: pointer;'>" + attach.fileName + "</span>";
+		str += "</div></li><br>";
+	})
+	$('.uploadResult').html(str);
+});
+
+$('.uploadResult').on('click','li',function(e){
+	var liObj = $(this);
+	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+	self.location='<c:url value="/download"/>'+'?id='+drafterid+'&fileName='+path;
+});
 </script>
 </body>
 </html>

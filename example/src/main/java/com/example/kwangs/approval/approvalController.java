@@ -19,7 +19,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
-import com.example.kwangs.common.file.AttachVO;
+import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.service.folderVO;

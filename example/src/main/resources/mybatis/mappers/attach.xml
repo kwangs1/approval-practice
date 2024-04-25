@@ -17,4 +17,8 @@
 	insert into attach
 	values(#{uuid},#{uploadPath},#{fileName},#{fileType},#{appr_seq})
 </insert>
+
+<select id="getAttachList" resultType="AttachVO" parameterType="String">
+	select * from attach where appr_seq = #{appr_seq}
+</select>
 </mapper>

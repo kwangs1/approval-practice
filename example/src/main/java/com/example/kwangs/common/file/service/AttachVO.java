@@ -1,4 +1,4 @@
-package com.example.kwangs.common.file;
+package com.example.kwangs.common.file.service;
 
 import org.springframework.stereotype.Component;
 

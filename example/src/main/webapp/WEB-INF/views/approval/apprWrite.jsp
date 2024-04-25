@@ -7,6 +7,15 @@
 <head>
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
+<style>
+.btn-upload {
+width: 150px; height: 30px; background: #fff; border: 1px solid rgb(77,77,77); border-radius: 10px;
+font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center;
+&:hover {background: rgb(77,77,77); color: #fff; }
+}
+.uploadResult ul li{list-style:none; padding-left:0px;}
+.uploadResult ul{padding-left:0px;}
+</style>
 </head>
 <body>
 <div class="loading" id="loading"style="display:none">
@@ -41,13 +50,14 @@
 <br><br>
 
 	<div>
-		<div class="panel-heading">
-			<input type="file" name="uploadFile" class="uploadFile" multiple/>
+		<div>
+			<label for="file" class="btn-upload">파일 업로드</label>		
+			<input type="file" id="file" name="uploadFile" class="uploadFile" 
+			multiple="multiple" style="display:none;"/>
 		</div>
-		
+		<br>		
 		<div class="uploadResult">
 			<ul>
-			
 			</ul>
 		</div>
 	</div>
@@ -131,13 +141,11 @@ window.onload = function(){
 
 		if (fileSize >= maxSize) {
 			alert("파일 사이즈 초과");
-			$('.uploadFile').val('');
 			return false;
 		}
 
 		if (regex.test(fileName)) {
 			alert("해당 종류의 파일은 업로드할 수 없습니다.");
-			$('.uploadFile').val('');
 			return false;
 		}
 		return true;
@@ -174,9 +182,13 @@ window.onload = function(){
 		}
 		var str = "";
 		$(uploadResultArr).each(function(i, obj) {
+			var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
+			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
+			
 			str += "<li style='list-style: none;'"
 			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
 			str += "<span> " + obj.fileName + "</span>";
+			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'>❌</button><br>";
 			str += "</div>";
 			str + "</li>";
 			
@@ -203,6 +215,22 @@ window.onload = function(){
 			console.log(str);
 		});
 	}
+	//파일 삭제 js
+	$('.uploadResult').on('click','button',function(e){
+		var targetFile = $(this).data("file");
+		var type = $(this).data("type");
+		var targetLi = $(this).closest("li");
+		
+		$.ajax({
+			url: '<c:url value="/deleteFile"/>',
+			type: 'post',
+			data: {fileName: targetFile, type: type},
+			dataType: 'text',
+			success: function(response){
+				targetLi.remove();
+			}
+		});
+	})
 </script>
 </body>
 </html>

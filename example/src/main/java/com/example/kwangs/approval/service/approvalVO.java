@@ -5,7 +5,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.kwangs.common.file.AttachVO;
+import com.example.kwangs.common.file.service.AttachVO;
 
 @Component
 public class approvalVO{
