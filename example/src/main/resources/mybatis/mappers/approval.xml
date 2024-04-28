@@ -229,4 +229,10 @@
     	and f.fldrid = #{fldrid}
 		<include refid="search"></include>	
 </select>
+
+<update id="UpdateDocAttachCnt">
+	update approval
+	set attachcnt = #{attachcnt}
+	where appr_seq = #{appr_seq}
+</update>
 </mapper>

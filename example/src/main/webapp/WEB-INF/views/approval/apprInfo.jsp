@@ -39,7 +39,7 @@ li{list-style:none; padding-left:0px;}
 			<c:when test="${info.status != 256}">
 			<div>
 				<label for="file" class="btn-upload">파일 업로드</label>
-					
+	
 				<a href="javascript:AttachModifyForm()">수정</a>
 				<input type="file" id="file" name="uploadFile" class="uploadFile" 
 				multiple="multiple" style="display:none;"/>

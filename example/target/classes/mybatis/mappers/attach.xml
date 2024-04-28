@@ -30,4 +30,7 @@
 	select * from attach where appr_seq = #{appr_seq}
 </select>
 
+<select id="AttachCnt" resultType="int">
+	select count(*) from attach where appr_seq = #{appr_seq}
+</select>
 </mapper>

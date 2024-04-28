@@ -30,5 +30,8 @@ public class fileMapper {
 	public List<AttachVO> AttachModifyForm(String appr_seq){
 		return session.selectList("Attach.AttachModifyForm",appr_seq);
 	}
-
+	
+	public int AttachCnt(String appr_seq) {
+		return session.selectOne("Attach.AttachCnt",appr_seq);
+	}
 }

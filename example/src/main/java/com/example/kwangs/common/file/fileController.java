@@ -152,11 +152,6 @@ public class fileController {
 		res.put("fileName", fileName);
 		service.ApprDocDeleteFiles(res);
 		
-		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
-		for(int i=0; i<attach.size(); i++) {
-			log.info("size... "+attach.size());
-		}
-		
 		return new ResponseEntity<String>("deleteFiles",HttpStatus.OK);
 	}
 	

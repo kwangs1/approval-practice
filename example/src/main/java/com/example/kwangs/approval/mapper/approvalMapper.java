@@ -100,4 +100,8 @@ public class approvalMapper{
 	public int totalApprCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.totalApprCnt",scri);
 	}
+	//
+	public void UpdateDocAttachCnt(Map<String,Object> res) {
+		session.update("mapper.approval.UpdateDocAttachCnt",res);
+	}
 }

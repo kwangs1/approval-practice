@@ -27,20 +27,21 @@ ul{padding-left:0px;}
 		<br>
 	<div class="uploadResult">
 		<ul></ul>
-</div>
+	</div>
 
-<c:forEach var="attach" items="${attach}">
-<div class="uploadFile">
-	<ul>
-		<li data-uuid="${attach.uuid}" data-filename="${attach.fileName}" data-path="${attach.uploadPath}">
-		<c:if test="${info.attachcnt >0}">
-			<span class="files"  data-type="file">${attach.fileName}</span>
-			<button class="delete" onClick="ApprDocDeleteFiles()">❌</button>		
-		</c:if>
-		</li>
-	</ul>
+	<c:forEach var="attach" items="${attach}">
+	<div class="uploadFile">
+		<ul>
+			<li data-uuid="${attach.uuid}" data-filename="${attach.fileName}" data-path="${attach.uploadPath}">
+			<c:if test="${info.attachcnt >0}">
+				<span class="files"  data-type="file">${attach.fileName}</span>
+				<button class="delete" onClick="ApprDocDeleteFiles()">❌</button>		
+			</c:if>
+			</li>
+		</ul>
+	</div>
+	</c:forEach>
 </div>
-</c:forEach>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>

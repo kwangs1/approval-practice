@@ -22,8 +22,8 @@ import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
+import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
-import com.example.kwangs.folder.service.impl.folderServiceimpl;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 import com.example.kwangs.user.service.userVO;
@@ -37,8 +37,7 @@ public class approvalController {
 	@Autowired
 	private participantService serviceP;
 	@Autowired
-	private folderServiceimpl folderService;
-	
+	private folderService folderService;
 	
 	//문서작성
 	@GetMapping("/apprWrite")
