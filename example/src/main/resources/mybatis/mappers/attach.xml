@@ -21,4 +21,13 @@
 <select id="getAttachList" resultType="AttachVO" parameterType="String">
 	select * from attach where appr_seq = #{appr_seq}
 </select>
+
+<delete id="ApprDocDeleteFiles">
+	delete from attach where appr_seq = #{appr_seq} and fileName = #{fileName}
+</delete>
+
+<select id="AttachModifyForm" resultType="AttachVO" parameterType="String">
+	select * from attach where appr_seq = #{appr_seq}
+</select>
+
 </mapper>

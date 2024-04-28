@@ -27,9 +27,15 @@ public class approvalVO{
 	private String folderid;
 	private String bizunitcd;
 	private List<AttachVO> attach;
+	private int attachcnt;
 
 	
-	
+	public int getAttachcnt() {
+		return attachcnt;
+	}
+	public void setAttachcnt(int attachcnt) {
+		this.attachcnt = attachcnt;
+	}
 	public List<AttachVO> getAttach() {
 		return attach;
 	}

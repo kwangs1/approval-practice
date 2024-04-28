@@ -1,6 +1,7 @@
 package com.example.kwangs.common.file.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +22,13 @@ public class fileMapper {
 	public List<AttachVO> getAttachList(String appr_seq){
 		return session.selectList("Attach.getAttachList",appr_seq);
 	}
+	
+	public void ApprDocDeleteFiles(Map<String,Object>res) {
+		session.delete("Attach.ApprDocDeleteFiles",res);
+	}
+	
+	public List<AttachVO> AttachModifyForm(String appr_seq){
+		return session.selectList("Attach.AttachModifyForm",appr_seq);
+	}
+
 }

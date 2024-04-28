@@ -24,7 +24,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 		<span></span>
 		<span></span>
 	</div>
-	<p>등록 중..</p>
+	<p>상신 중..</p>
 </div>
 <%@ include file="../participant/ParticipantWrite.jsp" %>
 <hr>
@@ -37,6 +37,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 
 <input type="hidden" name="folderid" id="folderid"/>
 <input type="hidden" name="bizunitcd" id="bizunitcd"/>
+<input type="hidden" name="attachcnt" id="attachcnt"/>
 <body>
 
 휴가 기간: <input type="date" name="startdate" id="startdate"/> ~
@@ -67,6 +68,8 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
 var docregno = '<c:out value="${uInfo.abbreviation}"/>';
+var id = '<c:out value="${user.id}"/>';
+var attachcnt = $('#attachcnt').val();
 
 window.onload = function(){
 	var startDay = new Date();
@@ -109,6 +112,7 @@ window.onload = function(){
 	    formData.append('docregno', docregno);
 	    formData.append('folderid', $('#folderid').val());
 	    formData.append('bizunitcd', $('#bizunitcd').val());
+	    formData.append('attachcnt', attachcnt);
 
 	    // 파일 정보 추가
 	    UploadFileAppend(formData);
@@ -187,13 +191,14 @@ window.onload = function(){
 			
 			str += "<li style='list-style: none;'"
 			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
-			str += "<span> " + obj.fileName + "</span>";
-			str += "<button type='button' data-file=\'"+fileCallPath+"\' data-type='file'>❌</button><br>";
+			str += "<span style='cursor: pointer;' class='download'> " + obj.fileName + "</span>&nbsp;&nbsp;";
+			str += "<button type='button' class='deleteBtn' data-file=\'"+fileCallPath+"\' data-type='file'>❌</button><br>";
 			str += "</div>";
 			str + "</li>";
 			
 		});
 		uploadUL.append(str);
+		attachcnt = uploadResultArr.length;
 	}
 	//업로드된 파일의 데이터를 담을 JS
 	function UploadFileAppend(formData){
@@ -216,7 +221,7 @@ window.onload = function(){
 		});
 	}
 	//파일 삭제 js
-	$('.uploadResult').on('click','button',function(e){
+	$('.uploadResult').on('click','.deleteBtn',function(e){
 		var targetFile = $(this).data("file");
 		var type = $(this).data("type");
 		var targetLi = $(this).closest("li");
@@ -231,6 +236,12 @@ window.onload = function(){
 			}
 		});
 	})
+	//다운로드 JS
+	$('.uploadResult').on('click','.download',function(e){
+	var liObj = $(this).closest("li");
+	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+	self.location='<c:url value="/download"/>'+'?id='+id+'&fileName='+path;
+});
 </script>
 </body>
 </html>

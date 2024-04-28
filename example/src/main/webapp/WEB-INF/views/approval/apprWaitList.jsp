@@ -25,7 +25,7 @@
 		<span></span>
 		<span></span>
 	</div>
-	<p>등록 중..</p>
+	<p>결재 중..</p>
 </div>
 <%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
@@ -163,6 +163,9 @@ $('#selectAll').change(function(){
 
 //일괄결재
 function BundleApproval(){
+	var loading = document.getElementById('loading')
+	loading.style.display = 'flex';
+	
 	var ary = []; // 결재 시퀀스 배열
 	<%-- 결재 대기에 걸린 결재선 정보--%>
 	var signerid = $('#signerid').val();
@@ -202,8 +205,6 @@ function BundleApproval(){
 			data: JSON.stringify(selectParticipant),
 			success: function(response){
 				console.log("일괄 결재 ajax 요청 데이터 ",response);
-				var loading = document.getElementById('loading')
-				loading.style.display = 'flex';
 				
 				setTimeout(function(){
 					alert("결재가 완료되었습니다.");

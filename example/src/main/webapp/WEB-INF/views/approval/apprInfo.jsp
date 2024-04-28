@@ -24,7 +24,7 @@ li{list-style:none; padding-left:0px;}
 		<span></span>
 		<span></span>
 	</div>
-	<p>등록 중..</p>
+	<p>결재 중..</p>
 </div>
 <div class="post-container">
   <h1 class="post-title">${info.title}</h1>
@@ -35,12 +35,20 @@ li{list-style:none; padding-left:0px;}
   </div>
   
   	<div>
-		<div>
-			<label for="file" class="btn-upload">파일 업로드</label>
-			
-			<input type="file" id="file" name="uploadFile" class="uploadFile" 
-			multiple="multiple" style="display:none;"/>
-		</div>
+		<c:choose>
+			<c:when test="${info.status != 256}">
+			<div>
+				<label for="file" class="btn-upload">파일 업로드</label>
+					
+				<a href="javascript:AttachModifyForm()">수정</a>
+				<input type="file" id="file" name="uploadFile" class="uploadFile" 
+				multiple="multiple" style="display:none;"/>
+			</div>
+			</c:when>
+			<c:when test="${info.status == 256 }">
+				<span>- 첨부파일 -</span>
+			</c:when>
+		</c:choose>
 		
 		<div class="uploadResult">
 			<ul>
@@ -70,15 +78,14 @@ var param = {
 	approvalstatus : approvalstatus,
 	signerid : signerid}
 
-function FlowAppr(){	
+function FlowAppr(){				
+	var loading = document.getElementById('loading')
+	loading.style.display = 'flex';
 	$.ajax({
 		type: 'post',
 		url: '<c:url value="/participant/FlowAppr"/>',
 		data: param,
 		success: function(response){		
-			var loading = document.getElementById('loading')
-			loading.style.display = 'flex';
-			
 			setTimeout(function(){
 				alert("결재가 완료되었습니다.");
 				window.close();
@@ -93,6 +100,7 @@ function FlowAppr(){
 	});
 }
 
+//해당 문서에 대한 업로드한 첨부파일 리스트
 $.getJSON('<c:url value="/getAttachList"/>',{appr_seq: appr_seq}, function(arr){
 	var str = "";
 	
@@ -103,12 +111,17 @@ $.getJSON('<c:url value="/getAttachList"/>',{appr_seq: appr_seq}, function(arr){
 	})
 	$('.uploadResult').html(str);
 });
-
+//첨부파일 다운로드
 $('.uploadResult').on('click','li',function(e){
 	var liObj = $(this);
 	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
 	self.location='<c:url value="/download"/>'+'?id='+drafterid+'&fileName='+path;
 });
+//첨부파일 수정폼
+function AttachModifyForm(){
+	url="<c:url value='/AttachModifyForm'/>"+"?appr_seq="+appr_seq;
+	window.open(url,"attachModify",'width=680px, height=300px');
+}
 </script>
 </body>
 </html>

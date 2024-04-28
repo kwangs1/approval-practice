@@ -9,7 +9,9 @@ import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -22,12 +24,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.common.file.service.AttachFileDTO;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.file.service.fileService;
@@ -37,6 +41,8 @@ public class fileController {
 
 	@Autowired
 	private fileService service;
+	@Autowired
+	private approvalService approvalService;
 	
 	private static Logger log = LoggerFactory.getLogger(fileController.class.getName());
 	
@@ -56,7 +62,7 @@ public class fileController {
 		log.info("file upload response....");
 		String id = (String)request.getSession().getAttribute("userId");
 		List<AttachFileDTO> list = new ArrayList<>();
-		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/"+id;
+		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+id;
 		String uploadFolderPath = getFolder();
 		File uploadPath = new File(uploadFolder, uploadFolderPath);
 		
@@ -100,7 +106,7 @@ public class fileController {
 		String id = (String)request.getSession().getAttribute("userId");
 		File file;
 		try {
-			file = new File("/Users/kwangs/Desktop/SpringEx/example/src/"+ id + "/" + URLDecoder.decode(fileName,"UTF-8"));
+			file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ id + "/" + URLDecoder.decode(fileName,"UTF-8"));
 			file.delete();
 		}catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
@@ -118,7 +124,7 @@ public class fileController {
 	//첨부파일 다운로드
 	@GetMapping("/download")
 	public void download(String fileName, String id, HttpServletResponse response)throws IOException{
-		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/"+ id + "/" + fileName);
+		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ id + "/" + fileName);
 		//file 다운르도 요청값 설정
 		response.setContentType("application/download");
 		response.setContentLength((int)file.length());
@@ -133,5 +139,32 @@ public class fileController {
 		FileCopyUtils.copy(fis, os);
 		fis.close();
 		os.close();
+	}
+	
+	//문서에 등록된 첨부파일 삭제
+	@PostMapping("/ApprDocDeleteFiles")
+	@ResponseBody
+	public ResponseEntity<String> ApprDocDeleteFiles(String fileName, String type, 
+			String appr_seq, String id,HttpServletRequest request, HttpServletResponse response){
+		log.info("ApprDocDeleteFiles: "+ fileName);
+		Map<String,Object> res = new HashMap<>();
+		res.put("appr_seq", appr_seq);
+		res.put("fileName", fileName);
+		service.ApprDocDeleteFiles(res);
+		
+		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
+		for(int i=0; i<attach.size(); i++) {
+			log.info("size... "+attach.size());
+		}
+		
+		return new ResponseEntity<String>("deleteFiles",HttpStatus.OK);
+	}
+	
+	//첨부파일 수정폼
+	@GetMapping("/AttachModifyForm")
+	public void AttachModifyForm(String appr_seq, Model model) {
+		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
+		model.addAttribute("attach",attach);
+		model.addAttribute("info",approvalService.apprInfo(appr_seq));
 	}
 }
