@@ -17,7 +17,6 @@ import com.example.kwangs.common.file.mapper.fileMapper;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.mapper.folderMapper;
-import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.service.userVO;
@@ -60,11 +59,8 @@ public class approvalServiceImpl implements approvalService{
 			attachVO.setAppr_seq(approval.getAppr_seq());
 			fileMapper.DocFileIn(attachVO);
 		}
-		List<apprfolderVO> DeptApprFolderList = fMapper.DeptApprFolderList(approval.getDrafterdeptid());			
-			for(apprfolderVO af : DeptApprFolderList) {
-				saveDatTemp.saveDataToDatFile(af.getFldrid(), af.getBizunitcd(),
-						approval.getDrafterid(),af.getFldrname(), approval.getDrafterid());				
-			}
+		//..
+		saveDatTemp.saveDataToDatFile(approval.getFolderid(), approval.getFoldername(), approval.getBizunitcd(),approval.getDrafterid());				
 		
 	}
 	//결재대기

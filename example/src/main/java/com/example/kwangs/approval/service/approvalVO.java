@@ -28,8 +28,15 @@ public class approvalVO{
 	private String bizunitcd;
 	private List<AttachVO> attach;
 	private int attachcnt;
-
+	private String foldername;
 	
+	
+	public String getFoldername() {
+		return foldername;
+	}
+	public void setFoldername(String foldername) {
+		this.foldername = foldername;
+	}
 	public int getAttachcnt() {
 		return attachcnt;
 	}

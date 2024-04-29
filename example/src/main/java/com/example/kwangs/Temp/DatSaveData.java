@@ -11,14 +11,12 @@ public class DatSaveData implements Serializable{
 	
 	 	private String fldrid;
 	    private String bizunitcd;
-	    private String procdeptid;
 	    private String fldrname;
 
-	    public DatSaveData(String fldrid, String bizunitcd, String procdeptid, String fldrname) {
+	    public DatSaveData(String fldrid, String fldrname, String bizunitcd) {
 	        this.fldrid = fldrid;
-	        this.bizunitcd = bizunitcd;
-	        this.procdeptid = procdeptid;
 	        this.fldrname = fldrname;
+	        this.bizunitcd = bizunitcd;
 	    }
 
 		public String getFldrid() {
@@ -35,14 +33,6 @@ public class DatSaveData implements Serializable{
 
 		public void setBizunitcd(String bizunitcd) {
 			this.bizunitcd = bizunitcd;
-		}
-
-		public String getProcdeptid() {
-			return procdeptid;
-		}
-
-		public void setProcdeptid(String procdeptid) {
-			this.procdeptid = procdeptid;
 		}
 
 		public String getFldrname() {

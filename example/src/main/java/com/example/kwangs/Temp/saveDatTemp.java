@@ -17,7 +17,7 @@ public class saveDatTemp {
     @Value("${dat.file.path}")
     private String datFilePath;
     
-    public void saveDataToDatFile(String fldrid, String bizunitcd,String procdeptid, String fldrname, String id)throws IOException{
+    public void saveDataToDatFile(String fldrid, String fldrname, String bizunitcd, String id)throws IOException{
 		File userFolder = new File(datFilePath + File.separator + id);
 		if (!userFolder.exists()) {
 		    boolean created = userFolder.mkdirs(); // 폴더 생성
@@ -31,12 +31,12 @@ public class saveDatTemp {
         apprfolder.setBizunitcd(bizunitcd);
         apprfolder.setProcdeptid(procdeptid);
         apprfolder.setFldrname(fldrname);*/
-		DatSaveData data = new DatSaveData(fldrid, bizunitcd, procdeptid, fldrname);
+		DatSaveData data = new DatSaveData(fldrid, fldrname, bizunitcd);
     	ObjectOutputStream output = null;
     	try {
     		output = new ObjectOutputStream(new FileOutputStream(userFolder + File.separator + "userFolder.dat"));
     		output.writeObject(data);
-    		log.info(".Dat File Save "+fldrid+", "+bizunitcd+", "+procdeptid+", "+fldrname);
+    		log.info(".Dat File Save "+fldrid+", "+fldrname+", "+bizunitcd );
     	}finally{
     		if(output != null) {
     			output.close();

@@ -30,7 +30,8 @@ e.preventDefault();
 selectedFldrid = $(this).data('fldrid');
 selectedBizunitcd = $(this).data('bizunitcd');
 selectedFldrname = $(this).data('fldrname');
-// 클릭시 동적으로 화면에 표시되게 하기위해 함수 호출
+
+selectedApFolder = { fldrid: selectedFldrid, fldrname: selectedFldrname, bizunitcd: selectedBizunitcd };
 updateSelectedApFolder();
 });
 
@@ -100,8 +101,7 @@ function confirmSelection(){
     }
 	var data = {
 			users: selectedUsers,
-			fldrid: selectedFldrid,
-			bizunitcd: selectedBizunitcd
+			selectedApFolder: selectedApFolder
 		}
 		window.opener.postMessage(data,"*");
 	

@@ -35,8 +35,9 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
 
-<input type="text" name="folderid" id="folderid"/>
-<input type="text" name="bizunitcd" id="bizunitcd"/>
+<input type="hidden" name="folderid" id="folderid"/>
+<input type="hidden" name="foldername" id="foldername"/>
+<input type="hidden" name="bizunitcd" id="bizunitcd"/>
 <input type="hidden" name="attachcnt" id="attachcnt"/>
 <body>
 
@@ -97,11 +98,13 @@ window.onload = function(){
 
 	window.addEventListener('message', function(e) {
 		var data = e.data;
-		var folderid = data.fldrid;
-		var bizunitcd = data.bizunitcd;
+		var selectedApFolder = data.selectedApFolder;
+		console.log("load apF "+selectedApFolder.fldrid);
+		console.log("load apF "+selectedApFolder.fldrname);
 
-		$('#folderid').val(folderid);
-		$('#bizunitcd').val(bizunitcd);
+		$('#folderid').val(selectedApFolder.fldrid);
+		$('#foldername').val(selectedApFolder.fldrname);
+		$('#bizunitcd').val(selectedApFolder.bizunitcd);
 	});
 
 	function Appr_Btn() {
@@ -120,6 +123,7 @@ window.onload = function(){
 	    formData.append('drafterdeptname', drafterdeptname);
 	    formData.append('docregno', docregno);
 	    formData.append('folderid', $('#folderid').val());
+	    formData.append('foldername', $('#foldername').val());
 	    formData.append('bizunitcd', $('#bizunitcd').val());
 	    formData.append('attachcnt', attachcnt);
 

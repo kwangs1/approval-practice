@@ -24,6 +24,7 @@
 		<result property="folderid" column="folderid" />
 		<result property="bizunitcd" column="bizunitcd" />
 		<result property="attachcnt" column="attachcnt" />
+		<result property="foldername" column="foldername" />
 	</resultMap>
 	
 	<!-- 검색 동적 쿼리 -->
@@ -47,7 +48,8 @@
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
-		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},#{folderid},#{bizunitcd},#{attachcnt})
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername})
 </insert>
 
 <!-- 결재대기 -->
