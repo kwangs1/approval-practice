@@ -12,25 +12,36 @@
 		<result property="fileType" column="fileType" />
 		<result property="appr_seq" column="appr_seq" />
 	</resultMap>
-	
+
+<!-- 첨부파일 등록 -->
 <insert id="DocFileIn" parameterType="AttachVO">
 	insert into attach
 	values(#{uuid},#{uploadPath},#{fileName},#{fileType},#{appr_seq})
 </insert>
 
+<!-- 첨부파일 리스트 -->
 <select id="getAttachList" resultType="AttachVO" parameterType="String">
 	select * from attach where appr_seq = #{appr_seq}
 </select>
 
-<delete id="ApprDocDeleteFiles">
-	delete from attach where appr_seq = #{appr_seq} and fileName = #{fileName}
-</delete>
-
+<!-- 수정폼 -->
 <select id="AttachModifyForm" resultType="AttachVO" parameterType="String">
 	select * from attach where appr_seq = #{appr_seq}
 </select>
 
+<!-- 첨부파일 삭제 -->
+<delete id="ApprDocDeleteFiles">
+	delete from attach where appr_seq = #{appr_seq} and fileName = #{fileName}
+</delete>
+
+<!-- 해당 문서 결재테이블의 첨부파일 카운트 업데이트 -->
 <select id="AttachCnt" resultType="int">
 	select count(*) from attach where appr_seq = #{appr_seq}
 </select>
+
+<!-- 첨부파일 수정 폼에서의 등록[추가] -->
+<insert id="ApprDocInsertFiles" parameterType="AttachVO">
+	insert into attach
+	values(#{uuid},#{uploadPath},#{fileName},#{fileType},#{appr_seq})
+</insert>
 </mapper>

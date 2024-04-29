@@ -32,6 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.example.kwangs.approval.service.approvalService;
+import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.common.file.service.AttachFileDTO;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.file.service.fileService;
@@ -141,6 +142,14 @@ public class fileController {
 		os.close();
 	}
 	
+	//첨부파일 수정폼
+	@GetMapping("/AttachModifyForm")
+	public void AttachModifyForm(String appr_seq, Model model) {
+		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
+		model.addAttribute("attach",attach);
+		model.addAttribute("info",approvalService.apprInfo(appr_seq));
+	}
+	
 	//문서에 등록된 첨부파일 삭제
 	@PostMapping("/ApprDocDeleteFiles")
 	@ResponseBody
@@ -155,11 +164,18 @@ public class fileController {
 		return new ResponseEntity<String>("deleteFiles",HttpStatus.OK);
 	}
 	
-	//첨부파일 수정폼
-	@GetMapping("/AttachModifyForm")
-	public void AttachModifyForm(String appr_seq, Model model) {
-		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
-		model.addAttribute("attach",attach);
-		model.addAttribute("info",approvalService.apprInfo(appr_seq));
+	//첨부파일 수정 폼에서의 등록[추가]
+	@PostMapping("/ApprDocInsertFiles")
+	@ResponseBody
+	public ResponseEntity<String> ApprDocInsertFiles(approvalVO approval){
+		List<AttachVO> attach = approval.getAttach();
+		for(int i=0; i < attach.size(); i++) {
+			AttachVO attachVO = attach.get(i);
+			attachVO.setAppr_seq(approval.getAppr_seq());
+			
+			service.ApprDocInsertFiles(attachVO);
+		}
+		
+		return new ResponseEntity<String>("InsertFiles",HttpStatus.OK);
 	}
 }

@@ -38,15 +38,12 @@ li{list-style:none; padding-left:0px;}
 		<c:choose>
 			<c:when test="${info.status != 256}">
 			<div>
-				<label for="file" class="btn-upload">파일 업로드</label>
-	
-				<a href="javascript:AttachModifyForm()">수정</a>
-				<input type="file" id="file" name="uploadFile" class="uploadFile" 
-				multiple="multiple" style="display:none;"/>
+				<label for="ModifyForm" class="btn-upload">첨부파일</label>
+				<input type="button" id="ModifyForm" onClick="AttachModifyForm()" style="display:none;"/>
 			</div>
 			</c:when>
 			<c:when test="${info.status == 256 }">
-				<span>- 첨부파일 -</span>
+				<span>첨부파일</span>
 			</c:when>
 		</c:choose>
 		

@@ -70,6 +70,15 @@ var drafterdeptname = '<c:out value="${user.deptname}"/>';
 var docregno = '<c:out value="${uInfo.abbreviation}"/>';
 var id = '<c:out value="${user.id}"/>';
 var attachcnt = $('#attachcnt').val();
+//새로고침 방지
+window.addEventListener('keydown',function(e){
+	//78: ctrl+N , 82: ctrl+R , 116: F5 | ctrlKey : window , metaKey : Mac
+	if((e.ctrlKey == true || e.metaKey == true && (e.keyCode == 78 || e.keyCode == 82)) || (e.keyCode == 116))
+	{
+        e.preventDefault();
+        e.stopPropagation();
+	}
+})
 
 window.onload = function(){
 	var startDay = new Date();
@@ -238,10 +247,10 @@ window.onload = function(){
 	})
 	//다운로드 JS
 	$('.uploadResult').on('click','.download',function(e){
-	var liObj = $(this).closest("li");
-	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-	self.location='<c:url value="/download"/>'+'?id='+id+'&fileName='+path;
-});
+		var liObj = $(this).closest("li");
+		var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+		self.location='<c:url value="/download"/>'+'?id='+id+'&fileName='+path;
+	});
 </script>
 </body>
 </html>
