@@ -118,6 +118,4 @@ public class apprfolderVO extends folderVO{
 	public void setBizunityearseq(String bizunityearseq) {
 		this.bizunityearseq = bizunityearseq;
 	}
-	
-	
 }

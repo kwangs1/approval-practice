@@ -1,5 +1,6 @@
 package com.example.kwangs.approval.service.impl;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.kwangs.Temp.saveDatTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
@@ -15,6 +17,7 @@ import com.example.kwangs.common.file.mapper.fileMapper;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.mapper.folderMapper;
+import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.service.userVO;
@@ -29,10 +32,12 @@ public class approvalServiceImpl implements approvalService{
 	private folderMapper fMapper;
 	@Autowired
 	private fileMapper fileMapper;
+	@Autowired
+	private saveDatTemp saveDatTemp;
 	
 	//문서 작성
 	@Override
-	public void apprWrite(approvalVO approval) {
+	public void apprWrite(approvalVO approval) throws IOException {
 		String abbr = approval.getDocregno();
 		approval.setDocregno(abbr+"-@N");
 		mapper.apprWrite(approval);
@@ -55,7 +60,12 @@ public class approvalServiceImpl implements approvalService{
 			attachVO.setAppr_seq(approval.getAppr_seq());
 			fileMapper.DocFileIn(attachVO);
 		}
-
+		List<apprfolderVO> DeptApprFolderList = fMapper.DeptApprFolderList(approval.getDrafterdeptid());			
+			for(apprfolderVO af : DeptApprFolderList) {
+				saveDatTemp.saveDataToDatFile(af.getFldrid(), af.getBizunitcd(),
+						approval.getDrafterid(),af.getFldrname(), approval.getDrafterid());				
+			}
+		
 	}
 	//결재대기
 	@Override

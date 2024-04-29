@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.kwangs.Temp.saveXmlTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.approvalVO;
@@ -20,7 +21,6 @@ import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
-import com.example.kwangs.xmlTemp.saveXmlTemp;
 
 @Service
 public class participantServiceImpl implements participantService{

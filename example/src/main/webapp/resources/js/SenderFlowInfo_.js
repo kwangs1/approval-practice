@@ -3,6 +3,7 @@
  */
 
 var selectedUsers = [];
+var selectedApFolder = [];
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
@@ -29,7 +30,7 @@ e.preventDefault();
 selectedFldrid = $(this).data('fldrid');
 selectedBizunitcd = $(this).data('bizunitcd');
 selectedFldrname = $(this).data('fldrname');
-
+// 클릭시 동적으로 화면에 표시되게 하기위해 함수 호출
 updateSelectedApFolder();
 });
 
@@ -74,7 +75,7 @@ function updateSelectedApFolder(){
 	selDiv.empty(); //기존 내용 제거
 
 	var userDiv = $('<div class="userDiv"></div>');
-	userDiv.append('<p>'+ selectedFldrname + '</p>');
+	userDiv.append('<p>'+ selectedApFolder.fldrname + '</p>');
 			
 	selDiv.append(userDiv);
 

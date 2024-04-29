@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.example.kwangs.bizunit.mapper.bizunitMapper;
 import com.example.kwangs.bizunit.service.bizunitVO;
-import com.example.kwangs.dept.mapper.deptMapper;
-import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.folderService;
@@ -22,8 +20,6 @@ public class folderServiceimpl implements folderService{
 
 	@Autowired
 	private folderMapper mapper;
-	@Autowired
-	private deptMapper deptMapper;
 	@Autowired
 	private userMapper userMapper;
 	@Autowired

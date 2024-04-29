@@ -1,5 +1,6 @@
 package com.example.kwangs.approval.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import com.example.kwangs.user.service.userVO;
 
 public interface approvalService {
 	//결재 작성
-	void apprWrite(approvalVO approval);
+	void apprWrite(approvalVO approval)throws IOException;
 	//결재대기
 	List<approvalVO> apprWaitList(SearchCriteria scri);
 	//결재진행

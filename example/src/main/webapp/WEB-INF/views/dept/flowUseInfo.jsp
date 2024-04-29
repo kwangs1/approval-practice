@@ -100,7 +100,7 @@
 				<span class="folder-name">${folder.fldrname}</span>
 				<c:forEach var="apprfolder" items="${folder.apprfolders}">
 					<ul class="af-list"> 				
-						<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" 
+						<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
 						data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}">${apprfolder.fldrname}</a>			
 					</ul>
 				</c:forEach>
@@ -113,9 +113,10 @@
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/SenderFlowInfo.js'/>"></script>
+<script src="<c:url value='/resources/js/SenderFlowInfo_.js'/>"></script>
 <script>
 var uId = '<c:out value="${user}"/>';
+var ownerid = '<c:out value="${deptId}"/>';
 <%-- 조직트리 --%>
 $(document).ready(function() {
 	// 처음에 모든 자식 요소를 감춥니다.
@@ -126,7 +127,11 @@ $(document).ready(function() {
 		$('ul.tree li').has('a[data-id="${user}"]').children('ul').show();
 		$('a[data-id="${user}"]').closest('ul.tree li').addClass('expanded');
 	}
-	
+	if(ownerid){
+		//사용자가 속한 부서의 li엘리먼트를 찾아 해당 li와 그 부모들의 ul를 모두 보여줌
+		$('ul.tree li').has('a[data-ownerid="${deptId}"]').children('ul').show();
+		$('a[data-ownerid="${deptId}"]').closest('ul.tree li').addClass('expanded');
+	}
   // 루트 요소와 자식 요소에 클릭 이벤트를 추가합니다.
     $('ul.tree li').click(function(e) {
      if (e.target.tagName !== 'INPUT') {
@@ -188,6 +193,34 @@ $.ajax({
 		  selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
 		  updateSelectedUsersUI();	
 	}
+	
+	$.ajax({
+		type: 'get',
+		url: '<c:url value="/loadDataFromDatFile"/>',
+		data: {id : uId},
+		success: function(data){
+			console.log(data.fldrid);
+			console.log(data.fldrname);
+			console.log(data.bizunitcd);
+			if(data.length === 0){
+				if(ownerid){
+					$('a.afLink[data-ownerid="'+ ownerid +'"]').each(function(){
+						 var selectedFldrid = $(this).data('fldrid');
+						 var selectedFldrname = $(this).data('fldrname');
+						 var selectedBizunitcd = $(this).data('bizunitcd');	 
+						 selectedApFolder = { fldrid: selectedFldrid, fldrname: selectedFldrname, bizunitcd: selectedBizunitcd };
+						 updateSelectedApFolder();		
+					})
+				}
+			}else{
+				selectedApFolder = data; // 데이터 설정
+				updateSelectedApFolder(); // UI 업데이트 함수 호출
+			}
+		},
+		error: function(error){
+			console.log("Error seding clicked users to server:",error);
+		}
+	});//end ajax	
 }); 
 //tab
 var tabList = document.querySelectorAll('.tab_menu .list li');

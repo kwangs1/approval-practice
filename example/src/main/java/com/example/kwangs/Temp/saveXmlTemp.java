@@ -1,4 +1,4 @@
-package com.example.kwangs.xmlTemp;
+package com.example.kwangs.Temp;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,6 +16,7 @@ public class saveXmlTemp {
 	@Value("${data.xml.basepath}")
 	private String basePath;
 	
+	//결재선 지정 후 xml저장
 	public void SaveParticipantTemp(String id,String xmlData) {
 		try {
 			//folder add
@@ -39,6 +40,7 @@ public class saveXmlTemp {
 		}
 	}
 	
+	//기안 뷰에 그려진 결재선 xml로 저장
 	public void SaveFlowUseInfoTemp(String id, String xmlData) {
 		try {
 			File userFolder = new File(basePath + File.separator + id);

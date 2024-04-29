@@ -1,5 +1,6 @@
 package com.example.kwangs.approval;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,7 +57,7 @@ public class approvalController {
 	
 	@ResponseBody
 	@PostMapping("/apprWrite")
-	public void apprWrite(approvalVO approval,RedirectAttributes rttr) {
+	public void apprWrite(approvalVO approval,RedirectAttributes rttr)throws IOException {
 		if(approval.getAttach() != null) {
 			List<AttachVO> attach = approval.getAttach();
 			for(int i=0; i < attach.size(); i++) {

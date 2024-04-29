@@ -35,8 +35,8 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
 
-<input type="hidden" name="folderid" id="folderid"/>
-<input type="hidden" name="bizunitcd" id="bizunitcd"/>
+<input type="text" name="folderid" id="folderid"/>
+<input type="text" name="bizunitcd" id="bizunitcd"/>
 <input type="hidden" name="attachcnt" id="attachcnt"/>
 <body>
 
