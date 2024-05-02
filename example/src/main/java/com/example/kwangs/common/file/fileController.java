@@ -6,6 +6,8 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,24 +50,36 @@ public class fileController {
 	private static Logger log = LoggerFactory.getLogger(fileController.class.getName());
 	
 	//날짜 별 폴더 생성
-	private String getFolder() {
+	public String getFolder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String str = sdf.format(date);
 		return str.replace("-", File.separator);
+	}	
+	//첨부파일 수정폼
+	@GetMapping("/AttachModifyForm")
+	public void AttachModifyForm(String appr_seq, Model model) {
+		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
+		model.addAttribute("attach",attach);
+		model.addAttribute("info",approvalService.apprInfo(appr_seq));
 	}
-
-	
-	//파일 업로드
+	//문서에 붙은 첨부파일 가져오기
+	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AttachVO>>getAttachList(String appr_seq){
+		return new ResponseEntity<>(service.getAttachList(appr_seq),HttpStatus.OK);
+	}
+	/*
+	 * 기안 전 파일 업로드&삭제&등록
+	 */
+	//파일 업로드[기안 상신 전]
 	@PostMapping(value="/uploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<List<AttachFileDTO>> uploadFile(MultipartFile[] uploadFile, HttpServletRequest request){
 		log.info("file upload response....");
-		String id = (String)request.getSession().getAttribute("userId");
 		List<AttachFileDTO> list = new ArrayList<>();
-		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+id;
 		String uploadFolderPath = getFolder();
-		File uploadPath = new File(uploadFolder, uploadFolderPath);
+		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolderPath+"/temp";
+		File uploadPath = new File(uploadFolder);
 		
 		if(uploadPath.exists() == false) {
 			uploadPath.mkdirs();
@@ -77,6 +91,7 @@ public class fileController {
 			log.info("Upload File Size: "+multipartFile.getSize());
 			AttachFileDTO attachDTO = new AttachFileDTO();
 			String uploadFileName = multipartFile.getOriginalFilename();
+			int fileSize = (int) multipartFile.getSize();
 			
 			uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1);
 			log.info("only fileName: "+uploadFileName);
@@ -91,6 +106,8 @@ public class fileController {
 				
 				attachDTO.setUuid(uuid.toString());
 				attachDTO.setUploadPath(uploadFolderPath);
+				attachDTO.setFileType(100);
+				attachDTO.setFilesize(fileSize);
 				list.add(attachDTO);
 			}catch(Exception e) {
 				e.printStackTrace();
@@ -98,34 +115,29 @@ public class fileController {
 		}
 		return new ResponseEntity<>(list, HttpStatus.OK);
 	}
-	
-	//업로드 된 파일 삭제
+	//업로드 된 파일 삭제[기안 상신 전]
 	@PostMapping("/deleteFile")
 	@ResponseBody
-	public ResponseEntity<String> deleteFile(String fileName, String type, HttpServletRequest request){
+	public ResponseEntity<String> deleteFile(String fileName, String type, HttpServletRequest request, HttpServletResponse response){
 		log.info("deleteFile: "+fileName);
-		String id = (String)request.getSession().getAttribute("userId");
-		File file;
+		
 		try {
-			file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ id + "/" + URLDecoder.decode(fileName,"UTF-8"));
+			String uploadFolderPath = getFolder();		
+			File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath+ "/temp" + URLDecoder.decode(fileName,"UTF-8"));
 			file.delete();
+			response.setHeader("Cache-Control","no-store");
+			response.setHeader("Cache-Control","no-cache");
 		}catch(UnsupportedEncodingException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		return new ResponseEntity<String>("deleted",HttpStatus.OK);
 	}
-	
-	//문서에 붙은 첨부파일 가져오기
-	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<List<AttachVO>>getAttachList(String appr_seq){
-		return new ResponseEntity<>(service.getAttachList(appr_seq),HttpStatus.OK);
-	}
-	
-	//첨부파일 다운로드
+	//첨부파일 다운로드[기안 상신 전]
 	@GetMapping("/download")
-	public void download(String fileName, String id, HttpServletResponse response)throws IOException{
-		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ id + "/" + fileName);
+	public void download(String fileName, HttpServletResponse response)throws IOException{
+		String uploadFolderPath = getFolder();
+		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath + "/temp" + fileName);
 		//file 다운르도 요청값 설정
 		response.setContentType("application/download");
 		response.setContentLength((int)file.length());
@@ -141,20 +153,100 @@ public class fileController {
 		fis.close();
 		os.close();
 	}
-	
-	//첨부파일 수정폼
-	@GetMapping("/AttachModifyForm")
-	public void AttachModifyForm(String appr_seq, Model model) {
-		List<AttachVO> attach = service.AttachModifyForm(appr_seq);
-		model.addAttribute("attach",attach);
-		model.addAttribute("info",approvalService.apprInfo(appr_seq));
-	}
+	/*
+	 * 기안 이후 파일 업로드&삭제&등록
+	 */
+	//파일 업로드[기안 상신 후]
+		@PostMapping(value="/InfoUploadFile", produces = MediaType.APPLICATION_JSON_VALUE)
+		@ResponseBody
+		public ResponseEntity<List<AttachFileDTO>> InfoUploadFile(MultipartFile[] uploadFile, HttpServletRequest request,
+				String uploadPath, String appr_seq) {
+			log.info("InfoUploadFile response....");
+			List<AttachFileDTO> list = new ArrayList<>();
+			String appr_seq_ = appr_seq.substring(16);
+			String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadPath+"/"+appr_seq_;
+			log.info("InfoUploadFile "+uploadFolder);
+			
+			for(MultipartFile multipartFile : uploadFile) {
+				log.info("===========================");
+				log.info("Upload File Name: "+multipartFile.getOriginalFilename());
+				log.info("Upload File Size: "+multipartFile.getSize());
+				AttachFileDTO attachDTO = new AttachFileDTO();
+				String uploadFileName = multipartFile.getOriginalFilename();
+				int fileSize = (int) multipartFile.getSize();
+				
+				uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1);
+				log.info("only fileName: "+uploadFileName);
+				attachDTO.setFileName(uploadFileName);
+				
+				UUID uuid = UUID.randomUUID();
+				uploadFileName = uuid.toString()+"_"+uploadFileName;
+				
+				try {
+					File saveFilePath = new File(uploadFolder,uploadFileName);
+					multipartFile.transferTo(saveFilePath);
+					
+					attachDTO.setUuid(uuid.toString());
+					attachDTO.setUploadPath(uploadPath);
+					attachDTO.setFileType(100);
+					attachDTO.setFilesize(fileSize);
+					list.add(attachDTO);
+				}catch(IOException e) {
+					e.printStackTrace();
+				}
+			}
+			return new ResponseEntity<>(list, HttpStatus.OK);
+		}
+		
+		//업로드 된 파일 삭제[기안 상신 후]
+		@PostMapping("/InfoDeleteFile")
+		@ResponseBody
+		public ResponseEntity<String> InfoDeleteFile(String fileName, String type, String appr_seq, String uploadPath,
+				HttpServletRequest request, HttpServletResponse response){
+			log.info("InfoDeleteFile: "+fileName);
+			String appr_seq_ = appr_seq.substring(16);
+			try {
+				File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadPath+ "/" + appr_seq_ +URLDecoder.decode(fileName,"UTF-8"));
+				log.info("InfoDeleteFile Path "+file);
+				file.delete();
+				response.setHeader("Cache-Control","no-store");
+				response.setHeader("Cache-Control","no-cache");
+			}catch(UnsupportedEncodingException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<String>("deleted",HttpStatus.OK);
+		}
+		//첨부파일 다운로드[기안 상신 후]
+		@GetMapping("/InfoFileDownload")
+		public void InfoFileDownload(String fileName, String appr_seq, HttpServletResponse response)throws IOException{
+			List<AttachVO> attach = service.getAttachList(appr_seq);
+			String appr_seq_ = appr_seq.substring(16);
+			for(AttachVO attachment : attach) {
+				File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ attachment.getUploadPath() + "/" + appr_seq_ +"/"+fileName);
+				
+				//file 다운르도 요청값 설정
+				response.setContentType("application/download");
+				response.setContentLength((int)file.length());
+				//파일명 한글일 경우 파일명 제대로 나오게..
+				String encodedFileName = new String(fileName.getBytes("UTF-8"),"ISO-8859-1");
+				response.setHeader("Content-disposition", "attachment;fileName=\""+ encodedFileName +"\"");
+				
+				//response 객체를 통해 서버로 부터 파일 다운
+				OutputStream os = response.getOutputStream();
+				//파일입력 객체생성
+				FileInputStream fis = new FileInputStream(file);
+				FileCopyUtils.copy(fis, os);
+				fis.close();
+				os.close();
+			}
+		}
 	
 	//문서에 등록된 첨부파일 삭제
 	@PostMapping("/ApprDocDeleteFiles")
 	@ResponseBody
 	public ResponseEntity<String> ApprDocDeleteFiles(String fileName, String type, 
-			String appr_seq, String id,HttpServletRequest request, HttpServletResponse response){
+			String appr_seq, HttpServletRequest request, HttpServletResponse response){
 		log.info("ApprDocDeleteFiles: "+ fileName);
 		Map<String,Object> res = new HashMap<>();
 		res.put("appr_seq", appr_seq);

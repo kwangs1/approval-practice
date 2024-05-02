@@ -24,8 +24,11 @@ public class approvalMapper{
 	}
 	
 	//결재 작성
+	public void InsertSelectKey(approvalVO approval) {
+		  session.insert("mapper.approval.InsertSelectKey",approval);
+	}
 	public void apprWrite(approvalVO approval) {
-		  session.insert("mapper.approval.apprWrite",approval);
+		session.insert("mapper.approval.apprWrite",approval);
 	}
 	
 	//결재 대기

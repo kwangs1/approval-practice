@@ -173,5 +173,6 @@ ablitionflag varchar2(1));\
     uuid varchar2(100) PRIMARY key,\
     uploadpath varchar2(200) not null,\
     filename varchar2(100) not null,\
-    filetype char(1) DEFAULT 'I',\
-    appr_seq varchar2(100));}
+    filetype number(3),\
+    appr_seq varchar2(100),\
+    Filesize number(3));}

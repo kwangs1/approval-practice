@@ -23,12 +23,17 @@
 		<result property="statusname" column="statusname" />
 	</resultMap>
 <!-- 결재선 지정 -->
-<insert id="ParticipantWrite" parameterType="participantVO">
+<insert id="InsertSelectKey" parameterType="participantVO">
 	<selectKey keyProperty="participant_seq" resultType="String" order="BEFORE">
 		select 'PARTICIPANT' || to_char(sysdate,'YYYYMMDD') || PARTICIPANT_SEQ.nextval from dual
 	</selectKey>
     insert into participant
     values(#{participant_seq}, #{appr_seq}, #{status}, #{line_seq}, #{signername},
+    #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname},0,#{statusname})
+</insert>
+<insert id="ParticipantWrite" parameterType="participantVO">
+    insert into participant
+    values(PARTICIPANT_SEQ.nextval, #{appr_seq}, #{status}, #{line_seq}, #{signername},
     #{signerid}, #{pos}, to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), #{upddate},#{approvalstatus},#{approvaltype},#{deptid},#{deptname},0,#{statusname})
 </insert>
  

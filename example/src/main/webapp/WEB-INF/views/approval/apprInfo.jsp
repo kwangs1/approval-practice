@@ -36,9 +36,9 @@ li{list-style:none; padding-left:0px;}
   
   	<div>
 		<c:choose>
-			<c:when test="${info.status != 256}">
+			<c:when test="${info.status != 256 && pInfo.signerid eq user.id}">
 			<div>
-				<label for="ModifyForm" class="btn-upload">첨부파일</label>
+				<label for="ModifyForm" class="btn-upload">업로드 파일수정</label>
 				<input type="button" id="ModifyForm" onClick="AttachModifyForm()" style="display:none;"/>
 			</div>
 			</c:when>
@@ -102,17 +102,17 @@ $.getJSON('<c:url value="/getAttachList"/>',{appr_seq: appr_seq}, function(arr){
 	var str = "";
 	
 	$(arr).each(function(i,attach){
-		str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"'>";
+		str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' data-size='"+attach.filesize+"'>";
 		str += "<div><span style='cursor: pointer;'>" + attach.fileName + "</span>";
 		str += "</div></li><br>";
 	})
-	$('.uploadResult').html(str);
+	$('.uploadResult ul').html(str);
 });
 //첨부파일 다운로드
-$('.uploadResult').on('click','li',function(e){
+$('.uploadResult ul').on('click','li',function(e){
 	var liObj = $(this);
-	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-	self.location='<c:url value="/download"/>'+'?id='+drafterid+'&fileName='+path;
+	var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+	self.location='<c:url value="/InfoFileDownload"/>'+'?appr_seq='+appr_seq +'&fileName='+path;
 });
 //첨부파일 수정폼
 function AttachModifyForm(){

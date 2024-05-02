@@ -7,7 +7,8 @@ public class AttachFileDTO {
 	private String fileName;
 	private String uploadPath;
 	private String uuid;
-	private boolean image;
+	private int fileType;
+	private int filesize;
 	
 	public String getFileName() {
 		return fileName;
@@ -27,17 +28,25 @@ public class AttachFileDTO {
 	public void setUuid(String uuid) {
 		this.uuid = uuid;
 	}
-	public boolean isImage() {
-		return image;
+	public int getFileType() {
+		return fileType;
 	}
-	public void setImage(boolean image) {
-		this.image = image;
+	public void setFileType(int fileType) {
+		this.fileType = fileType;
+	}
+	
+	public int getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
 	}
 	@Override
 	public String toString() {
-		return "AttachFileDTO [fileName=" + fileName + ", uploadPath=" + uploadPath + ", uuid=" + uuid + ", image="
-				+ image + "]";
+		return "AttachFileDTO [fileName=" + fileName + ", uploadPath=" + uploadPath + ", uuid=" + uuid + ", fileType="
+				+ fileType + ", filesize=" + filesize + "]";
 	}
+
 	
 	
 }

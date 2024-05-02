@@ -28,7 +28,8 @@ ul{padding-left:0px;}
 	</div>
 		<br>
 	<c:forEach var="attach" items="${attach}">
-	<div class="uploadFile">
+	<input type="hidden" id="path" value="${attach.uploadPath }"/>
+	<div class="uploadFileList">
 		<ul>
 			<li data-uuid="${attach.uuid}" data-filename="${attach.fileName}" data-path="${attach.uploadPath}">
 			<c:if test="${info.attachcnt >0}">
@@ -51,17 +52,18 @@ var appr_seq = '<c:out value="${info.appr_seq}"/>';
 //첨부파일 다운로드
 $(".uploadFile").on('click','.files',function(e){
 	var liObj = $(this).closest("li");
-	var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-	self.location='<c:url value="/download"/>'+'?id='+drafterid+'&fileName='+path;
+	var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+	self.location='<c:url value="/InfoFileDownload"/>'+'?appr_seq='+appr_seq+'&fileName='+path;
 })
 //파일삭제
 function ApprDocDeleteFiles(){
 	if(confirm("삭제하시겠습니까?")){
-		$('.uploadFile').on('click','.delete',function(){
+		$('.uploadFileList').on('click','.delete',function(){
 			var liObj = $(this).closest("li");
-			var targetFile = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+			var targetFile = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
 			var type = $(this).data("type");
 			var fileName = liObj.data('filename');	
+			var path = liObj.data('path');
 			
 			$.ajax({
 				url: '<c:url value="/ApprDocDeleteFiles"/>',
@@ -71,12 +73,12 @@ function ApprDocDeleteFiles(){
 				success: function(response){
 					alert("파일이 삭제가 되었습니다.");
 					$.ajax({
-						url: '<c:url value="/deleteFile"/>',
+						url: '<c:url value="/InfoDeleteFile"/>',
 						type: 'post',
-						data: {fileName: targetFile, type: type},
+						data: {fileName: targetFile, type: type, appr_seq: appr_seq, uploadPath: path},
 						dataType: 'text',
 						success: function(response){
-							targetLi.remove();
+							liObj.remove();
 						}
 					})//success end ajax
 					window.location.reload();
@@ -108,22 +110,26 @@ $("input[type='file']").change(function(e){
 	var formData = new FormData();
 	var inputFile = $("input[name='uploadFile']");
 	var files = inputFile[0].files;
+	var liObj = $('.uploadResult ul').closest("li");
 	
 	for(var i=0; i<files.length; i++){
 		if(!checkException(files[i].name, files[i].size)){
 			return false;
 		}
 		formData.append("uploadFile",files[i]);
+		formData.append("appr_seq",appr_seq);
+		formData.append("uploadPath",$('#path').val());
 	}
 	$.ajax({
-		url: '<c:url value="/uploadFile.do"/>',
+		url: '<c:url value="/InfoUploadFile"/>',
 		processData: false,
 		contentType: false,
 		data: formData,
 		type: 'post',
 		dataType: 'json',
 		success: function(result){
-			showUploadResult(result);
+			window.opener.location.reload()
+			showUploadResult(result);		
 		}
 	})	
 });
@@ -136,9 +142,9 @@ function showUploadResult(uploadResultAttr){
 	var uploadUL = $('.uploadResult ul');
 	//업로드 된 첨부파일에 대한./.
 	$(uploadResultAttr).each(function(i, obj){
-	    var fileCallPath =  encodeURIComponent( obj.uploadPath+"/"+ obj.uuid +"_"+obj.fileName);         
+	    var fileCallPath =  encodeURIComponent("/"+ obj.uuid +"_"+obj.fileName);         
 	    var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-		str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"'>";
+		str += "<li data-path='"+obj.uploadPath+"' data-uuid='"+obj.uuid+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"'  data-size='"+obj.filesize+"'>";
 		str += "<div><span style='cursor:pointer;' class='download'>" + obj.fileName + "</span>&nbsp;&nbsp;";
 		str += "<button type='button' class='delete' onclick='ApprDocDeleteFiles()'>❌</button><br>";
 		str += "</div></li>";
@@ -156,11 +162,13 @@ function ApprDocInsertFiles(){
 		var uploadPath = obj_.data("path");
 		var fileName = obj_.data("filename");
 		var fileType = obj_.data("type");
+		var filesize= obj_.data("size");
 		
 		formData.append("attach["+ i +"].uuid",uuid);
 		formData.append("attach["+ i +"].uploadPath",uploadPath);
 		formData.append("attach["+ i +"].fileName",fileName);
 		formData.append("attach["+ i +"].fileType",fileType);
+		formData.append("attach["+ i +"].filesize",filesize);
 	})
     formData.append("appr_seq", appr_seq);
 	$.ajax({

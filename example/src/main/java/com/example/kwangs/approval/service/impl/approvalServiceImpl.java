@@ -39,7 +39,7 @@ public class approvalServiceImpl implements approvalService{
 	public void apprWrite(approvalVO approval) throws IOException {
 		String abbr = approval.getDocregno();
 		approval.setDocregno(abbr+"-@N");
-		mapper.apprWrite(approval);
+		mapper.InsertSelectKey(approval);
 		
 		//기안자의 기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기 & 등록
 		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());	
@@ -54,11 +54,12 @@ public class approvalServiceImpl implements approvalService{
 			return;
 		}
 		List<AttachVO> attach = approval.getAttach();
-		for(int i=0; i < attach.size(); i++) {
-			AttachVO attachVO = attach.get(i);
-			attachVO.setAppr_seq(approval.getAppr_seq());
-			fileMapper.DocFileIn(attachVO);
-		}
+		if(attach != null && !attach.isEmpty()) {
+			for(AttachVO attachVO : attach) {
+				attachVO.setAppr_seq(approval.getAppr_seq());
+				fileMapper.DocFileIn(attachVO);
+			}
+		}	
 		//..
 		saveDatTemp.saveDataToDatFile(approval.getFolderid(), approval.getFoldername(), approval.getBizunitcd(),approval.getDrafterid());				
 		

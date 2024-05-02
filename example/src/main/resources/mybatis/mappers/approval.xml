@@ -42,12 +42,19 @@
 </select>
 
 <!-- 기안 -->
-<insert id="apprWrite" parameterType="approvalVO"> 
+<insert id="InsertSelectKey" parameterType="approvalVO"> 
 	<selectKey keyProperty="appr_seq" resultType="String" order="BEFORE">
 		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval from dual
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername})
+</insert>
+
+<insert id="apprWrite" parameterType="approvalVO"> 
+	insert into approval
+	values(APPR_SEQ.nextval,#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername})
 </insert>

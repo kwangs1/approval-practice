@@ -7,8 +7,9 @@ public class AttachVO {
 	private String uuid;
 	private String uploadPath;
 	private String fileName;
-	private boolean fileType;	
+	private int fileType;	
 	private String appr_seq;
+	private int filesize;
 	
 	public String getUuid() {
 		return uuid;
@@ -28,10 +29,11 @@ public class AttachVO {
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-	public boolean isFileType() {
+
+	public int getFileType() {
 		return fileType;
 	}
-	public void setFileType(boolean fileType) {
+	public void setFileType(int fileType) {
 		this.fileType = fileType;
 	}
 	public String getAppr_seq() {
@@ -40,11 +42,18 @@ public class AttachVO {
 	public void setAppr_seq(String appr_seq) {
 		this.appr_seq = appr_seq;
 	}
+	public int getFilesize() {
+		return filesize;
+	}
+	public void setFilesize(int filesize) {
+		this.filesize = filesize;
+	}
 	@Override
 	public String toString() {
 		return "AttachVO [uuid=" + uuid + ", uploadPath=" + uploadPath + ", fileName=" + fileName + ", fileType="
-				+ fileType + ", appr_seq=" + appr_seq + "]";
+				+ fileType + ", appr_seq=" + appr_seq + ", filesize=" + filesize + "]";
 	}
+	
 	
 	
 }

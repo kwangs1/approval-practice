@@ -25,12 +25,6 @@ public class saveDatTemp {
 		        throw new IOException("SaveParticipantTemp Failed to create directory: " + userFolder.getAbsolutePath());
 		    }
 		}
-		/*
-    	apprfolderVO apprfolder = new DataFile(fldrid, bizunitcd, procdeptid, fldrname);
-        apprfolder.setFldrid(fldrid);
-        apprfolder.setBizunitcd(bizunitcd);
-        apprfolder.setProcdeptid(procdeptid);
-        apprfolder.setFldrname(fldrname);*/
 		DatSaveData data = new DatSaveData(fldrid, fldrname, bizunitcd);
     	ObjectOutputStream output = null;
     	try {

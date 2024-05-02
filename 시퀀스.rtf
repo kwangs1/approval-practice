@@ -11,7 +11,7 @@ create sequence appr_seq\
     increment by 1\
     MAXVALUE 999999\
     MINVALUE 1\
-    nocache\
+    cache 20\
     CYCLE;\
 \
 create sequence participant_seq\
@@ -19,7 +19,7 @@ create sequence participant_seq\
     increment by 1\
     MAXVALUE 999999\
     MINVALUE 1\
-    nocache\
+    cache 20\
     CYCLE;\
 \
 create sequence dept_seq\

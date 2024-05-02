@@ -328,7 +328,7 @@ public class participantServiceImpl implements participantService{
 			}else {
 				pVO.setStatusname("결재");
 			}
-			mapper.ParticipantWrite(pVO);
+			mapper.InsertSelectKey(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
 			

@@ -111,43 +111,75 @@ window.onload = function(){
 		// FormData 객체 생성 
 		//[첨부파일 데이터와 묶어서 서버로 보내기 위해서 결재 데이터도 같이 FormData에 넣어줌.]
 		var formData = new FormData(); 
+		var inputFile = $("input[name='uploadFile']");
+		var files = inputFile[0].files;
 
 	    // 기안 시 등록하는 필드 정보 추가
-	    formData.append('draftername', $('#draftername').val());
-	    formData.append('drafterid', $('#drafterid').val());
-	    formData.append('title', $('#title').val());
-	    formData.append('content', $('#content').val());
-	    formData.append('startdate', $('#startdate').val());
-	    formData.append('enddate', $('#enddate').val());
-	    formData.append('drafterdeptid', drafterdeptid);
-	    formData.append('drafterdeptname', drafterdeptname);
-	    formData.append('docregno', docregno);
-	    formData.append('folderid', $('#folderid').val());
-	    formData.append('foldername', $('#foldername').val());
-	    formData.append('bizunitcd', $('#bizunitcd').val());
-	    formData.append('attachcnt', attachcnt);
+	    if(files.length > 0){
+		    formData.append('draftername', $('#draftername').val());
+		    formData.append('drafterid', $('#drafterid').val());
+		    formData.append('title', $('#title').val());
+		    formData.append('content', $('#content').val());
+		    formData.append('startdate', $('#startdate').val());
+		    formData.append('enddate', $('#enddate').val());
+		    formData.append('drafterdeptid', drafterdeptid);
+		    formData.append('drafterdeptname', drafterdeptname);
+		    formData.append('docregno', docregno);
+		    formData.append('folderid', $('#folderid').val());
+		    formData.append('foldername', $('#foldername').val());
+		    formData.append('bizunitcd', $('#bizunitcd').val());
+		    formData.append('attachcnt', attachcnt);
 
-	    // 파일 정보 추가
-	    UploadFileAppend(formData);
-	  	/*
-	  	 * 파일 등록 시 ajax에서는 일반적인 body에서의 form태그 안 enctype="multipart/form-data" 의 값을 설정하기위해 
-	  	 * processData, contentType 값을 flase로 설정
-	  	*/
-		$.ajax({
-			type : "post",
-			url : "${path}/approval/apprWrite",
-			data : formData,        
-	        processData: false,
-	        contentType: false,
-			success : function(response) {
-				participant();
-			},
-			error : function(xhr, status, error) {
-				console.log(xhr);
-				console.log(status);
-				console.log(error);
-			}
-		})
+		    // 파일 정보 추가
+		    UploadFileAppend(formData);
+		  	/*
+		  	 * 파일 등록 시 ajax에서는 일반적인 body에서의 form태그 안 enctype="multipart/form-data" 의 값을 설정하기위해 
+		  	 * processData, contentType 값을 flase로 설정
+		  	*/
+			$.ajax({
+				type : "post",
+				url : "${path}/approval/apprWrite",
+				data : formData,        
+		        processData: false,
+		        contentType: false,
+				success : function(response) {
+					participant();
+				},
+				error : function(xhr, status, error) {
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				}
+			})	
+	    }else{
+	    	var apprData = {
+	    			drafterdeptid: drafterdeptid,
+	    			drafterdeptname: drafterdeptname,
+	    			title: $('#title').val(),
+	    			content: $('#content').val(),
+	    			startdate: $('#startdate').val(),
+	    			enddate: $('#enddate').val(),
+	    			drafterid: $('#drafterid').val(),
+	    			draftername: $('#draftername').val(),
+	    			folderid: $('#folderid').val(),
+	    			bizunitcd: $('#bizunitcd').val(),
+	    			foldername: $('#foldername').val(),
+	    			docregno: docregno
+	    	}
+			$.ajax({
+				type : "post",
+				url : "${path}/approval/apprWrite",
+				data : apprData,        
+				success : function(response) {
+					participant();
+				},
+				error : function(xhr, status, error) {
+					console.log(xhr);
+					console.log(status);
+					console.log(error);
+				}
+			})	
+	    }
 	}
 //업로드 파일 관련 JS
 	var uploadUL = $(".uploadResult ul");
@@ -155,12 +187,10 @@ window.onload = function(){
 	var maxSize = 5242880; //5MB
 
 	function checkExtension(fileName, fileSize) {
-
 		if (fileSize >= maxSize) {
 			alert("파일 사이즈 초과");
 			return false;
 		}
-
 		if (regex.test(fileName)) {
 			alert("해당 종류의 파일은 업로드할 수 없습니다.");
 			return false;
@@ -199,11 +229,11 @@ window.onload = function(){
 		}
 		var str = "";
 		$(uploadResultArr).each(function(i, obj) {
-			var fileCallPath = encodeURIComponent(obj.uploadPath+"/"+obj.uuid+"_"+obj.fileName);
+			var fileCallPath = encodeURIComponent("/"+obj.uuid+"_"+obj.fileName);
 			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
 			
 			str += "<li style='list-style: none;'"
-			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.image+"' ><div>";
+			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"' data-size='"+obj.filesize+"' ><div>";
 			str += "<span style='cursor: pointer;' class='download'> " + obj.fileName + "</span>&nbsp;&nbsp;";
 			str += "<button type='button' class='deleteBtn' data-file=\'"+fileCallPath+"\' data-type='file'>❌</button><br>";
 			str += "</div>";
@@ -216,21 +246,19 @@ window.onload = function(){
 	//업로드된 파일의 데이터를 담을 JS
 	function UploadFileAppend(formData){
 		$(".uploadResult ul li").each(function(i, obj) {
-			var str = "";
 			 var jobj = $(obj);
+			 var uuid = jobj.data("uuid");
+		     var uploadPath = jobj.data("path");
+		     var fileName = jobj.data("filename");
+		     var fileType = jobj.data("type");
+		     var filesize = jobj.data("size");
 
-		        var uuid = jobj.data("uuid");
-		        var uploadPath = jobj.data("path");
-		        var fileName = jobj.data("filename");
-		        var fileType = jobj.data("type");
-
-		        // 파일 정보를 FormData에 추가
-		        formData.append("attach[" + i + "].uuid", uuid);
-		        formData.append("attach[" + i + "].uploadPath", uploadPath);
-		        formData.append("attach[" + i + "].fileName", fileName);
-		        formData.append("attach[" + i + "].fileType", fileType);
-			uploadUL.append(str);
-			console.log(str);
+		     // 파일 정보를 FormData에 추가
+		     formData.append("attach[" + i + "].uuid", uuid);
+		     formData.append("attach[" + i + "].uploadPath", uploadPath);
+		     formData.append("attach[" + i + "].fileName", fileName);
+		     formData.append("attach[" + i + "].fileType", fileType);
+		     formData.append("attach[" + i + "].filesize", filesize);
 		});
 	}
 	//파일 삭제 js
@@ -252,8 +280,8 @@ window.onload = function(){
 	//다운로드 JS
 	$('.uploadResult').on('click','.download',function(e){
 		var liObj = $(this).closest("li");
-		var path = encodeURIComponent(liObj.data("path")+"/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-		self.location='<c:url value="/download"/>'+'?id='+id+'&fileName='+path;
+		var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
+		self.location='<c:url value="/download"/>'+'?fileName='+path;
 	});
 </script>
 </body>

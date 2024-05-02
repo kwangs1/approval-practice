@@ -1,5 +1,6 @@
 package com.example.kwangs.approval;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -16,10 +17,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.common.file.fileController;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
@@ -39,6 +40,8 @@ public class approvalController {
 	private participantService serviceP;
 	@Autowired
 	private folderService folderService;
+	@Autowired
+	private fileController fileController;
 	
 	//문서작성
 	@GetMapping("/apprWrite")
@@ -57,16 +60,28 @@ public class approvalController {
 	
 	@ResponseBody
 	@PostMapping("/apprWrite")
-	public void apprWrite(approvalVO approval,RedirectAttributes rttr)throws IOException {
-		if(approval.getAttach() != null) {
-			List<AttachVO> attach = approval.getAttach();
-			for(int i=0; i < attach.size(); i++) {
-				AttachVO attachVO = attach.get(i);
-				log.info("getAttachValue: "+attachVO);
-			}
-		}
+	public void apprWrite(approvalVO approval,HttpServletRequest request)throws IOException {
 		service.apprWrite(approval);
-		rttr.addFlashAttribute("result",approval.getAppr_seq());
+		List<AttachVO> attach = approval.getAttach();
+		if(attach != null && !attach.isEmpty()) {		
+			String appr_seq = approval.getAppr_seq().substring(16);
+			String uploadFolder = fileController.getFolder();
+			String newFolderPath = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolder+"/"+appr_seq;
+			File newFolder = new File(newFolderPath);
+			
+			if(!newFolder.exists()) {
+				newFolder.mkdirs();
+			}
+			
+			String tempFolderPath = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolder+"/temp";
+			File tempFolder = new File(tempFolderPath);
+			File[] files = tempFolder.listFiles();
+			if(files != null) {
+				for(File file : files) {
+					file.renameTo(new File(newFolderPath + "/" + file.getName()));
+				}
+			}		
+		}
 	}
 
 	//결재함
