@@ -166,7 +166,11 @@ public class fileController {
 			String appr_seq_ = appr_seq.substring(16);
 			String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadPath+"/"+appr_seq_;
 			log.info("InfoUploadFile "+uploadFolder);
+			File uploadPath_ = new File(uploadFolder);
 			
+			if(uploadPath_.exists() == false) {
+				uploadPath_.mkdirs();
+			}
 			for(MultipartFile multipartFile : uploadFile) {
 				log.info("===========================");
 				log.info("Upload File Name: "+multipartFile.getOriginalFilename());
@@ -183,7 +187,7 @@ public class fileController {
 				uploadFileName = uuid.toString()+"_"+uploadFileName;
 				
 				try {
-					File saveFilePath = new File(uploadFolder,uploadFileName);
+					File saveFilePath = new File(uploadPath_,uploadFileName);
 					multipartFile.transferTo(saveFilePath);
 					
 					attachDTO.setUuid(uuid.toString());

@@ -50,7 +50,7 @@ ul{padding-left:0px;}
 var drafterid = '<c:out value="${info.drafterid}"/>';
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 //첨부파일 다운로드
-$(".uploadFile").on('click','.files',function(e){
+$(".uploadFileList").on('click','.files',function(e){
 	var liObj = $(this).closest("li");
 	var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
 	self.location='<c:url value="/InfoFileDownload"/>'+'?appr_seq='+appr_seq+'&fileName='+path;
