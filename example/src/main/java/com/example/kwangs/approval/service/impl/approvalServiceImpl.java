@@ -9,7 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.Temp.saveDatTemp;
+import com.example.kwangs.Temp.UseFolderDat.saveDatTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
@@ -48,7 +48,10 @@ public class approvalServiceImpl implements approvalService{
 		fm_6021.setFldrmbrid(approval.getAppr_seq());
 		fm_6021.setRegisterid(approval.getDrafterid());
 		fMapper.ApprFldrmbrInsert(fm_6021);
-		
+
+		//기록물철 임시저장
+		saveDatTemp.saveDataToDatFile(approval.getFolderid(), approval.getFoldername(), approval.getBizunitcd(),approval.getDrafterid());
+		//첨부파일
 		if(approval.getAttach() == null || approval.getAttach().size() <= 0) {
 			log.info("file List: "+approval.getAttach());
 			return;
@@ -59,9 +62,7 @@ public class approvalServiceImpl implements approvalService{
 				attachVO.setAppr_seq(approval.getAppr_seq());
 				fileMapper.DocFileIn(attachVO);
 			}
-		}	
-		//..
-		saveDatTemp.saveDataToDatFile(approval.getFolderid(), approval.getFoldername(), approval.getBizunitcd(),approval.getDrafterid());				
+		}					
 		
 	}
 	//결재대기

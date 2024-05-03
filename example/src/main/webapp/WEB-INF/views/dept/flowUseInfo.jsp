@@ -113,7 +113,7 @@
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/SenderFlowInfo__0.js'/>"></script>
+<script src="<c:url value='/resources/js/SenderFlowInfo.js'/>"></script>
 <script>
 var uId = '<c:out value="${user}"/>';
 var ownerid = '<c:out value="${deptId}"/>';

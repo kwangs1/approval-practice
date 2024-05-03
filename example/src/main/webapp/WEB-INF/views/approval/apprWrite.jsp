@@ -8,6 +8,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
 <style>
+body{background-color: #f0f0f0; font-family: Arial, sans-serif; font-size: 16px; padding: 20px; margin: 0;}
 .btn-upload {
 width: 150px; height: 30px; background: #fff; border: 1px solid rgb(77,77,77); border-radius: 10px;
 font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-content: center;
@@ -15,9 +16,18 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 }
 .uploadResult ul li{list-style:none; padding-left:0px;}
 .uploadResult ul{padding-left:0px;}
+.vacation-period {margin-top: 20px; align-items: center;}
 </style>
 </head>
 <body>
+<input type="hidden" name="draftername" id="draftername" value="${user.name}" />
+<input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
+<input type="hidden" name="folderid" id="folderid"/>
+<input type="hidden" name="foldername" id="foldername"/>
+<input type="hidden" name="bizunitcd" id="bizunitcd"/>
+<input type="hidden" name="attachcnt" id="attachcnt"/>
+
+<%@ include file="../participant/ParticipantWrite.jsp" %>
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
 		<span></span>
@@ -26,21 +36,8 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 	</div>
 	<p>상신 중..</p>
 </div>
-<%@ include file="../participant/ParticipantWrite.jsp" %>
-<hr>
 
-	<button onClick="Appr_Btn();">상신</button>
-	<button onClick="window.close()">닫기</button>
-<hr>
-<input type="hidden" name="draftername" id="draftername" value="${user.name}" />
-<input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
-
-<input type="hidden" name="folderid" id="folderid"/>
-<input type="hidden" name="foldername" id="foldername"/>
-<input type="hidden" name="bizunitcd" id="bizunitcd"/>
-<input type="hidden" name="attachcnt" id="attachcnt"/>
-<body>
-
+<div class="vacation-period">
 휴가 기간: <input type="date" name="startdate" id="startdate"/> ~
 	<input type="date" name="enddate" id="enddate" />
 <br><br>
@@ -50,7 +47,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 
 <textarea name="content" id="content" rows="10" cols="80" placeholder="내용입력"></textarea>
 <br><br>
-
+</div>
 	<div>
 		<div>
 			<label for="file" class="btn-upload">파일 업로드</label>		
@@ -65,6 +62,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 	</div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="<c:url value='/resources/js/UploadFile.js'/>"></script>
 <script>
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
@@ -99,8 +97,6 @@ window.onload = function(){
 	window.addEventListener('message', function(e) {
 		var data = e.data;
 		var selectedApFolder = data.selectedApFolder;
-		console.log("load apF "+selectedApFolder.fldrid);
-		console.log("load apF "+selectedApFolder.fldrname);
 
 		$('#folderid').val(selectedApFolder.fldrid);
 		$('#foldername').val(selectedApFolder.fldrname);
@@ -181,108 +177,6 @@ window.onload = function(){
 			})	
 	    }
 	}
-//업로드 파일 관련 JS
-	var uploadUL = $(".uploadResult ul");
-	var regex = new RegExp("(.*?)\.(exe|sh|zip|alz)$");
-	var maxSize = 5242880; //5MB
-
-	function checkExtension(fileName, fileSize) {
-		if (fileSize >= maxSize) {
-			alert("파일 사이즈 초과");
-			return false;
-		}
-		if (regex.test(fileName)) {
-			alert("해당 종류의 파일은 업로드할 수 없습니다.");
-			return false;
-		}
-		return true;
-	}
-	//작성뷰에서 파일 업로드 시 PC에 저장시키기 위한 JS
-	$("input[type='file']").change(function(e){
-		var formData = new FormData();
-		var inputFile = $("input[name='uploadFile']");
-		var files = inputFile[0].files;
-		for (var i = 0; i < files.length; i++) {
-			if (!checkExtension(files[i].name, files[i].size)) {
-					return false;
-				}
-			formData.append("uploadFile", files[i]);
-		}
-		$.ajax({
-			url : '<c:url value="/uploadFile"/>',
-			processData : false,
-			contentType : false,
-			data : formData,
-			type : 'POST',
-			dataType : 'json',
-			success : function(result) {
-				console.log(result);
-				showUploadResult(result); //업로드 결과 처리 함수 
-				}
-			}); //$.ajax	  
-		});	
-	//업로드 된 부분을 화면단에서 보여지게 하기 위한JS
-	 function showUploadResult(uploadResultArr) {
-
-		if (!uploadResultArr || uploadResultArr.length == 0) {
-			return;
-		}
-		var str = "";
-		$(uploadResultArr).each(function(i, obj) {
-			var fileCallPath = encodeURIComponent("/"+obj.uuid+"_"+obj.fileName);
-			var fileLink = fileCallPath.replace(new RegExp(/\\/g),"/");
-			
-			str += "<li style='list-style: none;'"
-			str += "data-uuid='"+obj.uuid+"' data-path='"+obj.uploadPath+"' data-filename='"+obj.fileName+"' data-type='"+obj.fileType+"' data-size='"+obj.filesize+"' ><div>";
-			str += "<span style='cursor: pointer;' class='download'> " + obj.fileName + "</span>&nbsp;&nbsp;";
-			str += "<button type='button' class='deleteBtn' data-file=\'"+fileCallPath+"\' data-type='file'>❌</button><br>";
-			str += "</div>";
-			str + "</li>";
-			
-		});
-		uploadUL.append(str);
-		attachcnt = uploadResultArr.length;
-	}
-	//업로드된 파일의 데이터를 담을 JS
-	function UploadFileAppend(formData){
-		$(".uploadResult ul li").each(function(i, obj) {
-			 var jobj = $(obj);
-			 var uuid = jobj.data("uuid");
-		     var uploadPath = jobj.data("path");
-		     var fileName = jobj.data("filename");
-		     var fileType = jobj.data("type");
-		     var filesize = jobj.data("size");
-
-		     // 파일 정보를 FormData에 추가
-		     formData.append("attach[" + i + "].uuid", uuid);
-		     formData.append("attach[" + i + "].uploadPath", uploadPath);
-		     formData.append("attach[" + i + "].fileName", fileName);
-		     formData.append("attach[" + i + "].fileType", fileType);
-		     formData.append("attach[" + i + "].filesize", filesize);
-		});
-	}
-	//파일 삭제 js
-	$('.uploadResult').on('click','.deleteBtn',function(e){
-		var targetFile = $(this).data("file");
-		var type = $(this).data("type");
-		var targetLi = $(this).closest("li");
-		
-		$.ajax({
-			url: '<c:url value="/deleteFile"/>',
-			type: 'post',
-			data: {fileName: targetFile, type: type},
-			dataType: 'text',
-			success: function(response){
-				targetLi.remove();
-			}
-		});
-	})
-	//다운로드 JS
-	$('.uploadResult').on('click','.download',function(e){
-		var liObj = $(this).closest("li");
-		var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-		self.location='<c:url value="/download"/>'+'?fileName='+path;
-	});
 </script>
 </body>
 </html>

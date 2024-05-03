@@ -6,14 +6,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
+<style>
+.user-container {float: left; align-items: center; margin-right: 5px;}
+.user-container div{display: flex; flex-direction: column; margin-right: 10px;}
+.user-container input[type="text"] {height: 30px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; font-size: 14px;}
+.position {font-weight: bold; font-size: 12px;}
+select{display:none;}
+#inputs { display: flex;flex-wrap: wrap;}
+</style>
 </head>
 <body>
-	<button onclick="pop()">결재선 정보</button>
+	<button onclick="pop()">결재선 정보</button>	
+	<button onClick="Appr_Btn();">상신</button>
+	<button onClick="window.close()">닫기</button>
+	<br><br>
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="${path}/resources/js/ReceiveFlowInfo.js"></script>
+<script src="${path}/resources/js/ReceiveFlowInfo_.js"></script>
 <script>
 function pop() {
 	window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");
@@ -49,7 +60,7 @@ $(document).ready(function(){
 		  var $deptname = $("<input>", { type: "hidden", name: "deptname_" }).val(participant.deptname);
 		  var $signerid = $("<input>", { type: "hidden", name: "signerid_" }).val(participant.signerid);
 		  var $signername = $("<input>", { type: "text", name: "signername_" }).val(participant.signername);
-		  var $pos = $("<input>", { type: "text", name: "pos_" }).val(participant.pos);
+		  var $pos = $("<input>", { type: "hidden", name: "pos_" }).val(participant.pos);
 		  var $status = $("<select>", { name: "status_" }).append(
 		   $("<option>", { value: "1000" }).text("기안"),
 		   $("<option>", { value: "2000" }).text("검토"),
@@ -57,7 +68,8 @@ $(document).ready(function(){
 		   $("<option>", { value: "4000" }).text("결재")
 		  ).val(participant.status);
 
-		  $container.append($deptid, $deptname, $signerid, $signername, $pos, $status);
+		  var $userDiv = $("<div>").append($("<span>").addClass("position").text($pos.val()),$signername);
+		  $container.append($deptid, $deptname, $signerid, $userDiv, $pos, $status);
 		  $("#inputs").append($container);
 		 }
 })

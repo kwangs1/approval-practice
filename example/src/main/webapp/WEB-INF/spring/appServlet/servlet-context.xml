@@ -16,7 +16,7 @@
 
     <!-- basePath 빈 설정 -->
     <beans:bean id="basePath" class="java.lang.String">
-        <beans:constructor-arg value="${data.xml.basepath}" />
+        <beans:constructor-arg value="${temp.data.basepath}" />
     </beans:bean>
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	

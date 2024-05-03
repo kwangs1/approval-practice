@@ -17,7 +17,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 }
 li{list-style:none; padding-left:0px;}
 </style>
-<body>
+<body onload="getAttachList()">
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
 		<span></span>
@@ -47,7 +47,7 @@ li{list-style:none; padding-left:0px;}
 			</c:when>
 		</c:choose>
 		
-		<div class="uploadResult">
+		<div class="InfoUploadResult">
 			<ul>
 			</ul>
 		</div>
@@ -60,6 +60,7 @@ li{list-style:none; padding-left:0px;}
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+<script src="<c:url value='/resources/js/InfoUploadFile.js'/>"></script>
 <script>
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
@@ -96,24 +97,6 @@ function FlowAppr(){
 		}
 	});
 }
-
-//해당 문서에 대한 업로드한 첨부파일 리스트
-$.getJSON('<c:url value="/getAttachList"/>',{appr_seq: appr_seq}, function(arr){
-	var str = "";
-	
-	$(arr).each(function(i,attach){
-		str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' data-size='"+attach.filesize+"'>";
-		str += "<div><span style='cursor: pointer;'>" + attach.fileName + "</span>";
-		str += "</div></li><br>";
-	})
-	$('.uploadResult ul').html(str);
-});
-//첨부파일 다운로드
-$('.uploadResult ul').on('click','li',function(e){
-	var liObj = $(this);
-	var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-	self.location='<c:url value="/InfoFileDownload"/>'+'?appr_seq='+appr_seq +'&fileName='+path;
-});
 //첨부파일 수정폼
 function AttachModifyForm(){
 	url="<c:url value='/AttachModifyForm'/>"+"?appr_seq="+appr_seq;
