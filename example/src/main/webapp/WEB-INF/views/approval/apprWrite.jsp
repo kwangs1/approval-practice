@@ -80,6 +80,7 @@ window.addEventListener('keydown',function(e){
 })
 
 window.onload = function(){
+	pop();
 	var startDay = new Date();
 	var endDay = new Date(startDay);
 	endDay.setDate(startDay.getDate() +7);

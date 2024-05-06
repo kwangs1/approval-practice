@@ -33,7 +33,7 @@ li{list-style:none; padding-left:0px;}
   <div class="post-content">
     <p>${info.content }</p>
   </div>
-  
+  <br>
   	<div>
 		<c:choose>
 			<c:when test="${info.status != 256 && pInfo.signerid eq user.id}">
@@ -42,7 +42,7 @@ li{list-style:none; padding-left:0px;}
 				<input type="button" id="ModifyForm" onClick="AttachModifyForm()" style="display:none;"/>
 			</div>
 			</c:when>
-			<c:when test="${info.status == 256 }">
+			<c:when test="${info.status == 256 || pInfo.signerid ne user.id}">
 				<span>첨부파일</span>
 			</c:when>
 		</c:choose>
@@ -68,6 +68,7 @@ var approvaltype = '<c:out value="${pInfo.approvaltype}"/>';
 var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
 var signerid = '<c:out value="${userId}"/>';
 var drafterid = '<c:out value="${info.drafterid}"/>';
+var regdate = '<c:out value="${info.regdate}"/>';
 
 var param = {	
 	appr_seq : appr_seq,

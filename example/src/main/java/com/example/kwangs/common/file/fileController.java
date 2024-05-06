@@ -163,14 +163,15 @@ public class fileController {
 				String uploadPath, String appr_seq) {
 			log.info("InfoUploadFile response....");
 			List<AttachFileDTO> list = new ArrayList<>();
-			String appr_seq_ = appr_seq.substring(16);
-			String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadPath+"/"+appr_seq_;
-			log.info("InfoUploadFile "+uploadFolder);
-			File uploadPath_ = new File(uploadFolder);
 			
-			if(uploadPath_.exists() == false) {
-				uploadPath_.mkdirs();
-			}
+			String appr_seq_ = appr_seq.substring(16);
+				String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadPath+"/"+appr_seq_;	
+				log.info("InfoUploadFile "+uploadFolder);
+			
+				File uploadPath_ = new File(uploadFolder);		
+				if(uploadPath_.exists() == false) {
+					uploadPath_.mkdirs();
+				}
 			for(MultipartFile multipartFile : uploadFile) {
 				log.info("===========================");
 				log.info("Upload File Name: "+multipartFile.getOriginalFilename());

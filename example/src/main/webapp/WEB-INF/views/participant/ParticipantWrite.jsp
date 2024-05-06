@@ -16,8 +16,13 @@ select{display:none;}
 </style>
 </head>
 <body>
-	<button onclick="pop()">결재선 정보</button>	
-	<button onClick="Appr_Btn();">상신</button>
+	<button onclick="pop()">결재선 정보</button>
+	<c:if test="${info.status != 4096 }">	
+		<button onClick="Appr_Btn();">상신</button>
+	</c:if>
+	<c:if test="${info.status == 4096 }">
+  		<button onclick="Resubmission()" class="button">재기안</button>
+  	</c:if>
 	<button onClick="window.close()">닫기</button>
 	<br><br>
 	<!-- 동적으로 생성 될 input box 위치 -->
@@ -31,8 +36,6 @@ function pop() {
 }
 
 $(document).ready(function(){
-	pop();
-	
 	var id = '<c:out value="${user.id}"/>';
 	$.ajax({
 		url: "<c:url value='/getXmlData'/>",

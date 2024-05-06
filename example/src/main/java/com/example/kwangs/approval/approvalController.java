@@ -22,6 +22,7 @@ import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
 import com.example.kwangs.common.file.fileController;
 import com.example.kwangs.common.file.service.AttachVO;
+import com.example.kwangs.common.file.service.fileService;
 import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.folder.service.folderService;
@@ -42,6 +43,8 @@ public class approvalController {
 	private folderService folderService;
 	@Autowired
 	private fileController fileController;
+	@Autowired
+	private fileService fileService;
 	
 	//문서작성
 	@GetMapping("/apprWrite")
@@ -231,6 +234,10 @@ public class approvalController {
 		//결재선 정보 	
 		List<participantVO> pInfo = serviceP.getRe_pInfo(appr_seq);
 		model.addAttribute("pInfo",pInfo);
+		
+		List<AttachVO> attach = fileService.AttachModifyForm(appr_seq);
+		model.addAttribute("attach",attach);
+		
 		return "/approval/Resubmission";
 	}
 	

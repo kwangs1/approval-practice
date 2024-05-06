@@ -55,9 +55,9 @@
       </tr>
     </thead>
     <tbody>
-    <c:forEach var="list" items="${list}">
+    <c:forEach var="list" items="${list}" varStatus="loop">
     <input type="hidden" name="drafterid" id="drafterid" value="${list.drafterid}" />
-    <input type="hidden" id="a_status" value="${list.status}" />
+    <input type="hidden" id="ApprStatus_${loop.index}" value="${list.status}" />
 	        <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 	  <c:forEach var="participant" items="${participantInfo}" varStatus="loop">
 		<c:if test="${participant.status == '1000' && participant.signerid == user.id}">
@@ -145,9 +145,7 @@ function loadPage(pageNum){
 	window.location.href = url;
 }
 
-var a_status = $('#a_status').val();
 var checkboxes = document.getElementsByName('appr_seq');
-
 <%-- 결재 진행에 걸린 결재선 정보--%>
 var signerid = $('#signerid').val();
 var approvalstatus = $('#approvalstatus').val();
@@ -207,12 +205,13 @@ function RetireAppr(){
 	}
 }
 function Resubmission_Pop(){
-	var appr_seq = $('.seq').val();
 	var Resubmission_Ary= [];
 	
 	for(var i=0; i < checkboxes.length; i++){
 		if(checkboxes[i].checked){
 			var appr_seq = checkboxes[i].value;
+			//문서 상태값
+			var ApprStatus = $('#ApprStatus_' + i).val();
 			Resubmission_Ary.push({appr_seq : appr_seq});
 		}
 	}
@@ -223,7 +222,7 @@ function Resubmission_Pop(){
 	}else if(Resubmission_Ary.length > 1){
 		alert("하나의 문서만 선택해주세요.");
 		return;
-	}else if(a_status != 4096){
+	}else if(ApprStatus != 4096){
 		alert("회수한 문서만 재기안이 가능합니다.");
 		return;
 	}

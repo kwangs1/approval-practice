@@ -62,7 +62,6 @@ $("input[type='file']").change(function(e){
 	var formData = new FormData();
 	var inputFile = $("input[name='uploadFile']");
 	var files = inputFile[0].files;
-	var liObj = $('.uploadResult ul').closest("li");
 	
 	for(var i=0; i<files.length; i++){
 		if(!checkException(files[i].name, files[i].size)){
@@ -83,7 +82,7 @@ $("input[type='file']").change(function(e){
 			window.opener.location.reload()
 			showUploadResult(result);		
 		}
-	})	
+	})
 });
 //UI상 보여질 부분
 function showUploadResult(uploadResultAttr){
