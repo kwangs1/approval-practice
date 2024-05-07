@@ -25,7 +25,6 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 <input type="hidden" name="folderid" id="folderid"/>
 <input type="hidden" name="foldername" id="foldername"/>
 <input type="hidden" name="bizunitcd" id="bizunitcd"/>
-<input type="hidden" name="attachcnt" id="attachcnt"/>
 
 <%@ include file="../participant/ParticipantWrite.jsp" %>
 <div class="loading" id="loading"style="display:none">
@@ -62,13 +61,12 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 	</div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/UploadFile.js'/>"></script>
+<script src="<c:url value='/resources/js/UploadFile_.js'/>"></script>
 <script>
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
 var docregno = '<c:out value="${uInfo.abbreviation}"/>';
 var id = '<c:out value="${user.id}"/>';
-var attachcnt = $('#attachcnt').val();
 //새로고침 방지
 window.addEventListener('keydown',function(e){
 	//78: ctrl+N , 82: ctrl+R , 116: F5 | ctrlKey : window , metaKey : Mac
@@ -125,8 +123,6 @@ window.onload = function(){
 		    formData.append('folderid', $('#folderid').val());
 		    formData.append('foldername', $('#foldername').val());
 		    formData.append('bizunitcd', $('#bizunitcd').val());
-		    formData.append('attachcnt', attachcnt);
-
 		    // 파일 정보 추가
 		    UploadFileAppend(formData);
 		  	/*

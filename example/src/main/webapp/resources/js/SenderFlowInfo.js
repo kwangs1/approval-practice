@@ -44,10 +44,6 @@ function updateSelectedUsersUI() {
     // 배열에 있는 각 유저 정보를 순회하면서 UI에 추가
     for (var i = 0; i < selectedUsers.length; i++) {
        var user = selectedUsers[i];
-		if(i === 0 && uId !== user.id){
-			alert("기안자는 반드시 본인이여야 합니다.");
-			location.reload();
-		}
        //팝업 화면에서의 결재선 상태값 설정 
        var status = user.status || (i === selectedUsers.length - 1 ? 4000 : (i > 0 ? 2000 : 1000));
        
@@ -98,6 +94,13 @@ function getStatusDropdownHTML(index, defaultStatus) {
 }
 
 function confirmSelection(){
+	if(selectedUsers.length == 1 && selectedUsers[0].id.toString() !== uId){
+		alert('결재자가 한명만 있을 경우, 기안자로 설정해야합니다.');
+		return;
+	}else if(selectedUsers.length > 0 && selectedUsers[0].id.toString() !== uId){
+		alert('기안자는 문서를 작성하는 본인만이 가능합니다.');
+		return;
+	}
     // 각 유저별로 select 태그의 값을 가져와서 status값도 전송
     for (var i = 0; i < selectedUsers.length; i++) {
         var status = $('[name="status_' + i + '"]').val();

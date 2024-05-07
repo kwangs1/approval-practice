@@ -77,8 +77,9 @@ public class fileController {
 	public ResponseEntity<List<AttachFileDTO>> uploadFile(MultipartFile[] uploadFile, HttpServletRequest request){
 		log.info("file upload response....");
 		List<AttachFileDTO> list = new ArrayList<>();
+		String id = (String) request.getSession().getAttribute("userId");
 		String uploadFolderPath = getFolder();
-		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolderPath+"/temp";
+		String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolderPath+"/temp/"+id;
 		File uploadPath = new File(uploadFolder);
 		
 		if(uploadPath.exists() == false) {
@@ -120,10 +121,10 @@ public class fileController {
 	@ResponseBody
 	public ResponseEntity<String> deleteFile(String fileName, String type, HttpServletRequest request, HttpServletResponse response){
 		log.info("deleteFile: "+fileName);
-		
+		String id = (String) request.getSession().getAttribute("userId");
 		try {
 			String uploadFolderPath = getFolder();		
-			File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath+ "/temp" + URLDecoder.decode(fileName,"UTF-8"));
+			File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath+ "/temp/"+id+"/"+ URLDecoder.decode(fileName,"UTF-8"));
 			file.delete();
 			response.setHeader("Cache-Control","no-store");
 			response.setHeader("Cache-Control","no-cache");
@@ -135,9 +136,10 @@ public class fileController {
 	}
 	//첨부파일 다운로드[기안 상신 전]
 	@GetMapping("/download")
-	public void download(String fileName, HttpServletResponse response)throws IOException{
+	public void download(String fileName, HttpServletResponse response,HttpServletRequest request)throws IOException{
 		String uploadFolderPath = getFolder();
-		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath + "/temp" + fileName);
+		String id = (String) request.getSession().getAttribute("userId");
+		File file = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+ uploadFolderPath + "/temp/"+id+"/"+ fileName);
 		//file 다운르도 요청값 설정
 		response.setContentType("application/download");
 		response.setContentLength((int)file.length());
@@ -162,9 +164,50 @@ public class fileController {
 		public ResponseEntity<List<AttachFileDTO>> InfoUploadFile(MultipartFile[] uploadFile, HttpServletRequest request,
 				String uploadPath, String appr_seq) {
 			log.info("InfoUploadFile response....");
-			List<AttachFileDTO> list = new ArrayList<>();
-			
+			List<AttachFileDTO> list = new ArrayList<>();			
 			String appr_seq_ = appr_seq.substring(16);
+			//해당 기안기의 파일폴더가 존재하지 않는경우
+			if(uploadPath.equals("undefined")) {
+				approvalVO apprInfo = approvalService.apprInfo(appr_seq);
+				String regDate = apprInfo.getRegdate();
+				String newPath = regDate.substring(0,10);
+				String NewUploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+newPath+"/"+appr_seq_;	
+				log.info("NewUploadFolder "+NewUploadFolder);
+			
+				File uploadPath_ = new File(NewUploadFolder);		
+				if(uploadPath_.exists() == false) {
+					uploadPath_.mkdirs();
+				}
+				
+				for(MultipartFile multipartFile : uploadFile) {
+					log.info("===========================");
+					log.info("Upload File Name: "+multipartFile.getOriginalFilename());
+					log.info("Upload File Size: "+multipartFile.getSize());
+					AttachFileDTO attachDTO = new AttachFileDTO();
+					String uploadFileName = multipartFile.getOriginalFilename();
+					int fileSize = (int) multipartFile.getSize();
+					
+					uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1);
+					log.info("only fileName: "+uploadFileName);
+					attachDTO.setFileName(uploadFileName);
+					
+					UUID uuid = UUID.randomUUID();
+					uploadFileName = uuid.toString()+"_"+uploadFileName;
+					
+					try {
+						File saveFilePath = new File(uploadPath_,uploadFileName);
+						multipartFile.transferTo(saveFilePath);
+						
+						attachDTO.setUuid(uuid.toString());
+						attachDTO.setUploadPath(newPath);
+						attachDTO.setFileType(100);
+						attachDTO.setFilesize(fileSize);
+						list.add(attachDTO);
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}else {
 				String uploadFolder = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadPath+"/"+appr_seq_;	
 				log.info("InfoUploadFile "+uploadFolder);
 			
@@ -172,33 +215,34 @@ public class fileController {
 				if(uploadPath_.exists() == false) {
 					uploadPath_.mkdirs();
 				}
-			for(MultipartFile multipartFile : uploadFile) {
-				log.info("===========================");
-				log.info("Upload File Name: "+multipartFile.getOriginalFilename());
-				log.info("Upload File Size: "+multipartFile.getSize());
-				AttachFileDTO attachDTO = new AttachFileDTO();
-				String uploadFileName = multipartFile.getOriginalFilename();
-				int fileSize = (int) multipartFile.getSize();
-				
-				uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1);
-				log.info("only fileName: "+uploadFileName);
-				attachDTO.setFileName(uploadFileName);
-				
-				UUID uuid = UUID.randomUUID();
-				uploadFileName = uuid.toString()+"_"+uploadFileName;
-				
-				try {
-					File saveFilePath = new File(uploadPath_,uploadFileName);
-					multipartFile.transferTo(saveFilePath);
+				for(MultipartFile multipartFile : uploadFile) {
+					log.info("===========================");
+					log.info("Upload File Name: "+multipartFile.getOriginalFilename());
+					log.info("Upload File Size: "+multipartFile.getSize());
+					AttachFileDTO attachDTO = new AttachFileDTO();
+					String uploadFileName = multipartFile.getOriginalFilename();
+					int fileSize = (int) multipartFile.getSize();
 					
-					attachDTO.setUuid(uuid.toString());
-					attachDTO.setUploadPath(uploadPath);
-					attachDTO.setFileType(100);
-					attachDTO.setFilesize(fileSize);
-					list.add(attachDTO);
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
+					uploadFileName = uploadFileName.substring(uploadFileName.lastIndexOf("/")+1);
+					log.info("only fileName: "+uploadFileName);
+					attachDTO.setFileName(uploadFileName);
+					
+					UUID uuid = UUID.randomUUID();
+					uploadFileName = uuid.toString()+"_"+uploadFileName;
+					
+					try {
+						File saveFilePath = new File(uploadPath_,uploadFileName);
+						multipartFile.transferTo(saveFilePath);
+						
+						attachDTO.setUuid(uuid.toString());
+						attachDTO.setUploadPath(uploadPath);
+						attachDTO.setFileType(100);
+						attachDTO.setFilesize(fileSize);
+						list.add(attachDTO);
+					}catch(IOException e) {
+						e.printStackTrace();
+					}
+				}	
 			}
 			return new ResponseEntity<>(list, HttpStatus.OK);
 		}
@@ -265,11 +309,13 @@ public class fileController {
 	@PostMapping("/ApprDocInsertFiles")
 	@ResponseBody
 	public ResponseEntity<String> ApprDocInsertFiles(approvalVO approval){
+		approval.setAttachcnt(approval.getAttach().size());
+		log.info("**____** "+approval.getAttachcnt());
+		
 		List<AttachVO> attach = approval.getAttach();
 		for(int i=0; i < attach.size(); i++) {
 			AttachVO attachVO = attach.get(i);
-			attachVO.setAppr_seq(approval.getAppr_seq());
-			
+			attachVO.setAppr_seq(approval.getAppr_seq());		
 			service.ApprDocInsertFiles(attachVO);
 		}
 		

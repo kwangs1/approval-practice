@@ -56,6 +56,9 @@ public class approvalServiceImpl implements approvalService{
 			log.info("file List: "+approval.getAttach());
 			return;
 		}
+		approval.setAttachcnt(approval.getAttach().size());
+		log.info("##### - "+approval.getAttachcnt());
+		
 		List<AttachVO> attach = approval.getAttach();
 		if(attach != null && !attach.isEmpty()) {
 			for(AttachVO attachVO : attach) {

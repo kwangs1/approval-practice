@@ -48,7 +48,7 @@ public class approvalController {
 	
 	//문서작성
 	@GetMapping("/apprWrite")
-	public void apprWrite(userVO userVO,HttpServletRequest req, Model model) {
+	public void apprWrite(userVO userVO,HttpServletRequest req, Model model,approvalVO approval) {
 		//부서 약어에 대한 값 가져오기 위함
 		String userId = (String) req.getSession().getAttribute("userId");
 		String abbreviation = userVO.getAbbreviation();
@@ -63,7 +63,7 @@ public class approvalController {
 	
 	@ResponseBody
 	@PostMapping("/apprWrite")
-	public void apprWrite(approvalVO approval,HttpServletRequest request)throws IOException {
+	public void apprWrite(approvalVO approval,HttpServletRequest request,Model model)throws IOException {
 		service.apprWrite(approval);
 		List<AttachVO> attach = approval.getAttach();
 		if(attach != null && !attach.isEmpty()) {		
@@ -75,15 +75,17 @@ public class approvalController {
 			if(!newFolder.exists()) {
 				newFolder.mkdirs();
 			}
-			
-			String tempFolderPath = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolder+"/temp";
+
+			String id = (String) request.getSession().getAttribute("userId");
+			String tempFolderPath = "/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+uploadFolder+"/temp/"+id;
 			File tempFolder = new File(tempFolderPath);
 			File[] files = tempFolder.listFiles();
 			if(files != null) {
 				for(File file : files) {
 					file.renameTo(new File(newFolderPath + "/" + file.getName()));
 				}
-			}		
+			}
+			tempFolder.delete();
 		}
 	}
 
@@ -234,7 +236,7 @@ public class approvalController {
 		//결재선 정보 	
 		List<participantVO> pInfo = serviceP.getRe_pInfo(appr_seq);
 		model.addAttribute("pInfo",pInfo);
-		
+		//jsp ForEach해서 데이터 불러올라꼬.,.
 		List<AttachVO> attach = fileService.AttachModifyForm(appr_seq);
 		model.addAttribute("attach",attach);
 		
