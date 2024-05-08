@@ -498,7 +498,6 @@ public class participantServiceImpl implements participantService{
 			mapper.ResubmissionParticipantWrite(pvo);
 			seq++;
 			approvalTypeAndStatus(participant);
-			log.info("end service ..");
 			 //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
 	        xmlBuilder.append("<participant>");
 	        xmlBuilder.append("<deptid>").append(pvo.getDeptid()).append("</deptid>");

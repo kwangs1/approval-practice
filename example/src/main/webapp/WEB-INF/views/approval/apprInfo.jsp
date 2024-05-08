@@ -16,6 +16,10 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 &:hover {background: rgb(77,77,77); color: #fff; }
 }
 li{list-style:none; padding-left:0px;}
+.signername{height: 30px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; font-size: 14px;}
+.position {font-weight: bold; font-size: 12px;}
+.FlowChart{display: flex; flex-direction: column; margin-right: 10px;}
+.FlowContainer{display: flex;flex-wrap: wrap;}
 </style>
 <body onload="getAttachList()">
 <div class="loading" id="loading"style="display:none">
@@ -26,7 +30,9 @@ li{list-style:none; padding-left:0px;}
 	</div>
 	<p>결재 중..</p>
 </div>
+
 <div class="post-container">
+  <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
   <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
   <p class="post-info">신청날짜: ${info.startdate} ~ ${info.enddate}</p>
@@ -51,6 +57,18 @@ li{list-style:none; padding-left:0px;}
 			<ul>
 			</ul>
 		</div>
+	</div>
+	<!-- 결재선 영역 -->
+	<div class="FlowContainer">
+		<c:forEach var="pList" items="${pList}"> 
+			<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
+			<input type="hidden" id="signerid" value="${pList.signerid}" />
+			<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
+			<div class="FlowChart">
+				<span class="position" id="pos">${pList.pos}</span>
+				<input type="text" class="signername" id="signername" value="${pList.signername}" disabled/>		
+			</div>
+		</c:forEach>
 	</div>
 	<br>
   <c:if test="${info.status == 1 && pInfo.approvaltype == 4}">

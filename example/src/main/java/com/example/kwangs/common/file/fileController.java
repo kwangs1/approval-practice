@@ -294,13 +294,15 @@ public class fileController {
 	//문서에 등록된 첨부파일 삭제
 	@PostMapping("/ApprDocDeleteFiles")
 	@ResponseBody
-	public ResponseEntity<String> ApprDocDeleteFiles(String fileName, String type, 
+	public ResponseEntity<String> ApprDocDeleteFiles(String fileName, String type, String uuid,
 			String appr_seq, HttpServletRequest request, HttpServletResponse response){
 		log.info("ApprDocDeleteFiles: "+ fileName);
 		Map<String,Object> res = new HashMap<>();
 		res.put("appr_seq", appr_seq);
 		res.put("fileName", fileName);
+		res.put("uuid", uuid);
 		service.ApprDocDeleteFiles(res);
+		UpdAttachCnt(appr_seq);
 		
 		return new ResponseEntity<String>("deleteFiles",HttpStatus.OK);
 	}
@@ -308,17 +310,28 @@ public class fileController {
 	//첨부파일 수정 폼에서의 등록[추가]
 	@PostMapping("/ApprDocInsertFiles")
 	@ResponseBody
-	public ResponseEntity<String> ApprDocInsertFiles(approvalVO approval){
-		approval.setAttachcnt(approval.getAttach().size());
-		log.info("**____** "+approval.getAttachcnt());
-		
+	public ResponseEntity<String> ApprDocInsertFiles(approvalVO approval){	
 		List<AttachVO> attach = approval.getAttach();
 		for(int i=0; i < attach.size(); i++) {
 			AttachVO attachVO = attach.get(i);
 			attachVO.setAppr_seq(approval.getAppr_seq());		
 			service.ApprDocInsertFiles(attachVO);
+			UpdAttachCnt(approval.getAppr_seq());
 		}
 		
 		return new ResponseEntity<String>("InsertFiles",HttpStatus.OK);
+	}
+	
+	//재기안 및 결재진행 중 첨부파일 등록 및 삭제 시 카운트 업데이트
+	public void UpdAttachCnt(String appr_seq) {
+		int cnt = service.getAttachCnt(appr_seq);
+		log.info("Current Cnt.. " +cnt);
+		approvalVO apprInfo = approvalService.apprInfo(appr_seq);
+		apprInfo.setAttachcnt(cnt);
+		log.info("Update Cnt.. "+apprInfo.getAttachcnt());
+		Map<String,Object>res = new HashMap<>();
+		res.put("appr_seq", appr_seq);
+		res.put("attachcnt", apprInfo.getAttachcnt());
+		approvalService.UpdAttachCnt(res);
 	}
 }

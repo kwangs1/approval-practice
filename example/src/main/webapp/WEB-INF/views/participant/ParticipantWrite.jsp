@@ -12,7 +12,7 @@
 .user-container input[type="text"] {height: 30px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; font-size: 14px;}
 .position {font-weight: bold; font-size: 12px;}
 select{display:none;}
-#inputs { display: flex;flex-wrap: wrap;}
+#inputs { display: flex;flex-wrap: wrap; pointer-events : none;}
 </style>
 </head>
 <body>

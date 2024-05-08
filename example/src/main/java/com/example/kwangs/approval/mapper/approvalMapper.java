@@ -103,8 +103,8 @@ public class approvalMapper{
 	public int totalApprCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.totalApprCnt",scri);
 	}
-	//
-	public void UpdateDocAttachCnt(Map<String,Object> res) {
-		session.update("mapper.approval.UpdateDocAttachCnt",res);
+	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
+	public void UpdAttachCnt(Map<String,Object>res) {
+		session.update("mapper.approval.UpdAttachCnt",res);
 	}
 }

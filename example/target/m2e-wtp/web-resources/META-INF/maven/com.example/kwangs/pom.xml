@@ -347,7 +347,26 @@
 		<artifactId>poi</artifactId>
 		<version>5.2.3</version>
 	</dependency>
-
+	<!-- JMS -->
+	<dependency>
+	    <groupId>org.springframework</groupId>
+	    <artifactId>spring-jms</artifactId>
+	    <version>5.3.14</version>
+	</dependency>
+	<!-- Apache ActiveMQ -->
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-spring</artifactId>
+	    <version>5.16.3</version>
+	</dependency>
+	<!-- Apache ActiveMQ Broker -->
+	<dependency>
+	    <groupId>org.apache.activemq</groupId>
+	    <artifactId>activemq-broker</artifactId>
+	    <version>5.16.3</version>
+	</dependency>
+	
+	
 	</dependencies>
 	<build>
 		<plugins>

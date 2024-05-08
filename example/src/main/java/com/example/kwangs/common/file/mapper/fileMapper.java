@@ -30,12 +30,12 @@ public class fileMapper {
 	public void ApprDocDeleteFiles(Map<String,Object>res) {
 		session.delete("Attach.ApprDocDeleteFiles",res);
 	}
-	//해당 문서 결재테이블의 첨부파일 카운트 업데이트
-	public int AttachCnt(String appr_seq) {
-		return session.selectOne("Attach.AttachCnt",appr_seq);
-	}
 	//첨부파일 수정 폼에서의 등록[추가]
 	public void ApprDocInsertFiles(AttachVO attach) {
 		session.insert("Attach.ApprDocInsertFiles",attach);
+	}
+	//해당 문서의 첨부파일 갯수 카운트
+	public int getAttachCnt(String appr_seq) {
+		return session.selectOne("Attach.getAttachCnt",appr_seq);
 	}
 }

@@ -11,8 +11,8 @@ public interface fileService {
 	List<AttachVO> AttachModifyForm(String appr_seq);
 	//첨부파일 삭제
 	void ApprDocDeleteFiles(Map<String,Object>res);
-	//삭제 이후 첨부파일 카운트 결재테이블에 업데이트
-	void UpdateDocAttachCnt(String appr_seq,int attachcnt);
 	//첨부파일 수정 폼에서의 등록[추가]
 	void ApprDocInsertFiles(AttachVO attach);
+	//해당 문서의 첨부파일 갯수 카운트
+	int getAttachCnt(String appr_seq);
 }

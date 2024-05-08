@@ -46,7 +46,7 @@ ul{padding-left:0px;}
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/InfoUploadFile.js'/>"></script>
+<script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
 <script>
 var drafterid = '<c:out value="${info.drafterid}"/>';
 var appr_seq = '<c:out value="${info.appr_seq}"/>';

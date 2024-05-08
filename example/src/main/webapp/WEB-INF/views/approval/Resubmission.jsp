@@ -33,7 +33,6 @@ ul{padding-left:0px;}
 <input type="hidden" name="folderid" id="folderid" value="${info.folderid}"/>
 <input type="hidden" name="folderid" id="foldername" value="${info.foldername}"/>
 <input type="hidden" name="bizunitcd" id="bizunitcd" value="${info.bizunitcd}"/>
-<input type="hidden" name="attachcnt" id="attachcnt" value="${info.attachcnt}"/>
 	<div class="vacation-period">
 		휴가 기간: <input type="date" name="startdate" id="startdate" value="${info.startdate}"/> ~
 			<input type="date" name="enddate" id="enddate" value="${info.enddate}"/>
@@ -77,6 +76,7 @@ ul{padding-left:0px;}
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var drafterid = '<c:out value="${info.drafterid}"/>';
 var status = '<c:out value="${info.status}"/>';
+var attachcnt = '<c:out value="${info.attachcnt}"/>';
 
 window.addEventListener('keydown',function(e){
 	if( (e.ctrlKey == true || e.metaKey == true && (e.keyCode == 78 || e.keyCode == 82)) || (e.keyCode == 116)){
@@ -104,7 +104,7 @@ function Resubmission(){
 		    formData.append('title', $('#title').val());
 		    formData.append('content', $('#content').val());
 		    // 파일 정보 추가
-		    ApprDocInsertFiles(formData);
+		    ApprDocInsertFiles();
 		    $.ajax({
 				type: 'post',
 				url: '<c:url value="/approval/Resubmission"/>',
@@ -134,7 +134,8 @@ function Resubmission(){
 		foldername: $('#foldername').val(),
 		bizunitcd: $('#bizunitcd').val(),
 		title:  $('#title').val(),
-		content:  $('#content').val()}
+		content:  $('#content').val()
+		}
 		
 		$.ajax({
 			type: 'post',

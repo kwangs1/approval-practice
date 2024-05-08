@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jms="http://www.springframework.org/schema/jms"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd
+           http://www.springframework.org/schema/jms
+           http://www.springframework.org/schema/jms/spring-jms.xsd">
+
+<!-- applicationContext.xml -->
+
+<!-- JMS Connection Factory 설정 
+	JMS 서버에 대한 연결 설정 및 관리 & 포트는 61616 고정-->
+<bean id="connectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
+    <property name="brokerURL" value="tcp://localhost:61616" />
+</bean>
+
+<!-- JMS Template 설정 
+	메시지를 생성 및 발송하는데 사용 & connectionFactory를 참조-->
+<bean id="jmsTemplate" class="org.springframework.jms.core.JmsTemplate">
+    <property name="connectionFactory" ref="connectionFactory" />
+</bean>
+
+<!-- JMS Listener Container Factory 설정 
+	JMS 메시지를 수신하기 위한 설정 & connectionFactory 참조 & concurrency 속성 값은 동시에 처리될 메시지의 최대 수-->
+<bean id="jmsListenerContainerFactory" class="org.springframework.jms.config.DefaultJmsListenerContainerFactory">
+    <property name="connectionFactory" ref="connectionFactory" />
+    <!-- 동시에 처리하지 않고 한번에 하나의 메시지를 처리 -->
+    <property name="concurrency" value="1-1" />
+</bean>
+
+           
+</beans>

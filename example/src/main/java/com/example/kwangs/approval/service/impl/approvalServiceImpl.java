@@ -118,5 +118,9 @@ public class approvalServiceImpl implements approvalService{
 	public int totalApprCnt(SearchCriteria scri) {
 		return mapper.totalApprCnt(scri);
 	}
-
+	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
+	@Override
+	public void UpdAttachCnt(Map<String,Object>res) {
+		mapper.UpdAttachCnt(res);
+	}
 }

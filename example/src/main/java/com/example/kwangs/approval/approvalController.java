@@ -224,6 +224,9 @@ public class approvalController {
 		participantVO pInfo = serviceP.pInfo(res);
 		model.addAttribute("pInfo",pInfo);
 		
+		List<participantVO> pList = serviceP.getRe_pInfo(appr_seq);
+		model.addAttribute("pList",pList);
+		
 		return "/approval/apprInfo";
 	}
 	

@@ -16,11 +16,12 @@ function ApprDocDeleteFiles(){
 			var type = $(this).data("type");
 			var fileName = liObj.data('filename');	
 			var path = liObj.data('path');
+			var uuid = liObj.data('uuid');
 			
 			$.ajax({
 				url: "/kwangs/ApprDocDeleteFiles",
 				type: 'post',
-				data: {fileName :fileName, appr_seq :appr_seq},
+				data: {fileName :fileName, appr_seq :appr_seq, uuid: uuid},
 				dataType: 'text',
 				success: function(response){
 					alert("파일이 삭제가 되었습니다.");
@@ -101,10 +102,11 @@ function showUploadResult(uploadResultAttr){
 		str += "</div></li>";
 	})
 	uploadUL.append(str);
+	ApprDocInsertFiles();
 }
-function ApprDocInsertFiles(formData){
+function ApprDocInsertFiles(){
+	var formData = new FormData();
 	//showUploadResult 함수를 통해 첨부파일 추가된 부분에 대해 반복문을 통해 넘길데이터 설정
-	var attachcnt = 0;
 	$('.uploadResult ul li').each(function(i,obj){
 		var obj_ = $(obj);
 		
@@ -119,10 +121,8 @@ function ApprDocInsertFiles(formData){
 		formData.append("attach["+ i +"].fileName",fileName);
 		formData.append("attach["+ i +"].fileType",fileType);
 		formData.append("attach["+ i +"].filesize",filesize);
-		attachcnt++;
 	})
-    //formData.append("appr_seq", appr_seq);
-	formData.append("attachcnt", attachcnt);
+    formData.append("appr_seq", appr_seq);
 	$.ajax({
 		type:'post',
 		url: "/kwangs/ApprDocInsertFiles",
