@@ -82,6 +82,10 @@ public class deptController {
 		List<folderVO> DeptFolderList = folderService.DeptFolderList(deptid);
 		model.addAttribute("list",DeptFolderList);
 		
+		List<deptVO> getSender = service.getSender(id);
+		model.addAttribute("sender",getSender);
+		model.addAttribute("deptList",service.joinUseDept());
+		
 		return "dept/flowUseInfo";
 	}
 }

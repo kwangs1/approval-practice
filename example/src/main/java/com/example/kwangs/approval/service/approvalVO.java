@@ -29,8 +29,50 @@ public class approvalVO{
 	private List<AttachVO> attach;
 	private int attachcnt;
 	private String foldername;
+	private String docattr;
+	private String sendername;
+	private String receivers;
+	private String sendid;
+	private String senddate;
+	private String orgdraftdeptid;
 	
 	
+	public String getOrgdraftdeptid() {
+		return orgdraftdeptid;
+	}
+	public void setOrgdraftdeptid(String orgdraftdeptid) {
+		this.orgdraftdeptid = orgdraftdeptid;
+	}
+	public String getDocattr() {
+		return docattr;
+	}
+	public void setDocattr(String docattr) {
+		this.docattr = docattr;
+	}
+	public String getSendername() {
+		return sendername;
+	}
+	public void setSendername(String sendername) {
+		this.sendername = sendername;
+	}
+	public String getReceivers() {
+		return receivers;
+	}
+	public void setReceivers(String receivers) {
+		this.receivers = receivers;
+	}
+	public String getSendid() {
+		return sendid;
+	}
+	public void setSendid(String sendid) {
+		this.sendid = sendid;
+	}
+	public String getSenddate() {
+		return senddate;
+	}
+	public void setSenddate(String senddate) {
+		this.senddate = senddate;
+	}
 	public String getFoldername() {
 		return foldername;
 	}

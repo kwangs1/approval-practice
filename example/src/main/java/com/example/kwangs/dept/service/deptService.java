@@ -16,4 +16,6 @@ public interface deptService {
 	List<deptVO>joinUseDept();
 	//결재선 정보 가져올 부서 및 유저목록
 	List<deptVO>flowUseInfo();
+	//해당 기안자의 부서 발신명의 가져오기
+	List<deptVO> getSender(String userid);
 }

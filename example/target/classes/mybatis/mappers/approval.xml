@@ -25,6 +25,12 @@
 		<result property="bizunitcd" column="bizunitcd" />
 		<result property="attachcnt" column="attachcnt" />
 		<result property="foldername" column="foldername" />
+		<result property="docattr" column="docattr" />
+		<result property="sendername" column="sendername" />
+		<result property="receivers" column="receivers" />
+		<result property="sendid" column="sendid" />
+		<result property="senddate" column="senddate" />
+		<result property="orgdraftdeptid" column="orgdraftdeptid" />
 	</resultMap>
 	
 	<!-- 검색 동적 쿼리 -->
@@ -49,14 +55,14 @@
 	insert into approval
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
-		#{folderid},#{bizunitcd},#{attachcnt},#{foldername})
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},#{orgdraftdeptid})
 </insert>
 
 <insert id="apprWrite" parameterType="approvalVO"> 
 	insert into approval
 	values(APPR_SEQ.nextval,#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
-		#{folderid},#{bizunitcd},#{attachcnt},#{foldername})
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},#{orgdraftdeptid})
 </insert>
 
 <!-- 결재대기 -->

@@ -92,4 +92,9 @@ public class deptServiceImpl implements deptService{
 		}
 		return flowUseInfo;
 	}
+	//해당 기안자의 부서 발신명의 가져오기
+	@Override
+	public List<deptVO> getSender(String userid){
+		return mapper.getSender(userid);
+	}
 }

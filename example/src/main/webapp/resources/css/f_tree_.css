@@ -74,12 +74,12 @@ ul.tree .af-list a {
   text-decoration: none;
   color: green;
 }
-.tab1_content #selectedUsers{
+.tab2_content #selectedUsers{
 	display: flex;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
-.tab1_content #selectedUsers .userDiv{
+.tab2_content #selectedUsers .userDiv{
 	flex: 1;
 	padding-left: 10px;
 }

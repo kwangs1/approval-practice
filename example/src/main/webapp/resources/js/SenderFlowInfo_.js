@@ -2,8 +2,11 @@
  * 결재선 지정 후 보내기
  */
 
-var selectedUsers = [];
-var selectedApFolder = [];
+var selectedUsers = []; //결재선 참여자
+var selectedApFolder = []; //기록물철
+var checkedValues = []; //문서 유형값
+var selectedDept = []; //발송 시 수신처에 대한 부서정보
+var selectedValue =[]; //셀렉트박스[기안부서id, 발신명의]
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
@@ -34,6 +37,18 @@ selectedFldrname = $(this).data('fldrname');
 selectedApFolder = { fldrid: selectedFldrid, fldrname: selectedFldrname, bizunitcd: selectedBizunitcd };
 updateSelectedApFolder();
 });
+//수신부서 정보 전송
+$('a.deptLink').on('click',function(e){
+	e.preventDefault();
+	
+	selectDeptId = $(this).data('deptid');
+	selectDeptName = $(this).data('deptname');
+	selectDeptSender = $(this).data('sendername');
+	
+	selectedDept = {deptid: selectDeptId,deptname: selectDeptName,sendername: selectDeptSender};
+	console.log(selectedDept);
+	updateselectedDept();
+})
 
 function updateSelectedUsersUI() {
     // 선택된 유저 정보를 기반으로 UI 업데이트
@@ -81,6 +96,17 @@ function updateSelectedApFolder(){
 	selDiv.append(userDiv);
 
 }
+//선택 된 수신부서
+function updateselectedDept(){
+	var selDiv = $('#selectedDept');
+	selDiv.empty(); //기존 내용 제거
+
+	var userDiv = $('<div class="userDiv"></div>');
+	userDiv.append('<p>'+ selectedDept.deptname + '</p>');
+			
+	selDiv.append(userDiv);
+
+}
 // 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
 function getStatusDropdownHTML(index, defaultStatus) {
     // status 선택을 위한 dropdown의 HTML을 반환
@@ -106,9 +132,25 @@ function confirmSelection(){
         var status = $('[name="status_' + i + '"]').val();
         selectedUsers[i].status = status;
     }
+	//체크박스 값 부모창으로 보내기 위해
+	var checkboxes = document.getElementsByName('docattr');
+	for(var j=0; j<checkboxes.length; j++){
+		if(checkboxes[j].checked){
+			checkedValues.push(checkboxes[j].value);
+			console.log(checkedValues);
+		}
+	}
+	//셀렉트박스 값
+	var deptid = $('#senderSelect').data('deptid');
+	var sendername = $('#senderSelect').data('sendername');
+	
+	selectedValue= {deptid: deptid, sendername: sendername};
 	var data = {
 			users: selectedUsers,
-			selectedApFolder: selectedApFolder
+			selectedApFolder: selectedApFolder,
+			checkedValues: checkedValues,
+			selectedDept: selectedDept,
+			selectedValue: selectedValue
 		}
 		window.opener.postMessage(data,"*");
 	

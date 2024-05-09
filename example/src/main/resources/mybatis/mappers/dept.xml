@@ -55,4 +55,9 @@
 <select id="findAll" resultType="deptVO">
 	select deptid from dept
 </select>
+
+<select id="getSender" resultType="deptVO" parameterType="String">
+	select * from dept d, member m where d.deptid = m.deptid and m.id = #{id}
+</select>
+
 </mapper>

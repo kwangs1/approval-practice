@@ -20,12 +20,6 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 </style>
 </head>
 <body>
-<input type="hidden" name="draftername" id="draftername" value="${user.name}" />
-<input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
-<input type="hidden" name="folderid" id="folderid"/>
-<input type="hidden" name="foldername" id="foldername"/>
-<input type="hidden" name="bizunitcd" id="bizunitcd"/>
-
 <%@ include file="../participant/ParticipantWrite.jsp" %>
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
@@ -60,8 +54,19 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 		</div>
 	</div>
 
+<input type="hidden" name="draftername" id="draftername" value="${user.name}" />
+<input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
+<input type="hidden" name="folderid" id="folderid"/>
+<input type="hidden" name="foldername" id="foldername"/>
+<input type="hidden" name="bizunitcd" id="bizunitcd"/>
+<input type="hidden" name="docattr" id="docattr"/>
+<input type="hidden" name="receivers" id="receivers"/>
+<input type="hidden" name="orgdraftdeptid" id="orgdraftdeptid"/>
+<input type="hidden" name="sendername" id="sendername"/>
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/UploadFile_.js'/>"></script>
+<script src="<c:url value='/resources/js/ApprCookie.js'/>"></script>
 <script>
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
@@ -96,11 +101,21 @@ window.onload = function(){
 	window.addEventListener('message', function(e) {
 		var data = e.data;
 		var selectedApFolder = data.selectedApFolder;
+		var checkedValues = data.checkedValues;
+		var selectedDept = data.selectedDept; 
+		var selectedValue = data.selectedValue;
 
 		$('#folderid').val(selectedApFolder.fldrid);
 		$('#foldername').val(selectedApFolder.fldrname);
 		$('#bizunitcd').val(selectedApFolder.bizunitcd);
+		$('#docattr').val(checkedValues);
+		$('#receivers').val(selectedDept.sendername);
+	    $('#orgdraftdeptid').val(selectedValue.deptid);
+	    $('#sendername').val(selectedValue.sendername);
+		
+		saveCookie(checkedValues);
 	});
+	
 
 	function Appr_Btn() {
 		// FormData 객체 생성 
@@ -123,6 +138,10 @@ window.onload = function(){
 		    formData.append('folderid', $('#folderid').val());
 		    formData.append('foldername', $('#foldername').val());
 		    formData.append('bizunitcd', $('#bizunitcd').val());
+			formData.append('docattr',$('#docattr').val());
+			formData.append('receivers',$('#receivers').val());
+			formData.append('sendername',$('#sendername').val());
+			formData.append('orgdraftdeptid',$('#orgdraftdeptid').val());
 		    // 파일 정보 추가
 		    UploadFileAppend(formData);
 		  	/*
@@ -137,6 +156,7 @@ window.onload = function(){
 		        contentType: false,
 				success : function(response) {
 					participant();
+					deleteCookie('docattr');
 				},
 				error : function(xhr, status, error) {
 					console.log(xhr);
@@ -157,7 +177,11 @@ window.onload = function(){
 	    			folderid: $('#folderid').val(),
 	    			bizunitcd: $('#bizunitcd').val(),
 	    			foldername: $('#foldername').val(),
-	    			docregno: docregno
+	    			docregno: docregno,
+					docattr: $('#docattr').val(),
+					receivers: $('#receivers').val(),
+					sendername: $('#sendername').val(),
+					orgdraftdeptid: $('#orgdraftdeptid').val()
 	    	}
 			$.ajax({
 				type : "post",
@@ -165,6 +189,7 @@ window.onload = function(){
 				data : apprData,        
 				success : function(response) {
 					participant();
+					deleteCookie('docattr');
 				},
 				error : function(xhr, status, error) {
 					console.log(xhr);

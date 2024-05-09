@@ -46,4 +46,8 @@ public class deptMapper {
 	public List<deptVO> findAll(){
 		return session.selectList("mapper.dept.findAll");
 	}
+	//해당 기안자의 부서 발신명의 가져오기
+	public List<deptVO> getSender(String userid){
+		return session.selectList("mapper.dept.getSender",userid);
+	}
 }

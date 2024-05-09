@@ -16,7 +16,7 @@ select{display:none;}
 </style>
 </head>
 <body>
-	<button onclick="pop()">결재선 정보</button>
+	<button onclick="pop()">결재정보</button>
 	<c:if test="${info.status != 4096 }">	
 		<button onClick="Appr_Btn();">상신</button>
 	</c:if>
