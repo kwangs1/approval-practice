@@ -35,8 +35,15 @@ public class approvalVO{
 	private String sendid;
 	private String senddate;
 	private String orgdraftdeptid;
+	private String poststatus;
 	
 	
+	public String getPoststatus() {
+		return poststatus;
+	}
+	public void setPoststatus(String poststatus) {
+		this.poststatus = poststatus;
+	}
 	public String getOrgdraftdeptid() {
 		return orgdraftdeptid;
 	}

@@ -311,6 +311,7 @@ public class participantServiceImpl implements participantService{
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
+		log.info("....? "+seqCurrval);
 		
 	    StringBuilder xmlBuilder = new StringBuilder();
 	    xmlBuilder.append("<participants>");
@@ -328,7 +329,7 @@ public class participantServiceImpl implements participantService{
 			}else {
 				pVO.setStatusname("결재");
 			}
-			mapper.InsertSelectKey(pVO);
+			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
 			

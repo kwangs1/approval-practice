@@ -48,7 +48,7 @@ li{list-style:none; padding-left:0px;}
 				<input type="button" id="ModifyForm" onClick="AttachModifyForm()" style="display:none;"/>
 			</div>
 			</c:when>
-			<c:when test="${info.status == 256 || pInfo.signerid ne user.id}">
+			<c:when test="${ (info.status == 256 && info.attachcnt > 0) || (info.status != 256 && info.attachcnt > 0)}">
 				<span>첨부파일</span>
 			</c:when>
 		</c:choose>

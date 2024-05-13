@@ -31,6 +31,7 @@
 		<result property="sendid" column="sendid" />
 		<result property="senddate" column="senddate" />
 		<result property="orgdraftdeptid" column="orgdraftdeptid" />
+		<result property="poststatus" column="poststatus" />
 	</resultMap>
 	
 	<!-- 검색 동적 쿼리 -->
@@ -44,25 +45,18 @@
 	
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
 <select id="getLatestReceiptsSeq" resultType="java.lang.String">
-   SELECT 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || appr_seq.currval FROM DUAL
+   SELECT 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.currval FROM DUAL
 </select>
 
 <!-- 기안 -->
-<insert id="InsertSelectKey" parameterType="approvalVO"> 
+<insert id="apprWrite" parameterType="approvalVO"> 
 	<selectKey keyProperty="appr_seq" resultType="String" order="BEFORE">
-		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval from dual
+		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval  from dual
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
-		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},#{orgdraftdeptid})
-</insert>
-
-<insert id="apprWrite" parameterType="approvalVO"> 
-	insert into approval
-	values(APPR_SEQ.nextval,#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
-		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
-		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},#{orgdraftdeptid})
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},#{orgdraftdeptid},#{poststatus})
 </insert>
 
 <!-- 결재대기 -->

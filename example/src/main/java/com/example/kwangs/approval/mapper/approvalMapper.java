@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,6 +17,7 @@ import com.example.kwangs.user.service.userVO;
 
 @Repository
 public class approvalMapper{
+	private final Logger log = LoggerFactory.getLogger(approvalMapper.class);
 	@Autowired
 	private SqlSession session;
 	
@@ -24,9 +27,6 @@ public class approvalMapper{
 	}
 	
 	//결재 작성
-	public void InsertSelectKey(approvalVO approval) {
-		  session.insert("mapper.approval.InsertSelectKey",approval);
-	}
 	public void apprWrite(approvalVO approval) {
 		session.insert("mapper.approval.apprWrite",approval);
 	}

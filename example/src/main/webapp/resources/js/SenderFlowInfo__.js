@@ -6,7 +6,7 @@ var selectedUsers = []; //결재선 참여자
 var selectedApFolder = []; //기록물철
 var checkedValues = []; //문서 유형값
 var selectedDept = []; //발송 시 수신처에 대한 부서정보
-var selectedValue =[]; //셀렉트박스[기안부서id, 발신명의]
+var selectedValue =[]; //셀렉트박스[발신부서id, 발신명의]
 
 $('a.userLink').on('click',function(e){
 	e.preventDefault();
@@ -110,12 +110,22 @@ function updateselectedDept(){
 // 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
 function getStatusDropdownHTML(index, defaultStatus) {
     // status 선택을 위한 dropdown의 HTML을 반환
-    var dropdownHTML = '<select name="status_' + index + '">' +
+    var dropdownHTML;
+    if(index === 0){
+        dropdownHTML= '<select name="status_' + index + '">' +
         '<option value="1000" ' + (defaultStatus === 1000 ? 'selected' : '') + '>기안</option>' +
         '<option value="2000" ' + (defaultStatus === 2000 ? 'selected' : '') + '>검토</option>' +
         '<option value="3000" ' + (defaultStatus === 3000 ? 'selected' : '') + '>협조</option>' +
         '<option value="4000" ' + (defaultStatus === 4000 ? 'selected' : '') + '>결재</option>' +
-        '</select>';
+        '</select>';    	
+    }else{
+        dropdownHTML= '<select name="status_' + index + '">' +
+        '<option value="2000" ' + (defaultStatus === 2000 ? 'selected' : '') + '>검토</option>' +
+        '<option value="3000" ' + (defaultStatus === 3000 ? 'selected' : '') + '>협조</option>' +
+        '<option value="4000" ' + (defaultStatus === 4000 ? 'selected' : '') + '>결재</option>' +
+        '</select>';    	   	
+    }
+
     return dropdownHTML;
 }
 
@@ -140,7 +150,7 @@ function confirmSelection(){
 			console.log(checkedValues);
 		}
 	}
-	//셀렉트박스 값
+	//셀렉트박스 값[발신명의, 발신부서ID]
 	var deptid = $('#senderSelect').data('deptid');
 	var sendername = $('#senderSelect').data('sendername');
 	

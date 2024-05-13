@@ -38,9 +38,16 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	public void apprWrite(approvalVO approval) throws IOException {
 		String abbr = approval.getDocregno();
-		approval.setDocregno(abbr+"-@N");
-		mapper.InsertSelectKey(approval);
+		approval.setDocregno(abbr+"-@N");		
 		
+		if ("1".equals(approval.getDocattr())) {
+		    log.info(approval.getDocattr());
+		    approval.setPoststatus("1");
+		    log.info(".. postStatus "+approval.getPoststatus());
+		}
+		mapper.apprWrite(approval);
+		
+
 		//기안자의 기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기 & 등록
 		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());	
 		fldrmbrVO fm_6021 = new fldrmbrVO();
