@@ -86,7 +86,7 @@ public class bizunitServiceimpl implements bizunitService{
 		fd.setParfldrid(b_fdInfo.getFldrid());
 		fd.setParfldrname(b_fdInfo.getFldrname());
 		fd.setFldrdepth(b_fdInfo.getFldrdepth()+1);
-		folderMapper.deptAllFolderAdd(fd);
+		folderMapper.FolderAdd(fd);
 	}
 	//기록물철 작성 시 단위과제 정보 가져오기
 	@Override

@@ -3,8 +3,8 @@ package com.example.kwangs.folder.service;
 import java.util.List;
 
 public interface folderService {
-	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
-	void deptAllFolderAdd(folderVO fd);
+	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
+	void FolderAdd(folderVO fd);
 	//하위 폴더 생성
 	void subFolderAdd(folderVO fd);
 	//문서함 사이드 메뉴 부서 폴더 가져올 거 

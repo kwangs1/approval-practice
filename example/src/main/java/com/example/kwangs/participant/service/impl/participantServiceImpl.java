@@ -406,6 +406,11 @@ public class participantServiceImpl implements participantService{
 	public List<participantVO>  ApprProgrsFLowInfo(String appr_seq) {
 		return mapper.ApprProgrsFLowInfo(appr_seq);
 	}
+	//발송대기 리스트에서 결재선 정보 가져오기
+	@Override
+	public List<participantVO> SndngWaitflowInfo(String appr_seq){
+		return mapper.SndngWaitflowInfo(appr_seq);
+	}
 	//결재
 	@Override
 	public void FlowAppr(participantVO participant) {

@@ -7,7 +7,7 @@
 <meta charset="UTF-8">
 <link rel="stylesheet" href="<c:url value='/resources/css/u_tree.css'/>"/>
 <body>
-<a href="deptAllFolderAdd">폴더등록</a> | 
+<a href="FolderAdd">폴더등록</a> | 
 <a href="javascript:window.close()">닫기</a><br>
   <ul class="tree">
   <%-- 최상위 폴더 start --%>

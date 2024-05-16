@@ -5,44 +5,25 @@
 <html>
 <head>
 <meta charset="UTF-8">
-</head>
-<link rel="stylesheet" href="<c:url value='/resources/css/docfldrSidebar.css'/>"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.slim.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-<style>
+<link rel="stylesheet" href="<c:url value='/resources/css/loading.css'/>"/>
+ <style>
 .disable{color:gray;}
 .pagination {list-style: none; display: flex;}
 .pagination li {margin: 0 5px;}
 .pagination a {text-decoration: none; color: #333; padding: 5px 10px; border: 1px solid #ccc; border-radius: 3px;}
 </style>
+</head>
 <body>
-<%@ include file="../common/apprMenu.jsp" %><br><br>
-
-<ul class="tree">
-    <li>
-      <a href="/kwangs">홈으로</a>
-    </li>
-  <c:forEach var="item" items="${docfldrSidebar}">
-  <c:choose>
-  	<c:when test="${item.applid != 8010 && item.applid != 7020}">
-    <li>
-    	<p class="disable">${item.fldrname}</p>
-    </li>  		
-  	</c:when>
-  	<c:otherwise>
-  	 <li>
-       <a href="#" data-fldrid = "${item.fldrid}"
-      	onClick ="loadDocFrame('${user.deptid}','${user.id}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">
-      ${item.fldrname}</a>
-    </li>	
-  	</c:otherwise>
-  </c:choose>
-  </c:forEach>
-</ul>
-<%-- 검색 --%>
+<%@ include file="../approval/apprFrame.jsp" %>
+  <br><br>
+<div class="cd1">
+  <h2>발송대기</h2> 
+ <%-- 검색 --%>
 <div class="search" align="center">
     <select id="searchType" name="searchType">
 		<option value="t"<c:out value="${scri.searchType eq 't' ? 'selected' : ''}"/>>제목</option>
@@ -62,55 +43,59 @@
 	 <c:if test="${scri.getPerPageNum() == 20 }">selected="selected"</c:if>>20개</option>
 	</select>
 </div>
-<div class="cd1">
-<h1 id="title_txt"><c:out value="${fldrname}"/></h1>
-<table class="table table-bordered">
-	<thead>
-	<tr>
-		<th><input type="checkbox" id="selectAll"/></th>
-		<th>문서번호</th>
-		<th>제목</th>
-		<th>기안자</th>
-		<th>결재자</th>
-		<th>결재완료일자</th>
-	</tr>
-	</thead>
-	<tbody id="docListBody">
-		<c:forEach var="item" items="${docframe}">
-		<tr>
-			<td><input type="checkbox" name="appr_seq" class="seq" id="appr_seq" value="${item.appr_seq}" />
-			&nbsp;&nbsp;<a href="#" data-apprseq="${item.appr_seq}" class="Simpleinfo">🔍</a></td>
-			<td>${item.docregno}</td>
-			<td><a href="#" data-apprseq="${item.appr_seq}" class="Docinfo">${item.title}</a></td>
-			<td>${item.draftername}</td>
-			<td>${item.finalapprover}</td>
-			<td>${item.approvaldate}</td>
-		</tr>		
-		</c:forEach>
-	</tbody>
-</table>
-	<ul class="pagination">
+ <table class="table table-bordered">
+    <thead>
+      <tr>
+      	<th style="width:10px;"><input type="checkbox" id="selectAll"></th>
+        <th>제목</th>
+        <th>기안자</th>
+		<th>결재완료일시</th>
+		<th>수신부서</th>
+      </tr>
+    </thead>
+    <tbody>
+    <c:forEach var="list" items="${list}">
+      <tr>
+      	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }"/></td>
+        <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
+        <td>${list.draftername }</td>
+        <td>${list.approvaldate }</td>
+        <td>${list.receivers }</td>
+		  <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
+		  <c:forEach var="participant" items="${SndngWaitflowInfo}" varStatus="loop">
+			<c:if test="${participant.flag eq '0' && participant.appr_seq eq list.appr_seq}">
+				<input type="hidden" id="appr_seq" value="${participant.appr_seq}" />
+				<input type="hidden" id="participant_seq_${loop.index }" value="${participant.participant_seq}"/>
+				<input type="hidden" id="signerid" value="${participant.signerid}"/>
+				<input type="hidden" id="approvalstatus" value="${participant.approvalstatus}"/>
+				<input type="hidden" id="approvaltype" value="${participant.approvaltype}"/>
+			</c:if> 
+		  </c:forEach>
+	  </tr>
+    </c:forEach>
+    </tbody>
+  </table>
+ <ul class="pagination">
 		<c:if test="${pageMaker.prev}">
 			<li>
-				<a href='<c:url value="docFrame?page=${pageMaker.startPage-1}"/>'>◀</a>
+				<a href='<c:url value="SndngWaitDocList?page=${pageMaker.startPage-1}"/>'>◀</a>
 			</li>
 		</c:if>
 		<c:forEach begin="${pageMaker.startPage}" end="${pageMaker.endPage}" var="pageNum">
 			<li>
-				<a href='<c:url value="docFrame${pageMaker.makeSearch(pageNum)}"/>'>&nbsp;&nbsp;${pageNum}&nbsp;&nbsp;</a>
+				<a href='<c:url value="SndngWaitDocList${pageMaker.makeSearch(pageNum)}"/>'>&nbsp;&nbsp;${pageNum}&nbsp;&nbsp;</a>
 			</li>
 		</c:forEach>
 		<c:if test="${pageMaker.next && pageMaker.endPage > 0}">
 			<li>
-				<a href='<c:url value="docFrame${pageMaker.makeSearch(pageMaker.endPage+1)}"/>'>▶</a>
+				<a href='<c:url value="SndngWaitDocList${pageMaker.makeSearch(pageMaker.endPage+1)}"/>'>▶</a>
 			</li>
 		</c:if>
 	</ul>
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/pagingCookie.js'/>"></script>
-<script>
+<script type="text/javascript">
 $(document).ready(function(){
 	//쿠키 값 가져오기..
 	var getPerPageNum = getCookie("perPageNum");
@@ -130,18 +115,9 @@ $(document).ready(function(){
 		$('#keywordInput').val(decodeURIComponent(keyword));
 		$('#searchType').val(searchType);		
 	}
-	//사이드 메뉴 클릭 시 글자색 변경 고정.
-	var clickFldrId = urlParams.get('fldrid');
-	$('.tree li a').each(function(){
-		var fldrid = $(this).data('fldrid');
-		if(clickFldrId === fldrid){
-			$(this).css('color','green');
-		}
-	})
 });
-
 function fncSearch(){
-	self.location = "docFrame" + "${pageMaker.makeQuery(1)}" + "&searchType=" + $("select option:selected").val() 
+	self.location = "SndngWaitDocList" + "${pageMaker.makeQuery(1)}" + "&searchType=" + $("select option:selected").val() 
 	+ "&keyword=" + encodeURIComponent($('#keywordInput').val());
 }
 
@@ -153,32 +129,24 @@ function loadPage(pageNum){
 	var searchType = $('#searchType').val();
 	var keyword = $('#keywordInput').val();
 	var perPageNum = $('#perPageNum').val();
-	var url = '<c:url value="docFrame"/>'+ "${pageMaker.makeSearch(1)}";
+	var url = '<c:url value="SndngWaitDocList"/>'+ "${pageMaker.makeSearch(1)}";
 	window.location.href = url;
 }
 
-$('a.Docinfo').on('click', function(event) {
+$('a.apprInfo').on('click', function(event) {
     event.preventDefault();
-    
     var appr_seq = $(this).attr("data-apprseq"); 
     var url = "<c:url value='/approval/apprInfo'/>" + "?appr_seq=" + appr_seq;
     window.open(url, "Info", "width=1024px, height=768px");
 });
 
+var checkboxes = document.getElementsByName('appr_seq');
+//"전체 선택" 체크박스를 클릭했을 때 모든 체크박스를 선택 또는 해제하는 함수
 $('#selectAll').change(function(){
-	var checkboxes = document.getElementsByName("appr_seq");
-	for(var i =0; i < checkboxes.length; i++){
-		checkboxes[i].checked = this.checked;
+	for(var i = 0; i < checkboxes.length; i++){
+	  checkboxes[i].checked = this.checked;
 	}
-})
-function loadDocFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
-	var searchType = $('#searchType').val();
-	var url = '<c:url value="docFrame"/>'
-	url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType='+searchType
-			
-	window.location.href = url;
-	setCookie_f(url);
-}
+});
 </script>
 </body>
 </html>

@@ -74,7 +74,7 @@ Attachment number(3),\
 Foldername varchar2(30),\
 Docattr varchar2(3),\
 Sendername varchar2(30),\
-Receivers varchar2(30),\
+Receivers varchar2(2000),\
 Sanded varchar2(20),\
 Senddate varchar2(30),\
 Orgdraftdeptid varchar2(20),\
@@ -182,4 +182,21 @@ ablitionflag varchar2(1));\
     filename varchar2(100) not null,\
     filetype number(3),\
     appr_seq varchar2(100),\
-    Filesize number(3));}
+    Filesize number(3));\
+\
+\'97\uc0\u48156 \u49569 \
+    create table send(\
+    sendid varchar2(20) PRIMARY key,\
+    appr_seq varchar2(100),\
+    parsendid varchar2(20),\
+    sendtype varchar2(2),\
+    receiverid varchar2(20),\
+    receivername varchar2(30),\
+    senderid varchar2(20),\
+    sendername varchar2(30),\
+    senddeptid varchar2(20),\
+    senddate varchar2(30),\
+    approvaldate varchar2(30),\
+    receiptappr_seq varchar2(100),\
+    registdate varchar2(30),\
+    registerid varchar2(20))}

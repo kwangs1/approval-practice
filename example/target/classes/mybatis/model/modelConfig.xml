@@ -10,6 +10,7 @@
 		<typeAlias type="com.example.kwangs.memo.service.memoVO" alias="memoVO" />	
 		<typeAlias type="com.example.kwangs.user.service.userVO" alias="userVO" />	
 		<typeAlias type="com.example.kwangs.approval.service.approvalVO" alias="approvalVO" />
+		<typeAlias type="com.example.kwangs.approval.service.sendVO" alias="sendVO" />
 		<typeAlias type="com.example.kwangs.participant.service.participantVO" alias="participantVO" />	
 		<typeAlias type="com.example.kwangs.approval.service.Document" alias="Document" />	
 		<typeAlias type="com.example.kwangs.dept.service.deptVO" alias="deptVO" />	

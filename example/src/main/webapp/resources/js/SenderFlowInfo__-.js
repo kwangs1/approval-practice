@@ -45,7 +45,7 @@ $('a.deptLink').on('click',function(e){
 	selectDeptName = $(this).data('deptname');
 	selectDeptSender = $(this).data('sendername');
 	
-	selectedDept = {deptid: selectDeptId,deptname: selectDeptName,sendername: selectDeptSender};
+	selectedDept.push({deptid: selectDeptId,deptname: selectDeptName,sendername: selectDeptSender});
 	console.log(selectedDept);
 	updateselectedDept();
 })
@@ -101,10 +101,13 @@ function updateselectedDept(){
 	var selDiv = $('#selectedDept');
 	selDiv.empty(); //기존 내용 제거
 
-	var userDiv = $('<div class="userDiv"></div>');
-	userDiv.append('<p>'+ selectedDept.deptname + '</p>');
-			
-	selDiv.append(userDiv);
+	for(var i =0; i < selectedDept.length; i++){
+		var receivers = selectedDept[i];
+		console.log(receivers.sendername);
+		var userDiv = $('<div class="userDiv"></div>');
+		userDiv.append('<p>'+ receivers.deptname +'</p>');		
+		selDiv.append(userDiv);
+	}		
 
 }
 // 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.

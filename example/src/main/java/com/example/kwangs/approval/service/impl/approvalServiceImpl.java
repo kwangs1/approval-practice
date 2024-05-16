@@ -85,6 +85,11 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	public List<approvalVO> SanctnProgrsList(SearchCriteria scri) {	
 		return mapper.SanctnProgrsList(scri);
+	}	
+	//발송대기
+	@Override
+	public List<approvalVO>SndngWaitDocList(SearchCriteria scri){
+		return mapper.SndngWaitDocList(scri);
 	}
 	//문서함
 	@Override
@@ -120,10 +125,15 @@ public class approvalServiceImpl implements approvalService{
 	public int totalDocCnt(SearchCriteria scri) {
 		return mapper.totalDocCnt(scri);
 	}
-	//결재대기 문서 총 갯수
+	//결재함[결재대기,진행] 문서 총 갯수
 	@Override
 	public int totalApprCnt(SearchCriteria scri) {
 		return mapper.totalApprCnt(scri);
+	}
+	//결재함[발송대기] 문서 총 갯수
+	@Override
+	public int TotalSndngWaitCnt(SearchCriteria scri) {
+		return mapper.TotalSndngWaitCnt(scri);
 	}
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	@Override

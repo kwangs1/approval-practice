@@ -41,6 +41,10 @@ public class approvalMapper{
 		return session.selectList("mapper.approval.SanctnProgrsList",scri);
 	}
 	
+	//발송대기
+	public List<approvalVO>SndngWaitDocList(SearchCriteria scri){
+		return session.selectList("mapper.approval.SndngWaitDocList",scri);
+	}
 	//문서함
 	public List<approvalVO> docFrame(SearchCriteria scri){
 		return session.selectList("mapper.approval.docFrame",scri);
@@ -99,9 +103,13 @@ public class approvalMapper{
 	public int totalDocCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.totalDocCnt",scri);
 	}
-	//결재대기 문서 총갯수
+	//결재함[결재대기,진행] 문서 총갯수
 	public int totalApprCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.totalApprCnt",scri);
+	}
+	//결재함[발송대기] 문서 총 갯수
+	public int TotalSndngWaitCnt(SearchCriteria scri) {
+		return session.selectOne("mapper.approval.TotalSndngWaitCnt",scri);
 	}
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	public void UpdAttachCnt(Map<String,Object>res) {

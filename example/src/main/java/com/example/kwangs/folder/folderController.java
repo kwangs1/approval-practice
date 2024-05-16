@@ -26,14 +26,14 @@ public class folderController {
 	@Autowired
 	private bizunitService bizService;
 	
-	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
-	@GetMapping("/deptAllFolderAdd")
-	public void deptAllFolderAdd() {}
+	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
+	@GetMapping("/FolderAdd")
+	public void FolderAdd() {}
 	
 	@ResponseBody
-	@PostMapping("/deptAllFolderAdd")
-	public void deptAllFolderAdd(folderVO fd) {
-		service.deptAllFolderAdd(fd);
+	@PostMapping("/FolderAdd")
+	public void FolderAdd(folderVO fd) {
+		service.FolderAdd(fd);
 	}
 	
 	//하위 폴더 생성

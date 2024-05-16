@@ -21,8 +21,8 @@
 		<result property="year" column="year" />
 		<result property="endyear" column="endyear" />
 	</resultMap>
-<!-- 부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]-->
-<insert id="deptAllFolderAdd" parameterType="folderVO">
+<!-- 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]-->
+<insert id="FolderAdd" parameterType="folderVO">
 	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
 		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
 	</selectKey>
@@ -54,9 +54,12 @@
 </select>
 <!-- 문서함 사이드 메뉴 부서 폴더 가져올 거 -->
 <select id="docfldrSidebar" resultType="folderVO" parameterType="String">
-	select * from folder
+	select * 
+		from folder 
 	where ownerid = #{ownerid}
-    order by fldrid, fldrdepth
+	start with parfldrid is null
+	CONNECT by PRIOR fldrid = parfldrid
+	order siblings by fldrid
 </select>
 <!-- 기안 시 단위과제 보여주기 -->
 <select id="DeptFolderList" resultMap="folder" parameterType="String">

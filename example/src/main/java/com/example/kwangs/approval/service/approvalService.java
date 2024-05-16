@@ -14,6 +14,8 @@ public interface approvalService {
 	List<approvalVO> apprWaitList(SearchCriteria scri);
 	//결재진행
 	List<approvalVO> SanctnProgrsList(SearchCriteria scri);
+	//발송대기
+	List<approvalVO>SndngWaitDocList(SearchCriteria scri);
 	//문서함
 	List<approvalVO>docFrame(SearchCriteria scri);
 	//결재 상세보기
@@ -26,8 +28,10 @@ public interface approvalService {
 	void Resubmission(approvalVO approval);
 	//문서함 문서 총갯수
 	int totalDocCnt(SearchCriteria scri);
-	//결재대기 문서 총 갯수
+	//결재함[결재대기,진행] 문서 총 갯수
 	int totalApprCnt(SearchCriteria scri);
+	//결재함[발송대기] 문서 총 갯수
+	int TotalSndngWaitCnt(SearchCriteria scri);
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	void UpdAttachCnt(Map<String,Object>res);
 }

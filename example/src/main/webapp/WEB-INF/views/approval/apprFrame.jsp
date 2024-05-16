@@ -18,7 +18,7 @@
     </li>
   <c:forEach var="item" items="${ApprfldrSidebar}">
    <c:choose>
-  	<c:when test="${item.applid == 1000}">
+  	<c:when test="${item.applid == 1000 || item.applid == 4000 || item.applid == 7010}">
     <li>
     	<p class="disable">${item.fldrname}</p>
     </li>  		
@@ -58,6 +58,12 @@ function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 	}
 	else if(applid === '2020'){
 		var url = "<c:url value='/approval/SanctnProgrsList'/>";
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
+		window.location.href = url;
+		setCookie_f2(url);
+	}
+	else if(applid === '4030'){
+		var url = "<c:url value='/approval/SndngWaitDocList'/>";
 		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
 		window.location.href = url;
 		setCookie_f2(url);

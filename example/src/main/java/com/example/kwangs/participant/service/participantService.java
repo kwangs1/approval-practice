@@ -27,6 +27,8 @@ public interface participantService {
 	List<participantVO> ApprWaitFLowInfo(String appr_seq);	
 	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	List<participantVO> ApprProgrsFLowInfo(String appr_seq);
+	//발송대기 리스트에서 결재선 정보 가져오기
+	List<participantVO> SndngWaitflowInfo(String appr_seq);
 	//결재
 	void FlowAppr(participantVO participant);
 	//일반 결재 시 상세보기에서의 결재선 정보 

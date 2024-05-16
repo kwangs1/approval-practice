@@ -18,9 +18,9 @@ public class folderMapper {
 	@Autowired
 	private SqlSession session;
 	
-	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
-	public void deptAllFolderAdd(folderVO fd) {
-		session.insert("folder.deptAllFolderAdd",fd);
+	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
+	public void FolderAdd(folderVO fd) {
+		session.insert("folder.FolderAdd",fd);
 	}
 	//하위 폴더 생성
 	public void subFolderAdd(folderVO fd) {

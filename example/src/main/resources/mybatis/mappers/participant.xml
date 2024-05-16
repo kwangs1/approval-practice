@@ -64,7 +64,17 @@
 	and p.flag ='0'
 	order by a.appr_seq desc
 </select>
-
+<!-- 발송대기 리스트에서 결재선 정보 가져오기 -->
+<select id="SndngWaitflowInfo" resultType="participantVO" parameterType="String">
+	select a.appr_seq, p.participant_seq, p.signerid, p.deptid, p.approvalstatus, p.approvaltype, p.flag
+		from approval a,participant p
+	where a.appr_seq = p.appr_seq
+	and a.status = 256
+	and a.docattr = '1'
+	and a.poststatus = '1'
+	and p.flag = '0'
+	order by a.appr_seq desc
+</select>
 <!-- 일괄 결재 후 결재선 타입 변경 -->
 <update id="updateNextApprovalType" parameterType="java.util.Map">
     update participant

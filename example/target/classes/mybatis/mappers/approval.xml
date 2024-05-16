@@ -103,7 +103,21 @@
 		)t
 		where rnum between #{rowStart} and #{rowEnd}
 </select>
-
+<!-- 발송대기 -->
+<select id="SndngWaitDocList" resultType="approvalVO" parameterType="String">
+	select t.*
+	    from(
+	        select appr_seq, title, drafterid, draftername, approvaldate,receivers,
+	            row_number() over(order by appr_seq desc)as rnum
+	           from approval
+	        where status =256
+	        and docattr = '1'
+			and poststatus = '1'
+	       	and drafterdeptid = #{drafterdeptid}
+			<include refid="search"></include>
+		)t	    
+	where rnum between #{rowStart} and #{rowEnd}
+</select>
 <!-- 문서함 -->
 <select id="docFrame" resultType="approvalVO">
 		select d.*
@@ -228,7 +242,7 @@
 		<include refid="search"></include>
 </select>
 
-<!-- 결재대기 문서 총 갯수 -->
+<!-- 결재함[결재대기,진행] 문서 총 갯수 -->
 <select id="totalApprCnt" resultType="int">
 		select count(*)
    		from approval a, folder f, fldrmbr fm
@@ -238,7 +252,15 @@
     	and f.fldrid = #{fldrid}
 		<include refid="search"></include>	
 </select>
-
+<!-- 결재함[발송대기] 문서 총 갯수 -->
+<select id="TotalSndngWaitCnt" resultType="int">
+	select count(*)
+	from approval
+   	where status = 256
+   	and docattr ='1'
+   	and poststatus = '1'
+	<include refid="search"></include>	
+</select>
 <update id="UpdAttachCnt">
 	update approval
 	set attachcnt = #{attachcnt}

@@ -2,6 +2,7 @@ package com.example.kwangs.approval;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -177,7 +178,43 @@ public class approvalController {
 		
 		return "/approval/SanctnProgrsList";		
 	}
-	
+	//발송대기
+	@GetMapping("/SndngWaitDocList")
+	public String SndngWaitDocList(Model model, HttpServletRequest request,SearchCriteria scri,folderVO fd) {
+		if(request.getSession(false).getAttribute("user") == null) {
+			return "redirect:/user/login";
+		}
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setDrafterdeptid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		scri.setSignerid(id);
+			
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		List<approvalVO> list = service.SndngWaitDocList(scri);
+		model.addAttribute("list",list);
+
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
+
+		pageMaker.setTotalCount(service.TotalSndngWaitCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
+			
+		for(approvalVO ap : list) {	
+			List<participantVO> SndngWaitflowInfo = serviceP.SndngWaitflowInfo(ap.getAppr_seq());
+			model.addAttribute("SndngWaitflowInfo",SndngWaitflowInfo);
+		}			
+		return "/approval/SndngWaitDocList";
+	}
 	//문서함
 	@GetMapping("/docFrame")
 	public void docFrame(Model model, HttpServletRequest request, SearchCriteria scri, folderVO fd, approvalVO ap) {
@@ -211,7 +248,7 @@ public class approvalController {
 	public String apprInfo(String appr_seq, Model model,participantVO pp,HttpServletRequest request) {		
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
-		
+		send(appr_seq);
 		//일반 결재 시 상세보기에서의 결재선 정보 
 		String userId = (String) request.getSession().getAttribute("userId");
 		Map<String,Object> res = new HashMap<>();
@@ -252,4 +289,17 @@ public class approvalController {
 		service.Resubmission(approval);
 	}
 
+	//발송
+	public void send(String appr_seq) {
+		approvalVO ap = service.apprInfo(appr_seq);
+			if(ap.getDocattr().equals("1") && ap.getPoststatus().equals("1")) {
+				if(ap.getReceivers() != null) {
+					String[] receiveDept = ap.getReceivers().split(",");
+					for(String s : receiveDept) {
+						log.info(s);
+					}
+				}
+			}
+
+	}
 }

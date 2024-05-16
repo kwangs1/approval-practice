@@ -25,6 +25,8 @@
 	<select id="userApplid" onchange="setApplidValue(this)" style="display:none">
 		<option value="" selected="selected">선택 하십시오.</option>
 		<option value="1000">결재</option>
+		<option value="4000">발송</option>
+		<option value="7010">접수</option>
 	</select>
 	<input type="hidden" name="applid" id="applid" value=""/><br><br>
 	
@@ -104,7 +106,7 @@ function insertBtn(){
 	
 	$.ajax({
 		type: 'post',
-		url: '<c:url value="/folder/deptAllFolderAdd"/>',
+		url: '<c:url value="/folder/FolderAdd"/>',
 		data: paramData,
 		success: function(){
 			var loading = document.getElementById('loading')

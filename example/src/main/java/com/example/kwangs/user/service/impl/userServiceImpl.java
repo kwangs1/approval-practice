@@ -45,7 +45,7 @@ public class userServiceImpl implements userService{
 		in1000.setApplid(1000);
 		in1000.setYear("0000");
 		in1000.setEndyear("9999");
-		fMapper.deptAllFolderAdd(in1000);
+		fMapper.FolderAdd(in1000);
 		
 		folderVO in2010 = new folderVO();
 		in2010.setFldrname("결재대기");
@@ -98,6 +98,42 @@ public class userServiceImpl implements userService{
 		in6022.setYear("0000");
 		in6022.setEndyear("9999");
 		fMapper.subFolderAdd(in6022);
+		
+		folderVO in4000 = new folderVO();
+		in4000.setFldrname("발송");
+		in4000.setOwnertype("2");
+		in4000.setOwnerid(user.getId());
+		in4000.setAppltype("2");
+		in4000.setApplid(4000);
+		in4000.setYear("0000");
+		in4000.setEndyear("9999");
+		fMapper.FolderAdd(in4000);
+		
+		folderVO in4030 = new folderVO();
+		in4030.setFldrname("발송대기");
+		in4030.setParfldrid(in4000.getFldrid());
+		in4030.setFldrdepth(in4000.getFldrdepth()+1);
+		in4030.setOwnertype("2");
+		in4030.setOwnerid(user.getId());
+		in4030.setAppltype("2");
+		in4030.setApplid(4030);
+		in4030.setYear("0000");
+		in4030.setEndyear("9999");
+		in4030.setParfldrname(in4000.getFldrname());
+		fMapper.subFolderAdd(in4030);
+		
+		folderVO in4050 = new folderVO();
+		in4050.setFldrname("발송현황");
+		in4050.setParfldrid(in4000.getFldrid());
+		in4050.setFldrdepth(in4000.getFldrdepth()+1);
+		in4050.setOwnertype("2");
+		in4050.setOwnerid(user.getId());
+		in4050.setAppltype("2");
+		in4050.setApplid(4050);
+		in4050.setYear("0000");
+		in4050.setEndyear("9999");
+		in4050.setParfldrname(in4000.getFldrname());
+		fMapper.subFolderAdd(in4050);
 	}
 	
 }

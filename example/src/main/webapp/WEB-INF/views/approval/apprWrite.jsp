@@ -53,6 +53,7 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 			</ul>
 		</div>
 	</div>
+<div class="receivers_info"></div>
 
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
@@ -60,7 +61,6 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 <input type="hidden" name="foldername" id="foldername"/>
 <input type="hidden" name="bizunitcd" id="bizunitcd"/>
 <input type="hidden" name="docattr" id="docattr"/>
-<input type="hidden" name="receivers" id="receivers"/>
 <input type="hidden" name="orgdraftdeptid" id="orgdraftdeptid"/>
 <input type="hidden" name="sendername" id="sendername"/>
 
@@ -96,25 +96,35 @@ window.onload = function(){
 	
 	start.value = startDay;
 	end.value = endDay;
-	}
+}
 
-	window.addEventListener('message', function(e) {
-		var data = e.data;
-		var selectedApFolder = data.selectedApFolder;
-		var checkedValues = data.checkedValues;
-		var selectedDept = data.selectedDept; 
-		var selectedValue = data.selectedValue;
+var selectedDept = [];
+window.addEventListener('message', function(e) {
+	var data = e.data;
+	var selectedApFolder = data.selectedApFolder;
+	var checkedValues = data.checkedValues;
+	selectedDept = data.selectedDept; 
+	var selectedValue = data.selectedValue;
 
-		$('#folderid').val(selectedApFolder.fldrid);
-		$('#foldername').val(selectedApFolder.fldrname);
-		$('#bizunitcd').val(selectedApFolder.bizunitcd);
-		$('#docattr').val(checkedValues);
-		$('#receivers').val(selectedDept.sendername);
-	    $('#orgdraftdeptid').val(selectedValue.deptid);
-	    $('#sendername').val(selectedValue.sendername);
+	$('#folderid').val(selectedApFolder.fldrid);
+	$('#foldername').val(selectedApFolder.fldrname);
+	$('#bizunitcd').val(selectedApFolder.bizunitcd);
+	$('#docattr').val(checkedValues);
+	$('#orgdraftdeptid').val(selectedValue.deptid);
+	$('#sendername').val(selectedValue.sendername);
+	
+	var useDiv = $('.receivers_info');
+	useDiv.empty();
+	
+	for(var i =0; i < selectedDept.length; i++){
+		var Container = $('<div class="container">');
+		Container.append('<input type="hidden" name="receivers_' + i + '"  value="' + selectedDept[i].sendername + '"/>');
 		
-		saveCookie(checkedValues);
-	});
+		useDiv.append(Container);
+	}
+	
+	saveCookie(checkedValues);
+});
 	
 
 	function Appr_Btn() {
@@ -123,81 +133,52 @@ window.onload = function(){
 		var formData = new FormData(); 
 		var inputFile = $("input[name='uploadFile']");
 		var files = inputFile[0].files;
-
-	    // 기안 시 등록하는 필드 정보 추가
-	    if(files.length > 0){
-		    formData.append('draftername', $('#draftername').val());
-		    formData.append('drafterid', $('#drafterid').val());
-		    formData.append('title', $('#title').val());
-		    formData.append('content', $('#content').val());
-		    formData.append('startdate', $('#startdate').val());
-		    formData.append('enddate', $('#enddate').val());
-		    formData.append('drafterdeptid', drafterdeptid);
-		    formData.append('drafterdeptname', drafterdeptname);
-		    formData.append('docregno', docregno);
-		    formData.append('folderid', $('#folderid').val());
-		    formData.append('foldername', $('#foldername').val());
-		    formData.append('bizunitcd', $('#bizunitcd').val());
-			formData.append('docattr',$('#docattr').val());
-			formData.append('receivers',$('#receivers').val());
-			formData.append('sendername',$('#sendername').val());
-			formData.append('orgdraftdeptid',$('#orgdraftdeptid').val());
-		    // 파일 정보 추가
+		var doc_Receivers = [];
+		
+		if(selectedDept && selectedDept.length > 0){
+			for(var i=0; i < selectedDept.length; i++){
+				doc_Receivers.push(selectedDept[i].sendername);
+			}
+			formData.append('receivers',doc_Receivers);
+		}
+    	formData.append('draftername', $('#draftername').val());
+		formData.append('drafterid', $('#drafterid').val());
+	  	formData.append('title', $('#title').val());
+	    formData.append('content', $('#content').val());
+	    formData.append('startdate', $('#startdate').val());
+		formData.append('enddate', $('#enddate').val());
+	    formData.append('drafterdeptid', drafterdeptid);
+	    formData.append('drafterdeptname', drafterdeptname);
+	    formData.append('docregno', docregno);
+	    formData.append('folderid', $('#folderid').val());
+	    formData.append('foldername', $('#foldername').val());
+	    formData.append('bizunitcd', $('#bizunitcd').val());
+		formData.append('docattr',$('#docattr').val());
+		formData.append('sendername',$('#sendername').val());
+		formData.append('orgdraftdeptid',$('#orgdraftdeptid').val());
+		if(files.length > 0){
 		    UploadFileAppend(formData);
-		  	/*
-		  	 * 파일 등록 시 ajax에서는 일반적인 body에서의 form태그 안 enctype="multipart/form-data" 의 값을 설정하기위해 
-		  	 * processData, contentType 값을 flase로 설정
-		  	*/
-			$.ajax({
-				type : "post",
-				url : "${path}/approval/apprWrite",
-				data : formData,        
-		        processData: false,
-		        contentType: false,
-				success : function(response) {
-					participant();
-					deleteCookie('docattr');
-				},
-				error : function(xhr, status, error) {
-					console.log(xhr);
-					console.log(status);
-					console.log(error);
-				}
-			})	
-	    }else{
-	    	var apprData = {
-	    			drafterdeptid: drafterdeptid,
-	    			drafterdeptname: drafterdeptname,
-	    			title: $('#title').val(),
-	    			content: $('#content').val(),
-	    			startdate: $('#startdate').val(),
-	    			enddate: $('#enddate').val(),
-	    			drafterid: $('#drafterid').val(),
-	    			draftername: $('#draftername').val(),
-	    			folderid: $('#folderid').val(),
-	    			bizunitcd: $('#bizunitcd').val(),
-	    			foldername: $('#foldername').val(),
-	    			docregno: docregno,
-					docattr: $('#docattr').val(),
-					receivers: $('#receivers').val(),
-					sendername: $('#sendername').val(),
-					orgdraftdeptid: $('#orgdraftdeptid').val()
-	    	}
-			$.ajax({
-				type : "post",
-				url : "${path}/approval/apprWrite",
-				data : apprData,        
-				success : function(response) {
-					participant();
-					deleteCookie('docattr');
-				},
-				error : function(xhr, status, error) {
-					console.log(xhr);
-					console.log(status);
-					console.log(error);
-				}
-			})	
-	    }
+		}
+	  	/*
+	  	 * 파일 등록 시 ajax에서는 일반적인 body에서의 form태그 안 enctype="multipart/form-data" 의 값을 설정하기위해 
+	  	 * processData, contentType 값을 flase로 설정
+	  	*/
+		$.ajax({
+			type : "post",
+			url : "${path}/approval/apprWrite",
+			data : formData,        
+	        processData: false,
+	        contentType: false,
+			success : function(response) {
+				participant();
+				deleteCookie('docattr');
+			},
+			error : function(xhr, status, error) {
+				console.log(xhr);
+				console.log(status);
+				console.log(error);
+			}
+		})	
 	}
 </script>
 </body>

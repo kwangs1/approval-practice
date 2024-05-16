@@ -25,16 +25,10 @@ public class folderServiceimpl implements folderService{
 	@Autowired
 	private bizunitMapper bizMapper;
 	
-	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
+	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
 	@Override
-	public void deptAllFolderAdd(folderVO fd) {
-		/*
-		List<deptVO> departments = deptMapper.findAll();
-		for(deptVO dept : departments) {
-			String ownerid = dept.getDeptid();		
-			fd.setOwnerid(ownerid);
-		}*/
-		mapper.deptAllFolderAdd(fd);
+	public void FolderAdd(folderVO fd) {
+		mapper.FolderAdd(fd);
 	}
 	
 	//하위 폴더 생성

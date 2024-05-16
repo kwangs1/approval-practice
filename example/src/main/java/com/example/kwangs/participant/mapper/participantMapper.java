@@ -38,6 +38,11 @@ public class participantMapper{
 		return session.selectList("mapper.participant.ApprProgrsFLowInfo",appr_seq);
 	}
 	
+	//발송대기 리스트에서 결재선 정보 가져오기
+	public List<participantVO> SndngWaitflowInfo(String appr_seq){
+		return session.selectList("mapper.participant.SndngWaitflowInfo",appr_seq);
+	}
+	
 	//결재 시 결재자들의 타입 값 변경
 	public void updateNextApprovalType(Map<String, Object> params) {
 		session.update("mapper.participant.updateNextApprovalType",params);
