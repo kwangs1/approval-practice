@@ -50,7 +50,7 @@
 </insert>
 <!-- 단위과제 작성 시 폴더 정보 가져올거 -->
 <select id="b_fdInfo" resultType="folderVO">
-	select fldrid, fldrname, fldrdepth from folder where applid = 7000
+	select fldrid, fldrname, fldrdepth from folder where applid = 7000 and ownerid = #{ownerid}
 </select>
 <!-- 문서함 사이드 메뉴 부서 폴더 가져올 거 -->
 <select id="docfldrSidebar" resultType="folderVO" parameterType="String">

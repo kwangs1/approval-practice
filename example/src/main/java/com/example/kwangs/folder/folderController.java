@@ -64,6 +64,9 @@ public class folderController {
 	public void info(Model model,String fldrid) {
 		folderVO info = service.info(fldrid);
 		model.addAttribute("info",info);
+		//단위과제 정보 가져오기
+		bizunitVO bInfo = bizService.bInfo(info.getOwnerid());
+		model.addAttribute("bInfo",bInfo);
 	}
 	
 	//기록물철 추가
@@ -76,8 +79,8 @@ public class folderController {
 		int depth = info.getFldrdepth() +1;
 		model.addAttribute("depth",depth);
 		
-		//기록물철 정보 가져오기
-		bizunitVO bInfo = bizService.bInfo(info.getFldrname());
+		//단위과제 정보 가져오기
+		bizunitVO bInfo = bizService.bInfo(info.getOwnerid());
 		model.addAttribute("bInfo",bInfo);
 	}
 	

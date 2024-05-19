@@ -5,6 +5,7 @@ import java.io.PrintWriter;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -93,7 +94,8 @@ public class bizunitController {
 	
 	@ResponseBody
 	@PostMapping("/write")
-	public void write(bizunitVO biz) {
-		service.write(biz);
+	public void write(bizunitVO biz, HttpServletRequest request) {
+		String deptid = (String) request.getSession().getAttribute("deptId");
+		service.write(biz,deptid);
 	}
 }

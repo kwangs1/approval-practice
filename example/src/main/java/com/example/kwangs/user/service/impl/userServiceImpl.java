@@ -23,6 +23,7 @@ public class userServiceImpl implements userService{
 	@Override
 	public void write(userVO user) {
 		mapper.write(user);
+		JoinUseFolder(user);
 	}
 	
 	@Override

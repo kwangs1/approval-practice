@@ -13,7 +13,7 @@ public interface bizunitService {
 	//단위과제 목록
 	List<bizunitVO> list();
 	//단위과제 작성
-	void write(bizunitVO biz);
+	void write(bizunitVO biz,String deptid);
 	//기록물철 작성 시 단위과제 정보 가져오기
-	bizunitVO bInfo(String bizunitname);
+	bizunitVO bInfo(String procdeptid);
 }

@@ -36,9 +36,6 @@
 </insert>
 <!-- 기록물철 작성 시 단위과제 정보 가져오기 -->
 <select id="bInfo" resultMap="bizunit" parameterType="String">
-	select *
-	from bizunit biz
-	inner join folder f 
-	on biz.BIZUNITNAME = f.fldrname
+	select * from bizunit where procdeptid = #{procdeptid}
 </select>
 </mapper>

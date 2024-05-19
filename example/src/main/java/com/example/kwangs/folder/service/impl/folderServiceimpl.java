@@ -70,7 +70,7 @@ public class folderServiceimpl implements folderService{
 		mapper.folderAddAndApprF(fd);
 		
 		userVO folderUseInfo = userMapper.folderUseInfo(userid);
-		bizunitVO biz = bizMapper.bInfo(fd.getFldrname());
+		bizunitVO biz = bizMapper.bInfo(fd.getOwnerid());
 		LocalDate now = LocalDate.now();
 		int year = now.getYear();
 		String strYear = Integer.toString(year);

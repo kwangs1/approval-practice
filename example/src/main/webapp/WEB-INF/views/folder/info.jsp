@@ -14,7 +14,7 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 <c:if test="${info.applid != 7000}">
 <a href="subFolderAdd?fldrid=${info.fldrid}">폴더 추가</a> | 
 </c:if>
-<c:if test="${info.applid == 7000}">
+<c:if test="${info.applid == 7010}">
 	<a href="javascript:folderAddAndApprF()">기록물철 추가</a> |
 </c:if>
 <a href="edit.do?fldrid=${info.fldrid}">수정</a> |

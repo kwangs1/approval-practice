@@ -67,10 +67,10 @@ public class bizunitServiceimpl implements bizunitService{
 	}
 	//단위과제 작성 시 폴더테이블에 같이 인서트
 	@Override
-	public void write(bizunitVO biz) {
+	public void write(bizunitVO biz,String deptid) {
 		mapper.write(biz);
 		
-		folderVO b_fdInfo = folderMapper.b_fdInfo();
+		folderVO b_fdInfo = folderMapper.b_fdInfo(deptid);
 		LocalDate now = LocalDate.now();
 		int year = now.getYear();
 		String strYear = Integer.toString(year);
@@ -90,8 +90,8 @@ public class bizunitServiceimpl implements bizunitService{
 	}
 	//기록물철 작성 시 단위과제 정보 가져오기
 	@Override
-	public bizunitVO bInfo(String bizunitname) {
-		return mapper.bInfo(bizunitname);
+	public bizunitVO bInfo(String procdeptid) {
+		return mapper.bInfo(procdeptid);
 	}
 	
 }

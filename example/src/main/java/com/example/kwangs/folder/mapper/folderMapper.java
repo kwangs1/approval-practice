@@ -31,8 +31,8 @@ public class folderMapper {
 		session.insert("folder.CreateDeptCommonFolder",fd);
 	}
 	//부서 별 폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
-	public folderVO b_fdInfo() {
-		return session.selectOne("folder.b_fdInfo");
+	public folderVO b_fdInfo(String ownerid) {
+		return session.selectOne("folder.b_fdInfo",ownerid);
 	}
 	//문서함 사이드 메뉴 부서 폴더 가져올 거 
 	public List<folderVO>docfldrSidebar(String ownerid){
