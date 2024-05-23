@@ -15,31 +15,7 @@ public class saveXmlTemp {
 
 	@Value("${temp.data.basepath}")
 	private String basePath;
-	
-	//결재선 지정 후 xml저장
-	public void SaveParticipantTemp(String id,String xmlData) {
-		try {
-			//folder add
-			File userFolder = new File(basePath + File.separator + id);
-			if (!userFolder.exists()) {
-			    boolean created = userFolder.mkdirs(); // 폴더 생성
-			    if (!created) {
-			        throw new IOException("SaveParticipantTemp Failed to create directory: " + userFolder.getAbsolutePath());
-			    }
-			}
-			
-			//xml file add & save
-			File file = new File(userFolder, "ApprFlow.xml");
-			FileWriter fileWriter = new FileWriter(file);
-			fileWriter.write(xmlData);
-			fileWriter.close();
-			
-			log.info("SaveParticipantTemp 데이터가 파일로 저장 되었습니다. 경로: "+ file.getAbsolutePath());
-		}catch(IOException e) {
-			e.printStackTrace();
-		}
-	}
-	
+
 	//기안 뷰에 그려진 결재선 xml로 저장
 	public void SaveFlowUseInfoTemp(String id, String xmlData) {
 		try {
@@ -51,7 +27,7 @@ public class saveXmlTemp {
 				}
 			}
 			
-			File file = new File(userFolder, "ViewApprFlow.xml");
+			File file = new File(userFolder, "userdata_flow.xml");
 			FileWriter fileWriter = new FileWriter(file);
 			fileWriter.write(xmlData);
 			fileWriter.close();
@@ -60,5 +36,6 @@ public class saveXmlTemp {
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
-	}
+	}	
+
 }

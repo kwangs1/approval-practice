@@ -22,7 +22,7 @@ public class DatController {
     @GetMapping("/loadDataFromDatFile")
     public DatSaveData loadDataFromDatFile(String id) throws IOException, ClassNotFoundException{
     	File userFolder = new File(basePath + File.separator + id);
-        File dataFile = new File(userFolder, "ApprFolder.dat");
+        File dataFile = new File(userFolder, "userdata_folder.dat");
         DatSaveData data = null;
         
         if (!dataFile.exists()) {

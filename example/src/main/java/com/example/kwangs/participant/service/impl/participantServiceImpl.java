@@ -311,10 +311,6 @@ public class participantServiceImpl implements participantService{
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
-		log.info("....? "+seqCurrval);
-		
-	    StringBuilder xmlBuilder = new StringBuilder();
-	    xmlBuilder.append("<participants>");
 		
 		for (participantVO pVO : participant) {
 			pVO.setAppr_seq(seqCurrval);
@@ -333,24 +329,8 @@ public class participantServiceImpl implements participantService{
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
 			approvalTypeAndStatus(participant);
 			
-			IntermediateApprFldrmbr(pVO.getAppr_seq());
-	        //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
-	        xmlBuilder.append("<participant>");
-	        xmlBuilder.append("<deptid>").append(pVO.getDeptid()).append("</deptid>");
-	        xmlBuilder.append("<deptname>").append(pVO.getDeptname()).append("</deptname>");
-	        xmlBuilder.append("<signerid>").append(pVO.getSignerid()).append("</signerid>");
-	        xmlBuilder.append("<signername>").append(pVO.getSignername()).append("</signername>");
-	        xmlBuilder.append("<pos>").append(pVO.getPos()).append("</pos>");
-	        xmlBuilder.append("<status>").append(pVO.getStatus()).append("</status>");
-	        // 다른 필드들도 필요한 경우 추가 가능
-	        xmlBuilder.append("</participant>");
-			
+			IntermediateApprFldrmbr(pVO.getAppr_seq());			
 		}
-		xmlBuilder.append("</participants>");
-
-	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
-	    String xmlData = xmlBuilder.toString();
-	    saveXmlTemp.SaveParticipantTemp(id,xmlData);
 	}	
 	//일괄 결재
 	@Override
@@ -484,8 +464,6 @@ public class participantServiceImpl implements participantService{
 	public void ResubmissionParticipantWrite(List<participantVO> participant,String id) {
 		int seq = 1;
 		
-		 StringBuilder xmlBuilder = new StringBuilder();
-		 xmlBuilder.append("<participants>");
 		for(participantVO pvo : participant) {
 			String appr_seq = pvo.getAppr_seq();
 			pvo.setAppr_seq(appr_seq);
@@ -504,22 +482,6 @@ public class participantServiceImpl implements participantService{
 			mapper.ResubmissionParticipantWrite(pvo);
 			seq++;
 			approvalTypeAndStatus(participant);
-			 //participantVO를 XML 형식으로 변환하여 StringBuilder에 추가
-	        xmlBuilder.append("<participant>");
-	        xmlBuilder.append("<deptid>").append(pvo.getDeptid()).append("</deptid>");
-	        xmlBuilder.append("<deptname>").append(pvo.getDeptname()).append("</deptname>");
-	        xmlBuilder.append("<signerid>").append(pvo.getSignerid()).append("</signerid>");
-	        xmlBuilder.append("<signername>").append(pvo.getSignername()).append("</signername>");
-	        xmlBuilder.append("<pos>").append(pvo.getPos()).append("</pos>");
-	        xmlBuilder.append("<status>").append(pvo.getStatus()).append("</status>");
-	        // 다른 필드들도 필요한 경우 추가 가능
-	        xmlBuilder.append("</participant>");
-			
 		}
-		xmlBuilder.append("</participants>");
-
-	    // 전체 participants를 XML 문자열로 변환하여 saveXml에 전달
-	    String xmlData = xmlBuilder.toString();
-	    saveXmlTemp.SaveParticipantTemp(id,xmlData);
 	}
 }

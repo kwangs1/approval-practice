@@ -28,7 +28,7 @@ public class saveDatTemp {
 		DatSaveData data = new DatSaveData(fldrid, fldrname, bizunitcd);
     	ObjectOutputStream output = null;
     	try {
-    		output = new ObjectOutputStream(new FileOutputStream(userFolder + File.separator + "ApprFolder.dat"));
+    		output = new ObjectOutputStream(new FileOutputStream(userFolder + File.separator + "userdata_folder.dat"));
     		output.writeObject(data);
     		log.info(".Dat File Save "+fldrid+", "+fldrname+", "+bizunitcd );
     	}finally{

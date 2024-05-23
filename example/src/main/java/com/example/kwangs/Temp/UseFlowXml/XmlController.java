@@ -21,7 +21,6 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.example.kwangs.participant.service.participantVO;
 import com.example.kwangs.user.service.userVO;
 
 @RestController
@@ -32,41 +31,7 @@ public class XmlController {
 	private String basePath;
 	@Autowired
 	private saveXmlTemp saveXmlTemp;
-	
-	@GetMapping("/getXmlData")
-	public List<participantVO> getXmlDate(String id){
-		List<participantVO> pp = new ArrayList<>();
 		
-		try {
-			File userFolder = new File(basePath + id + "/ApprFlow.xml");
-			
-			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document doc = builder.parse(userFolder);
-			
-			doc.getDocumentElement().normalize();
-			NodeList nodeList = doc.getElementsByTagName("participant");
-			
-			for(int i=0; i < nodeList.getLength(); i++) {
-				Node node = nodeList.item(i);
-				if(node.getNodeType() == Node.ELEMENT_NODE) {
-					Element element = (Element)node;
-					participantVO participant = new participantVO();
-                    participant.setDeptid(element.getElementsByTagName("deptid").item(0).getTextContent());
-                    participant.setDeptname(element.getElementsByTagName("deptname").item(0).getTextContent());
-                    participant.setSignerid(element.getElementsByTagName("signerid").item(0).getTextContent());
-                    participant.setSignername(element.getElementsByTagName("signername").item(0).getTextContent());
-                    participant.setPos(element.getElementsByTagName("pos").item(0).getTextContent());
-                    participant.setStatus(element.getElementsByTagName("status").item(0).getTextContent());
-					pp.add(participant);
-				}
-			}
-		}catch(Exception e) {
-			log.error("XML 파일 저장경로에 해당 사용자의 임시저장된 XML파일이 존재하지 않습니다.");
-		}
-		return pp;
-	}
-	
 	//결재선 지정 시 결재선 지정한 유저의 결재선 지정 데이터 임시저장
 	@PostMapping("/SaveFlowUseInfoTemp")
 	public void SaveFlowTemp(@RequestBody List<userVO> clickedUsers, HttpServletRequest request) {
@@ -97,7 +62,7 @@ public class XmlController {
 		List<userVO> user = new ArrayList<>();
 		try {
 			//xml파일이 저장된 곳
-			File userFolder = new File(basePath + id + "/ViewApprFlow.xml");
+			File userFolder = new File(basePath + id + "/userdata_flow.xml");
 			log.info("getSaveFlowUseInfoTemp .."+userFolder);
 			
 			//xml을 파싱하여 데이터 추출
