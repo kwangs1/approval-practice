@@ -335,6 +335,6 @@
 	</select>
 	<!-- 상세보기에서의 접수문서인지 체크 -->
 	<select id="getReceptInfo" resultType="com.example.kwangs.approval.service.sendVO">
-		select * from send where receiptappr_seq = #{receiptappr_seq}
+		select * from send where receiptappr_seq = #{receiptappr_seq} and receiverid = #{receiverid}
 	</select>
 </mapper>

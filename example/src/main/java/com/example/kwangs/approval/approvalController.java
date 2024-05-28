@@ -309,6 +309,8 @@ public class approvalController {
 		send.put("receiverid", deptid);
 		
 		sendVO SendInfo = service.getSendInfo(send);
+		log.info("@@ sendInfo deptId "+SendInfo.getReceiverid());
+		log.info("@@ sendInfo appr_seq "+SendInfo.getAppr_seq());
 		model.addAttribute("SendInfo",SendInfo);
 		//접수문서에 첨부파일이 존재하는경우[기안부서에서 생성된 apprid를 가져오기 위함]
 		//매개변수로는 apprid를 주었지만 쿼리 조건 시 send테이블의 receiptapprid 요걸러
