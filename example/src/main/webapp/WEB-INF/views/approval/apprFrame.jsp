@@ -68,6 +68,12 @@ function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 		window.location.href = url;
 		setCookie_f2(url);
 	}
+	else if(applid === '5010'){
+		var url = "<c:url value='/approval/RceptWaitDocList'/>";
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
+		window.location.href = url;
+		setCookie_f2(url);
+	}
 	setCookie_a(applid);
 }
 </script>

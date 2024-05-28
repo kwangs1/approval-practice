@@ -37,6 +37,8 @@ public interface participantService {
 	void RetireAppr(Map<String,Object> res);		
 	//재기안 시 해당 문서에 대한 결재자 정보 가져오기
 	List<participantVO> getRe_pInfo(String appr_seq);
+	//접수문서 시 기안부서 결재자 정보
+	List<participantVO> getRcept_pInfo(String appr_seq);	
 	//재기안 시 결재자 상태값 업데이트
 	void ResubmissionFlowStatusUpd(List<participantVO> participant);
 	//재기안 시 결재선 새로 추가

@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.service.Document;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.user.service.userVO;
@@ -44,6 +45,10 @@ public class approvalMapper{
 	//발송대기
 	public List<approvalVO>SndngWaitDocList(SearchCriteria scri){
 		return session.selectList("mapper.approval.SndngWaitDocList",scri);
+	}
+	//접수대기
+	public List<approvalVO>RceptWaitDocList(SearchCriteria scri){
+		return session.selectList("mapper.approval.RceptWaitDocList",scri);
 	}
 	//문서함
 	public List<approvalVO> docFrame(SearchCriteria scri){
@@ -111,8 +116,35 @@ public class approvalMapper{
 	public int TotalSndngWaitCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.TotalSndngWaitCnt",scri);
 	}
+	//결재함[접수대기] 문서 총 갯수
+	public int TotalRceptWaitCnt(SearchCriteria scri) {
+		return session.selectOne("mapper.approval.TotalRceptWaitCnt",scri);
+	}
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	public void UpdAttachCnt(Map<String,Object>res) {
 		session.update("mapper.approval.UpdAttachCnt",res);
+	}
+	/*
+	 * 문서발송
+	 * DocSndng - 발송부서의 send테이블 insert
+	 * ReceiveDeptIn = 수신부서
+	 * UpdDocPostStatus = 발송부서 문서 발송상태값 수정
+	*/
+	public void DocSend(sendVO send) {
+		session.insert("mapper.approval.DocSend",send);
+	}
+	public void ReceiveDeptIn(sendVO send) {
+		session.insert("mapper.approval.ReceiveDeptIn",send);
+	}
+	public void UpdDocPostStatus(String appr_seq) {
+		session.update("mapper.approval.UpdDocPostStatus",appr_seq);
+	}
+	//상세보기에서의 접수를 해야할 문서인지 체크
+	public sendVO getSendInfo(Map<String,Object> send) {
+		return session.selectOne("mapper.approval.getSendInfo",send);
+	}
+	//상세보기에서의 접수문서인지 체크
+	public sendVO getReceptInfo(String appr_seq) {
+		return session.selectOne("mapper.approval.getReceptInfo",appr_seq);
 	}
 }

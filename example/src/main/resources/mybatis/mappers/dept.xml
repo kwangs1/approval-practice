@@ -60,4 +60,8 @@
 	select * from dept d, member m where d.deptid = m.deptid and m.id = #{id}
 </select>
 
+<select id="SndngDeptInfo" resultType="deptVO" parameterType="String">
+	select * from dept where sendername = #{sendername}
+</select>
+
 </mapper>

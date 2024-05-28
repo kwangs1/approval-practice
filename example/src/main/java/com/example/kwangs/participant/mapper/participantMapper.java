@@ -77,6 +77,10 @@ public class participantMapper{
 	public List<participantVO> getRe_pInfo(String appr_seq){
 		return session.selectList("mapper.participant.getRe_pInfo",appr_seq);
 	}
+	//접수문서에 대한 결재자 정보 가져오기
+	public List<participantVO> getRcept_pInfo(String appr_seq){
+		return session.selectList("mapper.participant.getRcept_pInfo",appr_seq);
+	}
 	
 	//재기안 시 결재자 상태값 업데이트
 	public int ResubmissionFlowStatusUpd(participantVO pp){

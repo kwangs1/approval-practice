@@ -33,8 +33,6 @@ public class participantServiceImpl implements participantService{
 	@Autowired
 	private DocumentNumberGenerator DocumentNumberGenerator;
 	@Autowired
-	private saveXmlTemp saveXmlTemp;
-	@Autowired
 	private folderMapper folderMapper;
 	
 	/*
@@ -446,6 +444,11 @@ public class participantServiceImpl implements participantService{
 	@Override
 	public List<participantVO> getRe_pInfo(String appr_seq){
 		return mapper.getRe_pInfo(appr_seq);
+	}
+	//접수문서에 대한 결재자 정보 가져오기
+	@Override
+	public List<participantVO> getRcept_pInfo(String appr_seq){
+		return mapper.getRcept_pInfo(appr_seq);
 	}
 	//재기안 시 결재자 상태값 업데이트
 	@Override

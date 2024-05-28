@@ -16,6 +16,7 @@ public class Criteria {
 	private String bizunitcd;
 	private String id;
 	private String signerid;
+	private String receiverid;
 	
 	
 	//기본값으로 한 페이지당 보이는 게시물 개수 10개
@@ -127,6 +128,14 @@ public class Criteria {
 		this.signerid = signerid;
 	}
 	
+	public String getReceiverid() {
+		return receiverid;
+	}
+
+	public void setReceiverid(String receiverid) {
+		this.receiverid = receiverid;
+	}
+
 	public void cookieVal(HttpServletRequest request) {
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null) {

@@ -50,4 +50,8 @@ public class deptMapper {
 	public List<deptVO> getSender(String userid){
 		return session.selectList("mapper.dept.getSender",userid);
 	}
+	//문서 발송 시 수신처 부서 정보값 가져오기
+	public List<deptVO>SndngDeptInfo(String sendername){
+		return session.selectList("mapper.dept.SndngDeptInfo",sendername);
+	}
 }

@@ -36,8 +36,15 @@ public class approvalVO{
 	private String senddate;
 	private String orgdraftdeptid;
 	private String poststatus;
+	private String draftsrctype;
 	
 	
+	public String getDraftsrctype() {
+		return draftsrctype;
+	}
+	public void setDraftsrctype(String draftsrctype) {
+		this.draftsrctype = draftsrctype;
+	}
 	public String getPoststatus() {
 		return poststatus;
 	}

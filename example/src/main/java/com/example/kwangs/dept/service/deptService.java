@@ -18,4 +18,6 @@ public interface deptService {
 	List<deptVO>flowUseInfo();
 	//해당 기안자의 부서 발신명의 가져오기
 	List<deptVO> getSender(String userid);
+	//문서 발송 시 수신처 부서 정보값 가져오기
+	List<deptVO>SndngDeptInfo(String sendername);
 }

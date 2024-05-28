@@ -13,6 +13,7 @@ import com.example.kwangs.Temp.UseFolderDat.saveDatTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.file.mapper.fileMapper;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.paging.SearchCriteria;
@@ -91,6 +92,11 @@ public class approvalServiceImpl implements approvalService{
 	public List<approvalVO>SndngWaitDocList(SearchCriteria scri){
 		return mapper.SndngWaitDocList(scri);
 	}
+	//접수대기
+	@Override
+	public List<approvalVO>RceptWaitDocList(SearchCriteria scri){
+		return mapper.RceptWaitDocList(scri);
+	}
 	//문서함
 	@Override
 	public List<approvalVO> docFrame(SearchCriteria scri){
@@ -135,9 +141,42 @@ public class approvalServiceImpl implements approvalService{
 	public int TotalSndngWaitCnt(SearchCriteria scri) {
 		return mapper.TotalSndngWaitCnt(scri);
 	}
+	//결재함[접수대기] 문서 총 갯수
+	@Override
+	public int TotalRceptWaitCnt(SearchCriteria scri) {
+		return mapper.TotalRceptWaitCnt(scri);
+	}
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	@Override
 	public void UpdAttachCnt(Map<String,Object>res) {
 		mapper.UpdAttachCnt(res);
+	}
+	/*
+	 * 문서발송
+	 * DocSndng - 발송부서의 send테이블 insert
+	 * ReceiveDeptIn = 수신부서
+	 * UpdDocPostStatus = 발송부서 문서 발송상태값 수정
+	*/
+	@Override
+	public void DocSend(sendVO send) {
+		mapper.DocSend(send);
+	}
+	@Override
+	public void ReceiveDeptIn(sendVO send) {
+		mapper.ReceiveDeptIn(send);
+	}
+	@Override
+	public void UpdDocPostStatus(String appr_seq) {
+		mapper.UpdDocPostStatus(appr_seq);
+	}
+	//상세보기에서의 접수를 해야할 문서인지 체크
+	@Override
+	public sendVO getSendInfo(Map<String,Object> send) {
+		return mapper.getSendInfo(send);
+	}
+	//상세보기에서의 접수문서인지 체크
+	@Override
+	public sendVO getReceptInfo(String appr_seq) {
+		return mapper.getReceptInfo(appr_seq);
 	}
 }

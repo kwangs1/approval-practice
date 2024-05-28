@@ -2,7 +2,6 @@ package com.example.kwangs.approval;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,11 +21,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.file.fileController;
 import com.example.kwangs.common.file.service.AttachVO;
 import com.example.kwangs.common.file.service.fileService;
 import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
+import com.example.kwangs.dept.service.deptService;
+import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.service.participantService;
@@ -43,9 +46,9 @@ public class approvalController {
 	@Autowired
 	private folderService folderService;
 	@Autowired
-	private fileController fileController;
-	@Autowired
 	private fileService fileService;
+	@Autowired
+	private deptService deptService;
 	
 	//문서작성
 	@GetMapping("/apprWrite")
@@ -215,6 +218,39 @@ public class approvalController {
 		}			
 		return "/approval/SndngWaitDocList";
 	}
+	//접수대기
+	@GetMapping("/RceptWaitDocList")
+	public String RceptWaitDocList(Model model, HttpServletRequest request,SearchCriteria scri,folderVO fd) {
+		if(request.getSession(false).getAttribute("user") == null) {
+			return "redirect:/user/login";
+		}
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setReceiverid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		scri.setSignerid(id);
+			
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		List<approvalVO> list = service.RceptWaitDocList(scri);
+		model.addAttribute("list",list);
+
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
+
+		pageMaker.setTotalCount(service.TotalRceptWaitCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
+					
+		return "/approval/RceptWaitDocList";
+	}
 	//문서함
 	@GetMapping("/docFrame")
 	public void docFrame(Model model, HttpServletRequest request, SearchCriteria scri, folderVO fd, approvalVO ap) {
@@ -248,7 +284,6 @@ public class approvalController {
 	public String apprInfo(String appr_seq, Model model,participantVO pp,HttpServletRequest request) {		
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
-		send(appr_seq);
 		//일반 결재 시 상세보기에서의 결재선 정보 
 		String userId = (String) request.getSession().getAttribute("userId");
 		Map<String,Object> res = new HashMap<>();
@@ -263,6 +298,21 @@ public class approvalController {
 		
 		List<participantVO> pList = serviceP.getRe_pInfo(appr_seq);
 		model.addAttribute("pList",pList);
+		//접수문서 일 시 기안부서 결재선 보이게
+		List<participantVO> DraftflowList = serviceP.getRcept_pInfo(appr_seq);
+		model.addAttribute("DraftflowList",DraftflowList);
+		
+		//상세보기에서의 접수를 해야할 문서인지 체크
+		String deptid = (String) request.getSession().getAttribute("deptId");
+		Map<String,Object> send = new HashMap<>();
+		send.put("appr_seq", appr_seq);
+		send.put("receiverid", deptid);
+		
+		sendVO SendInfo = service.getSendInfo(send);
+		model.addAttribute("SendInfo",SendInfo);
+		//접수문서에 첨부파일이 존재하는경우[기안부서에서 생성된 apprid를 가져오기 위함]
+		//매개변수로는 apprid를 주었지만 쿼리 조건 시 send테이블의 receiptapprid 요걸러
+		model.addAttribute("ReceptInfo",service.getReceptInfo(appr_seq));
 		
 		return "/approval/apprInfo";
 	}
@@ -288,18 +338,51 @@ public class approvalController {
 	public void Resubmission(approvalVO approval) {
 		service.Resubmission(approval);
 	}
-
-	//발송
-	public void send(String appr_seq) {
-		approvalVO ap = service.apprInfo(appr_seq);
-			if(ap.getDocattr().equals("1") && ap.getPoststatus().equals("1")) {
-				if(ap.getReceivers() != null) {
-					String[] receiveDept = ap.getReceivers().split(",");
-					for(String s : receiveDept) {
-						log.info(s);
+	
+	//문서발송
+	@ResponseBody
+	@PostMapping("DocSend")
+	public ResponseEntity<String> DocSndng(String appr_seq, HttpServletRequest request){
+		approvalVO Info = service.apprInfo(appr_seq);
+		String id = (String) request.getSession().getAttribute("userId");
+		String name = (String) request.getSession().getAttribute("userName");
+		
+		//발송 시 수신처에 대한 값 send테이블 insert
+		if(Info.getDocattr().equals("1") && Info.getPoststatus().equals("1") && Info.getReceivers() != null) {
+			sendVO send = new sendVO();
+			send.setAppr_seq(Info.getAppr_seq());
+			send.setSenderid(id);
+			send.setSendername(name);
+			send.setRegisterid(id);
+			send.setSenddeptid(Info.getDrafterdeptid());
+			service.DocSend(send);
+			
+			String[] receiveDept = Info.getReceivers().split(",");
+			for(String sender : receiveDept) {
+				log.info("해당 문서 수신부서 "+sender);
+				//수신처에 대한 부서정보값 가져오기
+				List<deptVO> SndngDeptInfo = deptService.SndngDeptInfo(sender);
+				for(deptVO dp : SndngDeptInfo) {
+					sendVO Receive = new sendVO();
+					Receive.setAppr_seq(Info.getAppr_seq());
+					Receive.setReceiverid(dp.getDeptid());
+					Receive.setReceivername(dp.getSendername());
+					Receive.setSenderid(id);
+					Receive.setSendername(name);
+					Receive.setSenddeptid(Info.getDrafterdeptid());
+					Receive.setReceiptappr_seq(Info.getAppr_seq());
+					Receive.setRegisterid(id);
+					Receive.setParsendid(send.getSendid());
+					if(dp.getDeptid() != null) {
+						Receive.setRecdocstatus("2048");
+					}else {
+						Receive.setRecdocstatus("64");
 					}
+					service.ReceiveDeptIn(Receive);
 				}
 			}
-
+			service.UpdDocPostStatus(appr_seq);
+		}
+		return ResponseEntity.ok("Success Document Sndng!");
 	}
 }

@@ -50,7 +50,7 @@ public class fileController {
 	private static Logger log = LoggerFactory.getLogger(fileController.class.getName());
 	
 	//날짜 별 폴더 생성
-	public String getFolder() {
+	public static String getFolder() {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		Date date = new Date();
 		String str = sdf.format(date);

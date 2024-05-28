@@ -13,13 +13,21 @@ public class sendVO {
 	private String receivername;
 	private String senderid;
 	private String sendername;
-	private String senddeotid;
+	private String senddeptid;
 	private String senddate;
 	private String approvaldate;
-	private String receiptapprid;
+	private String receiptappr_seq;
 	private String registdate;
 	private String registerid;
+	private String recdocstatus;
 	
+	
+	public String getRecdocstatus() {
+		return recdocstatus;
+	}
+	public void setRecdocstatus(String recdocstatus) {
+		this.recdocstatus = recdocstatus;
+	}
 	public String getSendid() {
 		return sendid;
 	}
@@ -68,11 +76,11 @@ public class sendVO {
 	public void setSendername(String sendername) {
 		this.sendername = sendername;
 	}
-	public String getSenddeotid() {
-		return senddeotid;
+	public String getSenddeptid() {
+		return senddeptid;
 	}
-	public void setSenddeotid(String senddeotid) {
-		this.senddeotid = senddeotid;
+	public void setSenddeptid(String senddeptid) {
+		this.senddeptid = senddeptid;
 	}
 	public String getSenddate() {
 		return senddate;
@@ -86,11 +94,11 @@ public class sendVO {
 	public void setApprovaldate(String approvaldate) {
 		this.approvaldate = approvaldate;
 	}
-	public String getReceiptapprid() {
-		return receiptapprid;
+	public String getReceiptappr_seq() {
+		return receiptappr_seq;
 	}
-	public void setReceiptapprid(String receiptapprid) {
-		this.receiptapprid = receiptapprid;
+	public void setReceiptappr_seq(String receiptappr_seq) {
+		this.receiptappr_seq = receiptappr_seq;
 	}
 	public String getRegistdate() {
 		return registdate;

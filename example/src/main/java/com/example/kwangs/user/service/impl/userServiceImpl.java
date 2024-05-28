@@ -38,6 +38,7 @@ public class userServiceImpl implements userService{
 	}
 	
 	public void JoinUseFolder(userVO user) {
+		//결재
 		folderVO in1000 = new folderVO();
 		in1000.setFldrname("결재");
 		in1000.setOwnertype("2");
@@ -100,6 +101,7 @@ public class userServiceImpl implements userService{
 		in6022.setEndyear("9999");
 		fMapper.subFolderAdd(in6022);
 		
+		//발송
 		folderVO in4000 = new folderVO();
 		in4000.setFldrname("발송");
 		in4000.setOwnertype("2");
@@ -135,6 +137,30 @@ public class userServiceImpl implements userService{
 		in4050.setEndyear("9999");
 		in4050.setParfldrname(in4000.getFldrname());
 		fMapper.subFolderAdd(in4050);
+		
+		//접수
+		folderVO in7010 = new folderVO();
+		in7010.setFldrname("접수");
+		in7010.setOwnertype("2");
+		in7010.setOwnerid(user.getId());
+		in7010.setAppltype("2");
+		in7010.setApplid(7010);
+		in7010.setYear("0000");
+		in7010.setEndyear("9999");
+		fMapper.FolderAdd(in7010);
+		
+		folderVO in5010 = new folderVO();
+		in5010.setFldrname("접수대기");
+		in5010.setParfldrid(in7010.getFldrid());
+		in5010.setFldrdepth(in7010.getFldrdepth()+1);
+		in5010.setOwnertype("2");
+		in5010.setOwnerid(user.getId());
+		in5010.setAppltype("2");
+		in5010.setApplid(5010);
+		in5010.setYear("0000");
+		in5010.setEndyear("9999");
+		in5010.setParfldrname(in7010.getFldrname());
+		fMapper.subFolderAdd(in5010);
 	}
 	
 }

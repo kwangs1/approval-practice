@@ -97,4 +97,9 @@ public class deptServiceImpl implements deptService{
 	public List<deptVO> getSender(String userid){
 		return mapper.getSender(userid);
 	}
+	//문서 발송 시 수신처 부서 정보값 가져오기
+	@Override
+	public List<deptVO>SndngDeptInfo(String sendername){
+		return mapper.SndngDeptInfo(sendername);
+	}
 }

@@ -31,6 +31,15 @@ li{list-style:none; padding-left:0px;}
 	<p>결재 중..</p>
 </div>
 
+<div class="loading" id="loading2"style="display:none">
+	<div class="spinner">
+		<span></span>
+		<span></span>
+		<span></span>
+	</div>
+	<p>발송 중..</p>
+</div>
+
 <div class="post-container">
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
@@ -60,19 +69,35 @@ li{list-style:none; padding-left:0px;}
 	</div>
 	<!-- 결재선 영역 -->
 	<div class="FlowContainer">
-		<c:forEach var="pList" items="${pList}"> 
-			<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
-			<input type="hidden" id="signerid" value="${pList.signerid}" />
-			<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
-			<div class="FlowChart">
-				<span class="position" id="pos">${pList.pos}</span>
-				<input type="text" class="signername" id="signername" value="${pList.signername}" disabled/>		
-			</div>
-		</c:forEach>
+		<c:if test="${info.draftsrctype ne '1' }">
+			<c:forEach var="pList" items="${pList}"> 
+				<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
+				<input type="hidden" id="signerid" value="${pList.signerid}" />
+				<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
+				<div class="FlowChart">
+					<span class="position" id="pos">${pList.pos}</span>
+					<input type="text" class="signername" id="signername" value="${pList.signername}" disabled/>		
+				</div>
+			</c:forEach>
+		</c:if>
+		<c:if test="${info.draftsrctype eq '1' }">
+			<c:forEach var="pList" items="${DraftflowList}"> 
+				<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
+				<input type="hidden" id="signerid" value="${pList.signerid}" />
+				<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
+				<div class="FlowChart">
+					<span class="position" id="pos">${pList.pos}</span>
+					<input type="text" class="signername" id="signername" value="${pList.signername}" disabled/>		
+				</div>
+			</c:forEach>
+		</c:if>
 	</div>
 	<br>
   <c:if test="${info.status == 1 && pInfo.approvaltype == 4}">
   	<button onclick="FlowAppr()" class="button" id="btn">결재</button>  
+  </c:if>
+  <c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
+  	<button onclick="DocSend()" class="button" id="btn">발송</button> 
   </c:if>
   <button onclick="window.close()" class="button">닫기</button>
 </div>
@@ -120,6 +145,28 @@ function FlowAppr(){
 function AttachModifyForm(){
 	url="<c:url value='/AttachModifyForm'/>"+"?appr_seq="+appr_seq;
 	window.open(url,"attachModify",'width=680px, height=300px');
+}
+
+function DocSend(){
+	var loading = document.getElementById('loading2')
+	loading.style.display = 'flex';	
+	$.ajax({
+		type:'post',
+		url: '<c:url value="/approval/DocSend"/>',
+		data: {appr_seq: appr_seq},
+		success: function(){
+			setTimeout(function(){
+				alert("발송처리 되었습니다.");
+				window.close();
+				window.opener.location.reload();
+			},3000)
+		},
+		error: function(xhr, status){
+			alert("발송처리 도중 오류가 발생하였습니다.");
+			console.log(xhr);
+			console.log(status);
+		}
+	});
 }
 </script>
 </body>
