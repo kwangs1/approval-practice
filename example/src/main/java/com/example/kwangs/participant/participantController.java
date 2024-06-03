@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
+import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
 
@@ -42,8 +43,15 @@ public class participantController {
 	
 	//문서 기안 시 결재선 지정
 	@GetMapping("/ParticipantWrite")
-	public void ParticipantWrite(Model model,String appr_seq) {
+	public void ParticipantWrite(Model model,String appr_seq,HttpServletRequest request) {
 		model.addAttribute("info",approvalService.apprInfo(appr_seq));
+		
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		Map<String,Object> send = new HashMap<>();
+		send.put("appr_seq", appr_seq);
+		send.put("receiverid", deptid);
+		sendVO sendInfo = approvalService.getSendInfo(send);
+		model.addAttribute("sendInfo",sendInfo);
 	}
 
 	@ResponseBody

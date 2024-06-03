@@ -21,7 +21,7 @@ li{list-style:none; padding-left:0px;}
 .FlowChart{display: flex; flex-direction: column; margin-right: 10px;}
 .FlowContainer{display: flex;flex-wrap: wrap;}
 </style>
-<body onload="getAttachList()">
+<body onload="init()">
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
 		<span></span>
@@ -51,7 +51,7 @@ li{list-style:none; padding-left:0px;}
   <br>
   	<div>
 		<c:choose>
-			<c:when test="${info.status != 256 && pInfo.signerid eq user.id}">
+			<c:when test="${info.status != 256 && pInfo.signerid eq user.id && info.draftsrctype != '1'}">
 			<div>
 				<label for="ModifyForm" class="btn-upload">업로드 파일수정</label>
 				<input type="button" id="ModifyForm" onClick="AttachModifyForm()" style="display:none;"/>
@@ -99,6 +99,9 @@ li{list-style:none; padding-left:0px;}
   <c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
   	<button onclick="DocSend()" class="button" id="btn">발송</button> 
   </c:if>
+  <c:if test="${info.status == 256 && SendInfo.receiverid eq deptId}">
+		<button onclick="RceptForm()" class="button" >접수</button>
+  </c:if>
   <button onclick="window.close()" class="button">닫기</button>
 </div>
 
@@ -112,6 +115,8 @@ var approvalstatus = '<c:out value="${pInfo.approvalstatus}"/>';
 var signerid = '<c:out value="${userId}"/>';
 var drafterid = '<c:out value="${info.drafterid}"/>';
 var regdate = '<c:out value="${info.regdate}"/>';
+var draftsrctype = '<c:out value="${info.draftsrctype}"/>';
+var RECEIPTAPPR_SEQ = '<c:out value="${ReceptInfo.appr_seq}"/>';
 
 var param = {	
 	appr_seq : appr_seq,
@@ -167,6 +172,19 @@ function DocSend(){
 			console.log(status);
 		}
 	});
+}
+//접수 폼
+function RceptForm(){
+	url = '<c:url value="/approval/RceptDocForm"/>'+'?appr_seq='+appr_seq;
+	window.location.href = url;
+}
+//첨부파일 부분 접수문서와 기안문서가 출력되는부분 다르게
+function init(){
+	if(draftsrctype != 1){
+		getAttachList();
+	}else{
+		getRceptAttachList();
+	}
 }
 </script>
 </body>

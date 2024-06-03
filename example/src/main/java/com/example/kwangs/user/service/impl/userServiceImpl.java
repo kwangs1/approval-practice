@@ -1,6 +1,8 @@
 package com.example.kwangs.user.service.impl;
 
 
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +37,11 @@ public class userServiceImpl implements userService{
 	public userVO login(userVO user) {
 		log.debug("login success={}",user);
 		return mapper.login(user);
+	}
+	
+	@Override
+	public List<userVO> DeptUseInfo(String deptid){
+		return mapper.DeptUseInfo(deptid);
 	}
 	
 	public void JoinUseFolder(userVO user) {
@@ -100,6 +107,19 @@ public class userServiceImpl implements userService{
 		in6022.setYear("0000");
 		in6022.setEndyear("9999");
 		fMapper.subFolderAdd(in6022);
+		
+		folderVO in6050 = new folderVO();
+		in6050.setFldrname("접수한문서");
+		in6050.setParfldrid(in1000.getFldrid());
+		in6050.setParfldrname(in1000.getFldrname());
+		in6050.setFldrdepth(in1000.getFldrdepth()+1);
+		in6050.setOwnertype("2");
+		in6050.setOwnerid(user.getId());
+		in6050.setAppltype("2");
+		in6050.setApplid(6050);
+		in6050.setYear("0000");
+		in6050.setEndyear("9999");
+		fMapper.subFolderAdd(in6050);
 		
 		//발송
 		folderVO in4000 = new folderVO();

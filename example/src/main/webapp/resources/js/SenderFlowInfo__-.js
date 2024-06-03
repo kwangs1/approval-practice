@@ -64,7 +64,11 @@ function updateSelectedUsersUI() {
        
     	//오른쪽 유저화면에서의 위아래 이동버튼 및 삭제버튼
        var userDiv = $('<div class="userDiv"></div>');
-       userDiv.append('<p>' + user.name + ' [' + user.pos + '] ' + getStatusDropdownHTML(i, status) + '</p>');
+       if(SendID !== ''){
+           userDiv.append('<p>' + user.name + ' [' + user.pos + '] ' + getStatusDropdownHTML2(i, status) + '</p>');	   
+       }else{
+           userDiv.append('<p>' + user.name + ' [' + user.pos + '] ' + getStatusDropdownHTML(i, status) + '</p>');   
+       }
 
        // 위로 이동 버튼 생성
        if (i > 0) {
@@ -129,6 +133,15 @@ function getStatusDropdownHTML(index, defaultStatus) {
         '</select>';    	   	
     }
 
+    return dropdownHTML;
+}
+
+function getStatusDropdownHTML2(index, defaultStatus) {
+    // status 선택을 위한 dropdown의 HTML을 반환
+    var dropdownHTML = '<select name="status_' + index + '">' +
+        '<option value="4224" ' + (defaultStatus === 4224 ? 'selected' : '') + '>확인</option>' +
+        '<option value="4112" ' + (defaultStatus === 4112 ? 'selected' : '') + '>참조</option>' +
+        '</select>';    	
     return dropdownHTML;
 }
 

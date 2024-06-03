@@ -253,6 +253,18 @@ public class participantServiceImpl implements participantService{
 				fm2_r.setRegistdate(ap.getApprovaldate());
 				fm2_r.setRegisterid(ap.getDrafterid());
 				folderMapper.DocFldrmbr2Add(fm2_r);
+				if(ap.getStatus() == 256 && ap.getReceivers() != null) {
+					log.info("너는 발송 문서구나?");
+					folderVO ApprFldrId = folderMapper.ApprFldrmbr_4030(ap.getDrafterid());
+					log.info(ApprFldrId.getApplid()+" __ "+ApprFldrId.getFldrid());
+					//수신처가 있는 문서일 시 발송대기 폴더 생성
+					fldrmbrVO fm = new fldrmbrVO();
+					fm.setFldrid(ApprFldrId.getFldrid());
+					fm.setFldrmbrid(ap.getAppr_seq());
+					fm.setRegisterid(ap.getDrafterid());
+					folderMapper.ApprFldrmbrInsert(fm);
+					log.info("후후 발송대기 넣었소.,");
+				}
 			}
 		}
 	}	
@@ -320,6 +332,10 @@ public class participantServiceImpl implements participantService{
 				pVO.setStatusname("검토");
 			}else if(pVO.getStatus().equals("3000")) {
 				pVO.setStatusname("협조");
+			}else if(pVO.getStatus().equals("4224")) {
+				pVO.setStatusname("확인");
+			}else if(pVO.getStatus().equals("4112")) {
+				pVO.setStatusname("참조");
 			}else {
 				pVO.setStatusname("결재");
 			}
@@ -360,15 +376,20 @@ public class participantServiceImpl implements participantService{
 			//체크
 			int checkAppr_6021 = folderMapper.checkFldrmbr_6021(check6021);
 			int checkAppr_6022 = folderMapper.checkFldrmbr_6022(check6022);
-			if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
-				//결재시 결재한문서 폴더 등록
-				fldrmbrVO fm_6022 = new fldrmbrVO();
-				fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
-				fm_6022.setFldrmbrid(pp.getAppr_seq());
-				fm_6022.setRegisterid(pp.getSignerid());
-				folderMapper.ApprFldrmbrInsert(fm_6022);
-			}else if(checkAppr_6022 > 0) {
-				log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+			//접수문서 인지 아닌지
+			approvalVO ap = approvalMapper.apprInfo(pp.getAppr_seq());
+			if(ap.getSendid() == null) {
+				log.info("접수 문서 아니네여..");
+				if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
+					//결재시 결재한문서 폴더 등록
+					fldrmbrVO fm_6022 = new fldrmbrVO();
+					fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
+					fm_6022.setFldrmbrid(pp.getAppr_seq());
+					fm_6022.setRegisterid(pp.getSignerid());
+					folderMapper.ApprFldrmbrInsert(fm_6022);
+				}else if(checkAppr_6022 > 0) {
+					log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+				}				
 			}
 			//최종 결재자 결재 시 해당 문서에 대한 결재멤버 테이블에서의 모든 결재자 결재진행,결재대기 삭제
 			DeleteSignerApprFldrmbr(pp);	
@@ -417,15 +438,20 @@ public class participantServiceImpl implements participantService{
 		//체크
 		int checkAppr_6021 = folderMapper.checkFldrmbr_6021(check6021);
 		int checkAppr_6022 = folderMapper.checkFldrmbr_6022(check6022);
-		if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
-			//결재시 결재한문서 폴더 등록
-			fldrmbrVO fm_6022 = new fldrmbrVO();
-			fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
-			fm_6022.setFldrmbrid(participant.getAppr_seq());
-			fm_6022.setRegisterid(participant.getSignerid());
-			folderMapper.ApprFldrmbrInsert(fm_6022);
-		}else if(checkAppr_6022 > 0) {
-			log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+		//접수문서 인지 아닌지
+		approvalVO ap = approvalMapper.apprInfo(participant.getAppr_seq());
+		if(ap.getSendid() == null) {
+			log.info("접수 문서 아니네여..");
+			if(checkAppr_6021 == 0 && checkAppr_6022 == 0) {
+				//결재시 결재한문서 폴더 등록
+				fldrmbrVO fm_6022 = new fldrmbrVO();
+				fm_6022.setFldrid(ApprFldrmbr_6022.getFldrid());
+				fm_6022.setFldrmbrid(participant.getAppr_seq());
+				fm_6022.setRegisterid(participant.getSignerid());
+				folderMapper.ApprFldrmbrInsert(fm_6022);
+			}else if(checkAppr_6022 > 0) {
+				log.info("해당 사용자는 이미 이전에 결재를 하였기에 폴더를 생성하지 않습니다.");
+			}			
 		}
 		//최종 결재자 결재 시 해당 문서에 대한 결재멤버 테이블에서의 모든 결재자 결재진행,결재대기 삭제
 		DeleteSignerApprFldrmbr(participant);	
@@ -478,6 +504,10 @@ public class participantServiceImpl implements participantService{
 				pvo.setStatusname("검토");
 			}else if(pvo.getStatus().equals("3000")) {
 				pvo.setStatusname("협조");
+			}else if(pvo.getStatus().equals("4224")) {
+				pvo.setStatusname("확인");
+			}else if(pvo.getStatus().equals("4112")) {
+				pvo.setStatusname("참조");
 			}else {
 				pvo.setStatusname("결재");
 			}

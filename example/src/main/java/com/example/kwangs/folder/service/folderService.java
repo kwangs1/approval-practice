@@ -1,6 +1,7 @@
 package com.example.kwangs.folder.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface folderService {
 	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
@@ -19,4 +20,16 @@ public interface folderService {
 	void folderAddAndApprF(folderVO fd, String userid) throws Exception;
 	//결재함 사이드메뉴
 	List<folderVO>ApprfldrSidebar(String ownerid);
+	//기안자 발송대기 폴더 정보가져오기
+	folderVO ApprFldrmbr_4030(String ownerid);
+	//발송대기 폴더 삭제
+	void deleteApprFldrmbr_4030(Map<String,Object> sendData_4030);
+	//결재함 폴더 테이블 등록
+	void ApprFldrmbrInsert(fldrmbrVO fm);
+	//접수대기 폴더정보가져오기
+	folderVO ApprFldrmbr_5010(String ownerid);
+	//접수대기폴더 삭제
+	void deleteApprFldrmbr_5010(Map<String,Object> sendData_5010);
+	//접수한 폴더정보가져오기
+	folderVO ApprFldrmbr_6050(String ownerid);
 }

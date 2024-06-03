@@ -70,7 +70,6 @@ ul{padding-left:0px;}
 		<ul></ul>
 	</div>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="${path}/resources/js/ReceiveFlowInfo_.js"></script>
 <script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
 <script>
 var appr_seq = '<c:out value="${info.appr_seq}"/>';

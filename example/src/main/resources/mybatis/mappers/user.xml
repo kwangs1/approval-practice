@@ -32,4 +32,8 @@ select * from member where id = #{id} and pw = #{pw}
 <select id="folderUseInfo" resultType="userVO" parameterType="String">
 	select id,name from member where id = #{id}
 </select>
+
+<select id="DeptUseInfo" resultType="userVO" parameterType="String">
+	select * from member u, dept d where u.deptid = d.deptid and u.deptid = #{deptid}
+</select>
 </mapper>

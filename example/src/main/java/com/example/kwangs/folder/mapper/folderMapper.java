@@ -89,6 +89,18 @@ public class folderMapper {
 	public folderVO ApprFldrmbr_6022(String ownerid) {
 		return session.selectOne("folder.ApprFldrmbr_6022",ownerid);
 	}
+	//기안자의 발송대기 폴더 정보 가져오기
+	public folderVO ApprFldrmbr_4030(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_4030",ownerid);
+	}
+	// 접수대기 폴더 정보 가져오기
+	public folderVO ApprFldrmbr_5010(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_5010",ownerid);
+	}
+	//접수한 폴더정보가져오기
+	public folderVO ApprFldrmbr_6050(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_6050",ownerid);
+	}
 	//기안 시 기안자의 결재진행&기안한문서 폴더에 관한 결재멤버테이블 등록
 	public void ApprFldrmbrInsert(fldrmbrVO fm) {
 		session.insert("folder.ApprFldrmbrInsert",fm);
@@ -99,6 +111,12 @@ public class folderMapper {
 	}
 	public void deleteApprFldrmbr_2020(Map<String,Object> sendData_2020) {
 		session.delete("folder.deleteApprFldrmbr_2020",sendData_2020);
+	}
+	public void deleteApprFldrmbr_4030(Map<String,Object> sendData_4030) {
+		session.delete("folder.deleteApprFldrmbr_4030",sendData_4030);
+	}
+	public void deleteApprFldrmbr_5010(Map<String,Object> sendData_5010) {
+		session.delete("folder.deleteApprFldrmbr_5010",sendData_5010);
 	}
 	//해당 문서의 결재자들에 대한 결재대기,결재진행 폴더 중복 체크
 	public int checkFldrmbr_2010(Map<String,Object> check2010) {
@@ -114,4 +132,5 @@ public class folderMapper {
 	public int checkFldrmbr_6022(Map<String,Object>check6022) {
 		return session.selectOne("folder.checkFldrmbr_6022",check6022);
 	}
+
 }

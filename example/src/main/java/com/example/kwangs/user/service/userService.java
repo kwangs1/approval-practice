@@ -1,5 +1,7 @@
 package com.example.kwangs.user.service;
 
+import java.util.List;
+
 public interface userService {
 
 	void write(userVO user);
@@ -8,4 +10,5 @@ public interface userService {
 
 	userVO login(userVO user);
 
+	List<userVO> DeptUseInfo(String deptid);
 }

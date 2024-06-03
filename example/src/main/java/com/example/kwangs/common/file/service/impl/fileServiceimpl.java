@@ -25,6 +25,11 @@ public class fileServiceimpl implements fileService{
 	public List<AttachVO> getAttachList(String appr_seq){
 		return mapper.getAttachList(appr_seq);
 	}
+	//첨부파일 리스트[접수]
+	@Override
+	public List<AttachVO> getRceptAttachList(String appr_seq){
+		return mapper.getRceptAttachList(appr_seq);
+	}
 	//첨부파일 수정폼
 	@Override
 	public List<AttachVO> AttachModifyForm(String appr_seq){

@@ -23,7 +23,7 @@
     	<p class="disable">${item.fldrname}</p>
     </li>  		
   	</c:when>
-  	<c:when test="${item.applid != 6022 && item.applid != 6021 }">
+  	<c:when test="${item.applid != 6022 && item.applid != 6021 && item.applid != 6050}">
   	 <li>     
       <a href="#" data-applid ="${item.applid}"  
       onClick ="loadApprFrame('${user.deptid}','${user.id}','${item.ownerid}','${item.fldrid}','${item.fldrname}','${item.applid}')">

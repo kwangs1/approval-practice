@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.service.folderVO;
@@ -24,6 +25,8 @@ public class deptController {
 	private deptService service;
 	@Autowired
 	private folderServiceimpl folderService;
+	@Autowired
+	private approvalService approvalService;
 	
 	//목록
 	@GetMapping("/list")
@@ -87,5 +90,27 @@ public class deptController {
 		model.addAttribute("deptList",service.joinUseDept());
 		
 		return "dept/flowUseInfo";
+	}
+	
+	//결재선 정보 가져올 부서 및 유저목록 & 기록물철 정보[접수]
+	@GetMapping("/RceptflowUseInfo")
+	public String RceptflowUseInfo(Model model, HttpServletRequest request,String appr_seq) {
+		String id = (String) request.getSession().getAttribute("userId");
+		model.addAttribute("user",id);
+		
+		List<deptVO>flowUseInfo = service.flowUseInfo();
+		model.addAttribute("flowUseInfo",flowUseInfo);
+		
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		List<folderVO> DeptFolderList = folderService.DeptFolderList(deptid);
+		model.addAttribute("list",DeptFolderList);
+		
+		List<deptVO> getSender = service.getSender(id);
+		model.addAttribute("sender",getSender);
+		model.addAttribute("deptList",service.joinUseDept());
+		
+		model.addAttribute("DocInfo",approvalService.apprInfo(appr_seq));
+		
+		return "dept/RceptflowUseInfo";
 	}
 }

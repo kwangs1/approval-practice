@@ -109,13 +109,18 @@
 <select id="SndngWaitDocList" resultType="approvalVO" parameterType="String">
 	select t.*
 	    from(
-	        select appr_seq, title, drafterid, draftername, approvaldate,receivers,
+	        select a.appr_seq, a.title, a.drafterid, a.draftername, a.approvaldate,a.receivers,
 	            row_number() over(order by appr_seq desc)as rnum
-	           from approval
-	        where status =256
-	        and docattr = '1'
-			and poststatus = '1'
-	       	and drafterdeptid = #{drafterdeptid}
+	           from approval a, fldrmbr fm, folder f
+	        where a.status =256
+	        and a.docattr = '1'
+			and a.poststatus = '1'
+	       	and a.drafterdeptid = #{drafterdeptid}
+	       	and a.appr_seq = fm.fldrmbrid
+            and f.fldrid = fm.fldrid
+            and fm.fldrid =#{fldrid}
+            and f.applid = 4030
+            and f.ownerid =#{ownerid}
 			<include refid="search"></include>
 		)t	    
 	where rnum between #{rowStart} and #{rowEnd}
@@ -126,13 +131,17 @@
 	    from(
 	        select a.appr_seq, a.title, a.drafterid, a.draftername, a.approvaldate, a.receivers, a.sendername, a.senddate,
 	            row_number() over(order by a.appr_seq desc)as rnum
-	           from approval a, send s
+	           from approval a, send s, fldrmbr fm, folder f
 	        where a.appr_seq = s.appr_seq
-	        and a.status =256
-	        and a.docattr = '1'
-			and a.poststatus = '2'
-	       	and s.receiverid = #{receiverid}
-	       	and s.recdocstatus = '2048'
+            and a.status = 256
+            and f.applid = 5010
+            and f.ownerid = #{ownerid}
+            and f.ownertype = '2'
+            and fm.fldrid = f.fldrid
+            and s.sendid = fm.fldrmbrid
+            and s.appr_seq = a.appr_seq
+            and s.receiverid = #{receiverid}
+            and s.recdocstatus = '2048'
 			<include refid="search"></include>
 		)t	    
 	where rnum between #{rowStart} and #{rowEnd}
@@ -263,34 +272,36 @@
 
 <!-- 결재함[결재대기,진행] 문서 총 갯수 -->
 <select id="totalApprCnt" resultType="int">
-		select count(*)
+	select count(*)
    		from approval a, folder f, fldrmbr fm
-    	where a.appr_seq = fm.fldrmbrid
-    	and f.fldrid = fm.fldrid
-    	and f.ownerid = fm.registerid
-    	and f.fldrid = #{fldrid}
-		<include refid="search"></include>	
+    where a.appr_seq = fm.fldrmbrid
+    and f.fldrid = fm.fldrid
+    and f.ownerid = fm.registerid
+    and f.fldrid = #{fldrid}
+	<include refid="search"></include>	
 </select>
 <!-- 결재함[발송대기] 문서 총 갯수 -->
 <select id="TotalSndngWaitCnt" resultType="int">
 	select count(*)
-	from approval
-   	where status = 256
-   	and docattr ='1'
-   	and poststatus = '1'
-   	and drafterdeptid = #{drafterdeptid}
+		from approval a, folder f, fldrmbr fm
+   	where f.applid = #{applid}
+   	and f.ownerid = #{ownerid}
+   	and f.ownertype = '2'
+   	and fm.fldrid = f.fldrid
+   	and fm.fldrmbrid = a.appr_seq
 	<include refid="search"></include>	
 </select>
 <!-- 결재함[접수대기] 문서 총 갯수 -->
 <select id="TotalRceptWaitCnt" resultType="int">
 	select count(*)
-	from approval a, send s
-   	where a.appr_seq = s.appr_seq
-   	and a.status = 256
-   	and a.docattr ='1'
-   	and a.poststatus = '2'
-   	and s.recdocstatus = '2048'
-   	and s.receiverid = #{receiverid}
+		from approval a, send s, folder f, fldrmbr fm
+   	where f.applid = #{applid}
+   	and f.ownerid = #{ownerid}
+   	and f.ownertype = '2'
+   	and fm.fldrid = f.fldrid
+   	and s.sendid = fm.fldrmbrid
+   	and s.appr_seq = a.appr_seq
+	and s.recdocstatus = '2048'
 	<include refid="search"></include>	
 </select>
 <!-- 첨부파일 갯수 업데이트 -->
@@ -334,7 +345,37 @@
 		select * from send where appr_seq = #{appr_seq} and receiverid = #{receiverid}
 	</select>
 	<!-- 상세보기에서의 접수문서인지 체크 -->
-	<select id="getReceptInfo" resultType="com.example.kwangs.approval.service.sendVO">
-		select * from send where receiptappr_seq = #{receiptappr_seq} and receiverid = #{receiverid}
+	<select id="getReceptInfo" resultType="com.example.kwangs.approval.service.sendVO" parameterType="java.util.Map">
+		select s.appr_seq
+			from send s, approval a 
+		where s.receiverid = #{receiverid}
+		and s.receiptappr_seq = a.appr_seq
+		and a.appr_seq =#{appr_seq}
 	</select>
+	<!-- 접수대기 -> 접수 시 기존 apprid 가져오는 부분 -->
+	<select id="getSendOrgApprId" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
+		select * from send where receiptappr_seq = #{receiptappr_seq}
+	</select>
+	<!-- 발송 시 fldrmbr테이블에 fldrmbrid는 각 부서에 체결된 sendid로 기입 -->
+	<select id="getSendId" resultType="com.example.kwangs.approval.service.sendVO" parameterType="java.util.Map">
+		select * from send where appr_seq = #{appr_seq} and receiverid = #{receiverid}
+	</select>
+	<!-- 접수 -->
+	<insert id="RceptDocSang" parameterType="approvalVO" >
+	<selectKey keyProperty="appr_seq" resultType="String" order="BEFORE">
+		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval  from dual
+	</selectKey>
+	insert into approval
+	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
+		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
+		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype})
+	</insert>
+	<!-- 접수 완료 시 해당 문서의 접수테이블 업데이트 -->
+	<update id="updSendData">
+		update send s
+		set s.recdocstatus = '2', s.sendtype ='2',
+			s.receiptappr_seq = (select a.appr_seq from approval a  where a.sendid = s.sendid)
+		where s.sendid = #{sendid}
+	</update>
 </mapper>

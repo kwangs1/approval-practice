@@ -144,7 +144,23 @@ public class approvalMapper{
 		return session.selectOne("mapper.approval.getSendInfo",send);
 	}
 	//상세보기에서의 접수문서인지 체크
-	public sendVO getReceptInfo(String appr_seq) {
-		return session.selectOne("mapper.approval.getReceptInfo",appr_seq);
+	public sendVO getReceptInfo(Map<String,Object> send) {
+		return session.selectOne("mapper.approval.getReceptInfo",send);
+	}
+	//접수대기 -> 접수 시 기존 apprid 가져오는 부분
+	public sendVO getSendOrgApprId(String appr_seq) {
+		return session.selectOne("mapper.approval.getSendOrgApprId",appr_seq);
+	}
+	//발송 시 fldrmbr테이블에 fldrmbrid는 각 부서에 체결된 sendid로 기입
+	public sendVO getSendId(Map<String,Object> res) {
+		return session.selectOne("mapper.approval.getSendId",res);
+	}
+	//접수대기 문서 접수하기	
+	public void RceptDocSang(approvalVO ap) {
+		session.insert("mapper.approval.RceptDocSang",ap);
+	}
+	//접수 이후 해당문서에대한 send테이블에서의 값 업데이트
+	public void updSendData(String sendid) {
+		session.update("mapper.approval.updSendData",sendid);
 	}
 }

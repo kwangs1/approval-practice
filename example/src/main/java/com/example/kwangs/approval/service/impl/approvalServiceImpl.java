@@ -176,7 +176,32 @@ public class approvalServiceImpl implements approvalService{
 	}
 	//상세보기에서의 접수문서인지 체크
 	@Override
-	public sendVO getReceptInfo(String appr_seq) {
-		return mapper.getReceptInfo(appr_seq);
+	public sendVO getReceptInfo(Map<String,Object> send) {
+		return mapper.getReceptInfo(send);
+	}
+	//접수대기 -> 접수 시 기존 apprid 가져오는 부분
+	@Override
+	public sendVO getSendOrgApprId(String appr_seq) {
+		return mapper.getSendOrgApprId(appr_seq);
+	}
+	//발송 시 fldrmbr테이블에 fldrmbrid는 각 부서에 체결된 sendid로 기입
+	@Override
+	public sendVO getSendId(Map<String,Object> res) {
+		return mapper.getSendId(res);
+	}
+	//접수대기 문서 접수하기
+	public void RceptDocSang(approvalVO ap) throws IOException {
+		String abbr = ap.getDocregno();
+		ap.setDocregno(abbr+"-@N");
+		ap.setDraftsrctype("1");
+		log.info(".....>>> "+ap.getDraftsrctype());
+		mapper.RceptDocSang(ap);
+		
+		String sendid = ap.getSendid();
+		log.info("SERVICE-- SEND TABLE SENDID >>>>> "+sendid);
+		mapper.updSendData(sendid);
+		
+
+		saveDatTemp.saveDataToDatFile(ap.getFolderid(), ap.getFoldername(), ap.getBizunitcd(),ap.getDrafterid());
 	}
 }

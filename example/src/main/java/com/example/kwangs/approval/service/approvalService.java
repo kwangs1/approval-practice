@@ -50,6 +50,10 @@ public interface approvalService {
 	//상세보기에서의 접수를 해야할 문서인지 체크
 	sendVO getSendInfo(Map<String,Object> send);
 	//상세보기에서의 접수문서인지 체크
-	sendVO getReceptInfo(String appr_seq);
-	
+	sendVO getReceptInfo(Map<String,Object> send);
+	//문서 접수시 기안부서 문서ID및 발송ID 가져오기
+	sendVO getSendOrgApprId(String appr_seq);
+	sendVO getSendId(Map<String,Object> res);
+	//발송대기 문서 접수하기
+	void RceptDocSang(approvalVO ap) throws IOException;
 }

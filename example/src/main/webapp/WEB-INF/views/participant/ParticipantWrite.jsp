@@ -16,14 +16,17 @@ select{display:none;}
 </style>
 </head>
 <body>
-	<button onclick="pop()">결재정보</button>
-	<c:if test="${info.status != 4096 }">	
-		<button onClick="Appr_Btn();">상신</button>
+	<button onclick="pop()" class="button">결재정보</button>
+	<c:if test="${info.status != 4096 || info.apprid == ''}">	
+		<button onClick="Appr_Btn();" class="button">상신</button>
 	</c:if>
 	<c:if test="${info.status == 4096 }">
   		<button onclick="Resubmission()" class="button">재기안</button>
   	</c:if>
-	<button onClick="window.close()">닫기</button>
+  	<c:if test="${sendInfo.receiverid eq user.deptid}">
+		<button onclick="RceptDocSanc()" class="button" >접수</button>
+	</c:if>
+	<button onClick="window.close()" class="button">닫기</button>
 	<br><br>
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
@@ -31,8 +34,15 @@ select{display:none;}
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="${path}/resources/js/ReceiveFlowInfo_.js"></script>
 <script>
+var sendid = '<c:out value="${info.sendid}"/>';
+var appr_seq = '<c:out value="${info.appr_seq}"/>';
 function pop() {
-	window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");
+	if(sendid == ''){
+		window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");	
+	}else{	
+		url = "${path}/dept/RceptflowUseInfo?appr_seq="+appr_seq;
+		window.open(url,"pop","width=768, height=400");		
+	}
 }
 
 function participant() {

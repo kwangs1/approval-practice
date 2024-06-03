@@ -126,6 +126,18 @@
 <select id="ApprFldrmbr_6022" resultMap="folder" parameterType="String">
 	select * from folder where ownerid = #{ownerid} and applid = 6022
 </select>
+<!-- 기안자의 발송대기 폴더 정보 가져오기 -->
+<select id="ApprFldrmbr_4030" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 4030
+</select>
+<!-- 접수대기 폴더 정보 가져오기 -->
+<select id="ApprFldrmbr_5010" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 5010
+</select>
+<!-- 접수한 폴더 정보 가져오기 -->
+<select id="ApprFldrmbr_6050" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 6050
+</select>
 <!-- 기안 시 기안자의 결재진행&기안한 문서 결재멤버 폴더테이블 등록 -->
 <insert id="ApprFldrmbrInsert" parameterType="com.example.kwangs.folder.service.fldrmbrVO">
 	insert into fldrmbr
@@ -140,6 +152,18 @@
 	and fldrid = #{fldrid}
 </delete>
 <delete id="deleteApprFldrmbr_2020" parameterType="java.util.Map">
+	delete fldrmbr
+	where fldrmbrid = #{fldrmbrid}
+	and registerid = #{registerid}
+	and fldrid = #{fldrid}
+</delete>
+<delete id="deleteApprFldrmbr_4030" parameterType="java.util.Map">
+	delete fldrmbr
+	where fldrmbrid = #{fldrmbrid}
+	and registerid = #{registerid}
+	and fldrid = #{fldrid}
+</delete>
+<delete id="deleteApprFldrmbr_5010" parameterType="java.util.Map">
 	delete fldrmbr
 	where fldrmbrid = #{fldrmbrid}
 	and registerid = #{registerid}

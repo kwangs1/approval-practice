@@ -24,6 +24,13 @@
 <select id="getAttachList" resultType="AttachVO" parameterType="String">
 	select * from attach where appr_seq = #{appr_seq}
 </select>
+<!-- 첨부파일 리스트 -->
+<select id="getRceptAttachList" resultType="AttachVO" parameterType="String">
+	select * from attach at, approval a, send s
+	 where at.appr_seq = a.appr_seq
+	 and at.appr_seq = s.appr_seq
+	 and s.receiptappr_seq = #{appr_seq}
+</select>
 
 <!-- 수정폼 -->
 <select id="AttachModifyForm" resultType="AttachVO" parameterType="String">

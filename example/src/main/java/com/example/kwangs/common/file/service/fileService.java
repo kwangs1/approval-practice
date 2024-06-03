@@ -7,6 +7,8 @@ public interface fileService {
 
 	//첨부파일 리스트[문서에 대해]
 	List<AttachVO> getAttachList(String appr_seq);
+	//첨부파일 리스트[접수문서에 대해]
+	List<AttachVO> getRceptAttachList(String appr_seq);
 	//첨부파일 수정 폼
 	List<AttachVO> AttachModifyForm(String appr_seq);
 	//첨부파일 삭제

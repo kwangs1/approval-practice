@@ -22,6 +22,10 @@ public class fileMapper {
 	public List<AttachVO> getAttachList(String appr_seq){
 		return session.selectList("Attach.getAttachList",appr_seq);
 	}
+	//첨부파일 리스트[접수]
+	public List<AttachVO> getRceptAttachList(String appr_seq){
+		return session.selectList("Attach.getRceptAttachList",appr_seq);
+	}
 	//첨부파일 수정폼
 	public List<AttachVO> AttachModifyForm(String appr_seq){
 		return session.selectList("Attach.AttachModifyForm",appr_seq);

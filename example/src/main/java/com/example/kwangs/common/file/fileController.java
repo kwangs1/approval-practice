@@ -63,10 +63,15 @@ public class fileController {
 		model.addAttribute("attach",attach);
 		model.addAttribute("info",approvalService.apprInfo(appr_seq));
 	}
-	//문서에 붙은 첨부파일 가져오기
+	//문서에 붙은 첨부파일 가져오기[기안]
 	@GetMapping(value="/getAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<AttachVO>>getAttachList(String appr_seq){
 		return new ResponseEntity<>(service.getAttachList(appr_seq),HttpStatus.OK);
+	}
+	//문서에 붙은 첨부파일 가져오기[접수]
+	@GetMapping(value="/getRceptAttachList", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<List<AttachVO>>getRceptAttachList(String appr_seq){
+		return new ResponseEntity<>(service.getRceptAttachList(appr_seq),HttpStatus.OK);
 	}
 	/*
 	 * 기안 전 파일 업로드&삭제&등록

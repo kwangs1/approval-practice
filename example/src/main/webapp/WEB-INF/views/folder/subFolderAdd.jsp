@@ -33,6 +33,7 @@
 		<option value="2020">결재진행</option>
 		<option value="6021">기안한문서</option>
 		<option value="6022">결재한문서</option>
+		<option value="6050">접수한문서</option>
 		<option value="4030">발송대기</option>
 		<option value="4050">발송현황</option>
 		<option value="5010">접수대기</option>

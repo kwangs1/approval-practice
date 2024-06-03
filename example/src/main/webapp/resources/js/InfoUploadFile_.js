@@ -155,9 +155,27 @@ function getAttachList(){
 		$('.InfoUploadResult ul').html(str);
 	});	
 }
+//첨부파일 목록불러오기[접수문서만]
+function getRceptAttachList(){
+	$.getJSON("/kwangs/getRceptAttachList",{appr_seq: appr_seq}, function(arr){
+		console.log(arr);
+		var str = "";
+		
+		$(arr).each(function(i, attach){
+			str += "<li data-path='"+attach.uploadPath+"' data-uuid='"+attach.uuid+"' data-filename='"+attach.fileName+"' data-type='"+attach.fileType+"' data-size='"+attach.filesize+"'>";
+			str += "<div><span style='cursor: pointer;'>" + attach.fileName + "</span>";
+			str += "</div></li><br>";		
+		})
+		$('.InfoUploadResult ul').html(str);
+	});
+}
 //첨부파일 다운로드
 $('.InfoUploadResult ul').on('click','li',function(e){
 	var liObj = $(this);
 	var path = encodeURIComponent("/"+liObj.data("uuid")+"_"+liObj.data("filename"));
-	self.location="/kwangs/InfoFileDownload"+'?appr_seq='+appr_seq +'&fileName='+path;
+	if(draftsrctype != '1'){
+		self.location="/kwangs/InfoFileDownload"+'?appr_seq='+appr_seq +'&fileName='+path;
+	}else{
+		self.location="/kwangs/InfoFileDownload"+'?appr_seq='+RECEIPTAPPR_SEQ +'&fileName='+path;		
+	}
 });

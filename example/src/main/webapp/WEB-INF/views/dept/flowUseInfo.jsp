@@ -180,6 +180,7 @@ a{text-decoration: none; color: blue;}
 <script>
 var uId = '<c:out value="${user}"/>';
 var ownerid = '<c:out value="${deptId}"/>';
+var SendID = '';
 <%-- 조직트리 --%>
 $(document).ready(function() {	
 	var CheckVal = getCookie('docattr');

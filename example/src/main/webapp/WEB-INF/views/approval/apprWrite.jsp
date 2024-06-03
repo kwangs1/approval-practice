@@ -72,6 +72,7 @@ var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
 var docregno = '<c:out value="${uInfo.abbreviation}"/>';
 var id = '<c:out value="${user.id}"/>';
+var SendID = '';
 //새로고침 방지
 window.addEventListener('keydown',function(e){
 	//78: ctrl+N , 82: ctrl+R , 116: F5 | ctrlKey : window , metaKey : Mac

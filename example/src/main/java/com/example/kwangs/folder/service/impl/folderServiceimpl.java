@@ -2,6 +2,7 @@ package com.example.kwangs.folder.service.impl;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import com.example.kwangs.bizunit.mapper.bizunitMapper;
 import com.example.kwangs.bizunit.service.bizunitVO;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.apprfolderVO;
+import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.user.mapper.userMapper;
@@ -94,5 +96,37 @@ public class folderServiceimpl implements folderService{
 	@Override
 	public List<folderVO>ApprfldrSidebar(String ownerid){
 		return mapper.ApprfldrSidebar(ownerid);
+	}
+	
+	//기안자 발송대기 폴더 정보가져오기
+	@Override
+	public folderVO ApprFldrmbr_4030(String ownerid) {
+		return mapper.ApprFldrmbr_4030(ownerid);
+	}
+	//발송대기 폴더 삭제
+	@Override
+	public void deleteApprFldrmbr_4030(Map<String,Object> sendData_4030) {
+		mapper.deleteApprFldrmbr_4030(sendData_4030);
+	}
+	
+	//결재함 폴더 테이블 등록
+	@Override
+	public void ApprFldrmbrInsert(fldrmbrVO fm) {
+		mapper.ApprFldrmbrInsert(fm);
+	}
+	//접수대기 폴더정보가져오기
+	@Override
+	public folderVO ApprFldrmbr_5010(String ownerid) {
+		return mapper.ApprFldrmbr_5010(ownerid);
+	}
+	//접수대기폴더 삭제
+	@Override
+	public void deleteApprFldrmbr_5010(Map<String,Object> sendData_5010) {
+		mapper.deleteApprFldrmbr_5010(sendData_5010);
+	}
+	//접수한 폴더정보가져오기
+	@Override
+	public folderVO ApprFldrmbr_6050(String ownerid) {
+		return mapper.ApprFldrmbr_6050(ownerid);
 	}
 }

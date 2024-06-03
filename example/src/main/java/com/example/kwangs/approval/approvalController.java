@@ -29,10 +29,12 @@ import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
+import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
+import com.example.kwangs.user.service.userService;
 import com.example.kwangs.user.service.userVO;
 
 @Controller
@@ -49,6 +51,8 @@ public class approvalController {
 	private fileService fileService;
 	@Autowired
 	private deptService deptService;
+	@Autowired
+	private userService userService;
 	
 	//문서작성
 	@GetMapping("/apprWrite")
@@ -309,12 +313,9 @@ public class approvalController {
 		send.put("receiverid", deptid);
 		
 		sendVO SendInfo = service.getSendInfo(send);
-		log.info("@@ sendInfo deptId "+SendInfo.getReceiverid());
-		log.info("@@ sendInfo appr_seq "+SendInfo.getAppr_seq());
 		model.addAttribute("SendInfo",SendInfo);
 		//접수문서에 첨부파일이 존재하는경우[기안부서에서 생성된 apprid를 가져오기 위함]
-		//매개변수로는 apprid를 주었지만 쿼리 조건 시 send테이블의 receiptapprid 요걸러
-		model.addAttribute("ReceptInfo",service.getReceptInfo(appr_seq));
+		model.addAttribute("ReceptInfo",service.getReceptInfo(send));
 		
 		return "/approval/apprInfo";
 	}
@@ -381,10 +382,98 @@ public class approvalController {
 						Receive.setRecdocstatus("64");
 					}
 					service.ReceiveDeptIn(Receive);
+					//발송 후 수신부서들에 대해 FLDRMBR 테이블에 접수대기폴더 값을 넣기위해 && 부서ID에 대한 유저들 리스트
+					List<userVO> DeptUseInfo = userService.DeptUseInfo(dp.getDeptid());
+					Map<String,Object>res = new HashMap<>();
+					res.put("appr_seq", Info.getAppr_seq());
+					res.put("receiverid", dp.getDeptid());
+					sendVO getSendId = service.getSendId(res);
+					
+					for(userVO use : DeptUseInfo) {
+						log.info("수신 부서 부서ID: "+use.getDeptid());
+						log.info("수신 부서에 속한 인원들: "+use.getId());
+						log.info("수신 부서의 SENDID: "+getSendId.getSendid());
+						folderVO fldrmbr5010 = folderService.ApprFldrmbr_5010(use.getId());
+						fldrmbrVO fm = new fldrmbrVO();
+						fm.setFldrid(fldrmbr5010.getFldrid());
+						fm.setFldrmbrid(getSendId.getSendid());
+						fm.setRegisterid(use.getId());
+						folderService.ApprFldrmbrInsert(fm);
+					}
 				}
 			}
 			service.UpdDocPostStatus(appr_seq);
+			//해당 문서에 대한 fldrmbr테이블에서 발송대기 폴더값 삭제
+			folderVO ApprFldrId = folderService.ApprFldrmbr_4030(Info.getDrafterid());
+			Map<String,Object> sendData_4030 = new HashMap<>();
+			sendData_4030.put("fldrmbrid", Info.getAppr_seq());
+			sendData_4030.put("registerid", Info.getDrafterid());
+			sendData_4030.put("fldrid", ApprFldrId.getFldrid());
+			folderService.deleteApprFldrmbr_4030(sendData_4030);
 		}
 		return ResponseEntity.ok("Success Document Sndng!");
 	}
+	
+	//접수하기
+	@GetMapping("/RceptDocForm")
+	public String RceptDocForm(Model model, String appr_seq, HttpServletRequest request, userVO user) {
+		approvalVO Info = service.apprInfo(appr_seq);
+		model.addAttribute("Info",Info);
+		
+		List<participantVO> flowList = serviceP.getRe_pInfo(appr_seq);
+		model.addAttribute("flowList",flowList);
+		
+		//접수 시 필요한 문서값 확인
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		Map<String,Object> send = new HashMap<>();
+		send.put("appr_seq", appr_seq);
+		send.put("receiverid", deptid);
+		
+		sendVO sendInfo = service.getSendInfo(send);
+		model.addAttribute("sendInfo",sendInfo);
+		log.info("send table data.. sendid: "+sendInfo.getSendid());
+		
+		String id = (String) request.getSession().getAttribute("userId");
+		String abbreviation = user.getAbbreviation();
+		
+		//사용자의 부서에 대한 약어값
+		Map<String,Object> res = new HashMap<>();
+		res.put("id", id);
+		res.put("abbreviation", abbreviation);
+		
+		userVO Info_u = service.getUserDeptInfo(res);
+		model.addAttribute("res",Info_u);
+		
+		return "/approval/RceptDocForm";
+	}
+	
+	@ResponseBody
+	@PostMapping("/RceptDocSang")
+	public ResponseEntity<String> RceptDocSang(approvalVO ap,HttpServletRequest request) throws IOException{
+		service.RceptDocSang(ap);
+		
+		sendVO sendOrgApprId = service.getSendOrgApprId(ap.getAppr_seq());
+		List<userVO> DeptUseInfo = userService.DeptUseInfo(sendOrgApprId.getReceiverid());
+		for(userVO use : DeptUseInfo) {
+			//접수대기폴더 삭제
+			Map<String,Object> sendData_5010 = new HashMap<>();
+			folderVO fldrmbr5010 = folderService.ApprFldrmbr_5010(use.getId());
+			sendData_5010.put("fldrmbrid", sendOrgApprId.getSendid());
+			sendData_5010.put("registerid", use.getId());
+			sendData_5010.put("fldrid", fldrmbr5010.getFldrid());
+			folderService.deleteApprFldrmbr_5010(sendData_5010);	
+		}
+		
+		String id = (String)request.getSession().getAttribute("userId");
+		folderVO ApprFldrId_6050 = folderService.ApprFldrmbr_6050(id); //접수한 문서
+		//6050[접수한 문서]
+		fldrmbrVO fm = new fldrmbrVO();
+		fm.setFldrid(ApprFldrId_6050.getFldrid());
+		fm.setFldrmbrid(ap.getAppr_seq());
+		fm.setRegisterid(ap.getDrafterid());
+		folderService.ApprFldrmbrInsert(fm);
+		
+		return ResponseEntity.ok("RceptDocSang Success");
+	}
+	
 }
