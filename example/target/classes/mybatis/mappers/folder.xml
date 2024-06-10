@@ -195,4 +195,17 @@
 	and fldrmbrid = #{fldrmbrid}
 	and registerid = #{registerid}
 </select>
+<!-- 문서 카운트[결재함] -->
+<select id="getFolderCounts" statementType="CALLABLE" parameterType="java.util.Map">
+	{ call SP_APPROVAL_COUNT
+		(
+			#{sabun, mode=IN, jdbcType=VARCHAR},
+			#{applid, mode=IN, jdbcType=NUMERIC},
+			#{apprwaitcnt, mode=OUT, jdbcType=NUMERIC},
+			#{appringcnt, mode=OUT, jdbcType=NUMERIC},
+			#{sendwaitcnt, mode=OUT, jdbcType=NUMERIC},
+			#{rceptwaitcnt, mode=OUT, jdbcType=NUMERIC}
+		)
+	}
+</select>
 </mapper>

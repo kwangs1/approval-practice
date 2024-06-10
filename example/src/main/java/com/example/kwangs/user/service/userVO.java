@@ -16,8 +16,15 @@ public class userVO extends deptVO{
 	private Date upddate;
 	private String deptid;
 	private String deptname;
+	private String sabun;
 	
 	
+	public String getSabun() {
+		return sabun;
+	}
+	public void setSabun(String sabun) {
+		this.sabun = sabun;
+	}
 	public String getDeptid() {
 		return deptid;
 	}

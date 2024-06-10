@@ -9,6 +9,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.participant.service.participantVO;
 
 @Repository
@@ -29,13 +30,13 @@ public class participantMapper{
 	}
 	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-	public List<participantVO> ApprWaitFLowInfo(String appr_seq) {
-		return session.selectList("mapper.participant.ApprWaitFLowInfo",appr_seq);
+	public List<participantVO> ApprWaitFLowInfo(SearchCriteria scri) {
+		return session.selectList("mapper.participant.ApprWaitFLowInfo",scri);
 	}
 	
 	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-	public List<participantVO> ApprProgrsFLowInfo(String appr_seq) {
-		return session.selectList("mapper.participant.ApprProgrsFLowInfo",appr_seq);
+	public List<participantVO> ApprProgrsFLowInfo(SearchCriteria scri) {
+		return session.selectList("mapper.participant.ApprProgrsFLowInfo",scri);
 	}
 	
 	//발송대기 리스트에서 결재선 정보 가져오기

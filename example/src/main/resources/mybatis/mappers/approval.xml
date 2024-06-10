@@ -44,15 +44,10 @@
 		</if>
 	</sql>
 	
-<!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
-<select id="getLatestReceiptsSeq" resultType="java.lang.String">
-   SELECT 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.currval FROM DUAL
-</select>
-
 <!-- 기안 -->
 <insert id="apprWrite" parameterType="approvalVO"> 
 	<selectKey keyProperty="appr_seq" resultType="String" order="BEFORE">
-		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval  from dual
+		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.NEXTVAL FROM DUAL
 	</selectKey>
 	insert into approval
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
@@ -60,6 +55,11 @@
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
 		#{orgdraftdeptid},#{poststatus},#{draftsrctype})
 </insert>
+
+<!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
+<select id="getLatestReceiptsSeq" resultType="java.lang.String">
+   select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.CURRVAL FROM DUAL
+</select>
 
 <!-- 결재대기 -->
 <select id="apprWaitList" resultType="approvalVO" parameterType="String">

@@ -54,6 +54,16 @@ public class approvalController {
 	@Autowired
 	private userService userService;
 	
+	//프로시저 카운트 처리
+	public void FolderCounts(HttpServletRequest request, folderVO fd,Model model) {
+		String sabun = (String)request.getSession().getAttribute("sabun");
+		
+		Map<String,Object> res = new HashMap<>();
+		res.put("sabun", sabun);
+		res.put("applid", fd.getApplid());
+		Map<String,Object> result = folderService.getFolderCounts(res);
+		model.addAttribute("FolderCnt",result);
+	}
 	//문서작성
 	@GetMapping("/apprWrite")
 	public void apprWrite(userVO userVO,HttpServletRequest req, Model model,approvalVO approval) {
@@ -139,9 +149,11 @@ public class approvalController {
 		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
 		
 		for(approvalVO ap : wait) {	
-			List<participantVO> participantInfo = serviceP.ApprWaitFLowInfo(ap.getAppr_seq());
+			scri.setAppr_seq(ap.getAppr_seq());
+			List<participantVO> participantInfo = serviceP.ApprWaitFLowInfo(scri);
 			model.addAttribute("participantInfo",participantInfo);	
 		}
+		FolderCounts(request,fd,model);
 		
 		return "/approval/apprWaitList";
 	}
@@ -179,9 +191,11 @@ public class approvalController {
 		model.addAttribute("pageMaker",pageMaker);
 		
 		for(approvalVO ap : progrs) {	
-			List<participantVO> participantInfo = serviceP.ApprProgrsFLowInfo(ap.getAppr_seq());
+			scri.setAppr_seq(ap.getAppr_seq());
+			List<participantVO> participantInfo = serviceP.ApprProgrsFLowInfo(scri);
 			model.addAttribute("participantInfo",participantInfo);	
 		}
+		FolderCounts(request,fd,model);
 		
 		return "/approval/SanctnProgrsList";		
 	}
@@ -220,6 +234,7 @@ public class approvalController {
 			List<participantVO> SndngWaitflowInfo = serviceP.SndngWaitflowInfo(ap.getAppr_seq());
 			model.addAttribute("SndngWaitflowInfo",SndngWaitflowInfo);
 		}			
+		FolderCounts(request,fd,model);
 		return "/approval/SndngWaitDocList";
 	}
 	//접수대기
@@ -252,7 +267,8 @@ public class approvalController {
 
 		pageMaker.setTotalCount(service.TotalRceptWaitCnt(scri));
 		model.addAttribute("pageMaker",pageMaker);
-					
+
+		FolderCounts(request,fd,model);
 		return "/approval/RceptWaitDocList";
 	}
 	//문서함

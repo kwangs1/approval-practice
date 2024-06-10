@@ -1,0 +1,18 @@
+# 폴더리스트 수정 
+- controller, jsp (ajax)
+
+# 기록물철 등록 수정
+- insert 하는 부분 수정(jsp)
+, bizunit 데이터값  받는거 파라미터로 수정(controller,service)
+, 연번체번(service)
+
+# 기록물철 트리 수정
+- folder.xml 기록물철 폴더트리 쿼리 수정
+, folderService 메서드 수정 (파리미터 deptid -> deptid,fldrid)
+list3 ~ list 5 jsp 수정
+
+# 결재대기 프로시저 수정
+
+# 단위과제 컨트롤러 메서드 session deptid 빼고
+,서비스단 bizunit.write에서 선택된 부서아이드를 가지고 셀렉트 한다음 set값 셋팅
+,folder registerid 값, bizunit BIZUNITCHARGEID 값 000000000 으로 셋팅

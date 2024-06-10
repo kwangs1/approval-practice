@@ -71,6 +71,7 @@ ul{padding-left:0px;}
 	</div>
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
+<script src="<c:url value='/resources/js/ApprCookie.js'/>"></script>
 <script>
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var drafterid = '<c:out value="${info.drafterid}"/>';
@@ -93,66 +94,37 @@ function Resubmission(){
 	var inputFile = $("input[name='uploadFile']");
 	var files = inputFile[0].files;
 
+	 formData.append('appr_seq', appr_seq);
+	 formData.append('drafterid', $('#drafterid').val());
+	 formData.append('status', status);
+	 formData.append('folderid', $('#folderid').val());
+	 formData.append('foldername', $('#foldername').val());
+	 formData.append('bizunitcd', $('#bizunitcd').val());
+	 formData.append('title', $('#title').val());
+	 formData.append('content', $('#content').val());
 	 if(files.length > 0){
-		    formData.append('appr_seq', appr_seq);
-		    formData.append('drafterid', $('#drafterid').val());
-		    formData.append('status', status);
-		    formData.append('folderid', $('#folderid').val());
-		    formData.append('foldername', $('#foldername').val());
-		    formData.append('bizunitcd', $('#bizunitcd').val());
-		    formData.append('title', $('#title').val());
-		    formData.append('content', $('#content').val());
-		    // 파일 정보 추가
-		    ApprDocInsertFiles();
-		    $.ajax({
-				type: 'post',
-				url: '<c:url value="/approval/Resubmission"/>',
-				data : formData,        
-		        processData: false,
-		        contentType: false,
-				success: function(){
-					setTimeout(function(){ 
-						alert('해당 문서 재기안 되었습니다.');
-						window.close();
-						window.opener.location.reload();
-						ResubmissionFlowStatusUpd();
-						ResubmissionParticipantWrite();
-					},3000)
-				},
-				error: function(error){
-					alert('재기안 실패 하였습니다.');
-					console.log(error);
-				}
-			})
-	 }else{
-		var param = {
-		appr_seq : appr_seq,
-		drafterid: drafterid, 
-		status: status,
-		folderid: $('#folderid').val(),
-		foldername: $('#foldername').val(),
-		bizunitcd: $('#bizunitcd').val(),
-		title:  $('#title').val(),
-		content:  $('#content').val()
+		ApprDocInsertFiles();
+	 }
+	 $.ajax({
+		type: 'post',
+		url: '<c:url value="/approval/Resubmission"/>',
+		data : formData,        
+	    processData: false,
+	    contentType: false,
+		success: function(){
+			setTimeout(function(){ 
+				ResubmissionFlowStatusUpd();
+				ResubmissionParticipantWrite();
+				alert('해당 문서 재기안 되었습니다.');
+				window.close();
+				window.opener.location.reload();
+			},3000)
+			deleteCookie('docattr');
+		},
+		error: function(error){
+			alert('재기안 실패 하였습니다.');
+			console.log(error);
 		}
-		
-		$.ajax({
-			type: 'post',
-			url: '<c:url value="/approval/Resubmission"/>',
-			data: param,
-			success: function(){
-				setTimeout(function(){ 
-					alert('해당 문서 재기안 되었습니다.');
-					window.close();
-					window.opener.location.reload();
-					ResubmissionFlowStatusUpd();
-					ResubmissionParticipantWrite();
-				},3000)
-			},
-			error: function(error){
-				alert('재기안 실패 하였습니다.');
-				console.log(error);
-			}
 	})
 }
 

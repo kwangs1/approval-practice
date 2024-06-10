@@ -14,11 +14,12 @@
 		<result property="upddate" column="upddate" />		
 		<result property="deptid" column="deptid" />
 		<result property="deptname" column="deptname" />
+		<result property="sabun" column="sabun" />
 	</resultMap>
 	
 <insert id="write">
 insert into member
-values(#{id},#{pw},#{name},#{pos},sysdate,#{upddate},#{deptid},#{deptname})
+values(#{id},#{pw},#{name},#{pos},sysdate,#{upddate},#{deptid},#{deptname},#{sabun})
 </insert>
 	
 <select id="idcheck" resultType="int">

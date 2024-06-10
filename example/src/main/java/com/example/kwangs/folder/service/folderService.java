@@ -32,4 +32,6 @@ public interface folderService {
 	void deleteApprFldrmbr_5010(Map<String,Object> sendData_5010);
 	//접수한 폴더정보가져오기
 	folderVO ApprFldrmbr_6050(String ownerid);
+	//문서 카운트[결재함]
+	Map<String,Object> getFolderCounts(Map<String,Object>res);
 }

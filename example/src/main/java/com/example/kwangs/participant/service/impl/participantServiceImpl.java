@@ -13,6 +13,7 @@ import com.example.kwangs.Temp.UseFlowXml.saveXmlTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.fldrmbr2VO;
@@ -321,6 +322,7 @@ public class participantServiceImpl implements participantService{
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
+		log.info("participant service appr_seq? "+seqCurrval);
 		
 		for (participantVO pVO : participant) {
 			pVO.setAppr_seq(seqCurrval);
@@ -397,13 +399,13 @@ public class participantServiceImpl implements participantService{
 	}	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
-	public List<participantVO>  ApprWaitFLowInfo(String appr_seq) {
-		return mapper.ApprWaitFLowInfo(appr_seq);
+	public List<participantVO>  ApprWaitFLowInfo(SearchCriteria scri) {
+		return mapper.ApprWaitFLowInfo(scri);
 	}
 	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
 	@Override
-	public List<participantVO>  ApprProgrsFLowInfo(String appr_seq) {
-		return mapper.ApprProgrsFLowInfo(appr_seq);
+	public List<participantVO>  ApprProgrsFLowInfo(SearchCriteria scri) {
+		return mapper.ApprProgrsFLowInfo(scri);
 	}
 	//발송대기 리스트에서 결재선 정보 가져오기
 	@Override
@@ -511,7 +513,10 @@ public class participantServiceImpl implements participantService{
 			}else {
 				pvo.setStatusname("결재");
 			}
-			
+			log.info("ReGian flow Data Apprid "+pvo.getAppr_seq());
+			log.info("ReGian flow Data Signerid "+pvo.getSignerid());
+			log.info("ReGian flow Data ApprovalStatus "+pvo.getApprovalstatus());
+			log.info("ReGian flow Data ApprovalType "+pvo.getApprovaltype());
 			mapper.ResubmissionParticipantWrite(pvo);
 			seq++;
 			approvalTypeAndStatus(participant);

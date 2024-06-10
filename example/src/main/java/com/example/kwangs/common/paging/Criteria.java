@@ -17,7 +17,7 @@ public class Criteria {
 	private String id;
 	private String signerid;
 	private String receiverid;
-	
+	private String appr_seq;
 	
 	//기본값으로 한 페이지당 보이는 게시물 개수 10개
 	//이후 사용자가 원하는 게시물 개수 선택하여 리스트에 보이게 하기 위해 calculateRowStartAndEnd()함수 만듬.
@@ -134,6 +134,14 @@ public class Criteria {
 
 	public void setReceiverid(String receiverid) {
 		this.receiverid = receiverid;
+	}
+
+	public String getAppr_seq() {
+		return appr_seq;
+	}
+
+	public void setAppr_seq(String appr_seq) {
+		this.appr_seq = appr_seq;
 	}
 
 	public void cookieVal(HttpServletRequest request) {

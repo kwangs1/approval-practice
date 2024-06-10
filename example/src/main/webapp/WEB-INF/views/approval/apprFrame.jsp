@@ -9,6 +9,7 @@
 <link rel="stylesheet" href="<c:url value='/resources/css/docfldrSidebar.css'/>"/>
 <style>
 .disable{color:gray;}
+.count{color:#ec9f53}
 </style>
 <body>
 <%@ include file="../common/apprMenu.jsp" %><br><br>
@@ -46,7 +47,7 @@ $(document).ready(function(){
 			$(this).css('color','green');
 		}
 	});
-	
+	loadFolderCounts();
 })
 
 function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
@@ -75,6 +76,46 @@ function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 		setCookie_f2(url);
 	}
 	setCookie_a(applid);
+}
+
+function loadFolderCounts(){
+	$('.tree li a').each(function(){
+		var applid = $(this).attr('data-applid');
+		$.ajax({
+			type: 'get',
+			url: '<c:url value="/folder/getFolderCounts"/>',
+			data: {applid: applid},
+			//dataType: 'json',
+			success:function(response){
+				renderFolderCounts(applid,response);
+			},
+			error: function(xhr,status,error){
+				console.log(error);
+				console.log("응답 테스트 "+xhr.responseText);
+			}
+		})
+	});
+}
+
+function renderFolderCounts(applid,data){
+	$('.tree li a').each(function(){
+		if($(this).attr('data-applid') == applid){
+			var apprwaitcnt = data.apprwaitcnt || '';
+			var appringcnt = data.appringcnt || '';
+			var sendwaitcnt = data.sendwaitcnt || '';
+			var rceptwaitcnt = data.rceptwaitcnt || '';
+			
+			if(applid == 2010){
+				$(this).append('<span class="count">'+apprwaitcnt+'</span>');
+			}else if(applid == 2020){
+				$(this).append('<span class="count">'+appringcnt+'</span>');
+			}else if(applid == 4030){
+				$(this).append('<span class="count">'+sendwaitcnt+'</span>');
+			}else if(applid == 5010){
+				$(this).append('<span class="count">'+rceptwaitcnt+'</span>');
+			}
+		}
+	})
 }
 </script>
 </body>

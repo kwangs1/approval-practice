@@ -47,7 +47,8 @@ public class approvalServiceImpl implements approvalService{
 		    log.info(".. postStatus "+approval.getPoststatus());
 		}
 		mapper.apprWrite(approval);
-		
+
+		log.info("approval service appr_seq? "+approval.getAppr_seq());
 
 		//기안자의 기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기 & 등록
 		folderVO ApprFldrmbr_6021 = fMapper.ApprFldrmbr_6021(approval.getDrafterid());	

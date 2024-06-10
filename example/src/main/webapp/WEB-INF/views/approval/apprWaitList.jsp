@@ -30,7 +30,7 @@
 <%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
 <div class="cd1">
-  <h2>결재대기</h2> 
+  <h2>결재대기(${FolderCnt.apprwaitcnt})</h2> 
   <a href="javascript:BundleApproval()">일괄결재</a>
  <%-- 검색 --%>
 <div class="search" align="center">

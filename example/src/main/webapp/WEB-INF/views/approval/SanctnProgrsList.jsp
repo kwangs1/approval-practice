@@ -21,7 +21,7 @@
   <%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
 <div class="cd1">
-  <h2>결재진행</h2>
+  <h2>결재진행(${FolderCnt.appringcnt})</h2>
   <a href="javascript:RetireAppr()">회수</a> |
   <a href="javascript:Resubmission_Pop()">재기안</a>
  <%-- 검색 --%>
@@ -60,14 +60,14 @@
     <input type="hidden" id="ApprStatus_${loop.index}" value="${list.status}" />
 	        <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 	  <c:forEach var="participant" items="${participantInfo}" varStatus="loop">
-		<c:if test="${participant.status == '1000' && participant.signerid == user.id}">
-			<input type="hidden" id="appr_seq" value="${participant.appr_seq}" />
+		<c:if test="${participant.appr_seq == list.appr_seq && participant.signerid == user.id}">
+			<input type="hidden" id="appr_seq_${loop.index }" value="${participant.appr_seq}" />
 			<input type="hidden" id="participant_seq_${loop.index }" value="${participant.participant_seq}"/>
-			<input type="hidden" id="signerid" value="${participant.signerid}"/>
-			<input type="hidden" id="approvalstatus" value="${participant.approvalstatus}"/>
-			<input type="hidden" id="approvaltype" value="${participant.approvaltype}"/>
-			<input type="hidden" id="deptid" value="${participant.deptid}"/>
-			<input type="hidden" id="status" value="${participant.status}"/>
+			<input type="hidden" id="signerid_${loop.index }" value="${participant.signerid}"/>
+			<input type="hidden" id="approvalstatus_${loop.index }" value="${participant.approvalstatus}"/>
+			<input type="hidden" id="approvaltype_${loop.index }" value="${participant.approvaltype}"/>
+			<input type="hidden" id="deptid_${loop.index }" value="${participant.deptid}"/>
+			<input type="hidden" id="status_${loop.index }" value="${participant.status}"/>
 		</c:if> 
 	  </c:forEach>
 	      <tr>
@@ -169,12 +169,26 @@ function RetireAppr(){
 		if(checkboxes[i].checked){            
 			var appr_seq = checkboxes[i].value;
 			var participant_seq = $('#participant_seq_' + i).val();
+			var signerid_ = $('#signerid_' + i).val();
+			var deptid_ = $('#deptid_' + i).val();
+			var status_ = $('#status_' + i).val();
+			
+			var approvalStatus = $('#ApprStatus_'+i).val();
+			var drafterid = $('#drafterid').val();
+			
+			if(drafterid !== userid){
+				alert("문서의 기안자만 회수가 가능합니다");
+				return;
+			}else if(approvalStatus == 4096){
+				alert("이미 회수처리가 된 문서입니다.");
+				return;
+			}
 			RetireDoc.push({
 				appr_seq : appr_seq,
 				participant_seq : participant_seq,
-				signerid : signerid,
-				deptid : deptid,
-				status : status
+				signerid_ : signerid,
+				deptid_ : deptid,
+				status_ : status
 			});
 		}
 	}
@@ -182,10 +196,7 @@ function RetireAppr(){
 	if(RetireDoc == 0 || RetireDoc.length === 0){
 		alert("선택된 문서가 없습니다.");
 		return;
-	}else if(drafterid !== userid){
-		alert("문서의 기안자만 회수가 가능합니다");
-		return;
-	}else{
+	}else {
 		$.ajax({
 			type:'post',
 			url: '<c:url value="/participant/RetireAppr"/>',

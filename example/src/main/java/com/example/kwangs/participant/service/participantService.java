@@ -3,6 +3,8 @@ package com.example.kwangs.participant.service;
 import java.util.List;
 import java.util.Map;
 
+import com.example.kwangs.common.paging.SearchCriteria;
+
 public interface participantService {
 	/*
 	 * participant 내 기능 메서드
@@ -24,9 +26,9 @@ public interface participantService {
 	//일괄 결재
 	void BulkAppr(List<participantVO> participant);	
 	//일괄결재 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-	List<participantVO> ApprWaitFLowInfo(String appr_seq);	
+	List<participantVO> ApprWaitFLowInfo(SearchCriteria scri);	
 	//회수 시 결재선 정보 가져오기 위한 해당 문서의 결재선 정보 가져오는 부분
-	List<participantVO> ApprProgrsFLowInfo(String appr_seq);
+	List<participantVO> ApprProgrsFLowInfo(SearchCriteria scri);
 	//발송대기 리스트에서 결재선 정보 가져오기
 	List<participantVO> SndngWaitflowInfo(String appr_seq);
 	//결재

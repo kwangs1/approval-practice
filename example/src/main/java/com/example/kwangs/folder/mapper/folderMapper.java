@@ -133,4 +133,8 @@ public class folderMapper {
 		return session.selectOne("folder.checkFldrmbr_6022",check6022);
 	}
 
+	//문서 카운트[결재함]
+	public Map<String,Object> getFolderCounts(Map<String,Object>res){
+		return session.selectOne("folder.getFolderCounts",res);
+	}
 }

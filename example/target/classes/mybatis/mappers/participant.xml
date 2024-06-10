@@ -45,24 +45,31 @@
 
 <!-- 결재대기 화면에서의 결재선 정보 -->
 <select id="ApprWaitFLowInfo" resultType="participantVO" parameterType="String">
-	select a.appr_seq, p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.statusname
-		from  approval a, participant p		
-	where a.appr_seq = p.appr_seq
-	and p.approvalstatus = 4098
-	and p.approvaltype = 4
-	and p.flag = '0'
-	order by a.appr_seq desc
+select t.*
+	from(
+		select a.appr_seq, p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.statusname,
+		row_number() over(order by a.appr_seq desc)as rnum
+			from  approval a, participant p		
+		where a.appr_seq = p.appr_seq
+		and p.approvaltype = 4
+		and p.flag = '0'
+	)t
+	where rnum between #{rowStart} and #{rowEnd}
 </select>
 
 <!-- 결재진행 화면에서의 결재선 정보 -->
 <select id="ApprProgrsFLowInfo" resultType="participantVO" parameterType="String">
-	select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.status, p.deptid
-		from  approval a, participant p		
-	where a.appr_seq = p.appr_seq
-	and p.status = '1000'
-	and a.status != 256
-	and p.flag ='0'
-	order by a.appr_seq desc
+select t.*
+	from(
+		select a.appr_seq,p.participant_seq, p.approvalstatus, p.approvaltype, p.signerid, p.status, p.deptid,
+		row_number() over(order by a.appr_seq desc)as rnum
+			from  approval a, participant p		
+		where a.appr_seq = p.appr_seq
+		and p.status ='1000' or p.status ='4224' or p.status ='4112'
+		and a.status != 256
+		and p.flag ='0'
+	)t
+	where rnum between #{rowStart} and #{rowEnd}
 </select>
 <!-- 발송대기 리스트에서 결재선 정보 가져오기 -->
 <select id="SndngWaitflowInfo" resultType="participantVO" parameterType="String">

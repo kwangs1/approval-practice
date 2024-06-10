@@ -129,4 +129,10 @@ public class folderServiceimpl implements folderService{
 	public folderVO ApprFldrmbr_6050(String ownerid) {
 		return mapper.ApprFldrmbr_6050(ownerid);
 	}
+	//문서 카운트[결재함]
+	@Override
+	public Map<String,Object> getFolderCounts(Map<String,Object>res){
+		mapper.getFolderCounts(res);
+		return res;
+	}
 }

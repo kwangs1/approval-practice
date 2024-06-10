@@ -67,6 +67,7 @@ public class userController {
 			session.setAttribute("userId", currUser.getId());
 			session.setAttribute("deptId", currUser.getDeptid());
 			session.setAttribute("userName", currUser.getName());
+			session.setAttribute("sabun", currUser.getSabun());
 			return "redirect:/";
 		}else {
 			rttr.addFlashAttribute("result",0);

@@ -1,6 +1,8 @@
 package com.example.kwangs.folder;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -89,5 +91,19 @@ public class folderController {
 	public void folderAddAndApprF(folderVO fl, HttpServletRequest request)throws Exception {
 		String userid = (String)request.getSession().getAttribute("userId");
 		service.folderAddAndApprF(fl,userid);
+	}
+	
+	//폴더에 대한 문서 카운트[결재함]
+	@ResponseBody
+	@GetMapping("/getFolderCounts")
+	public Map<String,Object> FolderCounts(HttpServletRequest request, folderVO fd,Model model) {
+		String sabun = (String)request.getSession().getAttribute("sabun");
+		
+		Map<String,Object> res = new HashMap<>();
+		res.put("sabun", sabun);
+		res.put("applid", fd.getApplid());
+		
+		Map<String,Object> result = service.getFolderCounts(res);
+		return result;
 	}
 }

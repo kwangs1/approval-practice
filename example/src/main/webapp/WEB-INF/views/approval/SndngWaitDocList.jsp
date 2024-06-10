@@ -22,7 +22,7 @@
 <%@ include file="../approval/apprFrame.jsp" %>
   <br><br>
 <div class="cd1">
-  <h2>발송대기</h2> 
+  <h2>발송대기(${FolderCnt.sendwaitcnt})</h2> 
  <%-- 검색 --%>
 <div class="search" align="center">
     <select id="searchType" name="searchType">

@@ -17,7 +17,7 @@ select{display:none;}
 </head>
 <body>
 	<button onclick="pop()" class="button">결재정보</button>
-	<c:if test="${info.status != 4096 || info.apprid == ''}">	
+	<c:if test="${info.status != 4096 && info.status != 256}">	
 		<button onClick="Appr_Btn();" class="button">상신</button>
 	</c:if>
 	<c:if test="${info.status == 4096 }">
