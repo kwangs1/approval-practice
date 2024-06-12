@@ -29,20 +29,21 @@ li{list-style:none; padding-left:0px;}
 	</div>
 	<p>접수 중..</p>
 </div>
-	<%@ include file="../participant/ParticipantWrite.jsp" %>
+	
 <div class="post-container">
+<%@ include file="../participant/ParticipantWrite.jsp" %>
   <!-- 문서 본문영역 -->
-  <h1 class="post-title">${Info.title}</h1>
-  <p class="post-info">기안자: ${Info.draftername} | 작성일: ${Info.regdate }</p>
-  <p class="post-info">신청날짜: ${Info.startdate} ~ ${Info.enddate}</p>
+  <h1 class="post-title">${info.title}</h1>
+  <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
+  <p class="post-info">신청날짜: ${info.startdate} ~ ${info.enddate}</p>
   <div class="post-content">
-    <p>${Info.content }</p>
+    <p>${info.content }</p>
   </div>
   <br>
   
   	<div>
 
-  	<c:if test="${Info.status == 256 && Info.attachcnt >0}">
+  	<c:if test="${info.status == 256 && info.attachcnt >0}">
   		<span>첨부파일</span>
   	</c:if>
 
@@ -80,18 +81,18 @@ li{list-style:none; padding-left:0px;}
 <script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
 <script>
 var SendID = '<c:out value="${sendInfo.sendid}"/>';
-var title = '<c:out value="${Info.title}"/>';
-var content = '<c:out value="${Info.content}"/>';
-var startdate = '<c:out value="${Info.startdate}"/>';
-var enddate = '<c:out value="${Info.enddate}"/>';
-var attachcnt = '<c:out value="${Info.attachcnt}"/>';
+var title = '<c:out value="${info.title}"/>';
+var content = '<c:out value="${info.content}"/>';
+var startdate = '<c:out value="${info.startdate}"/>';
+var enddate = '<c:out value="${info.enddate}"/>';
+var attachcnt = '<c:out value="${info.attachcnt}"/>';
 var drafterid = '<c:out value="${userId}" />';
 var draftername = '<c:out value="${user.name}" />';
 var drafterdeptid = '<c:out value="${deptId}" />';
 var drafterdeptname = '<c:out value="${user.deptname}" />';
 var docregno = '<c:out value="${res.abbreviation}"/>';
-var DocAttr = '<c:out value="${Info.docattr}"/>';
-var appr_seq = '<c:out value="${Info.appr_seq}"/>';
+var DocAttr = '<c:out value="${info.docattr}"/>';
+var appr_seq = '<c:out value="${info.appr_seq}"/>';
 
 function init(){
 	getAttachList();

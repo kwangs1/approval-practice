@@ -105,12 +105,23 @@
 				<a href='<c:url value="docFrame${pageMaker.makeSearch(pageMaker.endPage+1)}"/>'>▶</a>
 			</li>
 		</c:if>
+			<input type="text" id='page' style="width: 50px;" value="${pageMaker.cri.page}"
+		onkeydown="javascript:if (event.keyCode == 13) { InputPage(); }"/>/${pageMaker.endPage}
 	</ul>
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/pagingCookie.js'/>"></script>
 <script>
+function InputPage(){
+	var page = $('#page').val();
+	var makeLoadPage = '<c:out value="${pageMaker.makeLoadPage(page)}"/>';
+	var decodeUrl = makeLoadPage.replace(/&amp;/g,'&');
+	var url = '<c:url value="docFrame"/>'
+	url += decodeUrl+'&page='+page;
+	window.location.href = url;
+}
+
 $(document).ready(function(){
 	//쿠키 값 가져오기..
 	var getPerPageNum = getCookie("perPageNum");
@@ -124,7 +135,7 @@ $(document).ready(function(){
 	var keyword = urlParams.get('keyword');
 	
 	if(searchType == null && keyword == null){
-		$('#keywordInput').val('');
+		$('#keywordInput').val("");
 		$('#searchType').val("t");
 	}else{
 		$('#keywordInput').val(decodeURIComponent(keyword));

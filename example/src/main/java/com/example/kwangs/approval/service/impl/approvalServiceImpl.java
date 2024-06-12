@@ -124,7 +124,21 @@ public class approvalServiceImpl implements approvalService{
 	
 	//재기안 시 문서 상태값 변경
 	@Override
-	public void Resubmission(approvalVO approval) {
+	public void Resubmission(approvalVO approval) throws IOException {
+		//기록물철 임시저장
+		saveDatTemp.saveDataToDatFile(approval.getFolderid(), approval.getFoldername(), approval.getBizunitcd(),approval.getDrafterid());
+		if(!approval.getDraftsrctype().equals("1")) {
+			if(approval.getDocattr().equals("1")) {
+				log.info("@>@>@>>> 1"+approval.getAppr_seq()+" --SUCCESS");
+				approval.setPoststatus("1");	
+			}else 
+				if(approval.getDocattr().equals("2")) {
+					log.info("@>@>@>>> 2"+approval.getAppr_seq()+" ---SUCCESS");
+					approval.setOrgdraftdeptid("");
+					approval.setSendername("");
+					approval.setPoststatus("");
+			}	
+		}		
 		mapper.Resubmission(approval);
 	}
 	//문서함 총 갯수

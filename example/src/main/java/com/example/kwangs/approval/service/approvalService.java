@@ -27,7 +27,7 @@ public interface approvalService {
 	//회수 시 문서 상태값 변경
 	void RetireApprStatus(String appr_seq);
 	//재기안 시 문서 상태값 변경
-	void Resubmission(approvalVO approval);
+	void Resubmission(approvalVO approval) throws IOException;
 	//문서함 문서 총갯수
 	int totalDocCnt(SearchCriteria scri);
 	//결재함[결재대기,진행] 문서 총 갯수

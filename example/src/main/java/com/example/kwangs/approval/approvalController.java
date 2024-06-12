@@ -349,12 +349,18 @@ public class approvalController {
 		List<AttachVO> attach = fileService.AttachModifyForm(appr_seq);
 		model.addAttribute("attach",attach);
 		
+		List<participantVO> pList = serviceP.getRe_pInfo(appr_seq);
+		model.addAttribute("pList",pList);
+		//접수문서 일 시 기안부서 결재선 보이게
+		List<participantVO> DraftflowList = serviceP.getRcept_pInfo(appr_seq);
+		model.addAttribute("DraftflowList",DraftflowList);
+		
 		return "/approval/Resubmission";
 	}
 	
 	@ResponseBody
 	@PostMapping("/Resubmission")
-	public void Resubmission(approvalVO approval) {
+	public void Resubmission(approvalVO approval)throws IOException {
 		service.Resubmission(approval);
 	}
 	
@@ -434,7 +440,7 @@ public class approvalController {
 	@GetMapping("/RceptDocForm")
 	public String RceptDocForm(Model model, String appr_seq, HttpServletRequest request, userVO user) {
 		approvalVO Info = service.apprInfo(appr_seq);
-		model.addAttribute("Info",Info);
+		model.addAttribute("info",Info);
 		
 		List<participantVO> flowList = serviceP.getRe_pInfo(appr_seq);
 		model.addAttribute("flowList",flowList);

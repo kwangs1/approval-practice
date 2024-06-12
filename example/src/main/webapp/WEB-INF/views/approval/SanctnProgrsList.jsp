@@ -146,12 +146,12 @@ function loadPage(pageNum){
 }
 
 var checkboxes = document.getElementsByName('appr_seq');
-<%-- 결재 진행에 걸린 결재선 정보--%>
+<%-- 결재 진행에 걸린 결재선 정보
 var signerid = $('#signerid').val();
 var approvalstatus = $('#approvalstatus').val();
 var approvaltype = $('#approvaltype').val();
 var status = $('#status').val();
-var drafterid = $('#drafterid').val();
+var drafterid = $('#drafterid').val();--%>
 var deptid = $('#deptid').val();
 var userid = '<c:out value="${user.id}"/>';
 //"전체 선택" 체크박스를 클릭했을 때 모든 체크박스를 선택 또는 해제하는 함수
@@ -169,9 +169,9 @@ function RetireAppr(){
 		if(checkboxes[i].checked){            
 			var appr_seq = checkboxes[i].value;
 			var participant_seq = $('#participant_seq_' + i).val();
-			var signerid_ = $('#signerid_' + i).val();
-			var deptid_ = $('#deptid_' + i).val();
-			var status_ = $('#status_' + i).val();
+			var signerid = $('#signerid_' + i).val();
+			var deptid = $('#deptid_' + i).val();
+			var status = $('#status_' + i).val();
 			
 			var approvalStatus = $('#ApprStatus_'+i).val();
 			var drafterid = $('#drafterid').val();
@@ -186,9 +186,9 @@ function RetireAppr(){
 			RetireDoc.push({
 				appr_seq : appr_seq,
 				participant_seq : participant_seq,
-				signerid_ : signerid,
-				deptid_ : deptid,
-				status_ : status
+				signerid : signerid,
+				deptid : deptid,
+				status : status
 			});
 		}
 	}

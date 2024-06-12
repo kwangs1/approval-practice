@@ -20,7 +20,7 @@ select{display:none;}
 	<c:if test="${info.status != 4096 && info.status != 256}">	
 		<button onClick="Appr_Btn();" class="button">상신</button>
 	</c:if>
-	<c:if test="${info.status == 4096 }">
+	<c:if test="${info.status == 4096}">
   		<button onclick="Resubmission()" class="button">재기안</button>
   	</c:if>
   	<c:if test="${sendInfo.receiverid eq user.deptid}">
@@ -36,6 +36,8 @@ select{display:none;}
 <script>
 var sendid = '<c:out value="${info.sendid}"/>';
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
+var status = '<c:out value="${info.status}"/>';
+
 function pop() {
 	if(sendid == ''){
 		window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");	

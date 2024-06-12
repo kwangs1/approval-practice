@@ -4,8 +4,8 @@
 
 var selectedUsers = []; //결재선 참여자
 var selectedApFolder = []; //기록물철
-var checkedValues = []; //문서 유형값
 var selectedDept = []; //발송 시 수신처에 대한 부서정보
+var checkedValues = []; //문서 유형값
 var selectedValue =[]; //셀렉트박스[발신부서id, 발신명의]
 
 $('a.userLink').on('click',function(e){
@@ -104,15 +104,12 @@ function updateSelectedApFolder(){
 function updateselectedDept(){
 	var selDiv = $('#selectedDept');
 	selDiv.empty(); //기존 내용 제거
-
 	for(var i =0; i < selectedDept.length; i++){
 		var receivers = selectedDept[i];
-		console.log(receivers.sendername);
-		var userDiv = $('<div class="userDiv"></div>');
-		userDiv.append('<p>'+ receivers.deptname +'</p>');		
+		var userDiv = $('<div class="userDiv" id="userDiv"></div>');
+		userDiv.append('<p>'+ receivers.sendername +'&nbsp;&nbsp;'+'<button onclick="deleteReceivers('+ i +')">X</button></p>');		
 		selDiv.append(userDiv);
-	}		
-
+	}	
 }
 // 유저 화면단에서 임의로 status 값도 설정하여 전송하려고 만듬.
 function getStatusDropdownHTML(index, defaultStatus) {
@@ -199,6 +196,11 @@ function confirmSelection(){
 function deleteUser(index) {
     selectedUsers.splice(index, 1); //배열요소 하나만 삭제
     updateSelectedUsersUI();
+}
+//수신처 삭제
+function deleteReceivers(index){
+	selectedDept.splice(index,1);
+	updateselectedDept();
 }
 
 // 유저를 위로 이동하는 함수 - 스왑

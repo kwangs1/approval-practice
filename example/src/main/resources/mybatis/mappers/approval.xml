@@ -253,7 +253,8 @@
 <!-- 재기안 시 문서 상태값 변경 -->
 <update id="Resubmission">
 	update approval
-		set status = 1, title=#{title}, content=#{content}
+		set status = 1, title=#{title}, content=#{content}, receivers = #{receivers}, sendername = #{sendername}, 
+		poststatus = #{poststatus}, folderid =#{folderid}, foldername =#{foldername}, bizunitcd = #{bizunitcd}, docattr = #{docattr}
 	where appr_seq = #{appr_seq}
 	and drafterid = #{drafterid}
 </update>

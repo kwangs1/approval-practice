@@ -17,6 +17,10 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 ul li{list-style:none; padding-left:0px;}
 ul{padding-left:0px;}
 .vacation-period {margin-top: 20px; align-items: center;}
+.signername{height: 30px; border: 1px solid #ccc; border-radius: 5px; padding: 5px; font-size: 14px;}
+.position {font-weight: bold; font-size: 12px;}
+.FlowChart{display: flex; flex-direction: column; margin-right: 10px;}
+.FlowContainer{display: flex;flex-wrap: wrap;}
 </style>
 </head>
 <body>
@@ -29,10 +33,32 @@ ul{padding-left:0px;}
 	<p>상신 중..</p>
 </div>
 <%@ include file="../participant/ParticipantWrite.jsp" %>
-<body>
-<input type="hidden" name="folderid" id="folderid" value="${info.folderid}"/>
-<input type="hidden" name="folderid" id="foldername" value="${info.foldername}"/>
-<input type="hidden" name="bizunitcd" id="bizunitcd" value="${info.bizunitcd}"/>
+	<!-- 결재선 영역 -->
+	<div class="FlowContainer">
+		<c:if test="${info.draftsrctype ne '1' }">
+			<c:forEach var="pList" items="${pList}"> 
+				<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
+				<input type="hidden" id="signerid" value="${pList.signerid}" />
+				<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
+				<div class="FlowChart">
+					<span class="position" id="pos">${pList.pos}</span>
+					<input type="hidden" class="signername" id="signername" value="${pList.signername}" disabled/>		
+				</div>
+			</c:forEach>
+		</c:if>
+		<c:if test="${info.draftsrctype eq '1' }">
+			<c:forEach var="pList" items="${DraftflowList}"> 
+				<input type="hidden" id="participant_seq" value="${pList.participant_seq}" />
+				<input type="hidden" id="signerid" value="${pList.signerid}" />
+				<input type="hidden" id="approvaltype" value="${pList.approvaltype}" />
+				<div class="FlowChart">
+					<span class="position" id="pos">${pList.pos}</span>
+					<input type="text" class="signername" id="signername" value="${pList.signername}" disabled/>		
+				</div>
+			</c:forEach>
+		</c:if>
+	</div>
+<body onload="pop()">
 	<div class="vacation-period">
 		휴가 기간: <input type="date" name="startdate" id="startdate" value="${info.startdate}"/> ~
 			<input type="date" name="enddate" id="enddate" value="${info.enddate}"/>
@@ -69,14 +95,56 @@ ul{padding-left:0px;}
 	<div class="uploadResult"> 
 		<ul></ul>
 	</div>
+<div class="receivers_info"></div>	
+<%-- 문서 내용 --%>
+<input type="hidden" id="appr_seq" value="${info.appr_seq}" />
+<input type="hidden" id="status" value="${info.status}" />
+<input type="hidden" id="drafterid" value="${info.drafterid}" />
+<input type="hidden" name="folderid" id="folderid" value="${info.folderid}"/>
+<input type="hidden" name="bizunitcd" id="bizunitcd" value="${info.bizunitcd}"/>
+<input type="hidden" name="foldername" id="foldername" value="${info.foldername}"/>
+<input type="hidden" name="docattr" id="docattr" />
+<input type="hidden" name="orgdraftdeptid" id="orgdraftdeptid" value="${info.orgdraftdeptid}"/>
+<input type="hidden" name="sendername" id="sendername" />
+<input type="hidden" name="poststatus" id="poststatus"/>
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
 <script src="<c:url value='/resources/js/ApprCookie.js'/>"></script>
 <script>
-var appr_seq = '<c:out value="${info.appr_seq}"/>';
-var drafterid = '<c:out value="${info.drafterid}"/>';
-var status = '<c:out value="${info.status}"/>';
-var attachcnt = '<c:out value="${info.attachcnt}"/>';
+var DocAttr = '<c:out value="${info.docattr}"/>';
+var SendID = '<c:out value="${info.sendid}"/>';
+var draftsrctype = '<c:out value="${info.draftsrctype}"/>';
+
+var selectedDept = [];
+window.addEventListener('message', function(e){
+	var data = e.data;
+	var selectedApFolder = data.selectedApFolder;
+	var checkedValues = data.checkedValues;
+	selectedDept = data.selectedDept;
+	var selectedSender = data.selectedValue;
+	
+	$('#folderid').val(selectedApFolder.fldrid);
+	$('#bizunitcd').val(selectedApFolder.bizunitcd);
+	$('#foldername').val(selectedApFolder.fldrname);
+	$('#docattr').val(checkedValues);
+	$('#sendername').val(selectedSender.sendername);
+	$('#orgdraftdeptid').val(selectedSender.deptid);
+	
+	saveCookie(checkedValues);
+	
+	var useDiv = $('.receivers_info');
+	useDiv.empty();
+	
+	for(var i =0; i < selectedDept.length; i++){
+		var Container = $('<div class="container">');
+		Container.append('<input type="hidden" name="receivers_' + i + '"  value="' + selectedDept[i].sendername + '"/>');
+		
+		useDiv.append(Container);
+	}
+
+	console.log(selectedDept)
+});
 
 window.addEventListener('keydown',function(e){
 	if( (e.ctrlKey == true || e.metaKey == true && (e.keyCode == 78 || e.keyCode == 82)) || (e.keyCode == 116)){
@@ -85,7 +153,13 @@ window.addEventListener('keydown',function(e){
 	}	
 });
 function pop() {
-	window.open("${path}/dept/flowUseInfo","pop","width=768, height=400");
+	if(draftsrctype == '1'){
+		url = "<c:url value='/dept/RceptflowUseInfo'/>" + "?appr_seq=" + appr_seq;
+		window.open(url,'flow','width=768px, height=550px');
+	}else{
+		url = "<c:url value='/dept/ResubmissionFlowUseInfo'/>" + "?appr_seq=" + appr_seq;
+		window.open(url,'flow','width=768px, height=550px');
+	}
 }
 function Resubmission(){
 	var loading = document.getElementById('loading')
@@ -94,14 +168,26 @@ function Resubmission(){
 	var inputFile = $("input[name='uploadFile']");
 	var files = inputFile[0].files;
 
-	 formData.append('appr_seq', appr_seq);
-	 formData.append('drafterid', $('#drafterid').val());
-	 formData.append('status', status);
-	 formData.append('folderid', $('#folderid').val());
-	 formData.append('foldername', $('#foldername').val());
-	 formData.append('bizunitcd', $('#bizunitcd').val());
-	 formData.append('title', $('#title').val());
-	 formData.append('content', $('#content').val());
+	var doc_Receivers = [];
+	if(selectedDept && selectedDept.length > 0){
+		for(var i=0; i < selectedDept.length; i++){
+			doc_Receivers.push(selectedDept[i].sendername);
+		}
+		formData.append('receivers',doc_Receivers);
+	}
+	
+	formData.append('appr_seq',$('#appr_seq').val());
+	formData.append('status',$('#status').val());
+	formData.append('drafterid',$('#drafterid').val());
+	formData.append('folderid',$('#folderid').val());
+	formData.append('bizunitcd',$('#bizunitcd').val());
+	formData.append('foldername',$('#foldername').val());
+	formData.append('title',$('#title').val());
+	formData.append('content',$('#content').val());
+	formData.append('docattr',$('#docattr').val());
+	formData.append('orgdraftdeptid',$('#orgdraftdeptid').val());
+	formData.append('sendername',$('#sendername').val());
+	formData.append('draftsrctype',draftsrctype);
 	 if(files.length > 0){
 		ApprDocInsertFiles();
 	 }
@@ -157,7 +243,6 @@ function ResubmissionFlowStatusUpd(){
 			console.log(error);
 		}
 	})
-}
 }
 
 function ResubmissionParticipantWrite() {

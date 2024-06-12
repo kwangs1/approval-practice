@@ -113,4 +113,26 @@ public class deptController {
 		
 		return "dept/RceptflowUseInfo";
 	}
+	
+	//재기안 시 일반 문서 결재선 정보 가져올 부서 및 유저목록 & 기록물철 정보
+	@GetMapping("/ResubmissionFlowUseInfo")
+	public String ResubmissionFlowUseInfo(Model model, HttpServletRequest request,String appr_seq) {
+		String id = (String) request.getSession().getAttribute("userId");
+		model.addAttribute("user",id);
+		
+		List<deptVO>flowUseInfo = service.flowUseInfo();
+		model.addAttribute("flowUseInfo",flowUseInfo);
+		
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		List<folderVO> DeptFolderList = folderService.DeptFolderList(deptid);
+		model.addAttribute("list",DeptFolderList);
+		
+		List<deptVO> getSender = service.getSender(id);
+		model.addAttribute("sender",getSender);
+		model.addAttribute("deptList",service.joinUseDept());
+		
+		model.addAttribute("DocInfo",approvalService.apprInfo(appr_seq));
+		
+		return "dept/ResubmissionFlowUseInfo";
+	}
 }
