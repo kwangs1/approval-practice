@@ -56,4 +56,6 @@ public interface approvalService {
 	sendVO getSendId(Map<String,Object> res);
 	//발송대기 문서 접수하기
 	void RceptDocSang(approvalVO ap) throws IOException;
+	//문서 삭제
+	boolean DeleteDoc(String appr_seq);
 }

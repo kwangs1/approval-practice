@@ -219,4 +219,9 @@ public class approvalServiceImpl implements approvalService{
 
 		saveDatTemp.saveDataToDatFile(ap.getFolderid(), ap.getFoldername(), ap.getBizunitcd(),ap.getDrafterid());
 	}
+	//문서삭제
+	@Override
+	public boolean DeleteDoc(String appr_seq) {
+		return mapper.DeleteDoc(appr_seq) == 1;
+	}
 }

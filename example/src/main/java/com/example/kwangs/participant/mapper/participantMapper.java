@@ -102,4 +102,9 @@ public class participantMapper{
 	public List<participantVO> ApprFlowLines(String signerid){
 		return session.selectList("mapper.participant.ApprFlowLines",signerid);
 	}
+	
+	//문서 삭제 시 결재선 삭제
+	public void deleteFlowInfo(String appr_seq) {
+		session.delete("mapper.participant.deleteFlowInfo",appr_seq);
+	}
 }

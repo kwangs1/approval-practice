@@ -195,6 +195,11 @@
 	and fldrmbrid = #{fldrmbrid}
 	and registerid = #{registerid}
 </select>
+<!-- 문서 삭제 시 결재함 테이블 삭제 -->
+<delete id="deleteDocFldrmbr">
+	delete fldrmbr
+	where fldrmbrid = #{fldrmbrid}
+</delete>
 <!-- 문서 카운트[결재함] -->
 <select id="getFolderCounts" statementType="CALLABLE" parameterType="java.util.Map">
 	{ call SP_APPROVAL_COUNT

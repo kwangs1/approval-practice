@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -498,4 +500,42 @@ public class approvalController {
 		return ResponseEntity.ok("RceptDocSang Success");
 	}
 	
+	//문서 삭제
+	@ResponseBody
+	@PostMapping("/DeleteDoc")
+	public ResponseEntity<String> DeleteDoc(@RequestBody List<approvalVO> list, HttpServletRequest request){
+		for(approvalVO ap: list) {
+			log.info("Delete Document.. "+ap.getAppr_seq());
+			List<AttachVO> attachList = fileService.getAttachList(ap.getAppr_seq());
+			
+			if(service.DeleteDoc(ap.getAppr_seq())) {
+				deleteFiles(attachList,ap.getAppr_seq());
+				serviceP.deleteFlowInfo(ap.getAppr_seq());
+				folderService.deleteDocFldrmbr(ap.getAppr_seq());
+				fileService.deleteDocAttach(ap.getAppr_seq());
+			}
+		}
+		return ResponseEntity.ok("Sucess Delete Document..");
+	}
+	
+	//첨부파일 삭제
+	private void deleteFiles(List<AttachVO> attach, String appr_seq) {
+		if(attach == null || attach.size() == 0) {
+			log.info("Not Files..");
+			return;
+		}
+		log.info("delete files ? "+attach);
+		for(int i=0; i < attach.size(); i++) {
+			AttachVO attachVO = attach.get(i);
+			String id = appr_seq.substring(16);
+			try {
+				File folder = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+attachVO.getUploadPath()+"/"+id);
+				FileUtils.cleanDirectory(folder);
+				folder.delete();
+				log.info("delete success");
+			}catch(Exception e) {
+				log.info("delete file error: "+e.getMessage());
+			}
+		}
+	}
 }

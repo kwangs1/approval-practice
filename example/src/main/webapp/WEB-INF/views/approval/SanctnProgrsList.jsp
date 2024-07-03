@@ -23,7 +23,8 @@
 <div class="cd1">
   <h2>결재진행(${FolderCnt.appringcnt})</h2>
   <a href="javascript:RetireAppr()">회수</a> |
-  <a href="javascript:Resubmission_Pop()">재기안</a>
+  <a href="javascript:Resubmission_Pop()">재기안</a> |
+  <a href="javascript:DeleteDocument()">삭제</a>
  <%-- 검색 --%>
 <div class="search" align="center">
     <select id="searchType" name="searchType">
@@ -251,6 +252,40 @@ $('a.apprInfo').on('click', function(event) {
     window.open(url, "Info", "width=1024px, height=768px");
 });
 
+function DeleteDocument(){
+	var ary = [];
+	for(var i=0; i < checkboxes.length; i++){
+		var appr_seq = checkboxes[i].value;
+		var ApprStatus = $('#ApprStatus_'+i).val();
+		
+		ary.push({appr_seq: appr_seq});
+		if(ApprStatus != 4096){
+			alert('회수된 문서만 삭제가 가능합니다.');
+			return;
+		}
+	}
+	
+	if(ary == 0 || ary.length == null){
+		alert('선택된 문서가 없습니다.');
+		return;
+	}else{
+		$.ajax({
+			type: 'post',
+			url: '<c:url value="/approval/DeleteDoc"/>',
+			contentType: 'application/json',
+			data: JSON.stringify(ary),
+			success: function(response){
+				console.log(response);
+				alert("해당 문서가 삭제되었습니다");
+				window.location.reload();
+			},
+			error: function(xhr,status){
+				console.log(xhr);
+				console.log(status);
+			}
+		});			
+	}
+}
 </script>
 </body>
 </html>

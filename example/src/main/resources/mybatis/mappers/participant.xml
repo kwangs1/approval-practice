@@ -195,4 +195,10 @@ select t.*
 	on p.appr_seq = a.appr_seq
 	where p.signerid = #{signerid}
 </select>
+
+<!-- 문서 삭제 시 결재선 삭제 -->
+<delete id="deleteFlowInfo">
+	delete participant
+	where appr_seq = #{appr_seq}
+</delete>
 </mapper>

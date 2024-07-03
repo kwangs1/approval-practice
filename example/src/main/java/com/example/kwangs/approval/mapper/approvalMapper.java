@@ -163,4 +163,8 @@ public class approvalMapper{
 	public void updSendData(String sendid) {
 		session.update("mapper.approval.updSendData",sendid);
 	}
+	//문서 삭제
+	public int DeleteDoc(String appr_seq) {
+		return session.delete("mapper.approval.DeleteDoc",appr_seq);
+	}
 }

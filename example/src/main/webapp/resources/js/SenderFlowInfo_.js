@@ -177,19 +177,41 @@ function confirmSelection(){
 		}
 		window.opener.postMessage(data,"*");
 	
-	$.ajax({
-		type: 'post',
-		url: '/kwangs/SaveFlowUseInfoTemp',
-		contentType: 'application/json',
-		data: JSON.stringify(selectedUsers),
-		success: function(){
-			console.log("success");
-		},
-		error : function(error){
-			console.error("Error seding clicked users to server:",error);
-		}
-	});
-	window.close();
+	if(SendID !== ''){
+		$.ajax({
+			type: 'post',
+			url: '/kwangs/SaveRceptFlowUseInfoTemp',
+			contentType: 'application/json',
+			data: JSON.stringify(selectedUsers),
+			success: function(){
+				console.log("success");
+                setTimeout(function() {
+                    window.close();
+                }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
+			},
+			error : function(error){
+				console.error("Error seding clicked users to server:",error);
+			}
+		});		
+	}else{
+		$.ajax({
+			type: 'post',
+			url: '/kwangs/SaveFlowUseInfoTemp',
+			contentType: 'application/json',
+			data: JSON.stringify(selectedUsers),
+			success: function(){
+				console.log("success");
+                setTimeout(function() {
+                    window.close();
+                }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
+			},
+			error : function(error){
+				console.error("Error seding clicked users to server:",error);
+			}
+		});		
+	}
+
+	//window.close();
 }
 
 //유저를 배열에서 삭제하는 함수

@@ -379,4 +379,9 @@
 			s.receiptappr_seq = (select a.appr_seq from approval a  where a.sendid = s.sendid)
 		where s.sendid = #{sendid}
 	</update>
+	<!-- 문서 삭제 -->
+	<delete id="DeleteDoc">
+		delete approval
+		where appr_seq = #{appr_seq}
+	</delete>
 </mapper>

@@ -118,7 +118,7 @@ a{text-decoration: none; color: blue;}
 </div>
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
-<script src="<c:url value='/resources/js/SenderFlowInfo__-.js'/>"></script>
+<script src="<c:url value='/resources/js/SenderFlowInfo_.js'/>"></script>
 <script src="<c:url value='/resources/js/ApprCookie.js'/>"></script>
 <script>
 var uId = '<c:out value="${user}"/>';
@@ -163,7 +163,7 @@ $(document).ready(function() {
   });  
 $.ajax({
 	type: 'get',
-	url: '<c:url value="/getSaveFlowUseInfoTemp"/>',
+	url: '<c:url value="/getSaveRceptFlowUseInfoTemp"/>',
 	data: {id : uId},
 	dataType: 'json',
 	success: function(data){

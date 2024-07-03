@@ -45,4 +45,6 @@ public interface participantService {
 	void ResubmissionFlowStatusUpd(List<participantVO> participant);
 	//재기안 시 결재선 새로 추가
 	 void ResubmissionParticipantWrite(List<participantVO> participant,String id);
+	 //문서 삭제 시 결재선 삭제
+	 void deleteFlowInfo(String appr_seq);
 }

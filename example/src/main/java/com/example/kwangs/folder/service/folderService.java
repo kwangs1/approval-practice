@@ -34,4 +34,6 @@ public interface folderService {
 	folderVO ApprFldrmbr_6050(String ownerid);
 	//문서 카운트[결재함]
 	Map<String,Object> getFolderCounts(Map<String,Object>res);
+	//문서 삭제 시 결재함테이블 에서 삭제
+	void deleteDocFldrmbr(String fldrmbrid);
 }

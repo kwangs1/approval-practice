@@ -16,7 +16,7 @@ public class saveXmlTemp {
 	@Value("${temp.data.basepath}")
 	private String basePath;
 
-	//기안 뷰에 그려진 결재선 xml로 저장
+	//기안 뷰에 그려진 결재선 xml로 저장[기안]
 	public void SaveFlowUseInfoTemp(String id, String xmlData) {
 		try {
 			File userFolder = new File(basePath + File.separator + id);
@@ -38,4 +38,25 @@ public class saveXmlTemp {
 		}
 	}	
 
+	//기안 뷰에 그려진 결재선 xml로 저장[접수]
+	public void SaveRceptFlowUseInfoTemp(String id, String xmlData) {
+		try {
+			File userFolder = new File(basePath + File.separator + id);
+			if(!userFolder.exists()) {
+				boolean created = userFolder.mkdirs();
+				if(!created) {
+					throw new IOException("SaveRceptFlowUseInfoTemp Failed to create directory:" + userFolder.getAbsolutePath());
+				}
+			}
+			
+			File file = new File(userFolder, "userdata_flow_rcept.xml");
+			FileWriter fileWriter = new FileWriter(file);
+			fileWriter.write(xmlData);
+			fileWriter.close();
+			
+			log.info("SaveFlowUseInfoTemp 데이터가 파일로 저장 되었습니다. 경로: "+file.getAbsolutePath());
+		}catch(IOException e) {
+			e.printStackTrace();
+		}
+	}	
 }

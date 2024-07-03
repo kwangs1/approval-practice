@@ -135,4 +135,9 @@ public class folderServiceimpl implements folderService{
 		mapper.getFolderCounts(res);
 		return res;
 	}
+	//문서 삭제 시 결재함 테이블 삭제
+	@Override
+	public void deleteDocFldrmbr(String fldrmbrid) {
+		mapper.deleteDocFldrmbr(fldrmbrid);
+	}
 }

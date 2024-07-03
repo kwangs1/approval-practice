@@ -50,5 +50,9 @@ public class fileServiceimpl implements fileService{
 	public int getAttachCnt(String appr_seq) {
 		return mapper.getAttachCnt(appr_seq);
 	}
-
+	//문서 삭제 시 첨부파일 삭제
+	@Override
+	public void deleteDocAttach(String appr_seq) {
+		mapper.deleteDocAttach(appr_seq);
+	}
 }

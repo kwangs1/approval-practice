@@ -17,4 +17,6 @@ public interface fileService {
 	void ApprDocInsertFiles(AttachVO attach);
 	//해당 문서의 첨부파일 갯수 카운트
 	int getAttachCnt(String appr_seq);
+	//문서 삭제 시 첨부파일 삭제
+	void deleteDocAttach(String appr_seq);
 }

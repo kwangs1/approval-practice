@@ -52,4 +52,10 @@
 <select id="getAttachCnt" resultType="int" parameterType="String">
 	select count(*) from attach where appr_seq = #{appr_seq}
 </select>
+
+<!-- 문서 삭제 시 첨부파일 삭제 -->
+<delete id="deleteDocAttach">
+	delete attach
+	where appr_seq = #{appr_seq}
+</delete>
 </mapper>

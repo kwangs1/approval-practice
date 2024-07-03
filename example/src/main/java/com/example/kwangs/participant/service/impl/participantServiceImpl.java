@@ -522,4 +522,10 @@ public class participantServiceImpl implements participantService{
 			approvalTypeAndStatus(participant);
 		}
 	}
+	//문서 삭제 시 결재선 삭제
+	@Override
+	public void deleteFlowInfo(String appr_seq) {
+		mapper.deleteFlowInfo(appr_seq);
+		log.info("flow data... delete");
+	}
 }
