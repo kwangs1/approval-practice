@@ -227,6 +227,19 @@
 		)
 	}
 </select>
+<!-- 문서 카운트[문서함] -->
+<select id="getDocFolderCnt" statementType="CALLABLE" parameterType="java.util.Map">
+	{ call SP_DOCUMENTBOX_COUNT
+		(
+			#{sabun, mode=IN, jdbcType=VARCHAR},
+			#{applid, mode=IN, jdbcType=NUMERIC},
+			#{fldrid, mode=IN, jdbcType=VARCHAR},
+			#{docregistcnt, mode=OUT, jdbcType=NUMERIC},
+			#{apprfldrcnt, mode=OUT, jdbcType=NUMERIC},
+			#{takeovercnt, mode=OUT, jdbcType=NUMERIC}
+		)
+	}
+</select>
 <!-- 기록물철 연번 채번 -->
 <select id="findByBizunitSeq" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="String">
 select af.*

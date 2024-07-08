@@ -141,6 +141,10 @@ public class folderMapper {
 	public Map<String,Object> getFolderCounts(Map<String,Object>res){
 		return session.selectOne("folder.getFolderCounts",res);
 	}
+	//문서 카운트[문서함]
+	public Map<String,Object> getDocFolderCnt(Map<String,Object>res){
+		return session.selectOne("folder.getDocFolderCnt",res);
+	}
 	//문서 삭제 시 결재함 테이블 삭제
 	public void deleteDocFldrmbr(String fldrmbrid) {
 		session.delete("folder.deleteDocFldrmbr",fldrmbrid);

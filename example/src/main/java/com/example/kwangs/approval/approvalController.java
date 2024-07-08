@@ -56,7 +56,7 @@ public class approvalController {
 	@Autowired
 	private userService userService;
 	
-	//프로시저 카운트 처리
+	//프로시저 카운트 처리[결재함]
 	public void FolderCounts(HttpServletRequest request, folderVO fd,Model model) {
 		String sabun = (String)request.getSession().getAttribute("sabun");
 		
@@ -65,6 +65,18 @@ public class approvalController {
 		res.put("applid", fd.getApplid());
 		Map<String,Object> result = folderService.getFolderCounts(res);
 		model.addAttribute("FolderCnt",result);
+	}
+	
+	//프로시저 카운트 처리[결재함]
+	public void DocFolderCnt(HttpServletRequest request, folderVO fd,Model model) {
+		String sabun = (String)request.getSession().getAttribute("sabun");
+		
+		Map<String,Object> res = new HashMap<>();
+		res.put("sabun", sabun);
+		res.put("applid", fd.getApplid());
+		res.put("fldrid", fd.getFldrid());
+		Map<String,Object> result = folderService.getDocFolderCnt(res);
+		model.addAttribute("DocFolderCnt",result);
 	}
 	//문서작성
 	@GetMapping("/apprWrite")
@@ -299,6 +311,10 @@ public class approvalController {
 		List<folderVO> docfldrSidebar = folderService.docfldrSidebar(drafterdeptid);
 		model.addAttribute("docfldrSidebar",docfldrSidebar);
 		model.addAttribute("fldrname",fd.getFldrname());
+		model.addAttribute("applid",fd.getApplid());// procedure applid
+		model.addAttribute("fldrid",fd.getFldrid());// fldrmng view data
+		
+		DocFolderCnt(request,fd,model);
 	}
 	
 	//문서 상세보기
