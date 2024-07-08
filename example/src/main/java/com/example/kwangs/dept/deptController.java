@@ -72,6 +72,18 @@ public class deptController {
 		return "dept/joinUseDept";
 	}
 	
+	//폴더 생성 시 담당자 지정
+	@GetMapping("/FolderUseList")
+	public String FolderUseList(Model model, HttpServletRequest request) {
+		String id = (String) request.getSession().getAttribute("userId");
+		model.addAttribute("user",id);
+		
+		List<deptVO>flowUseInfo = service.flowUseInfo();
+		model.addAttribute("flowUseInfo",flowUseInfo);
+		
+		return "dept/FolderUseList";
+	}
+	
 	//결재선 정보 가져올 부서 및 유저목록 & 기록물철 정보
 	@GetMapping("/flowUseInfo")
 	public String flowUseInfo(Model model, HttpServletRequest request) {

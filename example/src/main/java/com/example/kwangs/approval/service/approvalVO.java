@@ -37,8 +37,15 @@ public class approvalVO{
 	private String orgdraftdeptid;
 	private String poststatus;
 	private String draftsrctype;
+	private String orgdeptfolderid;
 	
 	
+	public String getOrgdeptfolderid() {
+		return orgdeptfolderid;
+	}
+	public void setOrgdeptfolderid(String orgdeptfolderid) {
+		this.orgdeptfolderid = orgdeptfolderid;
+	}
 	public String getDraftsrctype() {
 		return draftsrctype;
 	}

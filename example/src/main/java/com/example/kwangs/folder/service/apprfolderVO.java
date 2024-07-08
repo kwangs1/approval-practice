@@ -21,7 +21,15 @@ public class apprfolderVO extends folderVO{
 	private String prodyear;
 	private String endyear;
 	private String bizunityearseq;
+	private String originfldrid;
 	
+	
+	public String getOriginfldrid() {
+		return originfldrid;
+	}
+	public void setOriginfldrid(String originfldrid) {
+		this.originfldrid = originfldrid;
+	}
 	public String getFldrid() {
 		return fldrid;
 	}

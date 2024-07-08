@@ -3,6 +3,8 @@ package com.example.kwangs.folder.service;
 import java.util.List;
 import java.util.Map;
 
+import com.example.kwangs.bizunit.service.bizunitVO;
+
 public interface folderService {
 	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
 	void FolderAdd(folderVO fd);
@@ -17,7 +19,7 @@ public interface folderService {
 	//문서 상세보기
 	folderVO info(String fldrid);
 	//기록물철 작성
-	void folderAddAndApprF(folderVO fd, String userid) throws Exception;
+	void folderAddAndApprF(folderVO fd, String fldrmanagerid, String fldrmanagername, bizunitVO biz) throws Exception;
 	//결재함 사이드메뉴
 	List<folderVO>ApprfldrSidebar(String ownerid);
 	//기안자 발송대기 폴더 정보가져오기

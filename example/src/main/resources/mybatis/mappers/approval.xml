@@ -53,7 +53,7 @@
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid})
 </insert>
 
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
@@ -370,7 +370,7 @@
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid})
 	</insert>
 	<!-- 접수 완료 시 해당 문서의 접수테이블 업데이트 -->
 	<update id="updSendData">

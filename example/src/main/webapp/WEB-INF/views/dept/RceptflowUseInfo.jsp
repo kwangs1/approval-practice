@@ -26,20 +26,33 @@ a{text-decoration: none; color: blue;}
 	<div class="content tab1_content">
 	<input type="checkbox" name="docattr" id="docattr_1" value="1" />일반기안
   	<input type="checkbox" name="docattr" id="docattr_2" value="2" />내부결재
-	  <ul class="tree">
-			<c:forEach var="folder" items="${list}">
-				<ul class="folder">
-					<li id="folder${folder.fldrid}">
-					<span class="folder-name">${folder.fldrname}</span>
-					<c:forEach var="apprfolder" items="${folder.apprfolders}">
-						<ul class="af-list"> 				
-							<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
-							data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}">${apprfolder.fldrname}</a>			
-						</ul>
-					</c:forEach>
-					</li>
-				</ul>
-			</c:forEach>
+	<ul class="tree">
+	 	<c:forEach var="folder" items="${list}">
+		   <c:if test="${folder.parfldrid eq null}">
+		       <li id="folder${folder.fldrid}" id="folder">
+			     <span class="folder-name">${folder.fldrname}</span>    
+			         
+		          <%-- 단위과제 하위 start --%>
+		         <c:forEach var="subfolder" items="${list}">
+		            <c:if test="${subfolder.parfldrid eq folder.fldrid}">
+		              <ul class="folder">
+		                <li id="subfolder${subfolder.fldrid}">
+					     <span class="folder-name">${subfolder.fldrname}</span>
+					
+							<c:forEach var="apprfolder" items="${subfolder.apprfolders}">
+								<ul class="af-list"> 				
+									<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
+									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}">${apprfolder.fldrname}</a>			
+								</ul>
+							 </c:forEach>
+		                </li>
+		              </ul>
+		            </c:if>
+		          </c:forEach>
+		          <%-- end --%>      
+		        </li>
+		      </c:if>
+		    </c:forEach>
 		</ul>
 	  <div id="selectedApFolder"></div>
 	  </div>

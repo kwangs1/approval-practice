@@ -18,6 +18,10 @@ public class folderMapper {
 	@Autowired
 	private SqlSession session;
 	
+	//기록물철 연번 채번
+	public apprfolderVO findByBizunitSeq(String procdeptid) {
+		return session.selectOne("folder.findByBizunitSeq",procdeptid);
+	}
 	//폴더 생성(단위과제 작성 시 폴더 테이블 인서트 부분도 포함]
 	public void FolderAdd(folderVO fd) {
 		session.insert("folder.FolderAdd",fd);
@@ -59,8 +63,8 @@ public class folderMapper {
 		session.insert("folder.apprFolderAdd",af);
 	}
 	//기안 시 기록물철 가져와서 집어넣기
-	public List<apprfolderVO> DeptApprFolderList(String procdeptid){
-		return session.selectList("folder.DeptApprFolderList",procdeptid);
+	public List<apprfolderVO> DeptApprFolderList(Map<String,Object> res){
+		return session.selectList("folder.DeptApprFolderList",res);
 	}
 	//최종 결재 이후 문서폴더 멤버 테이블 insert
 	public void DocFldrmbr2Add(fldrmbr2VO fm2) {

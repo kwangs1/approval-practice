@@ -18,12 +18,15 @@
 </div>
 단위과제명: <input type="text" value="${bInfo.bizunitname}"/><br><br>
 기록물철명: <input type="text" name="fldrname" id="fldrname" autofocus="autofocus"/><br><br>
-단위과제코드: <input type="text" value="${bInfo.bizunitcd}"/><br><br>
+단위과제코드: <input type="text" value="${bInfo.bizunitcd}" id="bizunitcd"/><br><br>
 
-처리과: <input type="text" value="${bInfo.procdeptid}" /><br><br>
-<input type="hidden" name="fldrmanagerid" value="${currUser.userid}" />
-담당자: <input type="text" name="fldrmanagername" value="${currUser.name}" readonly="readonly" style="border:none;"/><br><br>
-보존기간: <select value="${bInfo.keepperiod}">
+처리과: <input type="text" value="${bInfo.procdeptid}"  id="procdeptid"/><br><br>
+
+<input type="text" name="fldrmanagerid" id="fldrmanagerid" />
+담당자: <a href="#" class="userLink" style="text-decoration: none;">🕵🏻</a>
+		<input type="text" name="fldrmanagername" id="fldrmanagername" readonly="readonly" class="userLink"/><br><br>
+
+보존기간: <select value="${bInfo.keepperiod}" id="keepperiod">
 			<option value="">보존기간 선택</option>
 			<option value="01">1년</option>
 			<option value="03">3년</option>
@@ -61,6 +64,19 @@ function setYear(){
 	document.getElementById('endyear').value = CurrYear;
 }
 
+$(document).on('click','.userLink',function(){
+	window.open("<c:url value='/dept/FolderUseList'/>", 'deptLink','width=550, height=350');
+})
+
+window.addEventListener('message', function(e){
+	var data = e.data;
+	var name = data.name;
+	var id = data.id;
+	
+	$('#fldrmanagername').val(name);
+	$('#fldrmanagerid').val(id);
+});
+
 function addApprFolder(){
 	var year = $('#year').val();
 	var endyear = $('#endyear').val();
@@ -71,6 +87,8 @@ function addApprFolder(){
 	var ownertype = '<c:out value="${info.ownertype}"/>';
 	var ownerid = '<c:out value="${info.ownerid}"/>';
 	var fldrdepth = '<c:out value="${depth}"/>';
+	var fldrmanagerid = $('#fldrmanagerid').val();
+	var fldrmanagername = $('#fldrmanagername').val();
 	
 	var paramData = {
 			year :year,
@@ -81,7 +99,12 @@ function addApprFolder(){
 			appltype :appltype,
 			ownertype :ownertype,
 			ownerid :ownerid,
-			fldrdepth :fldrdepth
+			fldrdepth :fldrdepth,
+			fldrmanagerid: fldrmanagerid,
+			fldrmanagername: fldrmanagername,
+			bizunitcd: $('#bizunitcd').val(),
+			procdeptid: $('#procdeptid').val(),
+			keepperiod: $('#keepperiod').val()
 	}
 	
 	$.ajax({

@@ -88,9 +88,9 @@ public class folderController {
 	
 	@ResponseBody
 	@PostMapping("/folderAddAndApprF")
-	public void folderAddAndApprF(folderVO fl, HttpServletRequest request)throws Exception {
-		String userid = (String)request.getSession().getAttribute("userId");
-		service.folderAddAndApprF(fl,userid);
+	public void folderAddAndApprF(folderVO fd, String fldrmanagerid, String fldrmanagername, bizunitVO biz,
+			HttpServletRequest request)throws Exception {
+		service.folderAddAndApprF(fd,fldrmanagerid,fldrmanagername,biz);
 	}
 	
 	//폴더에 대한 문서 카운트[결재함]

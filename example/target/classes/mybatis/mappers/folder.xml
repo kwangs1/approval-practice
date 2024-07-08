@@ -63,7 +63,7 @@
 </select>
 <!-- 기안 시 단위과제 보여주기 -->
 <select id="DeptFolderList" resultMap="folder" parameterType="String">
-	select * from folder where ownerid = #{ownerid} and applid = 7010
+	select * from folder where ownerid = #{ownerid} and applid in(7000, 7010)
 </select>
 <!-- 문서목록 -->
 <select id="list" resultMap="folder">
@@ -86,15 +86,29 @@
 <insert id="apprFolderAdd" parameterType="com.example.kwangs.folder.service.apprfolderVO">
 	insert into apprfolder
 	values(#{fldrid},#{fldrinfoyear},#{bizunitcd},#{procdeptid},0,0,
-	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},#{prodyear},#{endyear},#{bizunityearseq})
+	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},
+	#{prodyear},#{endyear},#{bizunityearseq},#{originfldrid})
 </insert>
 <!-- 기안 시 기록물철 가져와서 집어넣기 -->
-<select id="DeptApprFolderList" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="String">
-	select af.*, f.fldrname
+<select id="DeptApprFolderList" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="java.util.Map">
+	<!-- select af.*, f.fldrname
 	from apprfolder af
 	inner join folder f
 	on af.fldrid = f.fldrid
-	where af.procdeptid = #{procdeptid}
+	where af.procdeptid = #{procdeptid} -->
+	
+	with folder_hierarchy as(
+	  select f.*
+	   from folder f
+	  start with f.parfldrid = #{fldrid}
+	  connect by prior f.fldrid = f.parfldrid
+	)
+	select fh.fldrname,af.*
+	from folder_hierarchy fh, apprfolder af
+	where fh.ownerid = af.procdeptid
+	and fh.fldrid = af.fldrid
+	and fh.ownerid= #{ownerid}
+	and fh.applid  = 7020
 </select>
 <!-- 기록물 등록대장 fldrid 가져오기 -->
 <select id="DocFloder" resultMap="folder" parameterType="String">
@@ -212,5 +226,16 @@
 			#{rceptwaitcnt, mode=OUT, jdbcType=NUMERIC}
 		)
 	}
+</select>
+<!-- 기록물철 연번 채번 -->
+<select id="findByBizunitSeq" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="String">
+select af.*
+	from(
+	    select row_number() over (partition by af.procdeptid order by af.bizunityearseq  desc) rindex, 
+	    		af.bizunityearseq, af.fldrinfoyear, af.procdeptid
+	        from apprfolder af
+	    where af.procdeptid= #{procdeptid}
+    )af
+where af.rindex =  1
 </select>
 </mapper>
