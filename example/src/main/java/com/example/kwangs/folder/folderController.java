@@ -57,7 +57,8 @@ public class folderController {
 	//문서목록
 	@GetMapping("list")
 	public void list(Model model,HttpServletRequest request) {
-		List<folderVO> list = service.list();
+		String ownerid = (String)request.getSession().getAttribute("deptId");
+		List<folderVO> list = service.list(ownerid);
 		model.addAttribute("list",list);
 	}
 	
@@ -67,7 +68,10 @@ public class folderController {
 		folderVO info = service.info(fldrid);
 		model.addAttribute("info",info);
 		//단위과제 정보 가져오기
-		bizunitVO bInfo = bizService.bInfo(info.getOwnerid());
+		Map<String,Object>res = new HashMap<>();
+		res.put("bizunitname", info.getFldrname());
+		res.put("procdeptid", info.getOwnerid());
+		bizunitVO bInfo = bizService.bInfo(res);
 		model.addAttribute("bInfo",bInfo);
 	}
 	
@@ -82,7 +86,10 @@ public class folderController {
 		model.addAttribute("depth",depth);
 		
 		//단위과제 정보 가져오기
-		bizunitVO bInfo = bizService.bInfo(info.getOwnerid());
+		Map<String,Object>res = new HashMap<>();
+		res.put("bizunitname", info.getFldrname());
+		res.put("procdeptid", info.getOwnerid());
+		bizunitVO bInfo = bizService.bInfo(res);
 		model.addAttribute("bInfo",bInfo);
 	}
 	

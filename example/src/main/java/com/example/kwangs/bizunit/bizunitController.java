@@ -95,7 +95,8 @@ public class bizunitController {
 	@ResponseBody
 	@PostMapping("/write")
 	public void write(bizunitVO biz, HttpServletRequest request) {
-		String deptid = (String) request.getSession().getAttribute("deptId");
-		service.write(biz,deptid);
+		String id = (String) request.getSession().getAttribute("userId");
+		String name = (String) request.getSession().getAttribute("userName");
+		service.write(biz,id,name);
 	}
 }

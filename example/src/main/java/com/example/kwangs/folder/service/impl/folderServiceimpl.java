@@ -84,8 +84,8 @@ public class folderServiceimpl implements folderService{
 	}
 	//문서 목록
 	@Override
-	public List<folderVO> list(){
-		return mapper.list();
+	public List<folderVO> list(String ownerid){
+		return mapper.list(ownerid);
 	}
 	//문서 상세보기
 	@Override

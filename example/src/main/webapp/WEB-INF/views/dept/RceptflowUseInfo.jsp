@@ -40,10 +40,19 @@ a{text-decoration: none; color: blue;}
 					     <span class="folder-name">${subfolder.fldrname}</span>
 					
 							<c:forEach var="apprfolder" items="${subfolder.apprfolders}">
-								<ul class="af-list"> 				
+							<ul class="af-list"> 
+								<c:if test="${apprfolder.procstatus ne '3' }">
 									<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
-									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}">${apprfolder.fldrname}</a>			
-								</ul>
+									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}"
+									data-procstatus="${apprfolder.procstatus}">${apprfolder.fldrname}</a>								
+								</c:if>				
+								<c:if test="${apprfolder.procstatus eq '3' }">
+									<a href="#" class="afLink" style="color:silver"
+									data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
+									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}"
+									data-procstatus="${apprfolder.procstatus}">${apprfolder.fldrname}</a>								
+								</c:if>					
+							</ul>
 							 </c:forEach>
 		                </li>
 		              </ul>

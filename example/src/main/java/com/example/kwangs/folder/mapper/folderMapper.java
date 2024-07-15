@@ -47,8 +47,8 @@ public class folderMapper {
 		return session.selectList("folder.DeptFolderList",ownerid);
 	}
 	//문서 목록
-	public List<folderVO> list(){
-		return session.selectList("folder.list");
+	public List<folderVO> list(String ownerid){
+		return session.selectList("folder.list",ownerid);
 	}
 	//문서 상세보기
 	public folderVO info(String fldrid) {

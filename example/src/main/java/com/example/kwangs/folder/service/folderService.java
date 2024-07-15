@@ -15,7 +15,7 @@ public interface folderService {
 	//결재선 지정 시 폴더목록 불러올거
 	List<folderVO> DeptFolderList(String ownerid);
 	//문서 목록
-	List<folderVO> list();
+	List<folderVO> list(String ownerid);
 	//문서 상세보기
 	folderVO info(String fldrid);
 	//기록물철 작성
@@ -40,4 +40,6 @@ public interface folderService {
 	Map<String,Object> getDocFolderCnt(Map<String,Object>res);
 	//문서 삭제 시 결재함테이블 에서 삭제
 	void deleteDocFldrmbr(String fldrmbrid);
+	//기록물철 연번 채번
+	String ApprFldrBizunitYearSeq(String procdeptid);
 }

@@ -19,7 +19,7 @@
 <!-- upload csv -->
 <insert id="uploadCSV" parameterType="bizunitVO">
 	insert into bizunit
-	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},'0',#{ablitionflag})
+	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},#{keepperiod},#{ablitionflag})
 </insert>
 <!-- csv export file 에 넣을 단위과제  목록 -->
 <select id="getbizList" resultMap="bizunit">
@@ -32,10 +32,10 @@
 <!-- 단위과제 작성 -->
 <insert id="write" parameterType="bizunitVO">
 	insert into bizunit
-	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},'0',#{ablitionflag})
+	values(#{bizunitcd},#{procdeptid},#{procdeptname},sysdate,#{bizunitname},#{bizunitdesc},#{bizunitchargeid},#{keepperiod},#{ablitionflag})
 </insert>
 <!-- 기록물철 작성 시 단위과제 정보 가져오기 -->
-<select id="bInfo" resultMap="bizunit" parameterType="String">
-	select * from bizunit where procdeptid = #{procdeptid}
+<select id="bInfo" resultMap="bizunit" parameterType="java.util.Map">
+	select * from bizunit where procdeptid = #{procdeptid} and bizunitname = #{bizunitname}
 </select>
 </mapper>

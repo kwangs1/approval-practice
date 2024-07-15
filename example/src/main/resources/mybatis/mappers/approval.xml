@@ -153,7 +153,7 @@
 			select a.*, row_number() over(order by docregno desc)as rnum
 			from approval a, fldrmbr2 fm2
 			where 1=1
-			and a.drafterdeptid = #{drafterdeptid} 
+			<!-- and a.drafterdeptid = #{drafterdeptid}  -->
 			and a.status = 256
 			and a.appr_seq = fm2.fldrmbrid
 			and fm2.fldrid = #{fldrid}

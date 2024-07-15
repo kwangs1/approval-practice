@@ -27,16 +27,24 @@ $('a.userLink').on('click',function(e){
 var selectedFldrid = null;
 var selectedFldrname = null;
 var selectedBizunitcd = null;
+var selectedProcstatus = null;
 $('a.afLink').on('click',function(e){
 e.preventDefault();
 	
 selectedFldrid = $(this).data('fldrid');
 selectedBizunitcd = $(this).data('bizunitcd');
 selectedFldrname = $(this).data('fldrname');
+selectedProcstatus = $(this).data('procstatus');
 
-selectedApFolder = { fldrid: selectedFldrid, fldrname: selectedFldrname, bizunitcd: selectedBizunitcd };
+if(selectedProcstatus === 3){
+	alert("해당 기록물철은 사용할 수 없습니다.");
+	return;
+}
+
+selectedApFolder = { fldrid: selectedFldrid, fldrname: selectedFldrname, bizunitcd: selectedBizunitcd , procstatus: selectedProcstatus};
 updateSelectedApFolder();
 });
+
 //수신부서 정보 전송
 $('a.deptLink').on('click',function(e){
 	e.preventDefault();
@@ -210,7 +218,24 @@ function confirmSelection(){
 			}
 		});		
 	}
-
+	$.ajax({
+		type:'post',
+		url: '/kwangs/SaveDatToDatFile',
+		data: {fldrid: selectedApFolder.fldrid, 
+			  bizunitcd: selectedApFolder.bizunitcd, 
+			  fldrname: selectedApFolder.fldrname, 
+			  userid: uId
+		},
+		success: function(response){
+			console.log(response);
+            setTimeout(function() {
+                window.close();
+            }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
+		},
+		error:function(error){
+			console.error("Error sending clicked apprfolder "+error);	
+		}
+	})
 	//window.close();
 }
 

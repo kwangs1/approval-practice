@@ -66,8 +66,8 @@
 	select * from folder where ownerid = #{ownerid} and applid in(7000, 7010)
 </select>
 <!-- 문서목록 -->
-<select id="list" resultMap="folder">
-	select * from folder
+<select id="list" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid}
 </select>
 <!-- 문서 상세보기 -->
 <select id="info" resultMap="folder" parameterType="String">
@@ -91,19 +91,13 @@
 </insert>
 <!-- 기안 시 기록물철 가져와서 집어넣기 -->
 <select id="DeptApprFolderList" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="java.util.Map">
-	<!-- select af.*, f.fldrname
-	from apprfolder af
-	inner join folder f
-	on af.fldrid = f.fldrid
-	where af.procdeptid = #{procdeptid} -->
-	
 	with folder_hierarchy as(
 	  select f.*
 	   from folder f
 	  start with f.parfldrid = #{fldrid}
 	  connect by prior f.fldrid = f.parfldrid
 	)
-	select fh.fldrname,af.*
+	select fh.fldrname,fh.applid,fh.fldrdepth,af.*
 	from folder_hierarchy fh, apprfolder af
 	where fh.ownerid = af.procdeptid
 	and fh.fldrid = af.fldrid

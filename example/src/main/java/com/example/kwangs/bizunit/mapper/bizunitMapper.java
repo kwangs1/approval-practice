@@ -1,6 +1,7 @@
 package com.example.kwangs.bizunit.mapper;
 
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.ibatis.session.SqlSession;
@@ -33,7 +34,7 @@ public class bizunitMapper {
 		session.insert("mapper.bizunit.write",biz);
 	}
 	//기록물철 작성 시 단위과제 정보 가져오기
-	public bizunitVO bInfo(String bizunitname) {
-		return session.selectOne("mapper.bizunit.bInfo",bizunitname);
+	public bizunitVO bInfo(Map<String,Object>res) {
+		return session.selectOne("mapper.bizunit.bInfo",res);
 	}
 }

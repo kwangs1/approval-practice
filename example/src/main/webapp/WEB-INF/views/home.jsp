@@ -35,6 +35,7 @@ function bizunit(){
 
 function folder(){
 	url = '<c:url value="/folder/list"/>';
+	url += '?ownerid='+'${deptId}'
 	window.open(url,'folder','width=500px, height=500px');
 }
 

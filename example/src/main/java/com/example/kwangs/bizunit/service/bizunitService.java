@@ -1,6 +1,7 @@
 package com.example.kwangs.bizunit.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.web.multipart.MultipartFile;
 
@@ -13,7 +14,7 @@ public interface bizunitService {
 	//단위과제 목록
 	List<bizunitVO> list();
 	//단위과제 작성
-	void write(bizunitVO biz,String deptid);
+	void write(bizunitVO biz,String id, String name);
 	//기록물철 작성 시 단위과제 정보 가져오기
-	bizunitVO bInfo(String procdeptid);
+	bizunitVO bInfo(Map<String,Object>res);
 }
