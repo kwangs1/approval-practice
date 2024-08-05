@@ -148,5 +148,75 @@ public class folderMapper {
 	//문서 삭제 시 결재함 테이블 삭제
 	public void deleteDocFldrmbr(String fldrmbrid) {
 		session.delete("folder.deleteDocFldrmbr",fldrmbrid);
+	}	
+	//문서함[함관리] 에서 기록물철 정보
+	public apprfolderVO ApprFldrInfo(Map<String, Object> res) {
+		return session.selectOne("folder.ApprFldrInfo",res);
+	}
+	//수정[기록물철-정보]
+	public void edit(apprfolderVO af) {
+		session.update("folder.edit",af);
+	}
+	//수정[기록물철-이관년도]
+	public void transferYear(apprfolderVO af) {
+		session.update("folder.transferYear",af);
+	}
+	//수정[기록물철-편철상태확인취소]
+	public void CancelFldrStatus(apprfolderVO af) {
+		session.update("folder.CancelFldrStatus",af);
+	}
+	public void edit_FInfo(Map<String,Object>res) {
+		session.update("folder.edit_FInfo",res);
+	}
+	//기록물철 추가 시 해당 단위과제 하위 기록물철의 마지막 깊이값 가져오기
+	public folderVO getListFldrDepth(String fldrid) {
+		return session.selectOne("folder.getListFldrDepth",fldrid);
+	}	
+	//정리한 기록물철 하위 철 이동 시 정보 업데이트(폴더테이블)
+	public void MoveApprFldr(folderVO fd) {
+		session.update("folder.MoveApprFldr",fd);
+	}
+	//정리한 기록물철 하위 철 이동 시 정보 업데이트(기록물철 테이블)
+	public void UpdateApFldrInfo(apprfolderVO af) {
+		session.update("folder.UpdateApFldrInfo",af);
+	}
+	//기록물철, 단위과제에 대한 부서 폴더 리스트(깊이 정렬)
+	public List<folderVO> DeptFldrList(String ownerid){
+		return session.selectList("folder.DeptFldrList",ownerid);
+	}
+	//문서 이동 시 문서 깊이 중복 체크 후 값 조정 메서드
+	public void updateFldrdepth(folderVO fd) {
+		session.update("folder.updateFldrdepth",fd);
+	}
+	/*
+	 * 이관 
+	 */
+	//인계부서 기록물철 정보 업데이트
+	public void OriginApprFldrUpd(Map<String,Object>res) {
+		session.update("folder.OriginApprFldrUpd",res);
+	}	
+	//인수부서 정리할 기록물철 정보가져오기.
+	public folderVO OrganizeFldrInfo(String ownerid) {
+		return session.selectOne("folder.OrganizeFldrInfo",ownerid);
+	}
+	//기록물철 복사
+	public void CopyApprFldr(apprfolderVO af) {
+		session.insert("folder.CopyApprFldr",af);
+	}
+	//폴더 복사
+	public void CopyFldr(folderVO fd) {
+		session.insert("folder.CopyFldr",fd);
+	}
+	//인수부서에 인게부서 폴더 복사하는 부분
+	public folderVO TakeOverFldr(String fldrid) {
+		return session.selectOne("folder.TakeOverFldr",fldrid);
+	}
+	//이관 시 인계부서에서 fldrmbr2테이블에 해당기록물철 문서 저장된 데이터 읽어오기 
+	public List<fldrmbr2VO>getMoveFldrMngList(Map<String,Object>res){
+		return session.selectList("folder.getMoveFldrMngList",res);
+	}
+	//인수부서 기록물등록대장 정보
+	public folderVO getOfficialRegister(String ownerid) {
+		return session.selectOne("folder.getOfficialRegister",ownerid);
 	}
 }

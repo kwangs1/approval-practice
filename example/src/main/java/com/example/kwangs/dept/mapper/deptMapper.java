@@ -1,6 +1,7 @@
 package com.example.kwangs.dept.mapper;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,5 +54,8 @@ public class deptMapper {
 	//문서 발송 시 수신처 부서 정보값 가져오기
 	public List<deptVO>SndngDeptInfo(String sendername){
 		return session.selectList("mapper.dept.SndngDeptInfo",sendername);
+	}	
+	public deptVO getDeptName(Map<String,Object>res) {
+		return session.selectOne("mapper.dept.getDeptName",res);
 	}
 }

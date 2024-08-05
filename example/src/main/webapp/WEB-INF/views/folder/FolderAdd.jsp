@@ -20,6 +20,7 @@
 	<select id="deptApplid" onchange="setApplidValue(this)"  style="display:none">
 		<option value="" selected="selected">생성할 폴더를 선택 하십시오.</option>
 		<option value="7000">단위과제</option>
+		<option value="7030">정리할 기록물철</option>
 		<option value="8000">대장</option>
 	</select>	
 	<select id="userApplid" onchange="setApplidValue(this)" style="display:none">

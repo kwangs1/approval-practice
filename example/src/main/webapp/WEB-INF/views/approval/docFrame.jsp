@@ -69,11 +69,11 @@
 <c:choose>
 	<c:when test="${applid == 7020 }">
 	<h1 id="title_txt"><c:out value="${fldrname}"/>(${DocFolderCnt.apprfldrcnt})&nbsp;
-		<a href='<c:url value="/appr/DocFldrMng.do?fldrid=${fldrid}&procdeptid=${user.deptid}"/>'>🔅</a></h1>	
+		<a href='<c:url value="/approval/DocFldrMng?fldrid=${fldrid}&procdeptid=${user.deptid}"/>'>🔅</a></h1>	
 	</c:when>
 	<c:when test="${applid == 7040 }">
 	<h1 id="title_txt"><c:out value="${fldrname}"/>(${DocFolderCnt.takeovercnt})&nbsp;
-		<a href='<c:url value="/appr/DocFldrMng.do?fldrid=${fldrid}&procdeptid=${user.deptid}"/>'>🔅</a></h1>	
+		<a href='<c:url value="/approval/DocFldrMng?fldrid=${fldrid}&procdeptid=${user.deptid}"/>'>🔅</a></h1>	
 	</c:when>
 </c:choose>
 <table class="table table-bordered">

@@ -59,11 +59,27 @@
 	where ownerid = #{ownerid}
 	start with parfldrid is null
 	CONNECT by PRIOR fldrid = parfldrid
-	order siblings by fldrid
+	order siblings by fldrdepth
 </select>
 <!-- 기안 시 단위과제 보여주기 -->
 <select id="DeptFolderList" resultMap="folder" parameterType="String">
-	select * from folder where ownerid = #{ownerid} and applid in(7000, 7010)
+	select * from 
+	(
+		select f.*, null as bizunitcd
+			from folder f
+		where f.ownerid = #{ownerid}
+		and f.applid = 7000
+		
+		union all
+		
+		select f.*,af.bizunitcd
+		from folder f 
+		inner join apprfolder af
+		on f.fldrid = af.fldrid
+		and f.ownerid= #{ownerid}
+		and f.applid = 7010	
+	)
+	order by fldrdepth
 </select>
 <!-- 문서목록 -->
 <select id="list" resultMap="folder" parameterType="String">
@@ -79,7 +95,7 @@
 		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
 	</selectKey>
 	insert into folder
-	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},0,#{ownertype},#{ownerid},#{appltype},
+	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},#{fldrdepth},#{ownertype},#{ownerid},#{appltype},
 	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
 </insert>
 <!-- 기록물철 등록 -->
@@ -87,7 +103,7 @@
 	insert into apprfolder
 	values(#{fldrid},#{fldrinfoyear},#{bizunitcd},#{procdeptid},0,0,
 	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},
-	#{prodyear},#{endyear},#{bizunityearseq},#{originfldrid})
+	#{prodyear},#{endyear},#{bizunityearseq},#{originfldrid},#{transferyear})
 </insert>
 <!-- 기안 시 기록물철 가져와서 집어넣기 -->
 <select id="DeptApprFolderList" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="java.util.Map">
@@ -96,6 +112,7 @@
 	   from folder f
 	  start with f.parfldrid = #{fldrid}
 	  connect by prior f.fldrid = f.parfldrid
+	  order siblings by f.fldrdepth
 	)
 	select fh.fldrname,fh.applid,fh.fldrdepth,af.*
 	from folder_hierarchy fh, apprfolder af
@@ -244,5 +261,127 @@ select af.*
 	    where af.procdeptid= #{procdeptid}
     )af
 where af.rindex =  1
+</select>
+<!-- 문서함[함관리] 에서의 기록물철 정보 -->
+<select id="ApprFldrInfo" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="java.util.Map">
+	select f.fldrname,f.applid,f.fldrdepth, af.*
+	from apprfolder af, folder f
+	where af.fldrid = f.fldrid
+	and af.fldrid = #{fldrid}
+	and af.procdeptid = #{procdeptid}
+</select>
+
+<!-- 수정 -->
+<update id="edit">
+	update apprfolder
+		set fldrmanagerid = #{fldrmanagerid}, fldrmanagername = #{fldrmanagername},
+		endyear = #{endyear}, keepingperiod = #{keepingperiod}
+	where fldrid = #{fldrid}
+</update>
+
+<update id="edit_FInfo">
+	update folder
+		set fldrname = #{fldrname}, endyear = #{endyear},
+		updaterid = #{updaterid}, updatedate = to_date(to_char(SYSDATE,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS')
+	where fldrid = #{fldrid}
+</update>
+
+<update id="transferYear">
+	update apprfolder
+		set filingflag = '1', transferyear = #{transferyear}, procstatus = '1'
+	where fldrid = #{fldrid}
+</update>
+
+<update id="CancelFldrStatus">
+	update apprfolder
+		set filingflag = '0', procstatus = '0'
+	where fldrid = #{fldrid}
+</update>
+
+<!-- 기록물철 추가 시 해당 단위과제 하위 기록물철의 마지막 깊이값 가져오기 -->
+<select id="getListFldrDepth" resultMap="folder" parameterType="String">
+select 
+  f.* 
+from ( 
+    select
+        row_number() over(PARTITION by t.parfldrid order by fldrdepth desc) rindex, t.*
+    from folder t
+    where t.parfldrid = #{fldrid}
+    )f
+where f.rindex = 1
+</select>
+<!-- 정리한 기록물철 하위 철 이동 시 정보 업데이트(폴더테이블) -->
+<update id="MoveApprFldr">
+	update folder
+		set parfldrid = #{parfldrid}, parfldrname = #{parfldrname}, applid = 7020, fldrdepth = #{fldrdepth}, appltype = '3'
+	where fldrid = #{fldrid}
+</update>
+<!-- 정리한 기록물철 하위 철 이동 시 정보 업데이트(기록물철테이블) -->
+<update id="UpdateApFldrInfo">
+	update apprfolder
+		set bizunitcd = #{bizunitcd}, 
+			fldrmanagerid = #{fldrmanagerid}, fldrmanagername = #{fldrmanagername}
+	where fldrid = #{fldrid}
+</update>
+<!-- 기록물철, 단위과제에 대한 부서 폴더 리스트(깊이 정렬) -->
+<select id="DeptFldrList" resultMap="folder" parameterType="String">
+	select *
+		from folder 
+	where ownerid= #{ownerid}
+	and applid in (7010,7020)
+	order by fldrdepth
+</select>
+<!-- 문서 이동 시 문서 깊이 중복 체크 후 값 조정 -->
+<update id="updateFldrdepth">
+	update folder
+		set fldrdepth = #{fldrdepth}
+	where ownerid = #{ownerid}
+	and fldrid = #{fldrid}
+</update>
+<!-- 이관 시 해당 기록물철 값 업데이트 -->
+<update id="OriginApprFldrUpd">
+	update apprfolder
+		set filingflag = '1', procstatus = '3', biztranstype = #{biztranstype},
+			 fromdeptid = #{fromdeptid}, todeptid = #{todeptid}
+	where fldrid = #{fldrid}
+	and procdeptid = #{procdeptid}
+</update>
+<!-- 인수부서 정리할 기록물철 정보가져오기. -->
+<select id="OrganizeFldrInfo" resultMap="folder" parameterType="String">
+	select * from folder
+	where ownerid = #{ownerid}
+	and applid = 7030
+</select>
+<insert id="CopyApprFldr" parameterType="com.example.kwangs.folder.service.apprfolderVO">
+	<selectKey keyProperty="fldrid" resultType="String" order="BEFORE">
+		select 'FOLDER' || to_char(sysdate,'YYYYMM') || fldr_seq.nextval from dual
+	</selectKey>
+	insert into apprfolder
+	values(#{fldrid},#{fldrinfoyear},#{bizunitcd},#{procdeptid},#{filingflag},#{biztranstype},
+	#{keepingperiod},#{transferyaer},0,#{fldrmanagerid},#{fldrmanagername},#{fromdeptid},#{todeptid},
+	#{prodyear},#{endyear},#{bizunityearseq},#{originfldrid},#{transferyear})
+</insert>
+
+<insert id="CopyFldr" parameterType="com.example.kwangs.folder.service.folderVO">
+	insert into folder
+	values(#{fldrid},#{fldrname},#{parfldrid},#{parfldrname},#{fldrdepth},#{ownertype},#{ownerid},#{appltype},
+	#{applid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{updatedate},#{updaterid},#{year},#{endyear})
+</insert>
+<!-- 인수부서에 인게부서 폴더 복사하는 부분 -->
+<select id="TakeOverFldr" resultType="com.example.kwangs.folder.service.apprfolderVO" parameterType="String">
+	select *
+		from apprfolder af, folder f
+	where af.originfldrid = #{originfldrid}
+	and f.fldrid = af.originfldrid
+</select>
+<!-- 이관 시 인계부서에서 fldrmbr2테이블에 해당기록물철 문서 저장된 데이터 읽어오기 -->
+<select id="getMoveFldrMngList" resultType="com.example.kwangs.folder.service.fldrmbr2VO" parameterType="java.util.Map">
+	select * from fldrmbr2 where fldrid = #{fldrid}
+</select>
+<!-- 인수부서 기록물등록대장 정보 가져오기 -->
+<select id="getOfficialRegister" resultMap="folder" parameterType="String">
+	select * from folder
+	where ownerid = #{ownerid}
+	and applid = 8010
 </select>
 </mapper>

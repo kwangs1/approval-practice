@@ -22,11 +22,11 @@
 
 처리과: <input type="text" value="${bInfo.procdeptid}"  id="procdeptid"/><br><br>
 
-<input type="text" name="fldrmanagerid" id="fldrmanagerid" />
+<input type="hidden" name="fldrmanagerid" id="fldrmanagerid" />
 담당자: <a href="#" class="userLink" style="text-decoration: none;">🕵🏻</a>
 		<input type="text" name="fldrmanagername" id="fldrmanagername" readonly="readonly" class="userLink"/><br><br>
 
-보존기간: <select value="${bInfo.keepperiod}" id="keepperiod">
+보존기간: <select name="keepperiod" id="keepperiod" onchange="SelectChange()">
 			<option value="">보존기간 선택</option>
 			<option value="01">1년</option>
 			<option value="03">3년</option>
@@ -37,7 +37,7 @@
 			<option value="40">영구</option>
 		</select><br><br>
 생산년도: <input type="text" name="year" id="year" readonly="readonly" style="border:none;"/><br>
-종료년도: <input type="text" name="endyear" id="endyear"/><br><br>
+종료년도: <input type="text" name="endyear" id="endyear" readonly="readonly" style="border:none;"/><br><br>
 
 <button type="button" onclick="addApprFolder()">등록</button>
 <button type="button" onclick="window.close()">닫기</button>
@@ -47,21 +47,43 @@
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script>
 $(document).ready(function(){
-	var keep = '${bInfo.keepperiod}';
-	
-	$('option').each(function(i, obj){
-		if(keep === $(obj).val()){
-			$(obj).attr('selected','selected')
-		}
-	})
-	setYear();
-})
-
-function setYear(){
 	var today = new Date();
 	var CurrYear = today.getFullYear();
 	document.getElementById('year').value = CurrYear;
-	document.getElementById('endyear').value = CurrYear;
+})
+
+function SelectChange(){
+	var element = document.getElementById('keepperiod');
+	var value = element.options[element.selectedIndex].value;
+
+	var endyear = document.getElementById('endyear');
+	var startYear = document.getElementById('year').value;
+	var intVluae = parseInt(startYear);
+	if(value === "01"){
+		var t = intVluae +1;
+		endyear.value = t;
+	}else if(value === "01"){
+		var t = intVluae +1;
+		endyear.value = t;
+	}else if(value === "03"){
+		var t = intVluae +3;
+		endyear.value = t;
+	}else if(value === "05"){
+		var t = intVluae +5;
+		endyear.value = t;
+	}else if(value === "10"){
+		var t = intVluae +10;
+		endyear.value = t;
+	}else if(value === "20"){
+		var t = intVluae +20;
+		endyear.value = t;
+	}else if(value === "30"){
+		var t = intVluae +50;
+		endyear.value = t;
+	}else if(value === "40"){
+		endyear.value = "9999";
+	}
+
 }
 
 $(document).on('click','.userLink',function(){
@@ -118,7 +140,7 @@ function addApprFolder(){
 			setTimeout(function(){
 				alert('등록되었습니다.');
 				window.close();
-				opener.location.href ='<c:url value="/folder/list"/>'
+				window.opener.location.reload();
 			},3000)
 		},
 		error: function(xhr,error,status){

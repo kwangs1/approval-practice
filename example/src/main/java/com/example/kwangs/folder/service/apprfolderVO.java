@@ -22,8 +22,15 @@ public class apprfolderVO extends folderVO{
 	private String endyear;
 	private String bizunityearseq;
 	private String originfldrid;
+	private String transferyear;
 	
 	
+	public String getTransferyear() {
+		return transferyear;
+	}
+	public void setTransferyear(String transferyear) {
+		this.transferyear = transferyear;
+	}
 	public String getOriginfldrid() {
 		return originfldrid;
 	}

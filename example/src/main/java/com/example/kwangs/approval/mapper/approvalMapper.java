@@ -167,4 +167,16 @@ public class approvalMapper{
 	public int DeleteDoc(String appr_seq) {
 		return session.delete("mapper.approval.DeleteDoc",appr_seq);
 	}
+	//이관 시 해당 기록물철에 등록된 문서리스트
+	public List<approvalVO> getMoveApprList(String folderid){
+		return session.selectList("mapper.approval.getMoveApprList",folderid);
+	}
+	//이관 이후 문서 폴더값 업뎃
+	public void UpdMoveApprMng(approvalVO ap) {
+		session.update("mapper.approval.UpdMoveApprMng",ap);
+	}
+	//
+	public void UpdateApprInfo(approvalVO ap) {
+		session.update("mapper.approval.UpdateApprInfo",ap);
+	}
 }

@@ -23,8 +23,22 @@ public class folderVO {
 	private String endyear;
 	//기안 시 편철 정보부를 떄 폴더이름 가져오기위해서..
 	private List<apprfolderVO> apprfolders;
+	private int currentFldrDepth;
+	private String bizunitcd;
 	
 	
+	public String getBizunitcd() {
+		return bizunitcd;
+	}
+	public void setBizunitcd(String bizunitcd) {
+		this.bizunitcd = bizunitcd;
+	}
+	public int getCurrentFldrDepth() {
+		return currentFldrDepth;
+	}
+	public void setCurrentFldrDepth(int currentFldrDepth) {
+		this.currentFldrDepth = currentFldrDepth;
+	}
 	public List<apprfolderVO> getApprfolders() {
 		return apprfolders;
 	}

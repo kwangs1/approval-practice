@@ -42,4 +42,18 @@ public interface folderService {
 	void deleteDocFldrmbr(String fldrmbrid);
 	//기록물철 연번 채번
 	String ApprFldrBizunitYearSeq(String procdeptid);
-}
+	//문서함[함관리] 에서 기록물철 정보
+	public apprfolderVO ApprFldrInfo(Map<String, Object> res);
+	//수정[기록물철-정보]
+	void edit(apprfolderVO af, String userid);
+	//수정[기록물철-이관년도]
+	void transferYear(apprfolderVO af);
+	//수정[기록물철-편철확인상태취소]
+	void CancelFldrStatus(apprfolderVO af);
+	//기록물철 추가 시 해당 단위과제 하위 기록물철의 마지막 깊이값 가져오기
+	folderVO getListFldrDepth(String fldrid);
+	//정리할 기록물철 -> 해당 부서 단위제 하위 이동
+	void MoveApprFldr(folderVO fd,String userid, String name);
+	//이관 시 인계부서 기록물철 -> 인수부서에 같은기록물철로 생성
+	void MoveFldrMng(Map<String,Object>res);
+}	

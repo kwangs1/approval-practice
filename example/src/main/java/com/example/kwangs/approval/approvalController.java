@@ -31,6 +31,7 @@ import com.example.kwangs.common.paging.PageMaker;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptService;
 import com.example.kwangs.dept.service.deptVO;
+import com.example.kwangs.folder.service.apprfolderVO;
 import com.example.kwangs.folder.service.fldrmbrVO;
 import com.example.kwangs.folder.service.folderService;
 import com.example.kwangs.folder.service.folderVO;
@@ -56,6 +57,28 @@ public class approvalController {
 	@Autowired
 	private userService userService;
 	
+	
+	//첨부파일 삭제
+	private void deleteFiles(List<AttachVO> attach, String appr_seq) {
+		if(attach == null || attach.size() == 0) {
+			log.info("Not Files..");
+			return;
+		}
+		log.info("delete files ? "+attach);
+		for(int i=0; i < attach.size(); i++) {
+			AttachVO attachVO = attach.get(i);
+			String id = appr_seq.substring(16);
+			try {
+				File folder = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+attachVO.getUploadPath()+"/"+id);
+				FileUtils.cleanDirectory(folder);
+				folder.delete();
+				log.info("delete success");
+			}catch(Exception e) {
+				log.info("delete file error: "+e.getMessage());
+			}
+		}
+	}
+	
 	//프로시저 카운트 처리[결재함]
 	public void FolderCounts(HttpServletRequest request, folderVO fd,Model model) {
 		String sabun = (String)request.getSession().getAttribute("sabun");
@@ -67,7 +90,7 @@ public class approvalController {
 		model.addAttribute("FolderCnt",result);
 	}
 	
-	//프로시저 카운트 처리[결재함]
+	//프로시저 카운트 처리[문서함]
 	public void DocFolderCnt(HttpServletRequest request, folderVO fd,Model model) {
 		String sabun = (String)request.getSession().getAttribute("sabun");
 		
@@ -533,25 +556,39 @@ public class approvalController {
 		}
 		return ResponseEntity.ok("Sucess Delete Document..");
 	}
+
+	//문서함 [기록물철 -함관리]
+	@GetMapping("/DocFldrMng")
+	public String DocFldrMng(String fldrid, Model model, HttpServletRequest request) {
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		Map<String,Object> res = new HashMap<>();
+		res.put("fldrid", fldrid);
+		res.put("procdeptid", deptid);
+		apprfolderVO Info = folderService.ApprFldrInfo(res);
+		model.addAttribute("Info",Info);
+		
+		List<folderVO> docfldrSidebar = folderService.docfldrSidebar(deptid);
+		model.addAttribute("docfldrSidebar",docfldrSidebar);
+		
+		return "/approval/DocFldrMng";
+	}
 	
-	//첨부파일 삭제
-	private void deleteFiles(List<AttachVO> attach, String appr_seq) {
-		if(attach == null || attach.size() == 0) {
-			log.info("Not Files..");
-			return;
-		}
-		log.info("delete files ? "+attach);
-		for(int i=0; i < attach.size(); i++) {
-			AttachVO attachVO = attach.get(i);
-			String id = appr_seq.substring(16);
-			try {
-				File folder = new File("/Users/kwangs/Desktop/SpringEx/example/src/FILE/"+attachVO.getUploadPath()+"/"+id);
-				FileUtils.cleanDirectory(folder);
-				folder.delete();
-				log.info("delete success");
-			}catch(Exception e) {
-				log.info("delete file error: "+e.getMessage());
-			}
-		}
+	//문서함 [기록물철-함관리- 문서이관페이지]
+	@GetMapping("/TransferFldrMng")
+	public String TransferFldrMng(String fldrid, Model model, HttpServletRequest request) {
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		Map<String,Object>res = new HashMap<>();
+		res.put("fldrid", fldrid);
+		res.put("procdeptid", deptid);
+		apprfolderVO Info = folderService.ApprFldrInfo(res);
+		model.addAttribute("Info",Info);
+		
+		List<folderVO> docfldrSidebar = folderService.docfldrSidebar(deptid);
+		model.addAttribute("docfldrSidebar",docfldrSidebar);
+		
+		deptVO procDeptName = deptService.getDeptName(res);
+		model.addAttribute("procDeptName",procDeptName);
+		
+		return "/approval/TransferFldrMng";
 	}
 }

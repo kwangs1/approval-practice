@@ -17,7 +17,7 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 <c:if test="${info.applid == 7010}">
 	<a href="javascript:folderAddAndApprF()">기록물철 추가</a> |
 </c:if>
-<a href="edit.do?fldrid=${info.fldrid}">수정</a> |
+<a href="edit?fldrid=${info.fldrid}">수정</a> |
 <a href="javascript:window.close()">닫기</a>
 <div class="post">
 	<c:choose>
@@ -39,7 +39,7 @@ body{font-family: Arial, sans-serif; margin:0; padding:0;}
 <script>
 var buCode = '${bInfo.bizunitcd}';
 var deptid = '${bInfo.procdeptid}';
-var usu = '<c:out value="${currUser.userid}"/>';
+var usu = '<c:out value="${userId}"/>';
 function folderAddAndApprF(){
 	url = '<c:url value="/folder/folderAddAndApprF"/>';
 	url += '?fldrid='+ '${info.fldrid}' + '&buCode=' + buCode + '&deptid=' + deptid + '&userid=' + usu;

@@ -1,0 +1,67 @@
+@charset "UTF-8";
+@charset "UTF-8";
+/* 기본 스타일 초기화 */
+* { box-sizing: border-box; }
+
+/* 본문 글꼴과 배경색 */
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding:2.5em;
+}
+
+/* 헤더 스타일 */
+header {
+    background-color: #ced4da;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* 메인 컨텐츠 영역 스타일 */
+main {
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 기록물 상세 정보 섹션 스타일 */
+.record-details {
+    margin-bottom: 20px;
+}
+
+.record-details h2 {
+    color: #90a4ae;
+    border-bottom: 2px solid #ced4da;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+}
+
+/* 추가 정보 섹션 스타일 */
+.additional-info h3 {
+    color: #90a4ae;
+    border-bottom: 1px solid #ced4da;
+    padding-bottom: 5px;
+    margin-bottom: 10px;
+}
+
+.additional-info ul {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.additional-info li {
+    margin-bottom: 5px;
+}
+
+/* 푸터 스타일 */
+footer {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #ced4da;
+    color: white;
+    margin-top: 20px;
+}

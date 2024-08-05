@@ -1,6 +1,7 @@
 package com.example.kwangs.dept.service.impl;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,7 +52,7 @@ public class deptServiceImpl implements deptService{
 		folderVO fd_7000 = new folderVO();
 		fd_7000.setFldrname("단위과제");
 		fd_7000.setOwnertype("1");
-		fd_7000.setAppltype("3");
+		fd_7000.setAppltype("1");
 		fd_7000.setOwnerid(dept.getDeptid());
 		fd_7000.setApplid(7000);
 		fd_7000.setYear("0000");
@@ -64,12 +65,25 @@ public class deptServiceImpl implements deptService{
 		fd_8010.setParfldrname(fd_8000.getFldrname());
 		fd_8010.setFldrdepth(fd_8000.getFldrdepth()+1);
 		fd_8010.setOwnertype("1");
-		fd_8010.setAppltype("3");
+		fd_8010.setAppltype("1");
 		fd_8010.setOwnerid(dept.getDeptid());
 		fd_8010.setApplid(8010);
 		fd_8010.setYear("0000");
 		fd_8010.setEndyear("9999");
 		fdMapper.CreateDeptCommonFolder(fd_8010);
+		
+		folderVO fd_7030 = new folderVO();
+		fd_7030.setFldrname("정리할 기록물철");
+		fd_7030.setParfldrid(fd_7000.getFldrid());
+		fd_7030.setParfldrname(fd_7000.getFldrname());
+		fd_7030.setFldrdepth(fd_7000.getFldrdepth()+1);
+		fd_7030.setOwnertype("1");
+		fd_7030.setAppltype("1");
+		fd_7030.setOwnerid(dept.getDeptid());
+		fd_7030.setApplid(7030);
+		fd_7030.setYear("0000");
+		fd_7030.setEndyear("9999");
+		fdMapper.CreateDeptCommonFolder(fd_7030);
 	}
 	//상세보기
 	@Override
@@ -101,5 +115,9 @@ public class deptServiceImpl implements deptService{
 	@Override
 	public List<deptVO>SndngDeptInfo(String sendername){
 		return mapper.SndngDeptInfo(sendername);
+	}
+	@Override
+	public  deptVO getDeptName(Map<String,Object>res) {
+		return mapper.getDeptName(res);
 	}
 }

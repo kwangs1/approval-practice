@@ -1,13 +1,13 @@
 @charset "UTF-8";
-
 .tree {
   list-style-type: none;
   padding: 0px;
   margin: 0px;
-  width: 100px;
   background: #f5f5f5;
+  width: 100px;
   height: 100%;
   overflow: auto;
+  white-space: nowrap;
   position: fixed;
 }
 
@@ -17,6 +17,7 @@
   display: block;
   color: #000;
   font-weight: bold;
+  font-size: 12px;
 }
 
 .tree  a:hover {

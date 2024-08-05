@@ -1,6 +1,7 @@
 package com.example.kwangs.dept.service;
 
 import java.util.List;
+import java.util.Map;
 
 public interface deptService {
 
@@ -20,4 +21,5 @@ public interface deptService {
 	List<deptVO> getSender(String userid);
 	//문서 발송 시 수신처 부서 정보값 가져오기
 	List<deptVO>SndngDeptInfo(String sendername);
+	public  deptVO getDeptName(Map<String,Object>res);
 }

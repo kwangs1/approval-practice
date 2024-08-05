@@ -64,4 +64,11 @@
 	select * from dept where sendername = #{sendername}
 </select>
 
+<select id="getDeptName" resultType="deptVO">
+	select d.deptname
+		from dept d, apprfolder af
+	where d.deptid = af.procdeptid
+	and af.procdeptid = #{procdeptid}
+	and af.fldrid = #{fldrid}
+</select>
 </mapper>
