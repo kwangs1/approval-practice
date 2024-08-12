@@ -111,18 +111,24 @@ window.addEventListener('message', function(e) {
 	$('#foldername').val(selectedApFolder.fldrname);
 	$('#bizunitcd').val(selectedApFolder.bizunitcd);
 	$('#docattr').val(checkedValues);
-	$('#orgdraftdeptid').val(selectedValue.deptid);
 	$('#sendername').val(selectedValue.sendername);
 	
 	var useDiv = $('.receivers_info');
 	useDiv.empty();
 	
+	//if(checkedValues === '1'){	
 	for(var i =0; i < selectedDept.length; i++){
-		var Container = $('<div class="container">');
-		Container.append('<input type="hidden" name="receivers_' + i + '"  value="' + selectedDept[i].sendername + '"/>');
-		
-		useDiv.append(Container);
-	}
+
+			var Container = $('<div class="container">');
+			Container.append('<input type="hidden" name="receivers_' + i + '"  value="' + selectedDept[i].sendername + '"/>');
+			
+			useDiv.append(Container);
+			console.log("apprwrite"+selectedDept[i].sendername);
+			console.log(checkedValues)
+		}
+	//}else{
+	//	selectedDept = null;
+	//}
 	
 	saveCookie(checkedValues);
 });
@@ -156,7 +162,7 @@ window.addEventListener('message', function(e) {
 	    formData.append('bizunitcd', $('#bizunitcd').val());
 		formData.append('docattr',$('#docattr').val());
 		formData.append('sendername',$('#sendername').val());
-		formData.append('orgdraftdeptid',$('#orgdraftdeptid').val());
+		formData.append('orgdraftdeptid',drafterdeptid);
 		if(files.length > 0){
 		    UploadFileAppend(formData);
 		}

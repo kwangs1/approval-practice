@@ -5,7 +5,7 @@
 var selectedUsers = []; //결재선 참여자
 var selectedApFolder = []; //기록물철
 var selectedDept = []; //발송 시 수신처에 대한 부서정보
-var checkedValues = []; //문서 유형값
+var checkedValues = null; //문서 유형값
 var selectedValue =[]; //셀렉트박스[발신부서id, 발신명의]
 
 $('a.userLink').on('click',function(e){
@@ -48,11 +48,10 @@ updateSelectedApFolder();
 //수신부서 정보 전송
 $('a.deptLink').on('click',function(e){
 	e.preventDefault();
-	
 	selectDeptId = $(this).data('deptid');
 	selectDeptName = $(this).data('deptname');
 	selectDeptSender = $(this).data('sendername');
-	
+		
 	selectedDept.push({deptid: selectDeptId,deptname: selectDeptName,sendername: selectDeptSender});
 	console.log(selectedDept);
 	updateselectedDept();
@@ -167,15 +166,16 @@ function confirmSelection(){
 	var checkboxes = document.getElementsByName('docattr');
 	for(var j=0; j<checkboxes.length; j++){
 		if(checkboxes[j].checked){
-			checkedValues.push(checkboxes[j].value);
-			console.log(checkedValues);
+			//checkedValues.push(checkboxes[j].value);
+			checkedValues = checkboxes[j].value;
 		}
 	}
 	//셀렉트박스 값[발신명의, 발신부서ID]
-	var deptid = $('#senderSelect').data('deptid');
+	//var deptid = $('#senderSelect').data('deptid');
 	var sendername = $('#senderSelect').data('sendername');
-	
-	selectedValue= {deptid: deptid, sendername: sendername};
+	if(checkedValues ==='1'){
+		selectedValue= {sendername: sendername};
+	}
 	var data = {
 			users: selectedUsers,
 			selectedApFolder: selectedApFolder,
@@ -194,7 +194,7 @@ function confirmSelection(){
 			success: function(){
 				console.log("success");
                 setTimeout(function() {
-                    window.close();
+                   window.close();
                 }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
 			},
 			error : function(error){
@@ -210,7 +210,7 @@ function confirmSelection(){
 			success: function(){
 				console.log("success");
                 setTimeout(function() {
-                    window.close();
+                   window.close();
                 }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
 			},
 			error : function(error){
@@ -229,14 +229,33 @@ function confirmSelection(){
 		success: function(response){
 			console.log(response);
             setTimeout(function() {
-                window.close();
+               window.close();
             }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
 		},
 		error:function(error){
 			console.error("Error sending clicked apprfolder "+error);	
 		}
 	})
-	//window.close();
+	
+if(checkedValues === '1'){
+	$.ajax({
+		url: '/kwangs/SaveReceiverTemp',
+		type: 'post',
+		contentType: 'application/json',
+		data: JSON.stringify(selectedDept),
+		success: function(){
+			console.log("Receiver Temp Insert Success");
+			console.log(checkedValues)
+            setTimeout(function() {
+               window.close();
+            }, 500); // 1000 밀리초 (1초) 후에 창을 닫습니다.
+		},
+		error: function(error){
+			console.error("Error sending clicked Receivers "+error);			
+		}
+	})
+}
+
 }
 
 //유저를 배열에서 삭제하는 함수

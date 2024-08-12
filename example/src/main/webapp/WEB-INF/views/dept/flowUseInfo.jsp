@@ -158,7 +158,7 @@ a{text-decoration: none; color: blue;}
 		    <c:forEach var="dept" items="${deptList}">
 		      <c:if test="${dept.parid eq null}">
 		        <li id="dept${dept.deptid}">
-		          <a href="#" class="deptLink" data-deptname="${dept.deptname}" 
+		          <a href="#" class="deptLink" data-deptname="${dept.deptname}" data-id="${user}"
 		          	data-deptid="${dept.deptid}" data-sendername="${dept.sendername}">${dept.deptname}</a>
 		          	
 		          <%-- 최상위 하위 부서 start --%>
@@ -166,7 +166,7 @@ a{text-decoration: none; color: blue;}
 		            <c:if test="${subDept.parid eq dept.deptid}">
 		              <ul>
 		                <li id="subDept${subDept.deptid}">
-		                <a href="#" class="deptLink" data-deptname="${subDept.deptname}" 
+		                <a href="#" class="deptLink" data-deptname="${subDept.deptname}" data-id="${user}"
 		                	data-deptid="${subDept.deptid}" data-sendername="${subDept.sendername}">${subDept.deptname}</a>   
 		                	               
 		                  <%-- 최상위 하위 - 하위 부서 start --%>
@@ -174,7 +174,7 @@ a{text-decoration: none; color: blue;}
 		                    <c:if test="${grandDept.parid eq subDept.deptid}">
 		                      <ul>
 		                        <li id="grandDept${grandDept.deptid}" class="lastTree">
-		                        <a href="#" class="deptLink" data-deptname="${grandDept.deptname}" 
+		                        <a href="#" class="deptLink" data-deptname="${grandDept.deptname}" data-id="${user}"
 		                        	data-deptid="${grandDept.deptid}" data-sendername="${grandDept.sendername}">${grandDept.deptname}</a>
 		                        </li>
 		                      </ul>
@@ -210,6 +210,30 @@ $(document).ready(function() {
 		$('input[type="checkbox"][value="' + CheckVal +'"]').prop('checked',true);
 		if(CheckVal == 1){
 			document.querySelector(".tab3").style.display='block';
+			//수신처
+			$.ajax({
+				url: '<c:url value="/getSaveReceiverTemp"/>',
+				type: 'get',
+				data: {id: uId},
+				dataType: 'json',
+				success: function(data){
+					if(data.length === 0){
+			            console.log("No data found for ID: " + uId);
+					}else{	
+						for(var i =0; i<data.length; i++){
+							var receivers = data[i];
+							  var deptid = receivers.deptid;
+							  var sendername = receivers.sendername;
+							  console.log(receivers);
+							  selectedDept.push({ deptid: deptid, sendername: sendername});
+							  updateselectedDept();	
+						}
+					}
+				},
+				error: function(error){
+					console.log("Error seding clicked users to server:",error);
+				}
+			})
 		}
 	}else{
 		$('input[type="checkbox"][value="' + 2 +'"]').prop('checked',true);
@@ -247,6 +271,7 @@ $(document).ready(function() {
   $('.af-list').click(function(e){
 	  e.stopPropagation();
   });  
+  //결재선
 $.ajax({
 	type: 'get',
 	url: '<c:url value="/getSaveFlowUseInfoTemp"/>',
@@ -288,7 +313,7 @@ $.ajax({
 		  selectedUsers.push({ deptid: deptid, deptname: deptname, id: id, name: name, pos: pos });
 		  updateSelectedUsersUI();	
 	}
-	
+	//기록물철
 	$.ajax({
 		type: 'get',
 		url: '<c:url value="/loadDataFromDatFile"/>',
@@ -317,7 +342,6 @@ $.ajax({
 			console.log("Error seding clicked users to server:",error);
 		}
 	});//end ajax	
-	
 }); 
 //tab
 var tabList = document.querySelectorAll('.tab_menu .list li');
