@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="stamp">
+	<resultMap id="stamp" type="stampVO">
+		<result property="id" column="id" />
+		<result property="fno" column="fno" />
+		<result property="type" column="type" />
+		<result property="name" column="name" />
+	</resultMap>
+	
+
+<select id="list" resultMap="stamp" parameterType="String">
+	select * from stamp
+</select>
+
+<insert id="write" parameterType="com.example.kwangs.stamp.service.stampVO">
+	insert into stamp
+	values(#{id},#{fno},#{type},#{name})
+</insert>
+
+<select id="getAttachList" resultMap="stamp" parameterType="String">
+	select * from stamp
+</select>
+
+<delete id="StampDeleteFiles">
+	delete from stamp
+	where id = #{id} and name = #{name} and fno = #{fno}
+</delete>
+
+<select id="getFlowDeptStampList" resultMap="stamp" parameterType="String">
+	select d.deptname, d.sendername, s.name
+		from approval a,  participant p, dept d, stamp s
+	where a.appr_seq = p.appr_seq
+	and p.deptid = d.deptid
+	and d.deptid = s.id
+	and a.appr_seq= #{appr_seq}
+	group by d.deptname, d.sendername, s.name
+</select>
+</mapper>

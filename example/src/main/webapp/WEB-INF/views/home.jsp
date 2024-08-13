@@ -19,6 +19,7 @@
 <a href="javascript:pos()">직위</a> |
 <a href="javascript:bizunit()">단위과제</a> |
 <a href="javascript:folder()">폴더</a> |
+<a href="javascript:stamp()">관인</a> |
 <a href="${path}/user/logout">로그아웃</a>
 
 <script src="<c:url value='/resources/js/pagingCookie.js'/>"></script>
@@ -37,6 +38,11 @@ function folder(){
 	url = '<c:url value="/folder/list"/>';
 	url += '?ownerid='+'${deptId}'
 	window.open(url,'folder','width=500px, height=500px');
+}
+
+function stamp(){
+	url = '<c:url value="/stamp/stampCheckdeptList"/>';
+	window.open(url,'folder','width=600px, height=480px');
 }
 
 function loadApprFrameList(){

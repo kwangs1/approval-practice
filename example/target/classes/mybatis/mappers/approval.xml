@@ -33,6 +33,7 @@
 		<result property="orgdraftdeptid" column="orgdraftdeptid" />
 		<result property="poststatus" column="poststatus" />
 		<result property="draftsrctype" column="draftsrctype" />
+		<result property="stampname" column="stampname" />
 	</resultMap>
 	
 	<!-- 검색 동적 쿼리 -->
@@ -53,7 +54,7 @@
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname})
 </insert>
 
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
@@ -75,7 +76,7 @@
 			and a.status not in(4096,256)
 			and p.approvaltype = 4
 			and p.flag = '0'
-			and a.drafterdeptid = #{drafterdeptid}
+			<!-- and a.drafterdeptid = #{drafterdeptid}  -->
 	        and fm.fldrid = #{fldrid}
 	        and f.applid = 2010
 			<include refid="search"></include>
@@ -97,7 +98,7 @@
 			and a.status != 256
 			and p.signerid = #{signerid}
 			and (p.approvaltype =1024 and a.status =4096 or(p.approvaltype !=1024 and a.status != 4096))
-			and a.drafterdeptid = #{drafterdeptid}
+			<!-- and a.drafterdeptid = #{drafterdeptid}  -->
 			and fm.fldrid = #{fldrid}
 	        and f.applid = 2020
 	        <include refid="search"></include>
@@ -370,7 +371,7 @@
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname})
 	</insert>
 	<!-- 접수 완료 시 해당 문서의 접수테이블 업데이트 -->
 	<update id="updSendData">

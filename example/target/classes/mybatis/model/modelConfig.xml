@@ -21,5 +21,6 @@
 		<typeAlias type="com.example.kwangs.folder.service.fldrmbr2VO" alias="fldrmbr2VO" />	
 		<typeAlias type="com.example.kwangs.folder.service.apprfolderVO" alias="apprfolderVO" />
 		<typeAlias type="com.example.kwangs.common.file.service.AttachVO" alias="AttachVO" />
+		<typeAlias type="com.example.kwangs.stamp.service.stampVO" alias="stampVO" />
 </typeAliases>       
 </configuration>

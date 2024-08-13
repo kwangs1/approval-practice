@@ -31,27 +31,27 @@ a{text-decoration: none; color: blue;}
 	 	<c:forEach var="folder" items="${list}">
 		   <c:if test="${folder.parfldrid eq null}">
 		       <li id="folder${folder.fldrid}" id="folder">
-			     <span class="folder-name">${folder.fldrname}</span>    
+			     <span class="folder-name"><c:out value="${folder.fldrname}" escapeXml="false"/></span>    
 			         
 		          <%-- 단위과제 하위 start --%>
 		         <c:forEach var="subfolder" items="${list}">
 		            <c:if test="${subfolder.parfldrid eq folder.fldrid}">
 		              <ul class="folder">
 		                <li id="subfolder${subfolder.fldrid}">
-					     <span class="folder-name">${subfolder.fldrname}</span>
+					     <span class="folder-name"><c:out value="${subfolder.fldrname}" escapeXml="false"/></span>
 					
 							<c:forEach var="apprfolder" items="${subfolder.apprfolders}">
 							<ul class="af-list"> 
 								<c:if test="${apprfolder.procstatus ne '3' }">
 									<a href="#" class="afLink" data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
 									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}"
-									data-procstatus="${apprfolder.procstatus}">${apprfolder.fldrname}</a>								
+									data-procstatus="${apprfolder.procstatus}"><c:out value="${apprfolder.fldrname}" escapeXml="false"/></a>								
 								</c:if>				
 								<c:if test="${apprfolder.procstatus eq '3' }">
 									<a href="#" class="afLink" style="color:silver"
 									data-fldrid="${apprfolder.fldrid}" data-ownerid="${folder.ownerid}"
 									data-bizunitcd ="${apprfolder.bizunitcd}" data-fldrname="${apprfolder.fldrname}"
-									data-procstatus="${apprfolder.procstatus}">${apprfolder.fldrname}</a>								
+									data-procstatus="${apprfolder.procstatus}"><c:out value="${apprfolder.fldrname}" escapeXml="false"/></a>								
 								</c:if>					
 							</ul>
 							 </c:forEach>
@@ -210,30 +210,6 @@ $(document).ready(function() {
 		$('input[type="checkbox"][value="' + CheckVal +'"]').prop('checked',true);
 		if(CheckVal == 1){
 			document.querySelector(".tab3").style.display='block';
-			//수신처
-			$.ajax({
-				url: '<c:url value="/getSaveReceiverTemp"/>',
-				type: 'get',
-				data: {id: uId},
-				dataType: 'json',
-				success: function(data){
-					if(data.length === 0){
-			            console.log("No data found for ID: " + uId);
-					}else{	
-						for(var i =0; i<data.length; i++){
-							var receivers = data[i];
-							  var deptid = receivers.deptid;
-							  var sendername = receivers.sendername;
-							  console.log(receivers);
-							  selectedDept.push({ deptid: deptid, sendername: sendername});
-							  updateselectedDept();	
-						}
-					}
-				},
-				error: function(error){
-					console.log("Error seding clicked users to server:",error);
-				}
-			})
 		}
 	}else{
 		$('input[type="checkbox"][value="' + 2 +'"]').prop('checked',true);
@@ -342,6 +318,31 @@ $.ajax({
 			console.log("Error seding clicked users to server:",error);
 		}
 	});//end ajax	
+	
+	//수신처
+	$.ajax({
+		url: '<c:url value="/getSaveReceiverTemp"/>',
+		type: 'get',
+		data: {id: uId},
+		dataType: 'json',
+		success: function(data){
+			if(data.length === 0){
+	            console.log("No data found for ID: " + uId);
+			}else{	
+				for(var i =0; i<data.length; i++){
+					var receivers = data[i];
+					  var deptid = receivers.deptid;
+					  var sendername = receivers.sendername;
+					  console.log(receivers);
+					  selectedDept.push({ deptid: deptid, sendername: sendername});
+					  updateselectedDept();	
+				}
+			}
+		},
+		error: function(error){
+			console.log("Error seding clicked users to server:",error);
+		}
+	})//end ajax
 }); 
 //tab
 var tabList = document.querySelectorAll('.tab_menu .list li');

@@ -41,6 +41,9 @@ li{list-style:none; padding-left:0px;}
 </div>
 
 <div class="post-container">
+	<c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
+	  <button onclick="getFlowDeptStamp()" class="button">관인서명</button> 
+	</c:if>
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
   <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
@@ -185,6 +188,12 @@ function init(){
 	}else{
 		getRceptAttachList();
 	}
+}
+
+function getFlowDeptStamp(){
+	url= '<c:url value="/stamp/getFlowDeptStampList"/>'
+	url += '?appr_seq='+appr_seq
+	window.open(url,'stamp','width=340px, height=280px');
 }
 </script>
 </body>

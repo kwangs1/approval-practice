@@ -38,8 +38,15 @@ public class approvalVO{
 	private String poststatus;
 	private String draftsrctype;
 	private String orgdeptfolderid;
+	private String stampname;
 	
 	
+	public String getStampname() {
+		return stampname;
+	}
+	public void setStampname(String stampname) {
+		this.stampname = stampname;
+	}
 	public String getOrgdeptfolderid() {
 		return orgdeptfolderid;
 	}

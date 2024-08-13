@@ -17,6 +17,8 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 .uploadResult ul li{list-style:none; padding-left:0px;}
 .uploadResult ul{padding-left:0px;}
 .vacation-period {margin-top: 20px; align-items: center;}
+#receivers{border:none; pointer-events:none;}
+.sender_info{pointer-events:none;}
 </style>
 </head>
 <body>
@@ -39,6 +41,9 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 <br><br>
 
 <textarea name="content" id="content" rows="10" cols="80" placeholder="내용입력"></textarea>
+
+<div class="receivers_info"></div>
+<div class="sender_info"></div>
 <br><br>
 </div>
 	<div>
@@ -53,7 +58,6 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 			</ul>
 		</div>
 	</div>
-<div class="receivers_info"></div>
 
 <input type="hidden" name="draftername" id="draftername" value="${user.name}" />
 <input type="hidden" name="drafterid" id="drafterid" value="${user.id}" />
@@ -116,19 +120,26 @@ window.addEventListener('message', function(e) {
 	var useDiv = $('.receivers_info');
 	useDiv.empty();
 	
-	//if(checkedValues === '1'){	
+	var resultString = '수신처: ';
 	for(var i =0; i < selectedDept.length; i++){
-
-			var Container = $('<div class="container">');
-			Container.append('<input type="hidden" name="receivers_' + i + '"  value="' + selectedDept[i].sendername + '"/>');
-			
-			useDiv.append(Container);
-			console.log("apprwrite"+selectedDept[i].sendername);
-			console.log(checkedValues)
+		resultString += selectedDept[i].sendername;
+		if(i < selectedDept.length -1){
+			resultString += ',';
 		}
-	//}else{
-	//	selectedDept = null;
-	//}
+	}
+	
+	var Container = $('<div class="container">');
+	for(var i =0; i < selectedDept.length; i++){
+		Container.append('<input type="hidden" name="receivers_' + i + '" id="receivers" value="' + selectedDept[i].sendername + '"/>');
+	}
+	if($('#docattr').val() === '1'){
+		$('.sender_info').html('발신처: '+$('#sendername').val());
+		Container.append('<p>' +resultString+ '</p>')
+		useDiv.append(Container);
+	}else{
+		$('.sender_info').html('');
+		useDiv.html('');
+	}
 	
 	saveCookie(checkedValues);
 });
@@ -142,7 +153,7 @@ window.addEventListener('message', function(e) {
 		var files = inputFile[0].files;
 		var doc_Receivers = [];
 		
-		if(selectedDept && selectedDept.length > 0){
+		if(selectedDept && selectedDept.length > 0 && $('#docattr').val() === '1'){
 			for(var i=0; i < selectedDept.length; i++){
 				doc_Receivers.push(selectedDept[i].sendername);
 			}

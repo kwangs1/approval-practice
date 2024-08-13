@@ -60,7 +60,7 @@
         <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
         <td>${list.draftername }</td>
         <td>${list.approvaldate }</td>
-        <td>${list.receivers }</td>
+        <td class="text" data-receivers="${list.receivers}">${list.receivers }</td>
 		  <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 		  <c:forEach var="participant" items="${SndngWaitflowInfo}" varStatus="loop">
 			<c:if test="${participant.flag eq '0' && participant.appr_seq eq list.appr_seq}">
@@ -147,6 +147,18 @@ $('#selectAll').change(function(){
 	  checkboxes[i].checked = this.checked;
 	}
 });
+
+//수신처 길이제한
+function truncateText(text, length){
+	return text.length > length ? text.substring(0, length)+"..." : text;
+}
+
+var elements = document.querySelectorAll('.text');
+elements.forEach(function(element){
+	var text = element.getAttribute('data-receivers');
+	var truncatedText = truncateText(text,10);
+	element.textContent = truncatedText;
+})
 </script>
 </body>
 </html>
