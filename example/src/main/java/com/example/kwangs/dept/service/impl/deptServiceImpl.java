@@ -3,6 +3,8 @@ package com.example.kwangs.dept.service.impl;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import com.example.kwangs.user.service.userVO;
 
 @Service
 public class deptServiceImpl implements deptService{
+
+	private Logger log = LoggerFactory.getLogger(deptServiceImpl.class.getName());
 
 	@Autowired
 	private deptMapper mapper;
@@ -120,4 +124,17 @@ public class deptServiceImpl implements deptService{
 	public  deptVO getDeptName(Map<String,Object>res) {
 		return mapper.getDeptName(res);
 	}
+	@Override
+	 public List<deptVO> UserSosck(String deptid){
+		List<deptVO> sosck = mapper.UserSosck(deptid);
+		for(int i=0; i<sosck.size(); i++) {
+			deptVO dp = sosck.get(i);
+			List<userVO> users = mapper.userList(deptid);
+			dp.setUsers(users);
+				
+			log.info("소속 부서명: "+dp.getDeptid());
+			log.info("소속 부서 인원명단: "+dp.getUsers().get(i).getName());
+		}
+		 return sosck;
+	 }
 }

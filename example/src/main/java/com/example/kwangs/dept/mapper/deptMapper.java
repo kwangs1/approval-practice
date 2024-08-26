@@ -58,4 +58,7 @@ public class deptMapper {
 	public deptVO getDeptName(Map<String,Object>res) {
 		return session.selectOne("mapper.dept.getDeptName",res);
 	}
+	public List<deptVO> UserSosck(String deptid){
+		return session.selectList("mapper.dept.UserSosck",deptid);
+	}
 }

@@ -56,4 +56,8 @@ public interface folderService {
 	void MoveApprFldr(folderVO fd,String userid, String name);
 	//이관 시 인계부서 기록물철 -> 인수부서에 같은기록물철로 생성
 	void MoveFldrMng(Map<String,Object>res);
+	//
+	List<folderVO> ApprFldrmbr_4050(String ownerid);
+	//
+	List<fldrmbrVO> RecDeptDocInfo(String fldrid);
 }	

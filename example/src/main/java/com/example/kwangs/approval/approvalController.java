@@ -298,6 +298,19 @@ public class approvalController {
 		List<approvalVO> list = service.RceptWaitDocList(scri);
 		model.addAttribute("list",list);
 
+		List<fldrmbrVO> fldrmbr_ = folderService.RecDeptDocInfo(scri.getFldrid()); //접수한 문서에 대한 데이터값 조회.
+		for(fldrmbrVO fldr : fldrmbr_) {
+			log.info("fldrmbrid? "+fldr.getFldrmbrid());
+			sendVO Info = service.SendSttusApprInfo(fldr.getFldrmbrid()); //해당 접수대기 폴더테이블에 접수ID로 등록된 값들에 대해
+			approvalVO a = service.apprInfo(Info.getReceiptappr_seq());
+			if(Info.getRecdocstatus().equals("4")) {
+				log.info("receiptapprid? "+Info.getReceiptappr_seq());
+				log.info("apprid? "+a.getAppr_seq());
+				log.info("Recdocstatus? "+Info.getRecdocstatus());
+				//model.addAttribute("draftscrtype",a.getDraftsrctype());
+				model.addAttribute("orgappr_seq",a.getOrgappr_seq());				
+			}
+		}
 		//결재함 사이드 메뉴
 		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
 		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
@@ -345,6 +358,8 @@ public class approvalController {
 	public String apprInfo(String appr_seq, Model model,participantVO pp,HttpServletRequest request) {		
 		approvalVO Info = service.apprInfo(appr_seq);
 		model.addAttribute("info",Info);
+		approvalVO OrgDocReceivers = service.apprInfo(Info.getOrgappr_seq());//
+		model.addAttribute("OrgDocReceivers",OrgDocReceivers);//
 		//일반 결재 시 상세보기에서의 결재선 정보 
 		String userId = (String) request.getSession().getAttribute("userId");
 		Map<String,Object> res = new HashMap<>();
@@ -408,19 +423,41 @@ public class approvalController {
 	//문서발송
 	@ResponseBody
 	@PostMapping("DocSend")
-	public ResponseEntity<String> DocSndng(String appr_seq, HttpServletRequest request){
+	public ResponseEntity<String> DocSndng(String appr_seq,String stampname, HttpServletRequest request){
 		approvalVO Info = service.apprInfo(appr_seq);
 		String id = (String) request.getSession().getAttribute("userId");
-		String name = (String) request.getSession().getAttribute("userName");
+		//String name = (String) request.getSession().getAttribute("userName");
 		
 		//발송 시 수신처에 대한 값 send테이블 insert
 		if(Info.getDocattr().equals("1") && Info.getPoststatus().equals("1") && Info.getReceivers() != null) {
+
+			//발송 시 발송부서[기안부서]의 발송현황에서 접수부서가 최종결재완료전까지의 현황을 보기위해
+			List<deptVO> SndngSttus = deptService.UserSosck(Info.getDrafterdeptid());			
+			for(int i=0; i<SndngSttus.size(); i++) {
+				log.info("발송 후 기안부서의 발송현황 폴더테이블에 INSERT");
+				deptVO dp = SndngSttus.get(i);
+				fldrmbrVO ss = new fldrmbrVO();
+	
+				List<folderVO> getFolderInfo_4050 = folderService.ApprFldrmbr_4050(dp.getUsers().get(i).getId());
+				for(int j=0; j<getFolderInfo_4050.size(); j++) {
+					folderVO f = getFolderInfo_4050.get(j);
+					ss.setFldrid(f.getFldrid());
+					ss.setFldrmbrid(Info.getAppr_seq());
+					ss.setRegisterid(dp.getUsers().get(i).getId());
+					
+					folderService.ApprFldrmbrInsert(ss);
+				}
+				log.info("폴더ID? "+ss.getFldrid());
+				log.info("문서ID? "+ss.getFldrmbrid());
+				log.info("유저ID? "+dp.getUsers().get(i).getId());	
+			}
 			sendVO send = new sendVO();
 			send.setAppr_seq(Info.getAppr_seq());
 			send.setSenderid(id);
-			send.setSendername(name);
+			send.setSendername(Info.getSendername());
 			send.setRegisterid(id);
 			send.setSenddeptid(Info.getDrafterdeptid());
+			send.setRecdocstatus("1");
 			service.DocSend(send);
 			
 			String[] receiveDept = Info.getReceivers().split(",");
@@ -434,16 +471,17 @@ public class approvalController {
 					Receive.setReceiverid(dp.getDeptid());
 					Receive.setReceivername(dp.getSendername());
 					Receive.setSenderid(id);
-					Receive.setSendername(name);
+					Receive.setSendername(Info.getSendername());
 					Receive.setSenddeptid(Info.getDrafterdeptid());
 					Receive.setReceiptappr_seq(Info.getAppr_seq());
 					Receive.setRegisterid(id);
 					Receive.setParsendid(send.getSendid());
 					if(dp.getDeptid() != null) {
-						Receive.setRecdocstatus("2048");
+						Receive.setRecdocstatus("2");
 					}else {
 						Receive.setRecdocstatus("64");
 					}
+					Receive.setSendtype("2");
 					service.ReceiveDeptIn(Receive);
 					//발송 후 수신부서들에 대해 FLDRMBR 테이블에 접수대기폴더 값을 넣기위해 && 부서ID에 대한 유저들 리스트
 					List<userVO> DeptUseInfo = userService.DeptUseInfo(dp.getDeptid());
@@ -465,7 +503,16 @@ public class approvalController {
 					}
 				}
 			}
-			service.UpdDocPostStatus(appr_seq);
+			log.info("stampname? "+stampname);
+			String DrafterSetSendId = Info.getSendid();			
+			DrafterSetSendId = "00000000000000000000";
+			Info.setSendid(DrafterSetSendId);
+			Map<String ,Object> drafterRes = new HashMap<>();
+			drafterRes.put("appr_seq", appr_seq);
+			drafterRes.put("stampname", stampname);
+			drafterRes.put("sendid", DrafterSetSendId);
+			service.UpdDocPostStatus(drafterRes);
+			log.info("발송 후 기안부서의 approval senid? "+Info.getSendid());
 			//해당 문서에 대한 fldrmbr테이블에서 발송대기 폴더값 삭제
 			folderVO ApprFldrId = folderService.ApprFldrmbr_4030(Info.getDrafterid());
 			Map<String,Object> sendData_4030 = new HashMap<>();
@@ -514,7 +561,7 @@ public class approvalController {
 	@PostMapping("/RceptDocSang")
 	public ResponseEntity<String> RceptDocSang(approvalVO ap,HttpServletRequest request) throws IOException{
 		service.RceptDocSang(ap);
-		
+		/*
 		sendVO sendOrgApprId = service.getSendOrgApprId(ap.getAppr_seq());
 		List<userVO> DeptUseInfo = userService.DeptUseInfo(sendOrgApprId.getReceiverid());
 		for(userVO use : DeptUseInfo) {
@@ -535,7 +582,7 @@ public class approvalController {
 		fm.setFldrmbrid(ap.getAppr_seq());
 		fm.setRegisterid(ap.getDrafterid());
 		folderService.ApprFldrmbrInsert(fm);
-		
+		*/
 		return ResponseEntity.ok("RceptDocSang Success");
 	}
 	

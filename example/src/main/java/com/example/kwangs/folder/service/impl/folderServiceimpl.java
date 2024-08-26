@@ -383,4 +383,12 @@ public class folderServiceimpl implements folderService{
 			}
 		}
 	}
+	@Override
+	public List<folderVO> ApprFldrmbr_4050(String ownerid) {
+		return mapper.ApprFldrmbr_4050(ownerid);
+	}
+	@Override
+	public List<fldrmbrVO> RecDeptDocInfo(String fldrid){
+		return mapper.RecDeptDocInfo(fldrid);
+	}
 }

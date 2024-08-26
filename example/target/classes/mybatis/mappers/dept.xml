@@ -71,4 +71,11 @@
 	and af.procdeptid = #{procdeptid}
 	and af.fldrid = #{fldrid}
 </select>
+
+<select id="UserSosck" resultType="deptVO" parameterType="String">
+	select * 
+		from dept d, member u
+	where d.deptid = u.deptid
+	and d.deptid= #{deptid}
+</select>
 </mapper>

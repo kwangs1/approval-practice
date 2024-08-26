@@ -19,6 +19,10 @@ li{list-style:none; padding-left:0px;}
 .position {font-weight: bold; font-size: 12px;}
 .FlowChart{display: flex; flex-direction: column; margin-right: 10px;}
 .FlowContainer{display: flex;flex-wrap: wrap;}
+input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; padding: 5px; font-size: 14px; pointer-events:none;}
+.sender_info{position: absolute; z-index:2; font-weight:bold}
+.getStampImage{position: absolute; z-index:1; left:430px; top:-30px; opacity: 0.7;}
+.receiveStamp{display:flex; justify-content:center; position: relative;}
 </style>
 <body onload="init()">
 <div class="loading" id="loading"style="display:none">
@@ -34,11 +38,18 @@ li{list-style:none; padding-left:0px;}
 <%@ include file="../participant/ParticipantWrite.jsp" %>
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
+  <div class="receivers_info">수신처: <c:out value="${info.receivers}"/></div>
   <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
   <p class="post-info">신청날짜: ${info.startdate} ~ ${info.enddate}</p>
   <div class="post-content">
     <p>${info.content }</p>
   </div>
+    <br><br>
+  <div class="receiveStamp">
+	<div class="sender_info">발신처: <c:out value="${info.sendername}"/></div>	
+	<div class="getStampImage"></div><!-- 발송 이후 문서함& 접수대기 에서 관인보여주기 -->
+  </div>
+  <br><br><br>
   <br>
   
   	<div>
@@ -94,7 +105,19 @@ var docregno = '<c:out value="${res.abbreviation}"/>';
 var DocAttr = '<c:out value="${info.docattr}"/>';
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 
-function init(){
+function init(){	$.ajax({
+	url: '<c:url value="/stamp/getApprStampInfo"/>',
+	type: 'get',
+	data: {appr_seq :appr_seq},
+	success: function(response){
+		var localName = response.id+"."+response.name;
+		var fileCallPath = encodeURIComponent("s_" + localName);
+		$('.getStampImage').html("<img src='/kwangs/display?name="+fileCallPath+"'>");
+	},
+	error: function(xhr, status, error){
+		console.log(error)
+	}
+})
 	getAttachList();
 	flowPop();
 }
@@ -133,7 +156,8 @@ function RceptDocSanc(){
 			bizunitcd: $('#bizunitcd').val(),
 			foldername: $('#foldername').val(),
 			docattr: DocAttr,
-			draftsrctype: $('#draftsrctype').val()
+			draftsrctype: $('#draftsrctype').val(),
+			orgappr_seq: appr_seq
 	}
 	
 	$.ajax({

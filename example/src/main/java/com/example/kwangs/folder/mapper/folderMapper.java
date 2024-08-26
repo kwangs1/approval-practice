@@ -219,4 +219,10 @@ public class folderMapper {
 	public folderVO getOfficialRegister(String ownerid) {
 		return session.selectOne("folder.getOfficialRegister",ownerid);
 	}
+	public List<folderVO> ApprFldrmbr_4050(String ownerid) {
+		return session.selectList("folder.ApprFldrmbr_4050",ownerid);
+	}
+	public List<fldrmbrVO> RecDeptDocInfo(String fldrid){
+		return session.selectList("folder.RecDeptDocInfo",fldrid);
+	}
 }

@@ -181,8 +181,8 @@ public class approvalServiceImpl implements approvalService{
 		mapper.ReceiveDeptIn(send);
 	}
 	@Override
-	public void UpdDocPostStatus(String appr_seq) {
-		mapper.UpdDocPostStatus(appr_seq);
+	public void UpdDocPostStatus(Map<String ,Object> drafterRes) {
+		mapper.UpdDocPostStatus(drafterRes);
 	}
 	//상세보기에서의 접수를 해야할 문서인지 체크
 	@Override
@@ -207,8 +207,10 @@ public class approvalServiceImpl implements approvalService{
 	//접수대기 문서 접수하기
 	public void RceptDocSang(approvalVO ap) throws IOException {
 		String abbr = ap.getDocregno();
+		sendVO OrgRegisterDate = mapper.SendSttusApprInfo(ap.getSendid());
 		ap.setDocregno(abbr+"-@N");
 		ap.setDraftsrctype("1");
+		ap.setRegdate(OrgRegisterDate.getRegistdate());
 		log.info(".....>>> "+ap.getDraftsrctype());
 		mapper.RceptDocSang(ap);
 		
@@ -216,12 +218,24 @@ public class approvalServiceImpl implements approvalService{
 		log.info("SERVICE-- SEND TABLE SENDID >>>>> "+sendid);
 		mapper.updSendData(sendid);
 		
-
+		folderVO ApprFldrId_6050 = fMapper.ApprFldrmbr_6050(ap.getDrafterid()); //접수한 문서
+		//6050[접수한 문서]
+		fldrmbrVO fm = new fldrmbrVO();
+		fm.setFldrid(ApprFldrId_6050.getFldrid());
+		fm.setFldrmbrid(ap.getAppr_seq());
+		fm.setRegisterid(ap.getDrafterid());
+		fMapper.ApprFldrmbrInsert(fm);
+		
 		saveDatTemp.saveDataToDatFile(ap.getFolderid(), ap.getFoldername(), ap.getBizunitcd(),ap.getDrafterid());
 	}
 	//문서삭제
 	@Override
 	public boolean DeleteDoc(String appr_seq) {
 		return mapper.DeleteDoc(appr_seq) == 1;
+	}
+	//
+	@Override
+	public sendVO SendSttusApprInfo(String sendid) {
+		return mapper.SendSttusApprInfo(sendid);
 	}
 }

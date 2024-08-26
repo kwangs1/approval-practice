@@ -46,7 +46,7 @@ public interface approvalService {
 	*/
 	void DocSend(sendVO send);
 	void ReceiveDeptIn(sendVO send);
-	void UpdDocPostStatus(String appr_seq);
+	void UpdDocPostStatus(Map<String ,Object> drafterRes);
 	//상세보기에서의 접수를 해야할 문서인지 체크
 	sendVO getSendInfo(Map<String,Object> send);
 	//상세보기에서의 접수문서인지 체크
@@ -58,4 +58,6 @@ public interface approvalService {
 	void RceptDocSang(approvalVO ap) throws IOException;
 	//문서 삭제
 	boolean DeleteDoc(String appr_seq);
+	//
+	sendVO SendSttusApprInfo(String sendid);
 }

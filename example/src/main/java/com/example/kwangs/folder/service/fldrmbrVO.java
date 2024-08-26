@@ -1,17 +1,15 @@
 package com.example.kwangs.folder.service;
 
-import java.sql.Date;
-
 import org.springframework.stereotype.Component;
 
 @Component
 public class fldrmbrVO {
 	private String fldrid;
 	private String fldrmbrid;
-	private Date indexdate;
-	private Date registdate;
+	private String indexdate;
+	private String registdate;
 	private String registerid;
-	private Date updatedate;
+	private String updatedate;
 	private String updaterid;
 	
 	public String getFldrid() {
@@ -26,16 +24,16 @@ public class fldrmbrVO {
 	public void setFldrmbrid(String fldrmbrid) {
 		this.fldrmbrid = fldrmbrid;
 	}
-	public Date getIndexdate() {
+	public String getIndexdate() {
 		return indexdate;
 	}
-	public void setIndexdate(Date indexdate) {
+	public void setIndexdate(String indexdate) {
 		this.indexdate = indexdate;
 	}
-	public Date getRegistdate() {
+	public String getRegistdate() {
 		return registdate;
 	}
-	public void setRegistdate(Date registdate) {
+	public void setRegistdate(String registdate) {
 		this.registdate = registdate;
 	}
 	public String getRegisterid() {
@@ -44,10 +42,10 @@ public class fldrmbrVO {
 	public void setRegisterid(String registerid) {
 		this.registerid = registerid;
 	}
-	public Date getUpdatedate() {
+	public String getUpdatedate() {
 		return updatedate;
 	}
-	public void setUpdatedate(Date updatedate) {
+	public void setUpdatedate(String updatedate) {
 		this.updatedate = updatedate;
 	}
 	public String getUpdaterid() {

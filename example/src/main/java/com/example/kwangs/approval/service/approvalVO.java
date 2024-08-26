@@ -39,8 +39,15 @@ public class approvalVO{
 	private String draftsrctype;
 	private String orgdeptfolderid;
 	private String stampname;
+	private String orgappr_seq;
 	
 	
+	public String getOrgappr_seq() {
+		return orgappr_seq;
+	}
+	public void setOrgappr_seq(String orgappr_seq) {
+		this.orgappr_seq = orgappr_seq;
+	}
 	public String getStampname() {
 		return stampname;
 	}

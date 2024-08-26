@@ -136,8 +136,8 @@ public class approvalMapper{
 	public void ReceiveDeptIn(sendVO send) {
 		session.insert("mapper.approval.ReceiveDeptIn",send);
 	}
-	public void UpdDocPostStatus(String appr_seq) {
-		session.update("mapper.approval.UpdDocPostStatus",appr_seq);
+	public void UpdDocPostStatus(Map<String ,Object> drafterRes) {
+		session.update("mapper.approval.UpdDocPostStatus",drafterRes);
 	}
 	//상세보기에서의 접수를 해야할 문서인지 체크
 	public sendVO getSendInfo(Map<String,Object> send) {
@@ -178,5 +178,9 @@ public class approvalMapper{
 	//
 	public void UpdateApprInfo(approvalVO ap) {
 		session.update("mapper.approval.UpdateApprInfo",ap);
+	}
+	//
+	public sendVO SendSttusApprInfo(String sendid) {
+		return session.selectOne("mapper.approval.SendSttusApprInfo",sendid);
 	}
 }

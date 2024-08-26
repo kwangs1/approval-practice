@@ -37,6 +37,7 @@ input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; paddin
 </div>
 
 
+<input type="hidden" name="stampname" id="stampname" />
 <div class="post-container">
 	<c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
 	  <button onclick="getFlowDeptStamp()" class="button">관인서명</button> 
@@ -130,6 +131,7 @@ var draftsrctype = '<c:out value="${info.draftsrctype}"/>';
 var RECEIPTAPPR_SEQ = '<c:out value="${ReceptInfo.appr_seq}"/>';
 var sendername = '<c:out value="${info.sendername}"/>';
 var receivers = '<c:out value="${info.receivers}"/>';
+var docattr = '<c:out value="${info.docattr}"/>';
 
 var param = {	
 	appr_seq : appr_seq,
@@ -175,7 +177,7 @@ function DocSend(){
 	$.ajax({
 		type:'post',
 		url: '<c:url value="/approval/DocSend"/>',
-		data: {appr_seq: appr_seq},
+		data: {appr_seq: appr_seq,stampname:$('#stampname').val()},
 		success: function(){
 			setTimeout(function(){
 				alert("발송처리 되었습니다.");
@@ -222,7 +224,7 @@ function init(){
 		$('.receivers_info').html('수신처: '+receivers);
 	}
 
-	if(docattr === '1' && '<c:out value="${Info.draftsrctype}"/>' === '1'){
+	if(docattr === '1' && '<c:out value="${info.draftsrctype}"/>' === '1'){
 		$('.sender_info').html('발신처: '+ '<c:out value="${OrgDocReceivers.sendername}"/>');
 		$('.receivers_info').html('수신처: '+ '<c:out value="${OrgDocReceivers.receivers}"/>');		
 	}

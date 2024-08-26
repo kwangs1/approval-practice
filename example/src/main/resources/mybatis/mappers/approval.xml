@@ -34,6 +34,7 @@
 		<result property="poststatus" column="poststatus" />
 		<result property="draftsrctype" column="draftsrctype" />
 		<result property="stampname" column="stampname" />
+		<result property="orgappr_seq" column="orgappr_seq" />
 	</resultMap>
 	
 	<!-- 검색 동적 쿼리 -->
@@ -54,7 +55,7 @@
 	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname},#{orgappr_seq})
 </insert>
 
 <!-- 결재선 지정 후 결재 상신 시 결재 테이블에 결재 시퀀스 값 가져오기 위한 시퀀스 셀렉트 -->
@@ -72,7 +73,7 @@
 			where a.appr_seq = p.appr_seq 
 			and a.appr_seq = fm.fldrmbrid
 	        and f.fldrid = fm.fldrid
-			and p.approvalstatus = 4098
+			<!-- and p.approvalstatus = 4098 -->
 			and a.status not in(4096,256)
 			and p.approvaltype = 4
 			and p.flag = '0'
@@ -130,7 +131,7 @@
 <select id="RceptWaitDocList" resultType="approvalVO" parameterType="String">
 	select t.*
 	    from(
-	        select a.appr_seq, a.title, a.drafterid, a.draftername, a.approvaldate, a.receivers, a.sendername, a.senddate,
+	        select a.appr_seq, a.title, a.drafterid, a.draftername, a.approvaldate, a.receivers, a.sendername, a.senddate, a.draftsrctype,
 	            row_number() over(order by a.appr_seq desc)as rnum
 	           from approval a, send s, fldrmbr fm, folder f
 	        where a.appr_seq = s.appr_seq
@@ -142,7 +143,7 @@
             and s.sendid = fm.fldrmbrid
             and s.appr_seq = a.appr_seq
             and s.receiverid = #{receiverid}
-            and s.recdocstatus = '2048'
+           <!--  and s.recdocstatus = '2048' -->
 			<include refid="search"></include>
 		)t	    
 	where rnum between #{rowStart} and #{rowEnd}
@@ -151,7 +152,7 @@
 <select id="docFrame" resultType="approvalVO">
 		select d.*
 		from(
-			select a.*, row_number() over(order by docregno desc)as rnum
+			select a.*, row_number() over(order by appr_seq desc)as rnum
 			from approval a, fldrmbr2 fm2
 			where 1=1
 			<!-- and a.drafterdeptid = #{drafterdeptid}  -->
@@ -303,7 +304,6 @@
    	and fm.fldrid = f.fldrid
    	and s.sendid = fm.fldrmbrid
    	and s.appr_seq = a.appr_seq
-	and s.recdocstatus = '2048'
 	<include refid="search"></include>	
 </select>
 <!-- 첨부파일 갯수 업데이트 -->
@@ -339,7 +339,8 @@
 	<!-- 문서 발송 시 발송부서 문서 발송상태값 수정 -->
 	<update id="UpdDocPostStatus">
 		update approval
-		set poststatus = '2', senddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), sendid = drafterdeptid
+		set poststatus = '2', senddate = to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'), 
+		sendid = #{sendid}, stampname = #{stampname}, orgappr_seq = #{appr_seq}
 		where appr_seq = #{appr_seq}
 	</update>
 		<!--상세보기에서의 접수를 해야할 문서인지 체크 -->
@@ -368,17 +369,16 @@
 		select 'APPROVAL' || to_char(sysdate, 'YYYYMMDD') || APPR_SEQ.nextval  from dual
 	</selectKey>
 	insert into approval
-	values(#{appr_seq},#{draftername},#{drafterid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),#{title},#{content},
+	values(#{appr_seq},#{draftername},#{drafterid},#{regdate},#{title},#{content},
 		#{startdate},#{enddate},1,#{docregno},#{drafterdeptid},#{drafterdeptname},#{regno},#{finalapprover},#{approvaldate},
 		#{folderid},#{bizunitcd},#{attachcnt},#{foldername},#{docattr},#{sendername},#{receivers},#{sendid},#{senddate},
-		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname})
+		#{orgdraftdeptid},#{poststatus},#{draftsrctype},#{orgdeptfolderid},#{stampname},#{orgappr_seq})
 	</insert>
 	<!-- 접수 완료 시 해당 문서의 접수테이블 업데이트 -->
 	<update id="updSendData">
-		update send s
-		set s.recdocstatus = '2', s.sendtype ='2',
-			s.receiptappr_seq = (select a.appr_seq from approval a  where a.sendid = s.sendid)
-		where s.sendid = #{sendid}
+		update send 
+		set recdocstatus = '4'
+		where sendid = #{sendid}
 	</update>
 	<!-- 문서 삭제 -->
 	<delete id="DeleteDoc">
@@ -401,4 +401,8 @@
 			set bizunitcd = #{bizunitcd}, orgdraftdeptid =#{orgdraftdeptid}
 		where folderid = #{folderid}
 	</update>
+	
+	<select id="SendSttusApprInfo" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
+		select * from send where sendid = #{sendid}
+	</select>
 </mapper>

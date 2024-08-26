@@ -16,6 +16,7 @@
 .pagination {list-style: none; display: flex;}
 .pagination li {margin: 0 5px;}
 .pagination a {text-decoration: none; color: #333; padding: 5px 10px; border: 1px solid #ccc; border-radius: 3px;}
+.ing{width:30px; height:30px;}
 </style>
 </head>
 <body>
@@ -46,7 +47,7 @@
  <table class="table table-bordered">
     <thead>
       <tr>
-      	<th style="width:10px;"><input type="checkbox" id="selectAll"></th>
+      	<th style="width:15px;"><input type="checkbox" id="selectAll"></th>
         <th>제목</th>
         <th>기안자</th>
 		<th>발송일시</th>
@@ -57,7 +58,12 @@
     <c:forEach var="list" items="${list}">
       <tr>
       	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }"/></td>
-        <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
+        <td>   
+      		<c:if test="${list.appr_seq == orgappr_seq}">
+				<img class="ing" src="<c:url value='/resources/img/ing.gif'/>" alt="접수중.."/>&nbsp;&nbsp;
+			</c:if>
+        	<a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a>
+        </td>
         <td>${list.draftername }</td>
         <td>${list.senddate }</td>
         <td>${list.sendername }</td>

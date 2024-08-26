@@ -384,4 +384,11 @@ where f.rindex = 1
 	where ownerid = #{ownerid}
 	and applid = 8010
 </select>
+<select id="ApprFldrmbr_4050" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 4050
+</select>
+<!-- 접수한 문서에대한 정보 가져오기위함. -->
+<select id="RecDeptDocInfo" resultType="com.example.kwangs.folder.service.fldrmbrVO" parameterType="String">
+	select * from fldrmbr where fldrid = #{fldrid}
+</select>
 </mapper>
