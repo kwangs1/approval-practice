@@ -49,4 +49,8 @@ public class stampServiceimpl implements stampService{
 	public List<stampVO> getFlowDeptStampList(String appr_seq){
 		return mapper.getFlowDeptStampList(appr_seq);
 	}
+	@Override
+	public stampVO getApprStampInfo(String appr_seq) {
+		return mapper.getApprStampInfo(appr_seq);
+	}
 }

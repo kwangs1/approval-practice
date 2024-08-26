@@ -20,6 +20,11 @@ li{list-style:none; padding-left:0px;}
 .position {font-weight: bold; font-size: 12px;}
 .FlowChart{display: flex; flex-direction: column; margin-right: 10px;}
 .FlowContainer{display: flex;flex-wrap: wrap;}
+input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; padding: 5px; font-size: 14px; pointer-events:none;}
+.sender_info{position: absolute; z-index:2; font-weight:bold}
+.stampImage{position: absolute; z-index:1; left:430px; top:-30px; opacity: 0.7;}
+.getStampImage{position: absolute; z-index:1; left:430px; top:-30px; opacity: 0.7;}
+.receiveStamp{display:flex; justify-content:center; position: relative;}
 </style>
 <body onload="init()">
 <div class="loading" id="loading"style="display:none">
@@ -28,17 +33,9 @@ li{list-style:none; padding-left:0px;}
 		<span></span>
 		<span></span>
 	</div>
-	<p>결재 중..</p>
+	<p id="text"></p>
 </div>
 
-<div class="loading" id="loading2"style="display:none">
-	<div class="spinner">
-		<span></span>
-		<span></span>
-		<span></span>
-	</div>
-	<p>발송 중..</p>
-</div>
 
 <div class="post-container">
 	<c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
@@ -46,11 +43,22 @@ li{list-style:none; padding-left:0px;}
 	</c:if>
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
+  <c:if test="${info.docattr eq '1'}">
+  	<div class="receivers_info"></div>
+  </c:if>
   <p class="post-info">기안자: ${info.draftername} | 작성일: ${info.regdate }</p>
   <p class="post-info">신청날짜: ${info.startdate} ~ ${info.enddate}</p>
   <div class="post-content">
     <p>${info.content }</p>
   </div>
+    <br><br>
+  <c:if test="${info.docattr eq '1'}">
+	  <div class="receiveStamp">
+		<div class="sender_info"></div>	
+		<div class="stampImage"></div><!-- 발송 시 지정하는 관인이미지 보여주는곳 -->
+		<div class="getStampImage"></div><!-- 발송 이후 문서함& 접수대기 에서 관인보여주기 -->
+	  </div>
+  </c:if>
   <br>
   	<div>
 		<c:choose>
@@ -120,6 +128,8 @@ var drafterid = '<c:out value="${info.drafterid}"/>';
 var regdate = '<c:out value="${info.regdate}"/>';
 var draftsrctype = '<c:out value="${info.draftsrctype}"/>';
 var RECEIPTAPPR_SEQ = '<c:out value="${ReceptInfo.appr_seq}"/>';
+var sendername = '<c:out value="${info.sendername}"/>';
+var receivers = '<c:out value="${info.receivers}"/>';
 
 var param = {	
 	appr_seq : appr_seq,
@@ -129,7 +139,9 @@ var param = {
 	signerid : signerid}
 
 function FlowAppr(){				
-	var loading = document.getElementById('loading')
+	var loading = document.getElementById('loading');
+	var p  = document.getElementById('text');
+	p.innerHTML = '결재 중...';
 	loading.style.display = 'flex';
 	$.ajax({
 		type: 'post',
@@ -156,7 +168,9 @@ function AttachModifyForm(){
 }
 
 function DocSend(){
-	var loading = document.getElementById('loading2')
+	var loading = document.getElementById('loading');
+	var p  = document.getElementById('text');
+	p.innerHTML = '발송 중...';
 	loading.style.display = 'flex';	
 	$.ajax({
 		type:'post',
@@ -183,10 +197,34 @@ function RceptForm(){
 }
 //첨부파일 부분 접수문서와 기안문서가 출력되는부분 다르게
 function init(){
+	$.ajax({
+		url: '<c:url value="/stamp/getApprStampInfo"/>',
+		type: 'get',
+		data: {appr_seq :appr_seq},
+		success: function(response){
+			var localName = response.id+"."+response.name;
+			var fileCallPath = encodeURIComponent("s_" + localName);
+			$('.getStampImage').html("<img src='/kwangs/display?name="+fileCallPath+"'>");
+		},
+		error: function(xhr, status, error){
+			console.log(error)
+		}
+	})
+	
 	if(draftsrctype != 1){
 		getAttachList();
 	}else{
 		getRceptAttachList();
+	}
+	
+	if(docattr === '1'){
+		$('.sender_info').html('발신처: '+sendername);
+		$('.receivers_info').html('수신처: '+receivers);
+	}
+
+	if(docattr === '1' && '<c:out value="${Info.draftsrctype}"/>' === '1'){
+		$('.sender_info').html('발신처: '+ '<c:out value="${OrgDocReceivers.sendername}"/>');
+		$('.receivers_info').html('수신처: '+ '<c:out value="${OrgDocReceivers.receivers}"/>');		
 	}
 }
 
@@ -195,6 +233,23 @@ function getFlowDeptStamp(){
 	url += '?appr_seq='+appr_seq
 	window.open(url,'stamp','width=340px, height=280px');
 }
+
+window.addEventListener('message',function(e){
+	e.preventDefault();
+	var data = e.data;
+	
+	if(data && typeof data === 'object'){
+		var id = data.id;
+		var name = data.name;
+		
+		$('#stampname').val(name);
+		
+		var fileCallPath = encodeURIComponent("s_" + id+"."+name);
+		var stampImage = $('.stampImage');
+		stampImage.empty();
+		stampImage.append("<img src='/kwangs/display?name="+fileCallPath+"'>");		
+	}
+})
 </script>
 </body>
 </html>

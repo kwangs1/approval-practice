@@ -14,4 +14,6 @@ public interface stampService{
 	public void StampDeleteFiles(Map<String, Object> res);
 	
 	public List<stampVO> getFlowDeptStampList(String appr_seq);
+
+	public stampVO getApprStampInfo(String appr_seq);
 }

@@ -55,4 +55,18 @@ public class stampController {
 		List<stampVO> stamp = service.getFlowDeptStampList(appr_seq);
 		model.addAttribute("stamp",stamp);
 	}
+	
+	//문서 상세보기 관인정보 있을 시 보여주기
+	@ResponseBody
+	@GetMapping("/stamp/getApprStampInfo")
+	public ResponseEntity<stampVO> getApprStampInfo(String appr_seq){
+		stampVO s = service.getApprStampInfo(appr_seq);
+		if(s == null) {
+			log.error("Stamp Info not found for apprid: "+appr_seq);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}else {
+			log.info("getApprStampInfo Data? "+s.getId()+"."+s.getName());
+		}
+		return new ResponseEntity<>(s,HttpStatus.OK);
+	}
 }

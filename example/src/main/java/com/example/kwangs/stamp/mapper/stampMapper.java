@@ -38,4 +38,9 @@ public class stampMapper {
 	public List<stampVO> getFlowDeptStampList(String appr_seq){
 		return session.selectList("stamp.getFlowDeptStampList",appr_seq);
 	}
+	
+	public stampVO getApprStampInfo(String appr_seq) {
+		return session.selectOne("stamp.getApprStampInfo",appr_seq);
+	}
+	
 }

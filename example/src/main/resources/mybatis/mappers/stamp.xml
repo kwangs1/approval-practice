@@ -32,12 +32,19 @@
 </delete>
 
 <select id="getFlowDeptStampList" resultMap="stamp" parameterType="String">
-	select d.deptname, d.sendername, s.name
+	select d.deptname, d.sendername, s.name, s.id
 		from approval a,  participant p, dept d, stamp s
 	where a.appr_seq = p.appr_seq
 	and p.deptid = d.deptid
 	and d.deptid = s.id
 	and a.appr_seq= #{appr_seq}
-	group by d.deptname, d.sendername, s.name
+	group by d.deptname, d.sendername, s.name, s.id
+</select>
+
+<select id="getApprStampInfo" resultMap="stamp" parameterType="String">
+	select s.id,s.name 
+		from stamp s,approval a
+	where a.appr_seq= #{appr_seq}
+	and s.name = a.stampname
 </select>
 </mapper>
