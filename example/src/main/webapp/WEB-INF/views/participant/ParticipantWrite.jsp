@@ -23,7 +23,7 @@ select{display:none;}
 	<c:if test="${info.status == 4096}">
   		<button onclick="Resubmission()" class="button">재기안</button>
   	</c:if>
-  	<c:if test="${sendInfo.receiverid eq user.deptid}">
+  	<c:if test="${sendInfo.receiverid eq user.deptid && sendInfo.recdocstatus eq '2'}">
 		<button onclick="RceptDocSanc()" class="button" >접수</button>
 	</c:if>
 	<button onClick="window.close()" class="button">닫기</button>

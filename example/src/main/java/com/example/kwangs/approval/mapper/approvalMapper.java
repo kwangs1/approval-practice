@@ -10,7 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.example.kwangs.approval.service.Document;
+import com.example.kwangs.approval.service.action_log_sanc;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.opinionVO;
 import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.service.deptVO;
@@ -46,9 +48,17 @@ public class approvalMapper{
 	public List<approvalVO>SndngWaitDocList(SearchCriteria scri){
 		return session.selectList("mapper.approval.SndngWaitDocList",scri);
 	}
+	//발송현황
+	public List<approvalVO>SndngSttusDocList(SearchCriteria scri){
+		return session.selectList("mapper.approval.SndngSttusDocList",scri);
+	}
 	//접수대기
 	public List<approvalVO>RceptWaitDocList(SearchCriteria scri){
 		return session.selectList("mapper.approval.RceptWaitDocList",scri);
+	}
+	//수신반송
+	public List<approvalVO>ReceptReturnDocList(SearchCriteria scri){
+		return session.selectList("mapper.approval.ReceptReturnDocList",scri);
 	}
 	//문서함
 	public List<approvalVO> docFrame(SearchCriteria scri){
@@ -120,6 +130,10 @@ public class approvalMapper{
 	public int TotalRceptWaitCnt(SearchCriteria scri) {
 		return session.selectOne("mapper.approval.TotalRceptWaitCnt",scri);
 	}
+	//결재함[수신반송] 문서 총 갯수
+	public int TotalRceptReturnDocCnt(SearchCriteria scri) {
+		return session.selectOne("mapper.approval.TotalRceptReturnDocCnt",scri);
+	}
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	public void UpdAttachCnt(Map<String,Object>res) {
 		session.update("mapper.approval.UpdAttachCnt",res);
@@ -148,8 +162,8 @@ public class approvalMapper{
 		return session.selectOne("mapper.approval.getReceptInfo",send);
 	}
 	//접수대기 -> 접수 시 기존 apprid 가져오는 부분
-	public sendVO getSendOrgApprId(String appr_seq) {
-		return session.selectOne("mapper.approval.getSendOrgApprId",appr_seq);
+	public sendVO getSendOrgApprId(String sendid) {
+		return session.selectOne("mapper.approval.getSendOrgApprId",sendid);
 	}
 	//발송 시 fldrmbr테이블에 fldrmbrid는 각 부서에 체결된 sendid로 기입
 	public sendVO getSendId(Map<String,Object> res) {
@@ -163,10 +177,19 @@ public class approvalMapper{
 	public void updSendData(String sendid) {
 		session.update("mapper.approval.updSendData",sendid);
 	}
-	//문서 삭제
+	/*
+	 * 문서 삭제
+	 */
 	public int DeleteDoc(String appr_seq) {
 		return session.delete("mapper.approval.DeleteDoc",appr_seq);
 	}
+	public sendVO SndngSttusApprInfo(String sendid) {
+		return session.selectOne("mapper.approval.SndngSttusApprInfo",sendid);
+	}
+	public void SendDocRecdocStatus(Map<String,Object> res) {
+		session.update("mapper.approval.SendDocRecdocStatus",res);
+	}
+	//--//
 	//이관 시 해당 기록물철에 등록된 문서리스트
 	public List<approvalVO> getMoveApprList(String folderid){
 		return session.selectList("mapper.approval.getMoveApprList",folderid);
@@ -179,8 +202,32 @@ public class approvalMapper{
 	public void UpdateApprInfo(approvalVO ap) {
 		session.update("mapper.approval.UpdateApprInfo",ap);
 	}
-	//
-	public sendVO SendSttusApprInfo(String sendid) {
-		return session.selectOne("mapper.approval.SendSttusApprInfo",sendid);
+	//반송
+	public boolean RecptDocReturn(sendVO sndng) {
+		try {
+			int result = session.insert("mapper.approval.RecptDocReturn",sndng);
+			return result > 0;
+		}catch(Exception e) {
+			log.error("Insert 작업 중 오류발생",e);
+			return false;
+		}
+	}
+	
+	public void DocOpinionAdd(opinionVO opi) {
+		log.info("----- DocOpinion DAO In..");
+		log.info(opi.getOpinionid());
+		log.info(opi.getOpiniontype());
+		log.info(opi.getRegisterid());
+		log.info(" ."+opi.getCredate());
+		log.info(opi.getOpinioncontent());
+		session.insert("mapper.approval.DocOpinionAdd",opi);
+	}
+	
+	//이력남기기
+	public void ActionLogSancAdd(action_log_sanc sanc) {
+		session.insert("mapper.approval.ActionLogSancAdd",sanc);
+	}
+	public List<sendVO>sttusList(String parsendid){
+		return session.selectList("mapper.approval.sttusList",parsendid);
 	}
 }

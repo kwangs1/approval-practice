@@ -122,6 +122,9 @@ public class folderMapper {
 	public void deleteApprFldrmbr_5010(Map<String,Object> sendData_5010) {
 		session.delete("folder.deleteApprFldrmbr_5010",sendData_5010);
 	}
+	public void deleteApprFldrmbr_4050(Map<String,Object> sendData_4050) {
+		session.delete("folder.deleteApprFldrmbr_4050",sendData_4050);
+	}
 	//해당 문서의 결재자들에 대한 결재대기,결재진행 폴더 중복 체크
 	public int checkFldrmbr_2010(Map<String,Object> check2010) {
 		return session.selectOne("folder.checkFldrmbr_2010",check2010);

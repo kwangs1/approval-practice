@@ -42,6 +42,9 @@ input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; paddin
 	<c:if test="${info.status == 256 && info.docattr eq '1' && info.poststatus eq '1' }">
 	  <button onclick="getFlowDeptStamp()" class="button">관인서명</button> 
 	</c:if>
+	<c:if test="${SendInfo.recdocstatus eq '2' && SendInfo.receiverid eq user.deptid}">
+		<button onclick="DocOpinion()" class="button" >반송</button>
+	</c:if>
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
   <c:if test="${info.docattr eq '1'}">
@@ -117,8 +120,13 @@ input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; paddin
   <button onclick="window.close()" class="button">닫기</button>
 </div>
 
+<input type="hidden" id="parentOpi"/>
+<input type="hidden" id="credate"/>
+
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/InfoUploadFile_.js'/>"></script>
+<script src="<c:url value='/resources/js/DocCookie.js'/>"></script>
 <script>
 var appr_seq = '<c:out value="${info.appr_seq}"/>';
 var participant_seq = '<c:out value="${pInfo.participant_seq}"/>';
@@ -132,6 +140,13 @@ var RECEIPTAPPR_SEQ = '<c:out value="${ReceptInfo.appr_seq}"/>';
 var sendername = '<c:out value="${info.sendername}"/>';
 var receivers = '<c:out value="${info.receivers}"/>';
 var docattr = '<c:out value="${info.docattr}"/>';
+var sendid = '<c:out value="${info.sendid}"/>';
+var poststatus = '<c:out value="${info.poststatus}"/>';
+var childSendid = '<c:out value="${SendInfo.sendid}"/>';
+var OpinionCheck = '<c:out value ="${OpinionCheck}"/>';
+var sendtype = '<c:out value="${SendInfo.sendtype}"/>';
+var recdocstatus = '<c:out value="${SendInfo.recdocstatus}"/>';
+var CheckOpinion = '<c:out value="false"/>';
 
 var param = {	
 	appr_seq : appr_seq,
@@ -251,6 +266,46 @@ window.addEventListener('message',function(e){
 		stampImage.empty();
 		stampImage.append("<img src='/kwangs/display?name="+fileCallPath+"'>");		
 	}
+})
+
+//반송
+function RceptDocReturn(){
+	var loading = document.getElementById('loading');
+	var p  = document.getElementById('text');
+	p.innerHTML = '반송 중...';
+	loading.style.display = 'flex';
+	
+	var param = {
+			appr_seq: appr_seq,
+			opinioncontent: $('#parentOpi').val(),
+			credate: $('#credate').val()
+	}
+	$.ajax({
+		url: '<c:url value="/approval/RecptDocReturn"/>',
+		type: 'post',
+		contentType: 'application/json',
+		data: JSON.stringify(param),
+		success: function(){
+			loading.style.display = 'none';
+			alert("반송처리가 완료되었습니다.");
+			window.close();
+			window.opener.location.reload();
+		},
+		error: function(xhr, status, error){
+			alert("반송실패 ㅋ"+error);
+			console.log(xhr);
+			console.log(status);
+			console.log(error);
+		}
+	})
+}
+function DocOpinion(){
+	url = '<c:url value="/approval/DocOpinionForm"/>';
+	var childWindow =window.open(url,'DocOpinion','width=750px, height=120px');
+}
+
+window.addEventListener('beforeunload',function(){
+	deleteCookie('opinion');
 })
 </script>
 </body>

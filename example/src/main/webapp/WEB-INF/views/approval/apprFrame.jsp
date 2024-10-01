@@ -69,8 +69,20 @@ function loadApprFrame(drafterdeptid,id,ownerid,fldrid,fldrname,applid){
 		window.location.href = url;
 		setCookie_f2(url);
 	}
+	else if(applid === '4050'){
+		var url = "<c:url value='/approval/SndngSttusDocList'/>";
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
+		window.location.href = url;
+		setCookie_f2(url);
+	}
 	else if(applid === '5010'){
 		var url = "<c:url value='/approval/RceptWaitDocList'/>";
+		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
+		window.location.href = url;
+		setCookie_f2(url);
+	}
+	else if(applid === '5020'){
+		var url = "<c:url value='/approval/ReceptReturnDocList'/>";
 		url += '?drafterdeptid='+drafterdeptid+'&id='+id+'&ownerid='+ownerid+'&fldrid='+fldrid+'&fldrname='+fldrname+'&applid='+applid+'&searchType=t'+'&keyword='+""
 		window.location.href = url;
 		setCookie_f2(url);

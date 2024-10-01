@@ -194,6 +194,12 @@
 	and registerid = #{registerid}
 	and fldrid = #{fldrid}
 </delete>
+<delete id="deleteApprFldrmbr_4050" parameterType="java.util.Map">
+	delete fldrmbr
+	where fldrmbrid = #{fldrmbrid}
+	and registerid = #{registerid}
+	and fldrid = #{fldrid}
+</delete>
 <!-- 해당 문서의 결재자들에 대한 결재대기,결재진행 폴더 중복 체크 -->
 <select id="checkFldrmbr_2010" resultType="int" parameterType="java.util.Map">
 	select count(*) from fldrmbr 
@@ -234,7 +240,9 @@
 			#{apprwaitcnt, mode=OUT, jdbcType=NUMERIC},
 			#{appringcnt, mode=OUT, jdbcType=NUMERIC},
 			#{sendwaitcnt, mode=OUT, jdbcType=NUMERIC},
-			#{rceptwaitcnt, mode=OUT, jdbcType=NUMERIC}
+			#{rceptwaitcnt, mode=OUT, jdbcType=NUMERIC},
+			#{sndngsttuscnt, mode=OUT, jdbcType=NUMERIC},
+			#{rceptreturncnt, mode=OUT, jdbcType=NUMERIC}
 		)
 	}
 </select>

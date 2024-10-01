@@ -181,6 +181,19 @@ public class userServiceImpl implements userService{
 		in5010.setEndyear("9999");
 		in5010.setParfldrname(in7010.getFldrname());
 		fMapper.subFolderAdd(in5010);
+		
+		folderVO in5020 = new folderVO();
+		in5020.setFldrname("수신반송");
+		in5020.setParfldrid(in7010.getFldrid());
+		in5020.setFldrdepth(in7010.getFldrdepth()+1);
+		in5020.setOwnertype("2");
+		in5020.setOwnerid(user.getId());
+		in5020.setAppltype("2");
+		in5020.setApplid(5020);
+		in5020.setYear("0000");
+		in5020.setEndyear("9999");
+		in5020.setParfldrname(in7010.getFldrname());
+		fMapper.subFolderAdd(in5020);
 	}
 	
 }

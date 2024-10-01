@@ -57,8 +57,10 @@
     </thead>
     <tbody>
     <c:forEach var="list" items="${list}" varStatus="loop">
-    <input type="hidden" name="drafterid" id="drafterid" value="${list.drafterid}" />
+    <input type="hidden" name="drafterid" id="drafterid_${loop.index}" value="${list.drafterid}" />
     <input type="hidden" id="ApprStatus_${loop.index}" value="${list.status}" />
+    <input type="hidden" id="draftsrctype_${loop.index}" value="${list.draftsrctype}"/>
+	<input type="hidden" id="sendid_${loop.index}" value="${list.sendid}"/>
 	        <%-- 결재대기에 걸린 결재선 정보 가져오려고 --%>
 	  <c:forEach var="participant" items="${participantInfo}" varStatus="loop">
 		<c:if test="${participant.appr_seq == list.appr_seq && participant.signerid == user.id}">
@@ -175,7 +177,7 @@ function RetireAppr(){
 			var status = $('#status_' + i).val();
 			
 			var approvalStatus = $('#ApprStatus_'+i).val();
-			var drafterid = $('#drafterid').val();
+			var drafterid = $('#drafterid_'+i).val();
 			
 			if(drafterid !== userid){
 				alert("문서의 기안자만 회수가 가능합니다");
@@ -257,12 +259,24 @@ function DeleteDocument(){
 	for(var i=0; i < checkboxes.length; i++){
 		var appr_seq = checkboxes[i].value;
 		var ApprStatus = $('#ApprStatus_'+i).val();
-		
-		ary.push({appr_seq: appr_seq});
-		if(ApprStatus != 4096){
-			alert('회수된 문서만 삭제가 가능합니다.');
+		var draftsrctype = $('#draftsrctype_'+i).val();
+		var sendid = $('#sendid_'+i).val();
+		var drafterid = $('#drafterid_'+i).val();
+		var signerid = $('#signerid_'+i).val();
+
+		ary.push({appr_seq: appr_seq, draftsrctype: draftsrctype, sendid: sendid});
+		if(ApprStatus != '4096'){
+			alert('회수된 문서만 삭제가능합니다.');
+			return;
+		}	
+		if(drafterid !== signerid){
+			console.log(drafterid+" , "+signerid)
+			alert("해당문서 기안자만 문서를 삭제할 수 있습니다.");
 			return;
 		}
+
+		console.log(draftsrctype);
+		console.log(sendid);
 	}
 	
 	if(ary == 0 || ary.length == null){

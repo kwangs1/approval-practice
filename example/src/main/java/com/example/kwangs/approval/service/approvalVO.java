@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.stereotype.Component;
 
 import com.example.kwangs.common.file.service.AttachVO;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Component
 public class approvalVO{
@@ -40,6 +41,10 @@ public class approvalVO{
 	private String orgdeptfolderid;
 	private String stampname;
 	private String orgappr_seq;
+	//opinion
+	private String opinioncontent;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+	private Date credate;
 	
 	
 	public String getOrgappr_seq() {
@@ -229,6 +234,18 @@ public class approvalVO{
 	}
 	public void setStatus(int status) {
 		this.status = status;
+	}
+	public String getOpinioncontent() {
+		return opinioncontent;
+	}
+	public void setOpinioncontent(String opinioncontent) {
+		this.opinioncontent = opinioncontent;
+	}
+	public Date getCredate() {
+		return credate;
+	}
+	public void setCredate(Date credate) {
+		this.credate = credate;
 	}
 	
 	

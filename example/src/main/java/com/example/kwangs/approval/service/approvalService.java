@@ -1,6 +1,8 @@
 package com.example.kwangs.approval.service;
 
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
 
@@ -16,8 +18,12 @@ public interface approvalService {
 	List<approvalVO> SanctnProgrsList(SearchCriteria scri);
 	//발송대기
 	List<approvalVO>SndngWaitDocList(SearchCriteria scri);
+	//발송현황
+	List<approvalVO>SndngSttusDocList(SearchCriteria scri);
 	//접수대기
 	List<approvalVO>RceptWaitDocList(SearchCriteria scri);
+	//수신반송
+	List<approvalVO>ReceptReturnDocList(SearchCriteria scri);
 	//문서함
 	List<approvalVO>docFrame(SearchCriteria scri);
 	//결재 상세보기
@@ -36,6 +42,8 @@ public interface approvalService {
 	int TotalSndngWaitCnt(SearchCriteria scri);
 	//결재함[접수대기] 문서 총 갯수
 	int TotalRceptWaitCnt(SearchCriteria scri);
+	//결재함[수신반송] 문서 총 갯수
+	int TotalRceptReturnDocCnt(SearchCriteria scri);
 	//결재진행, 재기안 시 첨부파일 등록 및 삭제 시 카운트 업데이트
 	void UpdAttachCnt(Map<String,Object>res);
 	/*
@@ -56,8 +64,12 @@ public interface approvalService {
 	sendVO getSendId(Map<String,Object> res);
 	//발송대기 문서 접수하기
 	void RceptDocSang(approvalVO ap) throws IOException;
-	//문서 삭제
+	/*
+	 * 문서 삭제
+	 */
 	boolean DeleteDoc(String appr_seq);
-	//
-	sendVO SendSttusApprInfo(String sendid);
+	sendVO SndngSttusApprInfo(String sendid);
+	void SendDocRecdocStatus(Map<String,Object> res);
+	//수신반송
+	void RecptDocReturn(String appr_seq,String deptid,String userid, String opinioncontent, Date regdate, String name)throws ParseException;
 }

@@ -2,6 +2,8 @@ package com.example.kwangs.approval;
 
 import java.io.File;
 import java.io.IOException;
+import java.sql.Date;
+import java.text.ParseException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -274,6 +276,40 @@ public class approvalController {
 		FolderCounts(request,fd,model);
 		return "/approval/SndngWaitDocList";
 	}
+	//발송현황
+	@GetMapping("/SndngSttusDocList")
+	public String SndngSttusDocList(Model model, HttpServletRequest request,SearchCriteria scri,folderVO fd) {
+		if(request.getSession(false).getAttribute("user") == null) {
+			return "redirect:/user/login";
+		}
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setDrafterdeptid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		scri.setSignerid(id);
+			
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		List<approvalVO> list = service.SndngSttusDocList(scri);
+		model.addAttribute("list",list);
+
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
+
+		pageMaker.setTotalCount(service.TotalRceptWaitCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);			
+		FolderCounts(request,fd,model);
+		
+		return "/approval/SndngSttusDocList";
+	}
 	//접수대기
 	@GetMapping("/RceptWaitDocList")
 	public String RceptWaitDocList(Model model, HttpServletRequest request,SearchCriteria scri,folderVO fd) {
@@ -301,7 +337,7 @@ public class approvalController {
 		List<fldrmbrVO> fldrmbr_ = folderService.RecDeptDocInfo(scri.getFldrid()); //접수한 문서에 대한 데이터값 조회.
 		for(fldrmbrVO fldr : fldrmbr_) {
 			log.info("fldrmbrid? "+fldr.getFldrmbrid());
-			sendVO Info = service.SendSttusApprInfo(fldr.getFldrmbrid()); //해당 접수대기 폴더테이블에 접수ID로 등록된 값들에 대해
+			sendVO Info = service.SndngSttusApprInfo(fldr.getFldrmbrid()); //해당 접수대기 폴더테이블에 접수ID로 등록된 값들에 대해
 			approvalVO a = service.apprInfo(Info.getReceiptappr_seq());
 			if(Info.getRecdocstatus().equals("4")) {
 				log.info("receiptapprid? "+Info.getReceiptappr_seq());
@@ -320,6 +356,53 @@ public class approvalController {
 
 		FolderCounts(request,fd,model);
 		return "/approval/RceptWaitDocList";
+	}
+	//수신반송
+	@GetMapping("/ReceptReturnDocList")
+	public String ReceptReturnDocList(Model model, HttpServletRequest request,SearchCriteria scri,folderVO fd) {
+		if(request.getSession(false).getAttribute("user") == null) {
+			return "redirect:/user/login";
+		}
+		String id =(String)request.getSession().getAttribute("userId");
+		String drafterdeptid = (String)request.getSession().getAttribute("deptId");
+		
+		PageMaker pageMaker = new PageMaker();
+		pageMaker.setCri(scri);
+		
+		scri.setReceiverid(drafterdeptid);
+		scri.setId(id);
+		scri.setOwnerid(fd.getOwnerid());
+		scri.setFldrid(fd.getFldrid());
+		scri.setFldrname(fd.getFldrname());
+		scri.setApplid(fd.getApplid());
+		scri.setSignerid(id);
+			
+		scri.cookieVal(request);// 페이징 화면에 표기할 값 쿠키에 저장
+		List<approvalVO> list = service.ReceptReturnDocList(scri);
+		model.addAttribute("list",list);
+
+		//결재함 사이드 메뉴
+		List<folderVO> ApprfldrSidebar = folderService.ApprfldrSidebar(id);
+		model.addAttribute("ApprfldrSidebar",ApprfldrSidebar);	
+
+		pageMaker.setTotalCount(service.TotalRceptReturnDocCnt(scri));
+		model.addAttribute("pageMaker",pageMaker);
+
+		FolderCounts(request,fd,model);
+		
+		//해당 apprid로 반송 시 찍힌 send데이터
+		List<fldrmbrVO> sendList = folderService.RecDeptDocInfo(scri.getFldrid()); //접수한 문서에 대한 데이터값 조회.
+		for(fldrmbrVO fldr : sendList) {
+			//log.info("fldrmbrid? "+fldr.getFldrmbrid());
+			sendVO Info = service.SndngSttusApprInfo(fldr.getFldrmbrid()); //해당 접수대기 폴더테이블에 접수ID로 등록된 값들에 대해
+			deptVO dept = deptService.info(Info.getReceiverid());
+			if(Info.getRecdocstatus().equals("16")) {
+				model.addAttribute("registerid",Info.getRegisterid());				
+				model.addAttribute("deptname",dept.getOrg_deptname());				
+				model.addAttribute("registdate",Info.getRegistdate());				
+			}
+		}	
+		return "/approval/ReceptReturnDocList";
 	}
 	//문서함
 	@GetMapping("/docFrame")
@@ -561,28 +644,6 @@ public class approvalController {
 	@PostMapping("/RceptDocSang")
 	public ResponseEntity<String> RceptDocSang(approvalVO ap,HttpServletRequest request) throws IOException{
 		service.RceptDocSang(ap);
-		/*
-		sendVO sendOrgApprId = service.getSendOrgApprId(ap.getAppr_seq());
-		List<userVO> DeptUseInfo = userService.DeptUseInfo(sendOrgApprId.getReceiverid());
-		for(userVO use : DeptUseInfo) {
-			//접수대기폴더 삭제
-			Map<String,Object> sendData_5010 = new HashMap<>();
-			folderVO fldrmbr5010 = folderService.ApprFldrmbr_5010(use.getId());
-			sendData_5010.put("fldrmbrid", sendOrgApprId.getSendid());
-			sendData_5010.put("registerid", use.getId());
-			sendData_5010.put("fldrid", fldrmbr5010.getFldrid());
-			folderService.deleteApprFldrmbr_5010(sendData_5010);	
-		}
-		
-		String id = (String)request.getSession().getAttribute("userId");
-		folderVO ApprFldrId_6050 = folderService.ApprFldrmbr_6050(id); //접수한 문서
-		//6050[접수한 문서]
-		fldrmbrVO fm = new fldrmbrVO();
-		fm.setFldrid(ApprFldrId_6050.getFldrid());
-		fm.setFldrmbrid(ap.getAppr_seq());
-		fm.setRegisterid(ap.getDrafterid());
-		folderService.ApprFldrmbrInsert(fm);
-		*/
 		return ResponseEntity.ok("RceptDocSang Success");
 	}
 	
@@ -594,12 +655,28 @@ public class approvalController {
 			log.info("Delete Document.. "+ap.getAppr_seq());
 			List<AttachVO> attachList = fileService.getAttachList(ap.getAppr_seq());
 			
-			if(service.DeleteDoc(ap.getAppr_seq())) {
+			if(ap.getDraftsrctype().equals("1")) {
+				log.info("접수문서 삭제 처리...");
+				sendVO send = service.SndngSttusApprInfo(ap.getSendid());
+				String setRecdoc = send.getRecdocstatus();
+				setRecdoc = "2";
+				Map<String,Object> res = new HashMap<>();
+				res.put("sendid", send.getSendid());
+				res.put("recdocstatus", setRecdoc);
+				log.info("삭제 처리 된 접수문서 접수아이디? "+send.getSendid());
+				service.SendDocRecdocStatus(res);
+				if(service.DeleteDoc(ap.getAppr_seq())) {
+					serviceP.deleteFlowInfo(ap.getAppr_seq());
+					folderService.deleteDocFldrmbr(ap.getAppr_seq());	
+				}					
+			}else {
+				log.info("기안문서 삭제 처리...");
 				deleteFiles(attachList,ap.getAppr_seq());
 				serviceP.deleteFlowInfo(ap.getAppr_seq());
 				folderService.deleteDocFldrmbr(ap.getAppr_seq());
-				fileService.deleteDocAttach(ap.getAppr_seq());
+				fileService.deleteDocAttach(ap.getAppr_seq());					
 			}
+	
 		}
 		return ResponseEntity.ok("Sucess Delete Document..");
 	}
@@ -637,5 +714,18 @@ public class approvalController {
 		model.addAttribute("procDeptName",procDeptName);
 		
 		return "/approval/TransferFldrMng";
+	}
+	
+	//접수대기 반송
+	@ResponseBody
+	@PostMapping("/RecptDocReturn.")
+	public void RecptDocReturn(HttpServletRequest request, @RequestBody approvalVO RequestApproval) throws ParseException{
+		String deptid = (String)request.getSession().getAttribute("deptId");
+		String userid = (String)request.getSession().getAttribute("userId");
+		String name = (String)request.getSession().getAttribute("userName");
+		String appr_seq = RequestApproval.getAppr_seq();
+		String opinioncontent = RequestApproval.getOpinioncontent();
+		Date regdate = RequestApproval.getCredate();
+		service.RecptDocReturn(appr_seq,deptid,userid,opinioncontent,regdate,name);
 	}
 }

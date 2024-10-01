@@ -89,7 +89,7 @@
 <select id="SanctnProgrsList" resultType="approvalVO" parameterType="String">
 	select t.*
 		from(
-			select  a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate,  p.signerid, a.status
+			select  a.appr_seq, a.title, a.drafterid, a.draftername, a.regdate,  p.signerid, a.status, a.sendid, a.draftsrctype
 				,row_number() over(order by a.appr_seq desc)as rnum	
 			from  approval a, participant p, fldrmbr fm, folder f
 			where a.appr_seq = p.appr_seq
@@ -103,7 +103,7 @@
 			and fm.fldrid = #{fldrid}
 	        and f.applid = 2020
 	        <include refid="search"></include>
-			group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status
+			group by a.appr_seq,  a.title, a.drafterid, a.draftername, a.regdate, p.signerid , a.status, a.sendid, a.draftsrctype
 		)t
 		where rnum between #{rowStart} and #{rowEnd}
 </select>
@@ -127,6 +127,26 @@
 		)t	    
 	where rnum between #{rowStart} and #{rowEnd}
 </select>
+<!-- 발송현황 -->
+	<select id="SndngSttusDocList" resultType="approvalVO" parameterType="String">
+	select t.*
+	    from(
+  			select a.appr_seq, a.title, a.docregno, a.regdate, a.senddate, a.receivers,
+	            row_number() over(order by a.appr_seq desc)as rnum
+	           from approval a,send s, fldrmbr fm, folder f
+			where a.appr_seq = s.appr_seq
+			and a.appr_seq = fm.fldrmbrid
+			and f.fldrid = fm.fldrid
+			and f.applid = 4050
+			and a.drafterdeptid = #{drafterdeptid}
+            and fm.fldrid = #{fldrid}
+            and f.ownerid = #{ownerid}
+            and s.recdocstatus is not null
+			<include refid="search"></include>
+            group by a.appr_seq, a.title, a.docregno, a.regdate, a.senddate, a.receivers
+		)t	    
+	where rnum between #{rowStart} and #{rowEnd}
+	</select>
 <!-- 접수대기 -->
 <select id="RceptWaitDocList" resultType="approvalVO" parameterType="String">
 	select t.*
@@ -148,6 +168,23 @@
 		)t	    
 	where rnum between #{rowStart} and #{rowEnd}
 </select>
+	<!-- 수신반송 -->
+	<select id="ReceptReturnDocList" resultType="approvalVO" parameterType="String">
+	select t.*
+	    from(
+	        select a.appr_seq, a.title, a.draftername, a.sendername,a.senddate, a.drafterdeptname, a.draftsrctype, a.docregno,
+	            row_number() over(order by a.appr_seq desc)as rnum
+	           from approval a, send s, fldrmbr fm, folder f
+	        where a.appr_seq = s.appr_seq
+            and f.applid = 5020
+            and f.ownerid = #{ownerid}
+            and f.ownertype = '2'
+            and fm.fldrid = f.fldrid
+            and s.sendid = fm.fldrmbrid
+			<include refid="search"></include>
+		)t	    
+	where rnum between #{rowStart} and #{rowEnd}
+	</select>
 <!-- 문서함 -->
 <select id="docFrame" resultType="approvalVO">
 		select d.*
@@ -306,6 +343,18 @@
    	and s.appr_seq = a.appr_seq
 	<include refid="search"></include>	
 </select>
+<!-- 결재함[수신반송] 문서 총 갯수 -->
+	<select id="TotalRceptReturnDocCnt" resultType="int">
+		select count(*) from
+		approval a , send s, folder f, fldrmbr fm
+   		where f.applid = #{applid}
+   		and f.ownerid = #{ownerid}
+   		and f.ownertype = '2'
+   		and fm.fldrid = f.fldrid
+   		and s.sendid = fm.fldrmbrid
+   		and s.appr_seq = a.appr_seq
+		<include refid="search"></include>	
+	</select>
 <!-- 첨부파일 갯수 업데이트 -->
 <update id="UpdAttachCnt">
 	update approval
@@ -322,7 +371,10 @@
 		values(#{sendid},#{appr_seq},#{parsendid},#{sendtype},#{receiverid},#{receivername},#{senderid},
 			#{sendername},#{senddeptid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
 			#{approvaldate},#{receiptappr_seq},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
-			#{registerid},#{recdocstatus})
+			#{registerid},#{recdocstatus},
+			#{rejectdate},#{rejecterid},#{rejectername},#{returncommentflag},#{assignedflag},#{assigncommentflag},
+			#{assignuserid},#{assignusername},#{assigndeptid},#{docrecvdate},
+			#{broadno},#{broaddate},#{broaduserid},#{broadusername},#{broaddeptid},#{broaddeptname},#{undertakerid},#{undertakerdeptid},#{undertakername})
 	</insert>
 	<!-- 문서 발송 시 수신부서 INSERT -->
 	<insert id="ReceiveDeptIn" parameterType="com.example.kwangs.approval.service.sendVO">
@@ -334,7 +386,34 @@
 		values(#{sendid},#{appr_seq},#{parsendid},#{sendtype},#{receiverid},#{receivername},#{senderid},
 			#{sendername},#{senddeptid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
 			#{approvaldate},#{receiptappr_seq},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
-			#{registerid},#{recdocstatus})
+			#{registerid},#{recdocstatus},
+			#{rejectdate},#{rejecterid},#{rejectername},#{returncommentflag},#{assignedflag},#{assigncommentflag},
+			#{assignuserid},#{assignusername},#{assigndeptid},#{docrecvdate},
+			#{broadno},#{broaddate},#{broaduserid},#{broadusername},#{broaddeptid},#{broaddeptname},#{undertakerid},#{undertakerdeptid},#{undertakername})
+	</insert>
+	<!-- 문서 반송 시 INSERT -->
+	<insert id="RecptDocReturn" parameterType="com.example.kwangs.approval.service.sendVO">
+		<selectKey keyProperty="sendid" resultType="String" order="BEFORE">
+			select 'SEND' ||
+				to_char(sysdate,'YYYYMMDD') || send_seq.nextval from dual
+		</selectKey>
+		insert into send
+		values(#{sendid},#{appr_seq},#{parsendid},#{sendtype},#{receiverid},#{receivername},#{senderid},
+			#{sendername},#{senddeptid},to_char(sysdate,'YYYY/MM/DD HH24:MI:SS'),
+			#{approvaldate},#{receiptappr_seq},#{registdate},
+			#{registerid},#{recdocstatus},
+			#{rejectdate},#{rejecterid},#{rejectername},#{returncommentflag},#{assignedflag},#{assigncommentflag},
+			#{assignuserid},#{assignusername},#{assigndeptid},#{docrecvdate},
+			#{broadno},#{broaddate},#{broaduserid},#{broadusername},#{broaddeptid},#{broaddeptname},#{undertakerid},#{undertakerdeptid},#{undertakername})
+	</insert>
+	<insert id="DocOpinionAdd" parameterType="com.example.kwangs.approval.service.opinionVO">
+		insert into opinion
+		values(#{opinionid},#{opiniontype},#{opinioncontent},#{credate},#{registerid},#{updatedate},#{updateid})
+	</insert>
+	<!-- 이력 남기기 -->
+	<insert id="ActionLogSancAdd" parameterType="com.example.kwangs.approval.service.action_log_sanc">
+		insert into action_log_sanc
+		values(#{userid},#{action_code},to_date(to_char(SYSDATE,'YYYYMMDDHH24MISS'),'YYYYMMDDHH24MISS'),#{data2},#{data1})
 	</insert>
 	<!-- 문서 발송 시 발송부서 문서 발송상태값 수정 -->
 	<update id="UpdDocPostStatus">
@@ -357,7 +436,7 @@
 	</select>
 	<!-- 접수대기 -> 접수 시 기존 apprid 가져오는 부분 -->
 	<select id="getSendOrgApprId" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
-		select * from send where receiptappr_seq = #{receiptappr_seq}
+		select * from send where sendid = #{sendid}
 	</select>
 	<!-- 발송 시 fldrmbr테이블에 fldrmbrid는 각 부서에 체결된 sendid로 기입 -->
 	<select id="getSendId" resultType="com.example.kwangs.approval.service.sendVO" parameterType="java.util.Map">
@@ -385,6 +464,14 @@
 		delete approval
 		where appr_seq = #{appr_seq}
 	</delete>
+	<select id="SndngSttusApprInfo" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
+		select * from send where sendid = #{sendid}
+	</select>
+	<update id="SendDocRecdocStatus">
+		update send
+			set recdocstatus = #{recdocstatus}
+		where sendid = #{sendid}
+	</update>
 		<!-- 이관 시 해당 기록물철 문서 리스트 -->
 	<select id="getMoveApprList" resultType="approvalVO" parameterType="String">
 		select * from approval where folderid = #{folderid}
@@ -401,8 +488,7 @@
 			set bizunitcd = #{bizunitcd}, orgdraftdeptid =#{orgdraftdeptid}
 		where folderid = #{folderid}
 	</update>
-	
-	<select id="SendSttusApprInfo" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
-		select * from send where sendid = #{sendid}
+	<select id="sttusList" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
+		select * from send where parsendid = #{parsendid}
 	</select>
 </mapper>

@@ -1,5 +1,7 @@
 package com.example.kwangs.approval.service;
 
+import java.sql.Date;
+
 import org.springframework.stereotype.Component;
 
 @Component
@@ -20,6 +22,28 @@ public class sendVO {
 	private String registdate;
 	private String registerid;
 	private String recdocstatus;
+	private Date rejectdate;
+	private String rejecterid;
+	private String rejectername;
+	private String returncommentflag;
+	private String assignedflag;
+	private String assigncommentflag;
+	private String assignuserid;
+	private String assignusername;
+	private String assigndeptid;
+	private Date docrecvdate;
+	private String broadno;
+	private Date broaddate;
+	private String broaduserid;
+	private String broadusername;
+	private String broaddeptid;
+	private String broaddeptname;
+	private String undertakerid;
+	private String undertakerdeptid;
+	private String undertakername;
+	//=====//
+	private int count;
+	private String action_code; //쿼리 조인 결과값에서 log_sanc의 action_code값을 가져오기 위해
 	
 	
 	public String getRecdocstatus() {
@@ -111,6 +135,132 @@ public class sendVO {
 	}
 	public void setRegisterid(String registerid) {
 		this.registerid = registerid;
+	}
+	public Date getRejectdate() {
+		return rejectdate;
+	}
+	public void setRejectdate(Date rejectdate) {
+		this.rejectdate = rejectdate;
+	}
+	public String getRejecterid() {
+		return rejecterid;
+	}
+	public void setRejecterid(String rejecterid) {
+		this.rejecterid = rejecterid;
+	}
+	public String getRejectername() {
+		return rejectername;
+	}
+	public void setRejectername(String rejectername) {
+		this.rejectername = rejectername;
+	}
+	public String getReturncommentflag() {
+		return returncommentflag;
+	}
+	public void setReturncommentflag(String returncommentflag) {
+		this.returncommentflag = returncommentflag;
+	}
+	public String getAssignedflag() {
+		return assignedflag;
+	}
+	public void setAssignedflag(String assignedflag) {
+		this.assignedflag = assignedflag;
+	}
+	public String getAssigncommentflag() {
+		return assigncommentflag;
+	}
+	public void setAssigncommentflag(String assigncommentflag) {
+		this.assigncommentflag = assigncommentflag;
+	}
+	public String getAssignuserid() {
+		return assignuserid;
+	}
+	public void setAssignuserid(String assignuserid) {
+		this.assignuserid = assignuserid;
+	}
+	public String getAssignusername() {
+		return assignusername;
+	}
+	public void setAssignusername(String assignusername) {
+		this.assignusername = assignusername;
+	}
+	public String getAssigndeptid() {
+		return assigndeptid;
+	}
+	public void setAssigndeptid(String assigndeptid) {
+		this.assigndeptid = assigndeptid;
+	}
+	public Date getDocrecvdate() {
+		return docrecvdate;
+	}
+	public void setDocrecvdate(Date docrecvdate) {
+		this.docrecvdate = docrecvdate;
+	}
+	public String getBroadno() {
+		return broadno;
+	}
+	public void setBroadno(String broadno) {
+		this.broadno = broadno;
+	}
+	public Date getBroaddate() {
+		return broaddate;
+	}
+	public void setBroaddate(Date broaddate) {
+		this.broaddate = broaddate;
+	}
+	public String getBroaduserid() {
+		return broaduserid;
+	}
+	public void setBroaduserid(String broaduserid) {
+		this.broaduserid = broaduserid;
+	}
+	public String getBroadusername() {
+		return broadusername;
+	}
+	public void setBroadusername(String broadusername) {
+		this.broadusername = broadusername;
+	}
+	public String getBroaddeptid() {
+		return broaddeptid;
+	}
+	public void setBroaddeptid(String broaddeptid) {
+		this.broaddeptid = broaddeptid;
+	}
+	public String getBroaddeptname() {
+		return broaddeptname;
+	}
+	public void setBroaddeptname(String broaddeptname) {
+		this.broaddeptname = broaddeptname;
+	}
+	public String getUndertakerid() {
+		return undertakerid;
+	}
+	public void setUndertakerid(String undertakerid) {
+		this.undertakerid = undertakerid;
+	}
+	public String getUndertakerdeptid() {
+		return undertakerdeptid;
+	}
+	public void setUndertakerdeptid(String undertakerdeptid) {
+		this.undertakerdeptid = undertakerdeptid;
+	}
+	public String getUndertakername() {
+		return undertakername;
+	}
+	public void setUndertakername(String undertakername) {
+		this.undertakername = undertakername;
+	}
+	public int getCount() {
+		return count;
+	}
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public String getAction_code() {
+		return action_code;
+	}
+	public void setAction_code(String action_code) {
+		this.action_code = action_code;
 	}
 	
 	

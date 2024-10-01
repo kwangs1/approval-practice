@@ -9,11 +9,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.example.kwangs.Temp.UseFlowXml.saveXmlTemp;
 import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
+import com.example.kwangs.approval.service.action_log_sanc;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.paging.SearchCriteria;
+import com.example.kwangs.dept.mapper.deptMapper;
 import com.example.kwangs.dept.service.deptVO;
 import com.example.kwangs.folder.mapper.folderMapper;
 import com.example.kwangs.folder.service.fldrmbr2VO;
@@ -22,6 +24,8 @@ import com.example.kwangs.folder.service.folderVO;
 import com.example.kwangs.participant.mapper.participantMapper;
 import com.example.kwangs.participant.service.participantService;
 import com.example.kwangs.participant.service.participantVO;
+import com.example.kwangs.user.mapper.userMapper;
+import com.example.kwangs.user.service.userVO;
 
 @Service
 public class participantServiceImpl implements participantService{
@@ -35,6 +39,10 @@ public class participantServiceImpl implements participantService{
 	private DocumentNumberGenerator DocumentNumberGenerator;
 	@Autowired
 	private folderMapper folderMapper;
+	@Autowired
+	private deptMapper dMapper;
+	@Autowired
+	private userMapper uMapper;
 	
 	/*
 	 * participant 내 기능 메서드
@@ -201,8 +209,21 @@ public class participantServiceImpl implements participantService{
 	             // 현재의 결재자가 결재완료 하였고, 그 결재자가 최종결재자 일 때      	
 	            if(currentParticipant.getApprovaltype() == 2 && i == approvalLines.size() -1) {
                 	approvalMapper.ApprovalUpdateStatus(appr_seq); //문서 상태변경
+                	approvalVO ap = approvalMapper.apprInfo(appr_seq);
+					if(ap.getDraftsrctype() != null) {
+						log.info("접수문서 최종결재 ok");
+						log.info("draftsrctype? "+ap.getDraftsrctype());
+						sendVO send = approvalMapper.SndngSttusApprInfo(ap.getSendid());
+						String setRecdoc = send.getRecdocstatus();
+						setRecdoc = "8";
+						Map<String,Object> res = new HashMap<>();
+						res.put("sendid", send.getSendid());
+						res.put("recdocstatus", setRecdoc);
+						approvalMapper.SendDocRecdocStatus(res);	
+					}
                 	ConCludeDocRegNo(appr_seq); //문서번호 채번
                 	DocFldrmbr2Add(appr_seq); //기안시 편철정한 폴더와 기록물등록대장에 같이 insert
+                	SendDeptSosckUserDelFldr(appr_seq);
 	            }
 	        }//end if (currentParticipant.getApprovaltype() == 2)
 	    }//end for
@@ -528,4 +549,98 @@ public class participantServiceImpl implements participantService{
 		mapper.deleteFlowInfo(appr_seq);
 		log.info("flow data... delete");
 	}
+	
+	//접수문서 최종결재 이후, 발송부서 소속인원 발송현황 테이블에서의 문서데이터 삭제
+		public void SendDeptSosckUserDelFldr(String apprid) {
+			approvalVO ap = approvalMapper.apprInfo(apprid);
+			log.info("-SendDeptSosckUserDelFldr method start-");
+			if(ap.getSendid() != null) {
+				sendVO sendDocInfo= approvalMapper.SndngSttusApprInfo(ap.getSendid());
+				log.info("해당문서의 SENDID? "+sendDocInfo.getSendid()+" / 기안부서 APPRID? "+sendDocInfo.getAppr_seq());
+				
+				List<sendVO> sttusList = approvalMapper.sttusList(sendDocInfo.getParsendid());
+				Map<String ,Object> documentCounts = new HashMap<>(); //문서별 카운트 관리
+				
+				for(sendVO receiverDocInfo : sttusList) {			
+					String currentApprid = receiverDocInfo.getAppr_seq(); //send 테이블에서 apprid값(기안부서 문서ID) 저장
+					documentCounts.putIfAbsent(currentApprid, 0); //발송부서 문서id별로 맵에 담아 저장
+					int currentCount = (int) documentCounts.get(currentApprid); // .putIfAbsent에 담은 value값 설정
+					
+					if(receiverDocInfo.getAppr_seq().equals(ap.getOrgappr_seq()) && receiverDocInfo.getRecdocstatus().equals("8") &&
+							ap.getDraftsrctype().equals("1") && ap.getStatus() == 256) {
+						currentCount++;
+						documentCounts.put(currentApprid, currentCount); //위 조건에 합당하면, key,value별로 카운트 증가한 값 맵에 담기
+						receiverDocInfo.setCount(currentCount); // 증가된 count를 SndngVO 인스턴스 변수에 저장
+			            log.info("수신처 결재 완료 카운트: " + receiverDocInfo.getCount() + " / 전체 수신처 개수: " + sttusList.size());
+			            
+						if(receiverDocInfo.getCount() == sttusList.size()) {
+							log.info("모든 수신처에서 최종 결재가 완료됨.");
+							for(sendVO receiverDept : sttusList) {
+								List<deptVO> SndngSttus = dMapper.UserSosck(receiverDept.getSenddeptid());
+								
+								for(deptVO dept : SndngSttus) {
+									List<userVO> users = dMapper.userList(receiverDocInfo.getSenddeptid());
+									dept.setUsers(users);
+									
+									if(dept.getUsers() != null) {
+										for(userVO user : dept.getUsers()) {
+											String userid = user.getId();
+											log.info("발송 부서의 소속 멤버: "+userid);
+											List<folderVO> getFolderInfo_4050 = folderMapper.ApprFldrmbr_4050(userid);		
+											for(folderVO sendDeptUserFd : getFolderInfo_4050) {
+												Map<String,Object> Del4050 = new HashMap<>();
+												Del4050.put("fldrmbrid", receiverDocInfo.getAppr_seq());
+												Del4050.put("registerid", userid);
+												Del4050.put("fldrid", sendDeptUserFd.getFldrid());
+												folderMapper.deleteApprFldrmbr_4050(Del4050);
+									            log.info("발송부서 소속 인원의 폴더 데이터 삭제 완료");
+											}//end for getFolderInfo_4050
+										}
+									}else {
+										log.error("Dept Sosck Users Null...");
+									}
+								}//end for deptVO
+							}//end for sttusList
+						}//end if totalCount == sttusList.size();
+					}//end if ..1
+				}//end for sttusList
+				//결재 완료 시 수신처 소속인원 접수대기 폴데테이블에서 해당 문서 데이터 삭제
+				if(ap.getDraftsrctype().equals("1") && ap.getStatus() == 256) {
+					log.info("----? "+ap.getAppr_seq());
+					sendVO sendReceiptApprId = approvalMapper.getSendOrgApprId(ap.getSendid());
+					log.info("---!? "+sendReceiptApprId.getReceiverid());
+					List<userVO> DeptUseInfo = uMapper.DeptUseInfo(sendReceiptApprId.getReceiverid());
+					log.info("해당 수신처 접수문서 최종결재가 났으니, 수신부서 소속 인원 접수대기폴데어서 해당 데이터 삭제");
+					for(userVO use : DeptUseInfo) {
+						log.info("Name? "+use.getName()+" ,"+"Sosck? "+use.getDeptname());
+						//접수대기폴더 삭제
+						Map<String,Object> sendData_5010 = new HashMap<>();
+						folderVO fldrmbr5010 = folderMapper.ApprFldrmbr_5010(use.getId());
+						sendData_5010.put("fldrmbrid", sendReceiptApprId.getSendid());
+						sendData_5010.put("registerid", use.getId());
+						sendData_5010.put("fldrid", fldrmbr5010.getFldrid());
+						folderMapper.deleteApprFldrmbr_5010(sendData_5010);
+					}
+					action_log_sanc sanc = new action_log_sanc();
+					sanc.setUserid(ap.getFinalapprover());
+					sanc.setAction_code("S2");
+					sanc.setData1(ap.getTitle());
+					sanc.setData2(ap.getAppr_seq());
+					log.info("수신처에서의 문서 접수 후 최종결재완료 후 action_log_sanc 테이블 INSERT[접수부서]");
+					log.info(sanc.getUserid()+" / "+sanc.getAction_code()+" / "+sanc.getData1()+" / "+sanc.getData2());
+					approvalMapper.ActionLogSancAdd(sanc);
+				}	
+			}else {//end if sendid is not null
+				log.info("APPROVAL SENDID NULL");
+				action_log_sanc sanc = new action_log_sanc();
+				sanc.setUserid(ap.getFinalapprover());
+				sanc.setAction_code("S2");
+				sanc.setData1(ap.getTitle());
+				sanc.setData2(ap.getAppr_seq());
+				log.info("내부결재문서 접수 후 최종결재완료 후 action_log_sanc 테이블 INSERT[기안부서]");
+				log.info(sanc.getUserid()+" / "+sanc.getAction_code()+" / "+sanc.getData1()+" / "+sanc.getData2());
+				approvalMapper.ActionLogSancAdd(sanc);
+				return;
+			}
+		}//end method
 }

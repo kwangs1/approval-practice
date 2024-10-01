@@ -37,6 +37,7 @@
 		<option value="4030">발송대기</option>
 		<option value="4050">발송현황</option>
 		<option value="5010">접수대기</option>
+		<option value="5020">수신반송</option>
 	</select>
 	<input type="hidden" name="applid" id="applid" value=""/><br><br>
 	
