@@ -14,6 +14,7 @@ import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.kwangs.approval.service.approvalService;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.opinionVO;
 import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.file.fileController;
 import com.example.kwangs.common.file.service.AttachVO;
@@ -399,7 +401,7 @@ public class approvalController {
 			if(Info.getRecdocstatus().equals("16")) {
 				model.addAttribute("registerid",Info.getRegisterid());				
 				model.addAttribute("deptname",dept.getOrg_deptname());				
-				model.addAttribute("registdate",Info.getRegistdate());				
+				model.addAttribute("rejectdate",Info.getRejectdate());				
 			}
 		}	
 		return "/approval/ReceptReturnDocList";
@@ -472,6 +474,14 @@ public class approvalController {
 		//접수문서에 첨부파일이 존재하는경우[기안부서에서 생성된 apprid를 가져오기 위함]
 		model.addAttribute("ReceptInfo",service.getReceptInfo(send));
 		
+		List<opinionVO> DocOpinion = service.DocOpinionList(appr_seq);
+		for(int i=0; i<DocOpinion.size(); i++) {
+			log.info(DocOpinion.get(i).getParticipant_seq());
+			log.info(DocOpinion.get(i).getOpiniontype());
+			if(DocOpinion.size() >= 1) {
+				model.addAttribute("OpinionCheck",true);
+			}
+		}
 		return "/approval/apprInfo";
 	}
 	
@@ -718,7 +728,7 @@ public class approvalController {
 	
 	//접수대기 반송
 	@ResponseBody
-	@PostMapping("/RecptDocReturn.")
+	@PostMapping("/RecptDocReturn")
 	public void RecptDocReturn(HttpServletRequest request, @RequestBody approvalVO RequestApproval) throws ParseException{
 		String deptid = (String)request.getSession().getAttribute("deptId");
 		String userid = (String)request.getSession().getAttribute("userId");
@@ -728,4 +738,50 @@ public class approvalController {
 		Date regdate = RequestApproval.getCredate();
 		service.RecptDocReturn(appr_seq,deptid,userid,opinioncontent,regdate,name);
 	}
+	
+	//문서 의견달기 뷰
+		@GetMapping("/DocOpinionForm")
+		public String DocOpinionForm(Model model) {
+			return "/approval/DocOpinionForm";
+		}
+		//의견리스트
+		@GetMapping("/DocOpinionListForm")
+		public String DocOpinionListForm(Model model,String appr_seq) {
+			return "/approval/DocOpinionListForm";
+		}
+		@ResponseBody
+		@GetMapping("/DocOpinionList")
+		public ResponseEntity<List<opinionVO>>DocOpinionList(String appr_seq){
+			return new ResponseEntity<>(service.DocOpinionList(appr_seq), HttpStatus.OK);
+		}
+		//기안자 제외 중간결재들이 등록하는 경우.
+		@ResponseBody
+		@PostMapping("/FlowOpinionAdd")
+		public ResponseEntity<String>FlowOpinionAdd(@RequestBody opinionVO OpinionRequest,HttpServletRequest request){
+			String userid = (String)request.getSession().getAttribute("userId");
+			opinionVO op = new opinionVO();
+			op.setOpinionid(OpinionRequest.getParticipant_seq());
+			op.setOpiniontype("P1");
+			op.setOpinioncontent(OpinionRequest.getOpinioncontent());
+			op.setRegisterid(userid);
+			op.setCredate(OpinionRequest.getCredate());
+			
+			log.info("중간결재자 의견기입 "+OpinionRequest.getOpinioncontent());
+			service.DocOpinionAdd(op);
+			return ResponseEntity.ok("SUCCESS");
+		}
+		//의견 삭제(기안자 외)
+		@ResponseBody
+		@PostMapping("/DocOpinionDel")
+		public ResponseEntity<String>DocOpinionDel(@RequestBody opinionVO OpinionRequest){
+			log.info("delete opinion id value? "+OpinionRequest.getParticipant_seq());
+			log.info("delete opinion content value? "+OpinionRequest.getOpinioncontent());
+			log.info("delete opinion type value? "+OpinionRequest.getOpiniontype());
+			Map<String,Object> res = new HashMap<>();
+			res.put("opinionid", OpinionRequest.getParticipant_seq());
+			res.put("opinioncontent", OpinionRequest.getOpinioncontent());
+			res.put("opiniontype", OpinionRequest.getOpiniontype());
+			service.DocOpinionDel(res);
+			return ResponseEntity.ok("Delete Opinion");
+		}
 }

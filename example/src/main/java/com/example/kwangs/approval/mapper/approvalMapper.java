@@ -222,6 +222,15 @@ public class approvalMapper{
 		log.info(opi.getOpinioncontent());
 		session.insert("mapper.approval.DocOpinionAdd",opi);
 	}
+	//의견목록
+	public List<opinionVO>DocOpinionList(String appr_seq){
+		return session.selectList("mapper.approval.DocOpinionList",appr_seq);
+	}
+	//의견삭제
+	public void DocOpinionDel(Map<String,Object> res) {
+		log.info("DAO Delete Data? "+res);
+		session.delete("mapper.approval.DocOpinionDel",res);
+	}
 	
 	//이력남기기
 	public void ActionLogSancAdd(action_log_sanc sanc) {

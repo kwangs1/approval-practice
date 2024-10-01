@@ -22,7 +22,9 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 </style>
 </head>
 <body>
+<button onclick="DocOpinion()" class="button">의견</button>
 <%@ include file="../participant/ParticipantWrite.jsp" %>
+
 <div class="loading" id="loading"style="display:none">
 	<div class="spinner">
 		<span></span>
@@ -70,12 +72,13 @@ font-weight: 500; cursor: pointer; display: flex; align-items: center; justify-c
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="<c:url value='/resources/js/UploadFile_.js'/>"></script>
-<script src="<c:url value='/resources/js/ApprCookie.js'/>"></script>
+<script src="<c:url value='/resources/js/DocCookie.js'/>"></script>
 <script>
 var drafterdeptid = '<c:out value="${user.deptid}"/>';
 var drafterdeptname = '<c:out value="${user.deptname}"/>';
 var docregno = '<c:out value="${uInfo.abbreviation}"/>';
 var id = '<c:out value="${user.id}"/>';
+var CheckOpinion = '<c:out value="false"/>';
 var SendID = '';
 //새로고침 방지
 window.addEventListener('keydown',function(e){
@@ -198,6 +201,14 @@ window.addEventListener('message', function(e) {
 			}
 		})	
 	}
+	function DocOpinion(){
+		url = '<c:url value="/approval/DocOpinionForm"/>';
+		window.open(url,'DocOpinion','width=780px, height=120px');
+	}
+
+	window.addEventListener('beforeunload',function(){
+		deleteCookie('opinion');
+	})
 </script>
 </body>
 </html>

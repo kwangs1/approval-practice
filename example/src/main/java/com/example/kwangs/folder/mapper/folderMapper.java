@@ -101,6 +101,10 @@ public class folderMapper {
 	public folderVO ApprFldrmbr_5010(String ownerid) {
 		return session.selectOne("folder.ApprFldrmbr_5010",ownerid);
 	}
+	// 수신반송 폴더 정보 가져오기
+	public folderVO ApprFldrmbr_5020(String ownerid) {
+		return session.selectOne("folder.ApprFldrmbr_5020",ownerid);
+	}
 	//접수한 폴더정보가져오기
 	public folderVO ApprFldrmbr_6050(String ownerid) {
 		return session.selectOne("folder.ApprFldrmbr_6050",ownerid);

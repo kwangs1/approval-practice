@@ -45,6 +45,10 @@ input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; paddin
 	<c:if test="${SendInfo.recdocstatus eq '2' && SendInfo.receiverid eq user.deptid}">
 		<button onclick="DocOpinion()" class="button" >반송</button>
 	</c:if>
+	<c:if test="${(OpinionCheck eq true && info.poststatus ne '1' && info.drafterdeptid eq user.deptid) || 
+		(OpinionCheck eq true && info.poststatus ne '4' && info.drafterdeptid eq user.deptid)}" >
+		<button onclick="DocOpinion()" class="button">의견</button>	
+	</c:if>
   <!-- 문서 본문영역 -->
   <h1 class="post-title">${info.title}</h1>
   <c:if test="${info.docattr eq '1'}">
@@ -120,8 +124,8 @@ input[type="text"]{height:30px; border:1px solid #ccc; border-radius:5px; paddin
   <button onclick="window.close()" class="button">닫기</button>
 </div>
 
-<input type="hidden" id="parentOpi"/>
-<input type="hidden" id="credate"/>
+<input type="text" id="parentOpi"/>
+<input type="text" id="credate"/>
 
 
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
@@ -147,6 +151,7 @@ var OpinionCheck = '<c:out value ="${OpinionCheck}"/>';
 var sendtype = '<c:out value="${SendInfo.sendtype}"/>';
 var recdocstatus = '<c:out value="${SendInfo.recdocstatus}"/>';
 var CheckOpinion = '<c:out value="false"/>';
+var drafterdeptid = '<c:out value="${info.drafterdeptid}"/>';
 
 var param = {	
 	appr_seq : appr_seq,

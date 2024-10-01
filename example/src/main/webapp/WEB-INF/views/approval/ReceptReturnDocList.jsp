@@ -59,10 +59,11 @@
     <c:forEach var="list" items="${list}">
       <tr>
       	<td><input type="checkbox" name="appr_seq" class="seq" value="${list.appr_seq }"/></td>
-        <td> ${list.docregno }</td>
-        <td>${registerid }</td>
+	    <td><a href="#" class="apprInfo" data-apprseq="${list.appr_seq}">${list.title }</a></td>
+        <td> ${list.docregno}</td>
+        <td>${registerid}</td>
         <td>${deptname}</td>
-        <td>${registdate }</td>
+        <td>${rejectdate}</td>
 	  </tr>
     </c:forEach>
     </tbody>

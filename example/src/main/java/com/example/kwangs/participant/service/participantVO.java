@@ -1,6 +1,11 @@
 package com.example.kwangs.participant.service;
 
+import java.sql.Date;
+import java.util.List;
+
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 @Component
 public class participantVO {
@@ -19,9 +24,33 @@ public class participantVO {
 	private String deptname;
 	private String flag;
 	private String statusname;
+	private List<participantVO> participants;
+	//opinion
+	private String opinioncontent;
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss", timezone="Asia/Seoul")
+	private Date credate;
 	
 	
 	
+	public List<participantVO> getParticipants() {
+		return participants;
+	}
+	public void setParticipants(List<participantVO> participants) {
+		this.participants = participants;
+	}
+	public String getOpinioncontent() {
+		return opinioncontent;
+	}
+	public void setOpinioncontent(String opinioncontent) {
+		this.opinioncontent = opinioncontent;
+	}
+
+	public Date getCredate() {
+		return credate;
+	}
+	public void setCredate(Date credate) {
+		this.credate = credate;
+	}
 	public String getStatusname() {
 		return statusname;
 	}
@@ -113,5 +142,4 @@ public class participantVO {
 	public void setApprovaltype(int approvaltype) {
 		this.approvaltype = approvaltype;
 	}
-	
 }

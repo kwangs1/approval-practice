@@ -1,11 +1,5 @@
 /**
- * 공통
- */
-function deleteCookie(name){
-	document.cookie = name + "=; expires= Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
-/**
- * 문서 기안 시 결재정보창에 대한 값
+ * 문서에 관련한 쿠키값
  */
 function saveCookie(docattr){
 	var expires = new Date();
@@ -32,13 +26,11 @@ function getCookie(name){
 	}
 	return null;
 }
-/**
- * 문서 기안 시 기안자가 의견 작성에 대한 쿠키값
- */
-function saveOpinionToCookie(owner,regdate,content){
+
+function saveOpinionToCookie(owner,credate,content){
 	var opinionData = {
 		owner: owner,
-		regdate: regdate,
+		credate: credate,
 		content: content
 	}
 	var opinionString = encodeURIComponent(JSON.stringify(opinionData));
@@ -66,4 +58,8 @@ function loadOpinionFromCookie(){
 	}else{
 		console.warn('No opinion cookie found');
 	}
+}
+
+function deleteCookie(name){
+	document.cookie = name + "=; expires= Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }

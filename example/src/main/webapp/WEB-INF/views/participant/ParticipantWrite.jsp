@@ -31,6 +31,9 @@ select{display:none;}
 	<!-- 동적으로 생성 될 input box 위치 -->
 		<div id="inputs"></div>
 
+<input type="hidden" id="parentOpi"/>
+<input type="hidden" id="credate"/>
+
 <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 <script src="${path}/resources/js/ReceiveFlowInfo_.js"></script>
 <script>
@@ -49,8 +52,8 @@ function pop() {
 
 function participant() {
 	//결재선 데이터
-    var paticipant = [];
-
+    var participants = [];
+	
     $('#inputs .user-container').each(function () {
         var userContainer = $(this);
         var deptid = userContainer.find('input[name^="deptid_"]').val();
@@ -60,7 +63,7 @@ function participant() {
         var pos = userContainer.find('input[name^="pos_"]').val();
         var status = userContainer.find('select[name^="status_"]').val();
 
-        paticipant.push({
+        participants.push({
         	deptid: deptid,
         	deptname: deptname,
         	signername: signername,
@@ -69,14 +72,16 @@ function participant() {
             status: status
         });
     });
-    
-    console.log('Send data: ', JSON.stringify(paticipant));
-    
+    var dataToSend = {
+            participants: participants,
+            opinioncontent: $('#parentOpi').val(),
+            credate: $('#credate').val()
+        };
 	
     $.ajax({
         type: 'post',
         url: '${path}/participant/ParticipantWrite',
-        data: JSON.stringify(paticipant),
+        data: JSON.stringify(dataToSend),
         contentType: 'application/json',
         success: function (response) {
             console.log('Ajax 요청: ' + response);

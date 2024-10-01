@@ -19,10 +19,10 @@ public class opinionVO {
 	private String updateid; 
 	//participant
 	private String signername;
-	private String participantid;
+	private String participant_seq;
 	//approval
 	private String poststatus;
-	private String apprid;
+	private String appr_seq;
 	//send
 	private String sendid;
 	public String getOpinionid() {
@@ -74,29 +74,29 @@ public class opinionVO {
 	public void setSignername(String signername) {
 		this.signername = signername;
 	}
-	public String getParticipantid() {
-		return participantid;
-	}
-	public void setParticipantid(String participantid) {
-		this.participantid = participantid;
-	}
 	public String getPoststatus() {
 		return poststatus;
 	}
 	public void setPoststatus(String poststatus) {
 		this.poststatus = poststatus;
 	}
-	public String getApprid() {
-		return apprid;
-	}
-	public void setApprid(String apprid) {
-		this.apprid = apprid;
-	}
 	public String getSendid() {
 		return sendid;
 	}
 	public void setSendid(String sendid) {
 		this.sendid = sendid;
+	}
+	public String getParticipant_seq() {
+		return participant_seq;
+	}
+	public void setParticipant_seq(String participant_seq) {
+		this.participant_seq = participant_seq;
+	}
+	public String getAppr_seq() {
+		return appr_seq;
+	}
+	public void setAppr_seq(String appr_seq) {
+		this.appr_seq = appr_seq;
 	}
 	
 	

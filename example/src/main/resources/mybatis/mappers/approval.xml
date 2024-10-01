@@ -406,10 +406,6 @@
 			#{assignuserid},#{assignusername},#{assigndeptid},#{docrecvdate},
 			#{broadno},#{broaddate},#{broaduserid},#{broadusername},#{broaddeptid},#{broaddeptname},#{undertakerid},#{undertakerdeptid},#{undertakername})
 	</insert>
-	<insert id="DocOpinionAdd" parameterType="com.example.kwangs.approval.service.opinionVO">
-		insert into opinion
-		values(#{opinionid},#{opiniontype},#{opinioncontent},#{credate},#{registerid},#{updatedate},#{updateid})
-	</insert>
 	<!-- 이력 남기기 -->
 	<insert id="ActionLogSancAdd" parameterType="com.example.kwangs.approval.service.action_log_sanc">
 		insert into action_log_sanc
@@ -491,4 +487,25 @@
 	<select id="sttusList" resultType="com.example.kwangs.approval.service.sendVO" parameterType="String">
 		select * from send where parsendid = #{parsendid}
 	</select>
+	
+	<insert id="DocOpinionAdd" parameterType="com.example.kwangs.approval.service.opinionVO">
+		insert into opinion
+		values(#{opinionid},#{opiniontype},#{opinioncontent},#{credate},#{registerid},#{updatedate},#{updateid})
+	</insert>
+	
+	<select id="DocOpinionList" resultType="com.example.kwangs.approval.service.opinionVO" parameterType="String">
+		select *
+			from  opinion o, participant p, approval a
+		where o.opinionid = p.participant_seq
+		and p.appr_seq = a.appr_seq
+		and a.appr_seq = #{appr_seq}
+		order by p.participant_seq 
+	</select>
+	
+	<delete id="DocOpinionDel" parameterType="java.util.Map">
+		delete from opinion
+		where opinionid = #{opinionid}
+		and opinioncontent = #{opinioncontent}
+		and opiniontype = #{opiniontype}
+	</delete>
 </mapper>

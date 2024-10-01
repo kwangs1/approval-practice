@@ -72,4 +72,10 @@ public interface approvalService {
 	void SendDocRecdocStatus(Map<String,Object> res);
 	//수신반송
 	void RecptDocReturn(String appr_seq,String deptid,String userid, String opinioncontent, Date regdate, String name)throws ParseException;
+	//의견리스트
+	List<opinionVO>DocOpinionList(String apprid);
+	//의견추가
+	void DocOpinionAdd(opinionVO op);
+	//의견삭제
+	void DocOpinionDel(Map<String,Object> res);
 }

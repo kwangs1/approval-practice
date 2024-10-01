@@ -1,5 +1,6 @@
 package com.example.kwangs.participant.service.impl;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -13,6 +14,7 @@ import com.example.kwangs.approval.mapper.approvalMapper;
 import com.example.kwangs.approval.service.DocumentNumberGenerator;
 import com.example.kwangs.approval.service.action_log_sanc;
 import com.example.kwangs.approval.service.approvalVO;
+import com.example.kwangs.approval.service.opinionVO;
 import com.example.kwangs.approval.service.sendVO;
 import com.example.kwangs.common.paging.SearchCriteria;
 import com.example.kwangs.dept.mapper.deptMapper;
@@ -339,13 +341,13 @@ public class participantServiceImpl implements participantService{
 
 	//문서 기안 시 결재선 등록
 	@Override
-	public void ParticipantWrite(List<participantVO> participant,String id){
+	public void ParticipantWrite(List<participantVO> participants,String opinioncontent,Date credate){
 		int line_seq = 1;
 		
 		String seqCurrval = approvalMapper.getLatestReceiptsSeq(); //결재 시퀀스 가져오기
 		log.info("participant service appr_seq? "+seqCurrval);
 		
-		for (participantVO pVO : participant) {
+		for (participantVO pVO : participants) {
 			pVO.setAppr_seq(seqCurrval);
 			pVO.setLine_seq(line_seq);// 기본값 1
 
@@ -364,9 +366,25 @@ public class participantServiceImpl implements participantService{
 			}
 			mapper.ParticipantWrite(pVO);
 			line_seq++;// receitps_seq 별 사용자 번호 순차 증가
-			approvalTypeAndStatus(participant);
+			approvalTypeAndStatus(participants);
 			
-			IntermediateApprFldrmbr(pVO.getAppr_seq());			
+			IntermediateApprFldrmbr(pVO.getAppr_seq());		
+			if((pVO.getStatus().equals("1000") && opinioncontent != "") || (participants.size() == 1 && opinioncontent != "")) {
+				log.info("gian User: "+pVO.getSignerid());
+				log.info("gian User ParticipantID: "+pVO.getParticipant_seq());
+				opinionVO op = new opinionVO();
+				op.setOpinionid(pVO.getParticipant_seq());
+				op.setOpiniontype("P1");
+				op.setRegisterid(pVO.getSignerid());
+				op.setCredate(credate);
+				op.setOpinioncontent(opinioncontent);
+				approvalMapper.DocOpinionAdd(op);
+				log.info("DocOpinion Method OpinionId: "+op.getOpinionid());
+				log.info("DocOpinion Method OpinionType: "+op.getOpiniontype());
+				log.info("DocOpinion Method RegisterId: "+op.getRegisterid());
+				log.info("DocOpinion Method RegistDate: "+op.getCredate());
+				log.info("DocOpinion Method OpinionContent: "+op.getOpinioncontent());
+			}	
 		}
 	}	
 	//일괄 결재

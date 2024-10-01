@@ -1,5 +1,6 @@
 package com.example.kwangs.participant;
 
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,10 +57,20 @@ public class participantController {
 
 	@ResponseBody
 	@PostMapping("/ParticipantWrite")
-	public ResponseEntity<String> ParticipantWrite(@RequestBody List<participantVO> participant, HttpServletRequest request) {
-		String id = (String) request.getSession().getAttribute("userId");
-		service.ParticipantWrite(participant,id);
-	    return ResponseEntity.ok("Success");
+	public ResponseEntity<?> ParticipantWrite(@RequestBody participantVO participant, HttpServletRequest request) {
+		/*String id = (String) request.getSession().getAttribute("userId");
+		service.ParticipantWrite(participant,id,opinioncontent,credate);
+	    return ResponseEntity.ok("Success");*/
+		try {
+			List<participantVO> participants = participant.getParticipants();
+			String opinioncontent = participant.getOpinioncontent();
+			Date credate = participant.getCredate();
+			service.ParticipantWrite(participants, opinioncontent,credate);
+			return ResponseEntity.ok("flow sendData success");
+		}catch(Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error ocurred");
+		}
 	}
 	
 	//결재

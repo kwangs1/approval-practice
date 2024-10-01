@@ -57,6 +57,13 @@ public class approvalServiceImpl implements approvalService{
 		}
 		mapper.apprWrite(approval);
 
+		action_log_sanc sanc = new action_log_sanc();
+		sanc.setUserid(approval.getDrafterid());
+		sanc.setAction_code("S0");
+		sanc.setData2(approval.getAppr_seq());
+		sanc.setData1(approval.getTitle());
+		log.info(sanc.getUserid()+" / "+sanc.getAction_code()+" / "+sanc.getData1()+" / "+sanc.getData2());
+		mapper.ActionLogSancAdd(sanc);
 		log.info("approval service appr_seq? "+approval.getAppr_seq());
 
 		//기안자의 기안한문서 폴더에 관한 결재멤버테이블 등록을 위한 정보 가져오기 & 등록
@@ -304,12 +311,14 @@ public class approvalServiceImpl implements approvalService{
 	@Override
 	public void RecptDocReturn(String appr_seq,String deptid, String userid, String opinioncontent, Date regdate, String name) throws ParseException {
 		Map<String,Object> res= new HashMap<>();
-		res.put("apprid", appr_seq);
+		res.put("appr_seq", appr_seq);
 		res.put("receiverid", deptid);
+		log.info("반송 시키는 부서 ID? "+deptid);
 		sendVO sd = mapper.getSendInfo(res);
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HHmmss");
-		java.util.Date sdfDate = sdf.parse("1970/01/01 090000");
-		Date f_date = new Date(sdfDate.getTime());
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		java.util.Date sdfDate = sdf.parse("1970/01/01 09:00:00");
+		java.sql.Date f_date = new java.sql.Date(sdfDate.getTime());
 		
 		sendVO sndng = new sendVO();
 		sndng.setAppr_seq(appr_seq);
@@ -364,7 +373,7 @@ public class approvalServiceImpl implements approvalService{
 			log.info("수신부서 접수대기 데이터 삭제");
 			for(userVO use2 : DeptUseInfo2) {
 				log.info("반송처리 되어, 기안부서 소속인원들의 수신반송 폴더테이블에 등록");
-				folderVO fldrmbr5020 = fMapper.ApprFldrmbr_5010(use2.getId());
+				folderVO fldrmbr5020 = fMapper.ApprFldrmbr_5020(use2.getId());
 				log.info("발송부서? "+use2.getDeptid());
 				log.info("발송부서 소속인원? "+use2.getId());
 				fldrmbrVO fm = new fldrmbrVO();
@@ -384,5 +393,21 @@ public class approvalServiceImpl implements approvalService{
 		log.info("문서 반송 후 action_log_sanc 테이블 INSERT");
 		log.info(sanc.getUserid()+" / "+sanc.getAction_code()+" / "+sanc.getData1()+" / "+sanc.getData2());
 		mapper.ActionLogSancAdd(sanc);	
+	}
+	//의견목록
+	@Override
+	public List<opinionVO>DocOpinionList(String appr_seq){
+		return mapper.DocOpinionList(appr_seq);
+	}
+	//의견추가
+	@Override
+	public void DocOpinionAdd(opinionVO op) {
+		mapper.DocOpinionAdd(op);
+	}
+	//의견삭제
+	@Override
+	public void DocOpinionDel(Map<String,Object> res) {
+		log.info("Service Delete Data? "+res);
+		mapper.DocOpinionDel(res);
 	}
 }

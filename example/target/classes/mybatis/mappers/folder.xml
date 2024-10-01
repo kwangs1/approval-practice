@@ -159,6 +159,10 @@
 <select id="ApprFldrmbr_5010" resultMap="folder" parameterType="String">
 	select * from folder where ownerid = #{ownerid} and applid = 5010
 </select>
+<!-- 수신반송 폴더 정보 가져오기 -->
+<select id="ApprFldrmbr_5020" resultMap="folder" parameterType="String">
+	select * from folder where ownerid = #{ownerid} and applid = 5020
+</select>
 <!-- 접수한 폴더 정보 가져오기 -->
 <select id="ApprFldrmbr_6050" resultMap="folder" parameterType="String">
 	select * from folder where ownerid = #{ownerid} and applid = 6050

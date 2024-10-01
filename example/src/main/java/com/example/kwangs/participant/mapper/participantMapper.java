@@ -20,8 +20,8 @@ public class participantMapper{
 	private SqlSession session;
 	
 	//결재 상신 전 결재선 지정
-	public void ParticipantWrite(participantVO vo) {
-		session.insert("mapper.participant.ParticipantWrite",vo);
+	public void ParticipantWrite(participantVO participants) {
+		session.insert("mapper.participant.ParticipantWrite",participants);
 	}
 	
 	//일괄 결재 
