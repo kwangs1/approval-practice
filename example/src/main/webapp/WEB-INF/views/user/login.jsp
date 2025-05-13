@@ -10,7 +10,7 @@
 </head>
 <body>
     <section class="login-form">
-        <h1>Login TEST</h1>   
+        <h1>Login</h1>   
 		<form method="post" action="${path}/user/login">
             <div class="int-area">
                 <input type="text" name="id" id="id" autocomplete="off" required autofocus="autofocus">
